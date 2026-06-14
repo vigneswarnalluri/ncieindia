@@ -111,11 +111,8 @@ export default function Header() {
 
   // Close mobile menu when page changes
   useEffect(() => {
-    if (isOpen) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsOpen(false);
-    }
-  }, [pathname, isOpen]);
+    setIsOpen(false);
+  }, [pathname]);
 
   // Close mega menu when page changes
   useEffect(() => {
