@@ -1,0 +1,484 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0D6B4F;
+  --color-primary-light: #158a67;
+  --color-primary-dark: #074733;
+  --color-accent: #C9A24B;
+  --color-accent-light: #dcb35c;
+  --color-accent-dark: #A68034;
+  --color-mint: #F0F7F4;
+  --color-mint-light: #F7FAF9;
+  --color-charcoal: #111827;
+  --color-muted-text: #4B5563;
+  --color-border-premium: rgba(13, 107, 79, 0.1);
+  --color-border-gold: rgba(201, 162, 75, 0.2);
+
+  --font-sans: var(--font-poppins), system-ui, sans-serif;
+  --font-display: var(--font-poppins), system-ui, sans-serif;
+
+  --animate-marquee: marquee 28s linear infinite;
+  --animate-slide-down: slideDown 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-scroll-up: scrollUp 18s linear infinite;
+}
+
+/* GPU-composited keyframes — only transform & opacity, never layout props */
+@keyframes marquee {
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes slideDown {
+  from { transform: translate3d(0, -8px, 0); opacity: 0; }
+  to   { transform: translate3d(0, 0, 0); opacity: 1; }
+}
+
+@keyframes scrollUp {
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, -50%, 0); }
+}
+
+.animate-scroll-up {
+  animation: var(--animate-scroll-up);
+  will-change: transform;
+}
+.animate-scroll-up:hover {
+  animation-play-state: paused;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #111827;
+}
+
+/* Perf: contain paint/layout for large sections */
+html {
+  /* Remove smooth-scroll — it conflicts with JS scroll listeners and causes jank */
+  scroll-behavior: auto;
+  background-color: #ffffff;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  letter-spacing: 0.15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  /* Improve text rendering performance */
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Perf: contain paint/layout for large sections */
+/* Marquee — GPU-only, no repaints */
+.animate-marquee {
+  animation: var(--animate-marquee);
+  will-change: transform;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Mobile drawer */
+.animate-slide-down {
+  animation: var(--animate-slide-down);
+  will-change: transform, opacity;
+}
+
+/* Pattern helpers — cheap CSS, no backdrop-filter */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(13, 107, 79, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(13, 107, 79, 0.03) 1px, transparent 1px);
+}
+
+.bg-dot-pattern {
+  background-size: 20px 20px;
+  background-image: radial-gradient(circle, rgba(13, 107, 79, 0.04) 1px, transparent 1px);
+}
+
+/* Glass — only use where absolutely necessary, removed backdrop-filter on non-sticky paths */
+.bg-glass {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.bg-glass-dark {
+  background: rgba(13, 107, 79, 0.03);
+  border: 1px solid rgba(13, 107, 79, 0.08);
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #C9A24B 0%, #A68034 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-green {
+  background: linear-gradient(135deg, #0D6B4F 0%, #074733 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.border-gradient-gold {
+  border-image: linear-gradient(to right, #C9A24B, #E6C57A) 1;
+}
+
+/* ─── Material UI Design Tokens ─── */
+.mui-paper {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.08), 
+              0px 1px 1px 0px rgba(0,0,0,0.06), 
+              0px 1.5px 3px 0px rgba(0,0,0,0.05);
+}
+
+.mui-paper-hover {
+  /* Use transform instead of box-shadow change to stay on compositor thread */
+  transition: box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: box-shadow;
+}
+.mui-paper-hover:hover {
+  box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.06), 
+              0px 8px 10px 1px rgba(0,0,0,0.05), 
+              0px 3px 14px 2px rgba(0,0,0,0.04);
+  border-color: #d1d5db;
+}
+
+.mui-button-primary {
+  background-color: #0D6B4F;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02857em;
+  padding: 8px 22px;
+  border-radius: 8px;
+  box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.1), 
+              0px 2px 2px 0px rgba(0,0,0,0.08), 
+              0px 1px 5px 0px rgba(0,0,0,0.06);
+  transition: background-color 200ms, box-shadow 200ms;
+}
+.mui-button-primary:hover {
+  background-color: #08533d;
+  box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.1), 
+              0px 4px 5px 0px rgba(0,0,0,0.08), 
+              0px 1px 10px 0px rgba(0,0,0,0.06);
+}
+
+.mui-button-outlined {
+  border: 1px solid rgba(13, 107, 79, 0.5);
+  color: #0D6B4F;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02857em;
+  padding: 7px 21px;
+  border-radius: 8px;
+  transition: background-color 200ms, border-color 200ms;
+}
+.mui-button-outlined:hover {
+  border-color: #0D6B4F;
+  background-color: rgba(13, 107, 79, 0.04);
+}
+
+.mui-table-header {
+  background-color: #f9fafb;
+  color: #374151;
+  font-weight: 600;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.mui-table-row {
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 120ms;
+}
+.mui-table-row:hover {
+  background-color: #f9fafb;
+}
+
+/* Stepper */
+.mui-step-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+}
+.mui-step-dot.active {
+  background-color: #0D6B4F;
+  color: #ffffff;
+}
+.mui-step-dot.completed {
+  background-color: #C9A24B;
+  color: #ffffff;
+}
+
+/* ─── Accessibility Controls Styles ─── */
+
+/* Dark Contrast Theme */
+html.acc-dark-contrast {
+  background-color: #0b0f19 !important;
+  color: #ffffff !important;
+
+  /* Tailwind CSS variables override for background/text classes */
+  --color-white: #0b0f19 !important;
+  --color-zinc-50: #111827 !important;
+  --color-zinc-100: #1e293b !important;
+  --color-zinc-200: #334155 !important;
+  --color-zinc-300: #475569 !important;
+  --color-zinc-400: #94a3b8 !important;
+  
+  --color-charcoal: #ffffff !important;
+  --color-muted-text: #cbd5e1 !important;
+  --background: #0b0f19 !important;
+  --foreground: #ffffff !important;
+}
+
+/* Element background/text defaults in Dark Contrast */
+html.acc-dark-contrast body,
+html.acc-dark-contrast main:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast section:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast header:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast footer:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast .mui-paper:not(.acc-exclude):not(.acc-exclude *) {
+  background-color: #0b0f19 !important;
+  color: #ffffff !important;
+}
+
+html.acc-dark-contrast h1:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast h2:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast h3:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast h4:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast h5:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast h6:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast p:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast li:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast td:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast th:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast label:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast input:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast textarea:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast select:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast span:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast a:not(.acc-exclude):not(.acc-exclude *),
+html.acc-dark-contrast button:not(.acc-exclude):not(.acc-exclude *) {
+  color: #ffffff !important;
+}
+
+/* Specific Link highlight in Dark Contrast */
+html.acc-dark-contrast a:not(.acc-exclude):not(.acc-exclude *) {
+  text-decoration: underline !important;
+  color: #ffd700 !important;
+}
+html.acc-dark-contrast a:not(.acc-exclude):not(.acc-exclude *):hover {
+  color: #ffffff !important;
+  background-color: #1e293b !important;
+}
+
+/* Color Invert (Root HTML level inversion) */
+html.acc-invert {
+  filter: invert(1) hue-rotate(180deg) !important;
+}
+
+html.acc-invert img,
+html.acc-invert video,
+html.acc-invert iframe,
+html.acc-invert [style*="background-image"],
+html.acc-invert svg:not(.lucide),
+html.acc-invert .acc-exclude {
+  filter: invert(1) hue-rotate(180deg) !important;
+}
+
+/* Saturation / Monochrome / Grayscale */
+html.acc-grayscale {
+  filter: grayscale(1) !important;
+}
+html.acc-grayscale .acc-exclude {
+  filter: none !important;
+}
+
+html.acc-high-saturation {
+  filter: saturate(1.8) !important;
+}
+html.acc-high-saturation .acc-exclude {
+  filter: none !important;
+}
+
+/* Text Size Increase / Decrease */
+html.acc-text-inc,
+html.acc-text-inc p:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-inc span:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-inc a:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-inc button:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-inc h1:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-inc h2:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-inc h3:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-inc h4:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-inc li:not(.acc-exclude):not(.acc-exclude *) {
+  font-size: 1.15em !important;
+}
+
+html.acc-text-inc-2,
+html.acc-text-inc-2 p:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-inc-2 span:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-inc-2 a:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-inc-2 button:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-inc-2 h1:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-inc-2 h2:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-inc-2 h3:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-inc-2 h4:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-inc-2 li:not(.acc-exclude):not(.acc-exclude *) {
+  font-size: 1.3em !important;
+}
+
+html.acc-text-dec,
+html.acc-text-dec p:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-dec span:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-dec a:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-dec button:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-dec h1:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-dec h2:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-dec h3:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-dec h4:not(.acc-exclude):not(.acc-exclude *),
+html.acc-text-dec li:not(.acc-exclude):not(.acc-exclude *) {
+  font-size: 0.85em !important;
+}
+
+/* Font Sizing Layout Adjustments to prevent Header/Navbar overflow items from being pushed off-screen */
+html.acc-text-inc header nav.hidden.lg\:flex,
+html.acc-text-inc-2 header nav.hidden.lg\:flex,
+html.acc-text-inc header .acc-actions-container.hidden.lg\:flex,
+html.acc-text-inc-2 header .acc-actions-container.hidden.lg\:flex {
+  display: none !important;
+}
+
+html.acc-text-inc header div.lg\:hidden,
+html.acc-text-inc-2 header div.lg\:hidden {
+  display: flex !important;
+}
+
+/* Highlight Links */
+html.acc-highlight-links a:not(.acc-exclude):not(.acc-exclude *) {
+  outline: 2px dashed #C9A24B !important;
+  outline-offset: 3px !important;
+  background-color: rgba(201, 162, 75, 0.15) !important;
+  color: #0b5941 !important;
+  text-decoration: underline !important;
+  font-weight: 700 !important;
+}
+
+/* Hide Images */
+html.acc-hide-images img:not(.acc-exclude):not(.acc-exclude *),
+html.acc-hide-images [style*="background-image"]:not(.acc-exclude):not(.acc-exclude *) {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Large Cursor */
+html.acc-large-cursor,
+html.acc-large-cursor *,
+html.acc-large-cursor a,
+html.acc-large-cursor button {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M0,0 L0,22 L6,16 L12,28 L16,26 L10,14 L18,14 Z' fill='black' stroke='white' stroke-width='2'/%3E%3C/svg%3E"), default !important;
+}
+
+/* Ensure the Accessibility Panel remains completely legibly styled (light theme) at all times */
+html .acc-exclude {
+  --color-white: #ffffff !important;
+  --color-zinc-50: #f9fafb !important;
+  --color-zinc-100: #f3f4f6 !important;
+  --color-zinc-200: #e5e7eb !important;
+  --color-zinc-300: #d1d5db !important;
+  --color-zinc-400: #9ca3af !important;
+  
+  --color-charcoal: #111827 !important;
+  --color-muted-text: #4b5563 !important;
+  --background: #ffffff !important;
+  --foreground: #111827 !important;
+}
+
+/* Keep backdrop overlay transparent black and prevent any invert filters from double-inverting its opacity */
+html div.acc-exclude.fixed.inset-0 {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Reset default colors on the drawer component explicitly */
+html div.acc-exclude.fixed.right-0 {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border-color: #e5e7eb !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Header and footer panels within drawer */
+html div.acc-exclude .bg-zinc-50\/50,
+html div.acc-exclude .bg-zinc-50 {
+  background-color: #f9fafb !important;
+}
+
+/* Reset text labels and headings inside drawer */
+html .acc-exclude h2,
+html .acc-exclude span,
+html .acc-exclude p {
+  color: #111827 !important;
+}
+
+/* Inactive option toggle buttons inside drawer grid */
+html .acc-exclude .grid button {
+  background-color: #ffffff !important;
+  color: #374151 !important;
+  border-color: #e5e7eb !important;
+}
+
+/* Active option toggle buttons inside drawer grid */
+html .acc-exclude .grid button.bg-primary\/10 {
+  background-color: rgba(13, 107, 79, 0.1) !important;
+  color: #0d6b4f !important;
+  border-color: #0d6b4f !important;
+}
+
+/* Reset Reset Settings button in drawer footer */
+html .acc-exclude .border-t button {
+  background-color: #ffffff !important;
+  color: #0d6b4f !important;
+  border-color: rgba(13, 107, 79, 0.2) !important;
+}
+html .acc-exclude .border-t button:hover {
+  background-color: rgba(13, 107, 79, 0.05) !important;
+}
+
+/* Reset icon SVGs inside drawer */
+html .acc-exclude svg {
+  stroke: currentColor !important;
+}
+
+html .acc-exclude svg[fill="currentColor"] {
+  fill: currentColor !important;
+}
+
+/* Close button inside drawer */
+html .acc-exclude button.text-zinc-400 {
+  background-color: transparent !important;
+  color: #9ca3af !important;
+  border-color: transparent !important;
+}
+html .acc-exclude button.text-zinc-400:hover {
+  background-color: #f3f4f6 !important;
+  color: #4b5563 !important;
+}

@@ -1,0 +1,641 @@
+"use client";
+
+import React, { useState, useRef, useEffect } from "react";
+import Link from "next/link";
+import {
+  ArrowRight,
+  Award,
+  BookOpen,
+  Briefcase,
+  Code,
+  Coins,
+  FileText,
+  Globe,
+  HelpCircle,
+  Info,
+  Lightbulb,
+  Rocket,
+  ShieldCheck,
+  UserCheck,
+} from "lucide-react";
+
+// Key Initiatives data
+const INITIATIVES = [
+  {
+    title: "Student Innovation Scheme",
+    description: "Support mechanisms for student research translation and hardware/software prototyping validation inside colleges.",
+    focus: ["Prototyping grants up to ₹5 Lakhs", "Access to regional university makerspaces", "Pre-incubation business guidance"],
+    badge: "Student Innovators",
+  },
+  {
+    title: "Startup Incubation Framework",
+    description: "Policy alignment connecting raw student startups with early-stage business mentorship and national incubators.",
+    focus: ["Dedicated startup mentor matchboards", "Direct links to angel networks", "Soft-loan scheme applications"],
+    badge: "Student Startups",
+  },
+  {
+    title: "Industry Fellowship Program",
+    description: "Connecting talented student innovators with deep-tech internships at leading industrial partners.",
+    focus: ["High-impact corporate placements", "Postgraduate research grants", "Ecosystem project assignments"],
+    badge: "Career Pathways",
+  },
+  {
+    title: "National Civic Hackathons",
+    description: "Ecosystem-wide grand challenges to build concrete technical solutions for government problem statements.",
+    focus: ["Collaborate with ministry developers", "Cash awards for winning models", "Direct pathways to public sector pilots"],
+    badge: "Builders & Coders",
+  },
+  {
+    title: "Micro-Grant Seed Pipeline",
+    description: "Streamlined financing to cover initial corporate registration, patent filings, and legal setups.",
+    focus: ["Patent registration fee refunds", "Free corporate compliance toolkits", "Incubator desk space sponsorships"],
+    badge: "Financial Seed",
+  },
+  {
+    title: "Institutional Awards Panel",
+    description: "Certifications and ranking systems validating academic chapters and incubation mentors.",
+    focus: ["Annual NCIE Chapter rankings", "Certificate of Merit for mentors", "Showcase at National Innovation Summit"],
+    badge: "Recognition desk",
+  },
+];
+
+// Journey steps data
+const JOURNEY_STEPS = [
+  {
+    phase: "01",
+    title: "Ideation Phase",
+    description: "Students convert institutional research or personal projects into solid problem-solving blueprints.",
+    action: "Register College Chapter",
+  },
+  {
+    phase: "02",
+    title: "Prototype Build",
+    description: "Develop working hardware/software prototypes using university labs and makerspaces with mentor guidance.",
+    action: "Access Prototyping Labs",
+  },
+  {
+    phase: "03",
+    title: "Pilot Launch",
+    description: "Incorporate corporate identities, secure initial IP, and launch minimum viable products (MVPs).",
+    action: "Apply for IP Protection",
+  },
+  {
+    phase: "04",
+    title: "Capital Scaling",
+    description: "Access institutional venture networks, grant schemes, and seed funds to expand the startup's footprint.",
+    action: "Pitch to Seed Funds",
+  },
+];
+
+// Vision 2047 Centenary Milestones
+const VISION_MILESTONES = [
+  {
+    year: "2027",
+    title: "Regional Node Construction",
+    description: "Establish 1,000+ college chapters and map active student innovation cells across every state.",
+  },
+  {
+    year: "2032",
+    title: "Deep-Tech Commercialization",
+    description: "Transition 10,000+ laboratory prototypes into fully incorporated, viable corporate ventures.",
+  },
+  {
+    year: "2040",
+    title: "International Intellectual Property",
+    description: "Secure global patents and lead technical standardizations in green energy, civic tech, and AI.",
+  },
+  {
+    year: "2047",
+    title: "Viksit Bharat Achievement",
+    description: "Empower a self-reliant economy driven by a high-density, nationwide network of student-led enterprises.",
+  },
+];
+
+// Bulletins & Notices (Government-style)
+const CIRCULARS = [
+  {
+    id: "NCIE-2026-081",
+    date: "June 12, 2026",
+    title: "Call for Applications: National Student Incubation Cohort 2026",
+    description: "Guidelines and digital forms for early-stage student innovators looking for corporate mentorship desks and seed support grants.",
+    category: "Applications",
+  },
+  {
+    id: "NCIE-2026-079",
+    date: "June 08, 2026",
+    title: "Regional College Chapters Framework & Affiliation Guidelines",
+    description: "Policy document outlining eligibility, support parameters, and reporting structures for new academic institutions joining the NCIE network.",
+    category: "Policy Docs",
+  },
+  {
+    id: "NCIE-2026-074",
+    date: "May 29, 2026",
+    title: "Viksit Bharat Fellowship Scheme for Postgraduate Research",
+    description: "Fellowship awards targeting PG students specializing in green infrastructure development, civic-tech tools, and medical computing systems.",
+    category: "Fellowships",
+  },
+  {
+    id: "NCIE-2026-068",
+    date: "May 15, 2026",
+    title: "Ecosystem Partner Empanellment Directory v1.0",
+    description: "Roster of verified industry accelerators, venture groups, and technical makerspaces certified to host student cohorts.",
+    category: "Directories",
+  },
+];
+
+export default function Home() {
+  const [activeTab, setActiveTab] = useState("all");
+  const noticeRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
+  const pausedRef = useRef(false);
+
+  const filteredCirculars = activeTab === "all"
+    ? CIRCULARS
+    : CIRCULARS.filter(c => c.category === activeTab);
+
+  // Pad to at least 4 items per half so content always overflows the 320px container
+  const scrollItems = (() => {
+    if (filteredCirculars.length === 0) return [];
+    const result = [];
+    while (result.length < 4) result.push(...filteredCirculars);
+    return result;
+  })();
+
+  // Auto-scroll with requestAnimationFrame
+  useEffect(() => {
+    const el = noticeRef.current;
+    if (!el) return;
+    el.scrollTop = 0;
+    let last = 0;
+
+    const tick = (time: number) => {
+      if (!pausedRef.current && el) {
+        const dt = last ? time - last : 0;
+        el.scrollTop += dt * 0.038; // ~38px/s
+        if (el.scrollTop >= el.scrollHeight / 2) {
+          el.scrollTop = 0;
+        }
+      }
+      last = time;
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+
+    const onEnter = () => { pausedRef.current = true; };
+    const onLeave = () => { pausedRef.current = false; };
+    el.addEventListener("mouseenter", onEnter);
+    el.addEventListener("mouseleave", onLeave);
+
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      el.removeEventListener("mouseenter", onEnter);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, [activeTab]);
+
+  return (
+    <div className="flex-1 bg-[#F9FAFB] pb-16">
+      
+      {/* 1. Official News Flash Bar (Scrolling Marquee) */}
+      <div className="bg-[#074733] text-white border-b border-primary/20 text-xs py-2 px-4 sm:px-6 lg:px-8 overflow-hidden z-25 relative font-sans">
+        <div className="max-w-7xl mx-auto flex items-center gap-3">
+          <span className="flex items-center gap-1 bg-[#C9A24B] text-zinc-950 font-bold px-2.5 py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0">
+            <span className="w-1.5 h-1.5 rounded-full bg-zinc-900 inline-block" />
+            <span>Latest News</span>
+          </span>
+          <div className="overflow-hidden relative w-full">
+            <div className="flex gap-12 whitespace-nowrap animate-marquee" aria-live="off">
+              <span className="text-zinc-100">[APPLICATIONS] Applications for National Student Incubation Cohort 2026 are now open. Closing July 31.</span>
+              <span className="text-zinc-100">[POLICY] Regional College Chapters policy guidelines document v1.2 has been released.</span>
+              <span className="text-zinc-100">[FELLOWSHIPS] Viksit Bharat Postgraduate Research Fellowships funding allocation finalized.</span>
+              {/* Duplicate for seamless loop */}
+              <span className="text-zinc-100" aria-hidden>[APPLICATIONS] Applications for National Student Incubation Cohort 2026 are now open. Closing July 31.</span>
+              <span className="text-zinc-100" aria-hidden>[POLICY] Regional College Chapters policy guidelines document v1.2 has been released.</span>
+              <span className="text-zinc-100" aria-hidden>[FELLOWSHIPS] Viksit Bharat Postgraduate Research Fellowships funding allocation finalized.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Hero Section */}
+      <section className="relative border-b border-zinc-200 bg-white pt-12 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* Left Column: Official Welcome & Mission Statement */}
+            <div className="lg:col-span-7 space-y-6">
+              <h1 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-extrabold tracking-tight text-zinc-900 leading-tight">
+                National Council for <span className="text-[#0D6B4F]">Innovation</span> &amp; <span className="text-[#A68034]">Entrepreneurship</span>
+              </h1>
+              
+              <p className="text-sm text-zinc-700 leading-relaxed text-justify font-sans">
+                Aligning academic research with industry networks to build India&apos;s largest innovation engine. NCIE acts as a central registry and resource desk connecting student founders, college chapters, and capital partners in a single unified ecosystem.
+              </p>
+
+              {/* Quick Directories / Access Points */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <div className="border border-zinc-200 p-4 bg-zinc-50/50 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-sm font-bold text-zinc-900 uppercase tracking-wider flex items-center gap-1.5 border-b border-zinc-200 pb-2">
+                      <UserCheck className="w-4.5 h-4.5 text-primary" />
+                      <span>Chapter Directory</span>
+                    </h3>
+                    <p className="text-xs text-zinc-500 mt-2 leading-relaxed">
+                      Explore active university innovation cells and state coordinators.
+                    </p>
+                  </div>
+                  <Link href="/chapters" className="text-xs text-primary font-bold hover:underline inline-flex items-center gap-1 mt-4">
+                    <span>Search Chapters</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+
+                <div className="border border-zinc-200 p-4 bg-zinc-50/50 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-sm font-bold text-zinc-900 uppercase tracking-wider flex items-center gap-1.5 border-b border-zinc-200 pb-2">
+                      <FileText className="w-4.5 h-4.5 text-primary" />
+                      <span>Schemes Registry</span>
+                    </h3>
+                    <p className="text-xs text-zinc-500 mt-2 leading-relaxed">
+                      Review active grants, seed funding programs, and corporate fellowship circulars.
+                    </p>
+                  </div>
+                  <Link href="/programs" className="text-xs text-primary font-bold hover:underline inline-flex items-center gap-1 mt-4">
+                    <span>View Schemes</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center gap-3 pt-4">
+                <Link href="/join" className="w-full sm:w-auto">
+                  <button className="w-full sm:w-auto bg-[#0D6B4F] hover:bg-[#074733] text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 transition-colors cursor-pointer">
+                    Apply for Registration
+                  </button>
+                </Link>
+                <Link href="/about" className="w-full sm:w-auto">
+                  <button className="w-full sm:w-auto border border-zinc-300 hover:bg-zinc-50 text-zinc-700 font-bold text-xs uppercase tracking-wider px-6 py-3.5 transition-colors cursor-pointer">
+                    Read Organization Profile
+                  </button>
+                </Link>
+              </div>
+
+              <div className="flex items-center gap-2 pt-2 text-[10px] sm:text-xs text-zinc-550 font-medium">
+                <Info className="w-4.5 h-4.5 text-zinc-400 shrink-0" />
+                <span>NCIE India is the statutory apex body coordinating technical campus innovation networks.</span>
+              </div>
+            </div>
+
+            {/* Right Column: Official Notice Board */}
+            <div className="lg:col-span-5 w-full">
+              <div className="bg-white border border-zinc-200">
+                {/* Notice Board Header */}
+                <div className="bg-zinc-100 px-5 py-3.5 border-b border-zinc-200 flex items-center justify-between">
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-800 flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-primary" />
+                    <span>Notice Board / Circulars</span>
+                  </h2>
+                  <span className="bg-[#0D6B4F] text-white text-[9px] font-bold px-2 py-0.5 font-mono">NCIE DESK</span>
+                </div>
+
+                {/* Filter Tabs */}
+                <div className="flex border-b border-zinc-200 text-[10px] sm:text-xs bg-zinc-50 font-semibold">
+                  {["all", "Applications", "Policy Docs", "Fellowships"].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={`flex-1 py-2 px-1 text-center border-b-2 transition-all cursor-pointer ${
+                        activeTab === tab
+                          ? "border-primary text-primary font-bold bg-white"
+                          : "border-transparent text-zinc-500 hover:text-zinc-800"
+                      }`}
+                    >
+                      {tab === "all" ? "All Updates" : tab}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Notice List */}
+                <div
+                  ref={noticeRef}
+                  className="relative divide-y divide-zinc-200 bg-white"
+                  style={{ height: 320, overflowY: "hidden" }}
+                >
+                  {scrollItems.map((doc, i) => (
+                    <div key={`a-${i}-${doc.id}`} className="p-4 hover:bg-zinc-50/50 transition-colors">
+                      <div className="flex items-center justify-between gap-2 mb-1.5">
+                        <span className="text-[9px] font-mono text-zinc-400 font-bold">{doc.id}</span>
+                        <span className="text-primary text-[9px] font-bold uppercase tracking-wider border border-primary/20 px-1.5 py-0.2 rounded font-sans">
+                          {doc.category}
+                        </span>
+                      </div>
+                      <Link href="/media" className="text-xs font-bold text-zinc-850 hover:text-primary transition-colors block hover:underline leading-snug">
+                        {doc.title}
+                      </Link>
+                      <p className="text-[11px] text-zinc-500 leading-relaxed mt-1 line-clamp-2">{doc.description}</p>
+                      <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-dashed border-zinc-200 text-[10px]">
+                        <span className="text-zinc-400 font-medium">{doc.date}</span>
+                        <Link href="/media" className="text-primary hover:text-accent-dark font-bold flex items-center gap-0.5">
+                          <span>View Circular</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+                  {/* Duplicate */}
+                  {scrollItems.map((doc, i) => (
+                    <div key={`b-${i}-${doc.id}`} aria-hidden className="p-4 hover:bg-zinc-50/50 transition-colors">
+                      <div className="flex items-center justify-between gap-2 mb-1.5">
+                        <span className="text-[9px] font-mono text-zinc-400 font-bold">{doc.id}</span>
+                        <span className="text-primary text-[9px] font-bold uppercase tracking-wider border border-primary/20 px-1.5 py-0.2 rounded font-sans">
+                          {doc.category}
+                        </span>
+                      </div>
+                      <Link href="/media" className="text-xs font-bold text-zinc-850 hover:text-primary transition-colors block hover:underline leading-snug">
+                        {doc.title}
+                      </Link>
+                      <p className="text-[11px] text-zinc-500 leading-relaxed mt-1 line-clamp-2">{doc.description}</p>
+                      <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-dashed border-zinc-200 text-[10px]">
+                        <span className="text-zinc-400 font-medium">{doc.date}</span>
+                        <Link href="/media" className="text-primary hover:text-accent-dark font-bold flex items-center gap-0.5">
+                          <span>View Circular</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+                  {/* Fade */}
+                  <div className="sticky bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+                </div>
+
+                {/* Notice Footer */}
+                <div className="bg-zinc-50 px-4 py-3 border-t border-zinc-200 text-center">
+                  <Link href="/media" className="text-xs text-primary font-bold hover:underline inline-flex items-center gap-1">
+                    <span>Access Public Documents Archive</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 3. National Impact Indicators Dashboard */}
+      <section className="py-16 bg-[#F9FAFB] border-b border-zinc-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white border border-zinc-200 p-6 md:p-8">
+            
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-4 border-b border-zinc-200">
+              <div className="border-l-4 border-primary pl-3">
+                <h2 className="text-base font-bold text-zinc-900 uppercase tracking-wider">National Ecosystem Benchmarks</h2>
+                <p className="text-[10px] text-zinc-500 font-medium uppercase mt-0.5 tracking-wider">Official Indicators set for academic registries</p>
+              </div>
+              <span className="inline-flex items-center gap-1 text-[#0D6B4F] font-bold text-[10px] uppercase tracking-wider">
+                <Globe className="w-3.5 h-3.5" />
+                <span>Cohort FY 2026-27 Active</span>
+              </span>
+            </div>
+
+            {/* Benchmarks Structured Table */}
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse border border-zinc-200">
+                <thead>
+                  <tr className="bg-zinc-50 border-b border-zinc-200">
+                    <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-48">Metric Indicator</th>
+                    <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-40">Current Status</th>
+                    <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200">Scope Target / Update Details</th>
+                    <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 w-40">Responsible Desk</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { label: "Student Innovators", value: "Founding Cohort", desc: "First-round application verification currently active for student innovators cataloged in database.", state: "Verification Desk" },
+                    { label: "College Chapters", value: "Expanding Network", desc: "Academic chapter affiliation verification and handbook alignment across STEM colleges.", state: "Chapter Roster" },
+                    { label: "Innovation Schemes", value: "Launching Soon", desc: "Initial micro-grants disbursement approvals and incubator matching programs setup.", state: "Scheme Sandbox" },
+                    { label: "Enterprise Pipelines", value: "Coming Soon", desc: "Direct avenues configuration to seed capital pools and startup accelerators.", state: "Capital Pool" },
+                  ].map((item, idx) => (
+                    <tr key={idx} className="border-b border-zinc-200 last:border-b-0 hover:bg-zinc-50/50 odd:bg-white even:bg-zinc-50/20 text-xs">
+                      <td className="px-4 py-3.5 text-zinc-900 font-bold border-r border-zinc-200">{item.label}</td>
+                      <td className="px-4 py-3.5 font-mono text-[#0D6B4F] font-bold border-r border-zinc-200">{item.value}</td>
+                      <td className="px-4 py-3.5 text-zinc-600 leading-relaxed border-r border-zinc-200">{item.desc}</td>
+                      <td className="px-4 py-3.5 font-mono font-bold text-zinc-500 uppercase">{item.state}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Core Schemes & Initiatives Directory */}
+      <section className="py-16 bg-white border-b border-zinc-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center max-w-3xl mx-auto mb-10">
+            <h2 className="text-2xl font-extrabold text-zinc-900 tracking-tight">
+              Ecosystem Programs & Schemes
+            </h2>
+            <div className="w-12 h-0.5 bg-accent mx-auto mt-3 mb-2" />
+            <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed mt-2">
+              National programs designed to support student innovation, seed capital distribution, corporate fellowships, and institutional recognition.
+            </p>
+          </div>
+
+          {/* Initiatives Directory Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse border border-zinc-200">
+              <thead>
+                <tr className="bg-zinc-50 border-b border-zinc-200">
+                  <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-16 text-center">S.No.</th>
+                  <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-64">Initiative Name / Focus</th>
+                  <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200">Scheme Parameters / Details</th>
+                  <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 w-44">Accredited Track</th>
+                  <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 w-44 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {INITIATIVES.map((item, idx) => (
+                  <tr key={idx} className="border-b border-zinc-200 last:border-b-0 hover:bg-zinc-50/50 odd:bg-white even:bg-zinc-50/20 text-xs">
+                    <td className="px-4 py-4 text-center font-mono font-bold text-zinc-500 border-r border-zinc-200">0{idx + 1}</td>
+                    <td className="px-4 py-4 border-r border-zinc-200">
+                      <div className="font-bold text-zinc-900">{item.title}</div>
+                      <div className="text-[10px] text-zinc-400 mt-1 leading-relaxed">{item.description}</div>
+                    </td>
+                    <td className="px-4 py-4 border-r border-zinc-200 text-zinc-650 leading-relaxed">
+                      <ul className="list-disc list-inside space-y-1">
+                        {item.focus.map((point, i) => (
+                          <li key={i}>{point}</li>
+                        ))}
+                      </ul>
+                    </td>
+                    <td className="px-4 py-4 border-r border-zinc-200 font-mono font-bold uppercase text-zinc-500">{item.badge}</td>
+                    <td className="px-4 py-4 text-center">
+                      <Link href="/programs" className="text-primary hover:underline font-bold inline-flex items-center gap-0.5">
+                        <span>Guidelines</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 5. The Innovation Lifecycle Stepper (Horizontal Stepper Table) */}
+      <section className="py-16 bg-[#F9FAFB] border-b border-zinc-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center max-w-3xl mx-auto mb-10">
+            <h2 className="text-2xl font-extrabold text-zinc-900 tracking-tight">
+              Programmatic Stepper Lifecycle
+            </h2>
+            <div className="w-12 h-0.5 bg-primary mx-auto mt-3 mb-2" />
+            <p className="text-xs sm:text-sm text-zinc-500 mt-2">
+              From academic laboratory discovery to market scale. A structured, compliance-aligned sequence.
+            </p>
+          </div>
+
+          <div className="overflow-x-auto bg-white border border-zinc-200">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-zinc-50 border-b border-zinc-200 text-xs">
+                  <th className="px-6 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-24 text-center">Step</th>
+                  <th className="px-6 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-52">Operational Phase</th>
+                  <th className="px-6 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200">Phase Objective & Description</th>
+                  <th className="px-6 py-3 font-bold uppercase tracking-wider text-zinc-700 w-52">Required Action</th>
+                </tr>
+              </thead>
+              <tbody className="text-xs">
+                {JOURNEY_STEPS.map((step, index) => (
+                  <tr key={index} className="border-b border-zinc-200 last:border-b-0 hover:bg-zinc-50/50 odd:bg-white even:bg-zinc-50/20">
+                    <td className="px-6 py-4 font-mono font-bold text-center border-r border-zinc-200">
+                      <span className="inline-block px-2 py-1 bg-zinc-100 border border-zinc-300 font-bold text-zinc-700 text-[10px]">
+                        {step.phase}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 font-bold text-zinc-900 border-r border-zinc-200 uppercase tracking-wide">
+                      {step.title}
+                    </td>
+                    <td className="px-6 py-4 text-zinc-600 leading-relaxed border-r border-zinc-200">
+                      {step.description}
+                    </td>
+                    <td className="px-6 py-4">
+                      <button className="text-[11px] font-bold text-primary hover:text-accent-dark hover:underline flex items-center justify-between gap-1.5 w-full uppercase tracking-wider cursor-pointer">
+                        <span>{step.action}</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 6. Vision 2047: National Milestones Dashboard */}
+      <section className="py-16 border-b border-zinc-200 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <div className="lg:col-span-4 space-y-4">
+              <span className="inline-flex items-center gap-1 text-[#A68034] font-bold text-[10px] uppercase tracking-wider">
+                <Award className="w-3 h-3" />
+                <span>National Centenary Roadmap</span>
+              </span>
+              <h2 className="text-2xl md:text-3xl font-extrabold text-zinc-900 leading-tight">
+                Vision 2047:<br />Centenary Roadmap
+              </h2>
+              <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed">
+                Our operations align directly with the national objective of Viksit Bharat by 2047. We map a structural path to build a high-technology, entrepreneurial nation over four distinct execution phases.
+              </p>
+              <div className="pt-2">
+                <Link href="/vision-2047">
+                  <button className="border border-zinc-300 hover:bg-zinc-50 text-zinc-700 font-bold text-xs uppercase tracking-wider px-5 py-2.5 cursor-pointer">
+                    Explore Vision Roadmap
+                  </button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="lg:col-span-8 w-full">
+              <div className="bg-white border border-zinc-200 overflow-hidden">
+                <table className="min-w-full divide-y divide-zinc-200">
+                  <thead className="bg-zinc-50 text-xs">
+                    <tr>
+                      <th scope="col" className="px-6 py-3.5 text-left font-bold uppercase tracking-wider w-24 border-r border-zinc-200 text-zinc-700">Phase</th>
+                      <th scope="col" className="px-6 py-3.5 text-left font-bold uppercase tracking-wider w-48 border-r border-zinc-200 text-zinc-700">Strategic Target</th>
+                      <th scope="col" className="px-6 py-3.5 text-left font-bold uppercase tracking-wider text-zinc-700">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-zinc-200 text-xs">
+                    {VISION_MILESTONES.map((milestone) => (
+                      <tr key={milestone.year} className="hover:bg-zinc-50/50 odd:bg-white even:bg-zinc-50/20">
+                        <td className="px-6 py-4 font-mono font-bold text-accent-dark whitespace-nowrap bg-zinc-50/20 border-r border-zinc-200 text-center">
+                          {milestone.year}
+                        </td>
+                        <td className="px-6 py-4 font-bold text-zinc-950 whitespace-normal border-r border-zinc-200 leading-snug">
+                          {milestone.title}
+                        </td>
+                        <td className="px-6 py-4 text-zinc-600 whitespace-normal leading-relaxed text-justify">
+                          {milestone.description}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* 7. Help & Support / FAQs Quick Desk */}
+      <section className="py-16 bg-[#F9FAFB]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white border border-zinc-200 p-6 md:p-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+              
+              <div className="md:col-span-2 space-y-2">
+                <div className="flex items-center gap-2 text-primary border-l-4 border-primary pl-3">
+                  <HelpCircle className="w-5 h-5 text-accent-dark" />
+                  <h3 className="text-base font-bold uppercase tracking-wider text-zinc-900">Support Desk & Registration Queries</h3>
+                </div>
+                <p className="text-xs text-zinc-500 leading-relaxed pl-4">
+                  Have questions about registering your college chapter, applying for micro-grants, or filing intellectual property? Review our contact directory or contact the helpdesk directly.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3 justify-end">
+                <Link href="/contact" className="w-full sm:w-auto">
+                  <button className="w-full sm:w-auto border border-zinc-300 hover:bg-zinc-50 text-zinc-700 font-bold text-xs uppercase tracking-wider px-5 py-3 cursor-pointer text-center">
+                    Contact Support
+                  </button>
+                </Link>
+                <Link href="/join" className="w-full sm:w-auto">
+                  <button className="w-full sm:w-auto bg-[#0D6B4F] hover:bg-[#074733] text-white font-bold text-xs uppercase tracking-wider px-5 py-3 cursor-pointer text-center">
+                    Submit Query Form
+                  </button>
+                </Link>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  );
+}

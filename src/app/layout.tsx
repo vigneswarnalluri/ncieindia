@@ -1,0 +1,56 @@
+import type { Metadata } from "next";
+import { Poppins } from "next/font/google";
+import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { Analytics } from "@vercel/analytics/react";
+
+import { LanguageProvider } from "@/contexts/LanguageContext";
+
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  display: "swap",
+  preload: true,
+});
+
+export const metadata: Metadata = {
+  title: "NCIE India | National Council for Innovation and Entrepreneurship",
+  description:
+    "Building India's largest student innovation and entrepreneurship ecosystem. Fostering institutional collaboration, startup incubation, and regional chapters.",
+  keywords: [
+    "NCIE India",
+    "Innovation",
+    "Entrepreneurship",
+    "Student Network",
+    "Civic Tech India",
+    "Startup India",
+    "Institutions",
+    "Hackathons",
+    "Vision 2047",
+  ],
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html
+      lang="en"
+      className={`${poppins.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
+      <body className="min-h-full flex flex-col bg-white text-charcoal selection:bg-primary/10 selection:text-primary">
+        <LanguageProvider>
+          <Header />
+          <main className="flex-1 flex flex-col">{children}</main>
+          <Footer />
+        </LanguageProvider>
+        <Analytics />
+      </body>
+    </html>
+  );
+}
