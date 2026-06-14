@@ -130,7 +130,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full flex flex-col" style={{ contain: "layout style" }}>
+      <header className="sticky top-0 z-50 w-full flex flex-col">
       {/* Top Black Bar (Gov/Institutional style) */}
       <div
         className={cn(
@@ -139,36 +139,8 @@ export default function Header() {
         )}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-full">
-          {/* Left: Indian institutional branding & Socials */}
+          {/* Left: Socials */}
           <div className="flex items-center space-x-6">
-            {/* Gov of India Emblem */}
-            <div className="flex items-center">
-              <Image
-                src="/gov-emblem.png"
-                alt="Government of India Logo"
-                width={195}
-                height={40}
-                className="h-10 w-auto object-contain"
-                priority
-              />
-            </div>
-
-            <div className="h-6 w-px bg-white/15" />
-
-            {/* Ministry Logo */}
-            <div className="flex items-center">
-              <Image
-                src="/ministry-logo.png"
-                alt="Ministry of Skill Development and Entrepreneurship Logo"
-                width={240}
-                height={40}
-                className="h-10 w-auto object-contain invert brightness-200"
-                priority
-              />
-            </div>
-
-            <div className="h-6 w-px bg-white/15" />
-
             {/* Social Icons — black circles, white icons matching provided style */}
             <div className="flex items-center gap-1.5">
               <a href="https://www.linkedin.com/company/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
@@ -604,148 +576,191 @@ export default function Header() {
         </AnimatePresence>
       </div>
 
-      {/* Mobile Drawer Overlay */}
-      {isOpen && (
-        <div className="fixed inset-0 top-20 z-40 bg-zinc-900/15 lg:hidden">
-          <div className="bg-white border-b border-zinc-200 shadow-lg px-4 pt-4 pb-8 flex flex-col gap-4 animate-slide-down">
-            <nav className="flex flex-col gap-1.5">
-              {NAV_LINKS.map((link) => {
-                const isActive = pathname === link.href;
-                const hasMega = link.hasMega;
-                const isExpanded = !!mobileExpanded[link.key];
+      {/* Mobile Drawer (Right side slide-in) */}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 z-40 bg-black/30 lg:hidden"
+            />
 
-                if (hasMega) {
-                  return (
-                    <div key={link.key} className="flex flex-col">
-                      <button
-                        onClick={() => toggleMobileExpanded(link.key)}
+            {/* Drawer Panel */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "tween", duration: 0.25, ease: "easeOut" }}
+              className="fixed right-0 top-0 bottom-0 z-50 w-80 max-w-[85vw] h-full bg-white shadow-2xl flex flex-col lg:hidden"
+            >
+              {/* Drawer Header */}
+              <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-150 shrink-0">
+                <div className="flex items-center gap-2">
+                  <Image
+                    src="/logo-new.png"
+                    alt="NCIE Logo"
+                    width={110}
+                    height={32}
+                    className="h-8 w-auto object-contain"
+                    priority
+                    unoptimized
+                  />
+                </div>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="p-2 -mr-2 text-zinc-505 hover:text-primary rounded-lg transition-colors cursor-pointer"
+                  aria-label="Close menu"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Drawer Content */}
+              <div className="flex-1 overflow-y-auto px-4 py-6 flex flex-col gap-6">
+                <nav className="flex flex-col gap-1.5">
+                  {NAV_LINKS.map((link) => {
+                    const isActive = pathname === link.href;
+                    const hasMega = link.hasMega;
+                    const isExpanded = !!mobileExpanded[link.key];
+
+                    if (hasMega) {
+                      return (
+                        <div key={link.key} className="flex flex-col">
+                          <button
+                            onClick={() => toggleMobileExpanded(link.key)}
+                            className={cn(
+                              "flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all cursor-pointer text-left w-full",
+                              isActive
+                                ? "bg-mint text-primary font-bold"
+                                : "text-zinc-655 hover:bg-zinc-50 hover:text-primary"
+                            )}
+                          >
+                            <span>{t(link.key)}</span>
+                            <ChevronDown
+                              className={cn(
+                                "w-4 h-4 transition-transform duration-200 text-zinc-400",
+                                isExpanded && "rotate-180 text-primary"
+                              )}
+                            />
+                          </button>
+                          
+                          {/* Sub-links */}
+                          <AnimatePresence initial={false}>
+                            {isExpanded && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.2, ease: "easeInOut" }}
+                                className="overflow-hidden flex flex-col pl-6 pr-4 py-1.5 gap-2 border-l-2 border-zinc-150 ml-4 mt-1"
+                              >
+                                {hasMega === "programs" ? (
+                                  <>
+                                    <Link
+                                      href="/programs"
+                                      className="text-xs font-bold text-zinc-500 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50 uppercase tracking-wide"
+                                    >
+                                      {language === "en" ? "• All Programs Overview" : "• सभी कार्यक्रम अवलोकन"}
+                                    </Link>
+                                    <Link
+                                      href="/programs/nidhi-cis"
+                                      className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
+                                    >
+                                      NIDHI College Innovation
+                                    </Link>
+                                    <Link
+                                      href="/programs/seed-pipeline"
+                                      className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
+                                    >
+                                      Seed Capital Pipeline
+                                    </Link>
+                                    <Link
+                                      href="/programs/makerspace-empowerment"
+                                      className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
+                                    >
+                                      Makerspace Fabrication
+                                    </Link>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Link
+                                      href="/chapters"
+                                      className="text-xs font-bold text-zinc-500 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50 uppercase tracking-wide"
+                                    >
+                                      {language === "en" ? "• All Chapters Overview" : "• सभी शाखाएं अवलोकन"}
+                                    </Link>
+                                    <Link
+                                      href="/chapters"
+                                      className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
+                                    >
+                                      Academic Chapters
+                                    </Link>
+                                    <Link
+                                      href="/chapters"
+                                      className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
+                                    >
+                                      State Liaison Desks
+                                    </Link>
+                                    <Link
+                                      href="/opportunities"
+                                      className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
+                                    >
+                                      Centenary Fellowships
+                                    </Link>
+                                    <Link
+                                      href="/media"
+                                      className="text-xs font-medium text-zinc-655 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
+                                    >
+                                      Documents & Circulars
+                                    </Link>
+                                  </>
+                                )}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <Link
+                        key={link.key}
+                        href={link.href}
                         className={cn(
-                          "flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all cursor-pointer text-left w-full",
+                          "flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all",
                           isActive
                             ? "bg-mint text-primary font-bold"
-                            : "text-zinc-650 hover:bg-zinc-50 hover:text-primary"
+                            : "text-zinc-655 hover:bg-zinc-50 hover:text-primary"
                         )}
                       >
                         <span>{t(link.key)}</span>
-                        <ChevronDown
+                        <ChevronRight
                           className={cn(
-                            "w-4 h-4 transition-transform duration-200 text-zinc-400",
-                            isExpanded && "rotate-180 text-primary"
+                            "w-4 h-4 transition-transform",
+                            isActive ? "text-primary translate-x-0.5" : "text-zinc-300"
                           )}
                         />
-                      </button>
-                      
-                      {/* Sub-links with height and opacity animation */}
-                      <AnimatePresence initial={false}>
-                        {isExpanded && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.2, ease: "easeInOut" }}
-                            className="overflow-hidden flex flex-col pl-6 pr-4 py-1.5 gap-2 border-l-2 border-zinc-150 ml-4 mt-1"
-                          >
-                            {hasMega === "programs" ? (
-                              <>
-                                <Link
-                                  href="/programs"
-                                  className="text-xs font-bold text-zinc-500 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50 uppercase tracking-wide"
-                                >
-                                  {language === "en" ? "• All Programs Overview" : "• सभी कार्यक्रम अवलोकन"}
-                                </Link>
-                                <Link
-                                  href="/programs/nidhi-cis"
-                                  className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
-                                >
-                                  NIDHI College Innovation
-                                </Link>
-                                <Link
-                                  href="/programs/seed-pipeline"
-                                  className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
-                                >
-                                  Seed Capital Pipeline
-                                </Link>
-                                <Link
-                                  href="/programs/makerspace-empowerment"
-                                  className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
-                                >
-                                  Makerspace Fabrication
-                                </Link>
-                              </>
-                            ) : (
-                              <>
-                                <Link
-                                  href="/chapters"
-                                  className="text-xs font-bold text-zinc-500 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50 uppercase tracking-wide"
-                                >
-                                  {language === "en" ? "• All Chapters Overview" : "• सभी शाखाएं अवलोकन"}
-                                </Link>
-                                <Link
-                                  href="/chapters"
-                                  className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
-                                >
-                                  Academic Chapters
-                                </Link>
-                                <Link
-                                  href="/chapters"
-                                  className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
-                                >
-                                  State Liaison Desks
-                                </Link>
-                                <Link
-                                  href="/opportunities"
-                                  className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
-                                >
-                                  Centenary Fellowships
-                                </Link>
-                                <Link
-                                  href="/media"
-                                  className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
-                                >
-                                  Documents & Circulars
-                                </Link>
-                              </>
-                            )}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                }
-
-                return (
-                  <Link
-                    key={link.key}
-                    href={link.href}
-                    className={cn(
-                      "flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all",
-                      isActive
-                        ? "bg-mint text-primary font-bold"
-                        : "text-zinc-650 hover:bg-zinc-50 hover:text-primary"
-                    )}
-                  >
-                    <span>{t(link.key)}</span>
-                    <ChevronRight
-                      className={cn(
-                        "w-4 h-4 transition-transform",
-                        isActive ? "text-primary translate-x-0.5" : "text-zinc-300"
-                      )}
-                    />
+                      </Link>
+                    );
+                  })}
+                </nav>
+                <div className="h-px bg-zinc-100 my-2" />
+                <div className="flex flex-col gap-3">
+                  <Link href="/join" className="w-full">
+                    <Button variant="primary" className="w-full justify-center">
+                      {t("register_member")}
+                    </Button>
                   </Link>
-                );
-              })}
-            </nav>
-            <div className="h-px bg-zinc-100 my-2" />
-            <div className="flex flex-col gap-3">
-              <Link href="/join" className="w-full">
-                <Button variant="primary" className="w-full justify-center">
-                  {t("register_member")}
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </header>
 
     {/* Accessibility Controls Modal */}

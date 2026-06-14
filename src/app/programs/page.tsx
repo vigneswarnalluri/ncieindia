@@ -4,6 +4,14 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Filter } from "lucide-react";
 
+export interface Tranche {
+  name: string;
+  stage: string;
+  amount: string;
+  note?: string;
+  trigger: string;
+}
+
 export interface Program {
   id: string;
   title: string;
@@ -13,6 +21,8 @@ export interface Program {
   duration: string;
   description: string;
   benefits: string[];
+  tranches?: Tranche[];
+  stages?: { title: string; desc: string }[];
 }
 
 export const PROGRAMS_DATA: Program[] = [
@@ -28,6 +38,40 @@ export const PROGRAMS_DATA: Program[] = [
       "Milestone-based prototyping grant of up to ₹5 Lakhs",
       "Assigned industry mentor & patent validation services",
       "Direct entry to regional bootcamps and startup clinics",
+    ],
+    tranches: [
+      {
+        name: "Tranche 1",
+        stage: "Stage 1: Explore → Idea",
+        amount: "₹10,000",
+        note: "= ₹10,00,000 total allocation",
+        trigger: "Released after idea screening and selection"
+      },
+      {
+        name: "Tranche 2",
+        stage: "Stage 2: Idea → Ideation",
+        amount: "₹25,000 × shortlisted startups",
+        note: "based on performance",
+        trigger: "Released after concept validation and feasibility approval"
+      },
+      {
+        name: "Tranche 3",
+        stage: "Stage 3: Ideation → Prototype",
+        amount: "₹75,000 × selected startups",
+        trigger: "Released after ideation review and prototype approval"
+      },
+      {
+        name: "Tranche 4",
+        stage: "Stage 4: Prototype → Commercialization",
+        amount: "₹1,50,000 × top-performing startups",
+        trigger: "Released after prototype validation and market readiness"
+      },
+      {
+        name: "Tranche 5",
+        stage: "Stage 5: Commercialization → Establishment",
+        amount: "₹2,40,000 × final selected startups",
+        trigger: "Released after final establishment milestone approval"
+      }
     ],
   },
   {
@@ -71,6 +115,99 @@ export const PROGRAMS_DATA: Program[] = [
       "Paid proof-of-concept (POC) trials with potential vendor onboarding",
       "CSR-sponsored funding allocations and lab grants",
     ],
+  },
+  {
+    id: "internship-ecosystem",
+    title: "10-Core Paid Internship Ecosystem",
+    subtitle: "Structured national internship framework across all UG sectors",
+    category: "student",
+    budget: "Paid stipend (Industry & Gov-sponsored)",
+    duration: "2 to 6 Months per cohort",
+    description: "A structured national framework established across 10 core undergraduate sectors, ensuring that every student in India gains real-time industry exposure and practical, skill-based learning opportunities in verified work environments.",
+    benefits: [
+      "Covers 10 core sectors including Engineering, AI, Healthcare, Finance, and Social Innovation",
+      "Paid, structured, and practical learning experiences with verified corporate and research partners",
+      "Direct pathway to make undergraduate students industry-ready before graduation",
+    ],
+    stages: [
+      { title: "Stage 1: Profile Registration & Skill Assessment", desc: "Submit your academic credentials, technical skills, and portfolio on the national portal." },
+      { title: "Stage 2: Sector Matching", desc: "Our system matches your skills with projects in one of the 10 core sectors based on company requirements." },
+      { title: "Stage 3: Corporate Selection & Onboarding", desc: "Participate in corporate screening rounds/interviews before commencing your paid placement." },
+    ]
+  },
+  {
+    id: "mass-startup-funding",
+    title: "Mass Student Startup Funding Program",
+    subtitle: "Flagship scale-up launchpad for student-led ventures",
+    category: "startup",
+    budget: "₹5,00,000 seed grant per startup",
+    duration: "Milestone-based release",
+    description: "A national initiative backed by a ₹1,000 Crore allocation aiming to fund 20,000 student-led startups. Releases equity-free seed grants to remove financial barriers for young innovators.",
+    benefits: [
+      "Equity-free seed funding of up to ₹5,00,000 per selected startup",
+      "Structured 5-Stage release plan tracking idea to commercial establishment",
+      "Continuous incubation alignment and business development mentorship",
+    ],
+    tranches: [
+      {
+        name: "Tranche 1",
+        stage: "Stage 1: Explore → Idea",
+        amount: "₹10,000",
+        note: "= ₹10,00,000 initial batch allocation",
+        trigger: "Released after idea screening and selection"
+      },
+      {
+        name: "Tranche 2",
+        stage: "Stage 2: Idea → Ideation",
+        amount: "₹25,000 × shortlisted startups",
+        note: "based on performance",
+        trigger: "Released after concept validation and feasibility approval"
+      },
+      {
+        name: "Tranche 3",
+        stage: "Stage 3: Ideation → Prototype",
+        amount: "₹75,000 × selected startups",
+        trigger: "Released after ideation review and prototype approval"
+      },
+      {
+        name: "Tranche 4",
+        stage: "Stage 4: Prototype → Commercialization",
+        amount: "₹1,50,000 × top-performing startups",
+        trigger: "Released after prototype validation and market readiness"
+      },
+      {
+        name: "Tranche 5",
+        stage: "Stage 5: Commercialization → Establishment",
+        amount: "₹2,40,000 × final selected startups",
+        trigger: "Released after final establishment milestone approval"
+      }
+    ],
+    stages: [
+      { title: "Stage 1: Ideation Screening & Selection", desc: "Submit your initial startup proposal. Shortlisted projects receive Tranche 1 funding." },
+      { title: "Stage 2: Feasibility & Concept Validation", desc: "Audit and validate the concept feasibility with a domain expert panel." },
+      { title: "Stage 3: Prototype & Market Validation", desc: "Design a functional product prototype and validate it through pilot customer testing." },
+      { title: "Stage 4: Commercial Registration & Launch", desc: "Incorporate your student business entity and register intellectual property." },
+    ]
+  },
+  {
+    id: "institutional-development-fund",
+    title: "Institutional Development & Incubation Fund",
+    subtitle: "Infrastructure grants to build centers of innovation excellence",
+    category: "institution",
+    budget: "₹20,00,000 to ₹50,00,000 per institution",
+    duration: "24 Months rollout support",
+    description: "A parallel ₹1,000 Crore national infrastructure fund allocated to technical and non-technical educational institutions to build incubation centers, innovation labs, and entrepreneurship cells.",
+    benefits: [
+      "Dedicated capital grants ranging from ₹20 Lakhs to ₹50 Lakhs per institution",
+      "Funding strictly allocated for incubation centers, innovation labs, and startup spaces",
+      "Full integration with the nationwide Innovation India Council database and mentors",
+    ],
+    stages: [
+      { title: "Stage 1: Proposal Submission & Audit", desc: "Submit detailed campus infrastructure maps, faculty resources, and ED Cell proposals." },
+      { title: "Stage 2: Technical Committee Evaluation", desc: "Joint audit by the Innovation India Council and state coordinator liaison desks." },
+      { title: "Stage 3: First Installment & Lab Set Up", desc: "Disbursement of initial capital grants for purchasing machinery, 3D printers, and CNC mills." },
+      { title: "Stage 4: Annual Audit & Incubation Launch", desc: "Verification of operational labs before releasing subsequent milestone support." },
+    ]
   },
 ];
 
