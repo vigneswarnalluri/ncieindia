@@ -20,6 +20,7 @@ import {
   FaYoutube,
   FaInstagram,
   FaWhatsapp,
+  FaFacebook,
 } from "react-icons/fa";
 import { FaXTwitter, FaLinkedinIn } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
@@ -146,6 +147,10 @@ export default function Header() {
               <a href="https://www.linkedin.com/company/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
                 className="w-7 h-7 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center transition-colors shrink-0">
                 <FaLinkedinIn className="w-3.5 h-3.5" />
+              </a>
+              <a href="https://www.facebook.com/ncieindiaofficial" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
+                className="w-7 h-7 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center transition-colors shrink-0">
+                <FaFacebook className="w-3.5 h-3.5" />
               </a>
               <a href="https://www.instagram.com/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
                 className="w-7 h-7 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center transition-colors shrink-0">
@@ -782,6 +787,10 @@ export default function Header() {
                       <a href="https://www.linkedin.com/company/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
                         className="w-8 h-8 rounded bg-zinc-100 hover:bg-primary hover:text-white text-zinc-600 flex items-center justify-center transition-colors">
                         <FaLinkedinIn className="w-3.5 h-3.5" />
+                      </a>
+                      <a href="https://www.facebook.com/ncieindiaofficial" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
+                        className="w-8 h-8 rounded bg-zinc-100 hover:bg-primary hover:text-white text-zinc-600 flex items-center justify-center transition-colors">
+                        <FaFacebook className="w-3.5 h-3.5" />
                       </a>
                       <a href="https://www.instagram.com/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
                         className="w-8 h-8 rounded bg-zinc-100 hover:bg-primary hover:text-white text-zinc-600 flex items-center justify-center transition-colors">

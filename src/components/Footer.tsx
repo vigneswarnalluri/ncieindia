@@ -43,6 +43,10 @@ export default function Footer() {
                 className="w-9 h-9 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center hover:scale-105 transition-all shrink-0">
                 <FaLinkedinIn className="w-4 h-4" />
               </a>
+              <a href="https://www.facebook.com/ncieindiaofficial" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
+                className="w-9 h-9 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center hover:scale-105 transition-all shrink-0">
+                <FaFacebook className="w-4 h-4" />
+              </a>
               <a href="https://www.instagram.com/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
                 className="w-9 h-9 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center hover:scale-105 transition-all shrink-0">
                 <FaInstagram className="w-4 h-4" />
