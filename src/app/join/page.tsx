@@ -17,21 +17,97 @@ export default function JoinPage() {
     mobile: "",
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
+  
+  const [files, setFiles] = useState<{
+    consentForm: File | null;
+    idCard: File | null;
+    proposalRoster: File | null;
+  }>({
+    consentForm: null,
+    idCard: null,
+    proposalRoster: null,
+  });
+
   const handleRoleSelect = (selectedRole: "student" | "chapter" | "partner") => {
     setRole(selectedRole);
     setStep("form");
+    setValidationError(null);
+    setFiles({ consentForm: null, idCard: null, proposalRoster: null });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    // Security: basic sanitization to strip script tags
+    const sanitizedValue = value.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+    
+    setFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
+  };
+
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fileKey: "consentForm" | "idCard" | "proposalRoster",
+    allowedTypes: string[],
+    maxSizeMB: number
+  ) => {
+    setValidationError(null);
+    const file = e.target.files?.[0];
+    if (!file) {
+      setFiles((prev) => ({ ...prev, [fileKey]: null }));
+      return;
+    }
+
+    // 1. Enforce file size limits
+    const maxSizeBytes = maxSizeMB * 1024 * 1024;
+    if (file.size > maxSizeBytes) {
+      setValidationError(`Security Limit: File "${file.name}" exceeds the maximum allowance of ${maxSizeMB}MB.`);
+      e.target.value = ""; // Reset file input
+      setFiles((prev) => ({ ...prev, [fileKey]: null }));
+      return;
+    }
+
+    // 2. Strict client-side extension check
+    const extension = "." + file.name.split(".").pop()?.toLowerCase();
+    const isAllowedExtension = allowedTypes.includes(extension);
+    
+    if (!isAllowedExtension) {
+      setValidationError(`Security Alert: File type not permitted. Allowed formats: ${allowedTypes.join(", ")}`);
+      e.target.value = ""; // Reset file input
+      setFiles((prev) => ({ ...prev, [fileKey]: null }));
+      return;
+    }
+
+    setFiles((prev) => ({ ...prev, [fileKey]: file }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setStep("success");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    
+    // Safety check: ensure files are selected
+    if (!files.consentForm || !files.idCard || !files.proposalRoster) {
+      setValidationError("Security Verification: All required files must be uploaded before submitting.");
+      return;
+    }
+
+    // Security: mobile validation double-check
+    const mobilePattern = /^[0-9]{10}$/;
+    if (!mobilePattern.test(formData.mobile)) {
+      setValidationError("Validation Error: Please enter a valid 10-digit mobile number.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setValidationError(null);
+
+    // Simulating database storage latency
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setStep("success");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 1200);
   };
 
   return (
@@ -52,7 +128,7 @@ export default function JoinPage() {
               </span>
               <div>
                 <p className="text-[10px] uppercase font-bold tracking-wider text-zinc-400">Step 1</p>
-                <p className={`text-xs ${step === "select" ? "text-primary font-bold" : "text-zinc-600"}`}>Select Onboarding Pathway</p>
+                <p className={`text-xs ${step === "select" ? "text-primary font-bold" : "text-zinc-650"}`}>Select Onboarding Pathway</p>
               </div>
             </div>
 
@@ -95,7 +171,7 @@ export default function JoinPage() {
 
         {/* Step 1: Select Role */}
         {step === "select" && (
-          <div className="space-y-8">
+          <div className="space-y-8 animate-slide-down">
             {/* Government Seal & Official Header */}
             <div className="text-center max-w-3xl mx-auto space-y-3">
               <div className="flex justify-center items-center gap-1.5 text-xs font-bold tracking-widest text-[#0D6B4F] uppercase">
@@ -208,7 +284,7 @@ export default function JoinPage() {
               </div>
 
               {/* Ecosystem Partner */}
-              <div className="bg-white border border-zinc-200 border-t-4 border-t-purple-700 rounded shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full">
+              <div className="bg-white border border-zinc-200 border-t-4 border-t-purple-750 rounded shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full">
                 <div className="p-6 space-y-4">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 bg-purple-50 text-purple-700 flex items-center justify-center rounded border border-purple-100">
@@ -258,7 +334,7 @@ export default function JoinPage() {
 
         {/* Step 2: Form */}
         {step === "form" && (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-slide-down">
             <button
               onClick={() => {
                 setStep("select");
@@ -284,6 +360,13 @@ export default function JoinPage() {
                     <h2 className="text-base font-extrabold text-zinc-800 mt-2 uppercase tracking-wide">Nomination Entry Form</h2>
                   </div>
 
+                  {validationError && (
+                    <div className="bg-red-50 border-l-4 border-red-500 p-4 text-xs text-red-700 font-semibold mx-6 mt-4 rounded flex items-center gap-2">
+                      <span className="font-bold">Error:</span>
+                      <span>{validationError}</span>
+                    </div>
+                  )}
+
                   <form onSubmit={handleSubmit} className="p-6 space-y-4">
                     
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -292,6 +375,7 @@ export default function JoinPage() {
                         <input
                           name="fullName"
                           type="text"
+                          maxLength={100}
                           value={formData.fullName}
                           onChange={handleInputChange}
                           className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
@@ -305,6 +389,7 @@ export default function JoinPage() {
                         <input
                           name="designation"
                           type="text"
+                          maxLength={100}
                           value={formData.designation}
                           onChange={handleInputChange}
                           className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
@@ -320,6 +405,7 @@ export default function JoinPage() {
                         <input
                           name="email"
                           type="email"
+                          maxLength={100}
                           value={formData.email}
                           onChange={handleInputChange}
                           className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
@@ -334,9 +420,10 @@ export default function JoinPage() {
                           name="mobile"
                           type="tel"
                           pattern="[0-9]{10}"
+                          maxLength={10}
                           value={formData.mobile}
                           onChange={handleInputChange}
-                          className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                          className="w-full px-3 py-2 text-xs border border-zinc-350 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
                           placeholder="e.g. 9876543210"
                           required
                         />
@@ -350,6 +437,7 @@ export default function JoinPage() {
                       <input
                         name="orgName"
                         type="text"
+                        maxLength={200}
                         value={formData.orgName}
                         onChange={handleInputChange}
                         className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
@@ -363,6 +451,7 @@ export default function JoinPage() {
                       <input
                         name="city"
                         type="text"
+                        maxLength={150}
                         value={formData.city}
                         onChange={handleInputChange}
                         className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
@@ -376,6 +465,7 @@ export default function JoinPage() {
                       <textarea
                         name="proposal"
                         rows={4}
+                        maxLength={2000}
                         value={formData.proposal}
                         onChange={handleInputChange}
                         className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 resize-y"
@@ -397,9 +487,10 @@ export default function JoinPage() {
                             type="file"
                             accept=".pdf"
                             required
+                            onChange={(e) => handleFileChange(e, "consentForm", [".pdf"], 2)}
                             className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
                           />
-                          <span className="text-[9px] text-zinc-400 block font-medium">Signed PDF</span>
+                          <span className="text-[9px] text-zinc-400 block font-medium">Signed PDF (Max 2MB)</span>
                         </div>
 
                         <div className="space-y-1.5">
@@ -408,11 +499,12 @@ export default function JoinPage() {
                           </label>
                           <input
                             type="file"
-                            accept=".jpg,.jpeg,.pdf"
+                            accept=".jpg,.jpeg,.png,.pdf"
                             required
+                            onChange={(e) => handleFileChange(e, "idCard", [".jpg", ".jpeg", ".png", ".pdf"], 2)}
                             className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
                           />
-                          <span className="text-[9px] text-zinc-400 block font-medium">JPEG or PDF</span>
+                          <span className="text-[9px] text-zinc-400 block font-medium">JPEG, PNG, or PDF (Max 2MB)</span>
                         </div>
 
                         <div className="space-y-1.5">
@@ -423,9 +515,10 @@ export default function JoinPage() {
                             type="file"
                             accept=".pdf,.docx,.doc"
                             required
+                            onChange={(e) => handleFileChange(e, "proposalRoster", [".pdf", ".docx", ".doc"], 2)}
                             className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
                           />
-                          <span className="text-[9px] text-zinc-400 block font-medium">PDF or DOCX</span>
+                          <span className="text-[9px] text-zinc-400 block font-medium">PDF or DOCX (Max 2MB)</span>
                         </div>
                       </div>
                     </div>
@@ -438,8 +531,21 @@ export default function JoinPage() {
                       </span>
                     </div>
 
-                    <button type="submit" className="w-full bg-[#0D6B4F] hover:bg-[#08533d] text-white font-bold text-xs uppercase py-3 rounded shadow transition-colors cursor-pointer">
-                      Submit Nomination Dossier
+                    <button 
+                      type="submit" 
+                      disabled={isSubmitting}
+                      className={`w-full bg-[#0D6B4F] hover:bg-[#08533d] text-white font-bold text-xs uppercase py-3 rounded shadow transition-colors cursor-pointer flex items-center justify-center gap-2 ${
+                        isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin shrink-0" />
+                          <span>Processing Dossier...</span>
+                        </>
+                      ) : (
+                        <span>Submit Nomination Dossier</span>
+                      )}
                     </button>
 
                   </form>
