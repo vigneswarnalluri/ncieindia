@@ -384,6 +384,52 @@ export default function JoinPage() {
                       />
                     </div>
 
+                    {/* Verification Documents Upload */}
+                    <div className="border-t border-zinc-200 pt-5 mt-5 space-y-4">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Required Verification Documents</p>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block">
+                            Affiliation Consent Form <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="file"
+                            accept=".pdf"
+                            required
+                            className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
+                          />
+                          <span className="text-[9px] text-zinc-400 block font-medium">Signed PDF</span>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block">
+                            Institutional ID Card <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="file"
+                            accept=".jpg,.jpeg,.pdf"
+                            required
+                            className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
+                          />
+                          <span className="text-[9px] text-zinc-400 block font-medium">JPEG or PDF</span>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block">
+                            Chapter Proposal Roster <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="file"
+                            accept=".pdf,.docx,.doc"
+                            required
+                            className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
+                          />
+                          <span className="text-[9px] text-zinc-400 block font-medium">PDF or DOCX</span>
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Official Declaration Tick box */}
                     <div className="p-3 bg-zinc-50 border border-zinc-200 rounded flex gap-2.5 items-start text-[11px] text-zinc-650">
                       <input type="checkbox" required className="mt-0.5 focus:ring-primary h-4 w-4 border-zinc-300 rounded shrink-0 cursor-pointer accent-primary" />
@@ -485,7 +531,7 @@ export default function JoinPage() {
             <div className="bg-zinc-50 border border-zinc-200 rounded p-4 text-left flex gap-3 text-xs text-zinc-650 leading-relaxed">
               <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
               <span>
-                <strong>Next Step:</strong> Our regional chapter liaison desk will review your details. Verification templates will be dispatched to <strong className="text-primary">{formData.email}</strong> within 3-5 business days. Please keep your verification documents ready for upload.
+                <strong>Next Step:</strong> Our regional chapter liaison desk has received your dossier and uploaded verification documents. A verification confirmation reference will be sent to <strong className="text-primary">{formData.email}</strong>. The review process will take 3-5 business days, and credentials will be issued once approved.
               </span>
             </div>
 
