@@ -323,134 +323,117 @@ export default function Header() {
         </div>
 
         {/* Mega Menu Dropdowns */}
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           {activeMenu === "programs" && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 2 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
+              exit={{ opacity: 0, y: 2 }}
+              transition={{ duration: 0.1, ease: "easeOut" }}
               onMouseEnter={() => handleMouseEnter("programs")}
               onMouseLeave={handleMouseLeave}
               style={{ willChange: "transform, opacity" }}
-              className="absolute left-1/2 -translate-x-1/2 top-full w-full max-w-5xl bg-white border border-zinc-200/80 rounded-2xl shadow-[0_20px_40px_-12px_rgba(0,0,0,0.12)] z-50 overflow-hidden mt-2"
+              className="absolute left-1/2 -translate-x-1/2 top-full w-full max-w-7xl px-4 sm:px-6 lg:px-8 z-50 mt-1"
             >
-              <div className="grid grid-cols-12">
+              <div className="bg-white border border-zinc-200 rounded-xl shadow-[0_12px_24px_rgba(0,0,0,0.06)] overflow-hidden grid grid-cols-12">
                 {/* Left Side: Spotlight Sidebar */}
-                <div className="col-span-4 bg-zinc-50/80 border-r border-zinc-150 p-6 flex flex-col justify-between min-h-[340px]">
-                  <div className="space-y-3">
-                    <span className="text-[9px] font-bold tracking-widest text-primary bg-primary/10 px-2 py-0.5 rounded-full uppercase">
-                      Portal Sandbox
-                    </span>
-                    <h3 className="text-base font-extrabold text-zinc-900 leading-snug">
-                      NCIE Schemes &amp; Capital Sandbox
+                <div className="col-span-3 bg-zinc-50 border-r border-zinc-200 p-6 flex flex-col justify-between min-h-[300px]">
+                  <div className="space-y-4">
+                    <h3 className="text-base font-extrabold text-zinc-950 leading-snug font-sans">
+                      NCIE Schemes Portal
                     </h3>
-                    <p className="text-[11px] text-zinc-500 leading-relaxed">
-                      Merit-based allowances and setup grants designed to validate student prototypes, fund collegiate makerspaces, and support early incorporated spin-offs.
+                    <p className="text-xs text-zinc-500 leading-relaxed font-sans">
+                      Access verified national frameworks, funding eligibility requirements, and student startup capital pipelines under NCIE guidelines.
                     </p>
                   </div>
                   
-                  <div className="pt-6 border-t border-zinc-200/60 space-y-4">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="text-[10px] font-mono text-primary font-bold uppercase tracking-wider">
-                        FY 2026-27 Active
-                      </span>
-                    </div>
-                    <Link href="/join" className="block">
-                      <Button variant="primary" size="sm" className="w-full justify-between uppercase font-bold tracking-wider text-[10px] py-2">
-                        <span>Apply for Incubation</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
-                      </Button>
+                  <div className="pt-6 border-t border-zinc-200/80 space-y-3">
+                    <Link href="/join" className="group/btn flex items-center justify-between text-xs font-bold text-primary hover:text-primary-dark transition-colors uppercase tracking-wider font-sans">
+                      <span>Apply for Incubation</span>
+                      <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
                     </Link>
                   </div>
                 </div>
 
-                {/* Right Side: Grid of 4 Action Cards */}
-                <div className="col-span-8 p-6 grid grid-cols-2 gap-4 bg-white">
-                  {/* Card 1: NIDHI CIS */}
-                  <Link href="/programs/nidhi-cis" className="border border-zinc-100 hover:border-primary/20 bg-white hover:bg-mint/30 p-4.5 rounded-xl transition-all group/card flex flex-col justify-between">
-                    <div className="space-y-2.5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded bg-primary/10 text-primary flex items-center justify-center group-hover/card:bg-primary group-hover/card:text-white transition-colors">
-                          <BookOpen className="w-4 h-4" />
-                        </div>
-                        <h4 className="text-xs font-extrabold text-zinc-800 group-hover/card:text-primary transition-colors">
-                          NIDHI College Innovation
-                        </h4>
-                      </div>
-                      <p className="text-[11px] text-zinc-500 leading-relaxed">
-                        Supports hardware &amp; software prototype building in college innovation cells.
-                      </p>
-                    </div>
-                    <div className="mt-4 pt-3 border-t border-zinc-100/60 flex items-center justify-between text-[9px] font-mono font-bold text-accent-dark">
-                      <span>STUDENT SCHEME</span>
-                      <span>₹5 LAKH GRANT</span>
-                    </div>
-                  </Link>
-
-                  {/* Card 2: Seed Pipeline */}
-                  <Link href="/programs/seed-pipeline" className="border border-zinc-100 hover:border-primary/20 bg-white hover:bg-mint/30 p-4.5 rounded-xl transition-all group/card flex flex-col justify-between">
-                    <div className="space-y-2.5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded bg-accent/25 text-accent-dark flex items-center justify-center group-hover/card:bg-accent group-hover/card:text-white transition-colors">
-                          <Rocket className="w-4 h-4" />
-                        </div>
-                        <h4 className="text-xs font-extrabold text-zinc-800 group-hover/card:text-primary transition-colors">
+                {/* Right Side: 3-Column Directory Link Grid */}
+                <div className="col-span-9 p-8 grid grid-cols-3 gap-8 bg-white">
+                  {/* Column 1: For Innovators */}
+                  <div className="space-y-4">
+                    <h4 className="text-[11px] font-bold tracking-wider text-zinc-400 uppercase font-sans">
+                      Student Schemes
+                    </h4>
+                    <div className="flex flex-col gap-4.5">
+                      <Link href="/programs/nidhi-cis" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
+                          NIDHI College Innovation (NIDHI-CIS)
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          Prototype validation grants up to ₹5 Lakh
+                        </span>
+                      </Link>
+                      
+                      <Link href="/programs/seed-pipeline" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
                           Seed Capital Pipeline
-                        </h4>
-                      </div>
-                      <p className="text-[11px] text-zinc-500 leading-relaxed">
-                        Equity-free seed capital funding for validated, incorporated student ventures.
-                      </p>
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          Equity-free setup allowances up to ₹25 Lakh
+                        </span>
+                      </Link>
                     </div>
-                    <div className="mt-4 pt-3 border-t border-zinc-100/60 flex items-center justify-between text-[9px] font-mono font-bold text-accent-dark">
-                      <span>STARTUP STAGE</span>
-                      <span>₹25 LAKH SEED</span>
-                    </div>
-                  </Link>
+                  </div>
 
-                  {/* Card 3: Makerspace Grants */}
-                  <Link href="/programs/makerspace-empowerment" className="border border-zinc-100 hover:border-primary/20 bg-white hover:bg-mint/30 p-4.5 rounded-xl transition-all group/card flex flex-col justify-between">
-                    <div className="space-y-2.5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded bg-purple-50 text-purple-600 flex items-center justify-center group-hover/card:bg-purple-600 group-hover/card:text-white transition-colors">
-                          <Landmark className="w-4 h-4" />
-                        </div>
-                        <h4 className="text-xs font-extrabold text-zinc-800 group-hover/card:text-primary transition-colors">
+                  {/* Column 2: Institutional Grants */}
+                  <div className="space-y-4">
+                    <h4 className="text-[11px] font-bold tracking-wider text-zinc-400 uppercase font-sans">
+                      Institutional &amp; Industry Support
+                    </h4>
+                    <div className="flex flex-col gap-4.5">
+                      <Link href="/programs/makerspace-empowerment" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
                           Makerspace Fabrication
-                        </h4>
-                      </div>
-                      <p className="text-[11px] text-zinc-500 leading-relaxed">
-                        Institutional funding for technical colleges to deploy makerspaces and CNC/3D mills.
-                      </p>
-                    </div>
-                    <div className="mt-4 pt-3 border-t border-zinc-100/60 flex items-center justify-between text-[9px] font-mono font-bold text-accent-dark">
-                      <span>INSTITUTIONS</span>
-                      <span>₹50 LAKH GRANT</span>
-                    </div>
-                  </Link>
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          STEM lab setup grants up to ₹50 Lakh
+                        </span>
+                      </Link>
 
-                  {/* Card 4: CSR Bridges */}
-                  <Link href="/programs" className="border border-zinc-100 hover:border-primary/20 bg-white hover:bg-mint/30 p-4.5 rounded-xl transition-all group/card flex flex-col justify-between">
-                    <div className="space-y-2.5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded bg-blue-50 text-blue-600 flex items-center justify-center group-hover/card:bg-blue-600 group-hover/card:text-white transition-colors">
-                          <Briefcase className="w-4 h-4" />
-                        </div>
-                        <h4 className="text-xs font-extrabold text-zinc-800 group-hover/card:text-primary transition-colors">
+                      <Link href="/programs" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
                           CSR Corporate Bridges
-                        </h4>
-                      </div>
-                      <p className="text-[11px] text-zinc-500 leading-relaxed">
-                        Connect corporate CSR sponsors with student groups working on green tech, AI, and civic briefs.
-                      </p>
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          Industry-sponsored student POC alignment
+                        </span>
+                      </Link>
                     </div>
-                    <div className="mt-4 pt-3 border-t border-zinc-100/60 flex items-center justify-between text-[9px] font-mono font-bold text-accent-dark">
-                      <span>CORPORATE</span>
-                      <span>SPONSORED POCS</span>
+                  </div>
+
+                  {/* Column 3: Resources */}
+                  <div className="space-y-4">
+                    <h4 className="text-[11px] font-bold tracking-wider text-zinc-400 uppercase font-sans">
+                      Helpdesk &amp; Registry
+                    </h4>
+                    <div className="flex flex-col gap-4.5">
+                      <Link href="/join" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-primary group-hover/item:underline transition-colors font-sans leading-tight">
+                          Start Incubation Application
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          Access sandbox registration tools
+                        </span>
+                      </Link>
+
+                      <a href="tel:18001234567" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
+                          Official Toll-Free Helpdesk
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          Support line: 1800 123 4567
+                        </span>
+                      </a>
                     </div>
-                  </Link>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -458,131 +441,114 @@ export default function Header() {
 
           {activeMenu === "ecosystem" && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 2 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
+              exit={{ opacity: 0, y: 2 }}
+              transition={{ duration: 0.1, ease: "easeOut" }}
               onMouseEnter={() => handleMouseEnter("ecosystem")}
               onMouseLeave={handleMouseLeave}
               style={{ willChange: "transform, opacity" }}
-              className="absolute left-1/2 -translate-x-1/2 top-full w-full max-w-5xl bg-white border border-zinc-200/80 rounded-2xl shadow-[0_20px_40px_-12px_rgba(0,0,0,0.12)] z-50 overflow-hidden mt-2"
+              className="absolute left-1/2 -translate-x-1/2 top-full w-full max-w-7xl px-4 sm:px-6 lg:px-8 z-50 mt-1"
             >
-              <div className="grid grid-cols-12">
+              <div className="bg-white border border-zinc-200 rounded-xl shadow-[0_12px_24px_rgba(0,0,0,0.06)] overflow-hidden grid grid-cols-12">
                 {/* Left Side: Spotlight Sidebar */}
-                <div className="col-span-4 bg-zinc-50/80 border-r border-zinc-150 p-6 flex flex-col justify-between min-h-[340px]">
-                  <div className="space-y-3">
-                    <span className="text-[9px] font-bold tracking-widest text-primary bg-primary/10 px-2 py-0.5 rounded-full uppercase">
-                      Ecosystem Hub
-                    </span>
-                    <h3 className="text-base font-extrabold text-zinc-900 leading-snug">
-                      National Council Registry Network
+                <div className="col-span-3 bg-zinc-50 border-r border-zinc-200 p-6 flex flex-col justify-between min-h-[300px]">
+                  <div className="space-y-4">
+                    <h3 className="text-base font-extrabold text-zinc-955 leading-snug font-sans">
+                      National Council Registry
                     </h3>
-                    <p className="text-[11px] text-zinc-500 leading-relaxed">
-                      NCIE connects regional coordinators, university chapters, PG research fellows, and verified tech partners to build a structured student innovation pool.
+                    <p className="text-xs text-zinc-500 leading-relaxed font-sans">
+                      Directory of affiliated academic STEM chapters, regional liaison coordinators, and active CENTENARY research fellowship offices.
                     </p>
                   </div>
                   
-                  <div className="pt-6 border-t border-zinc-200/60 space-y-4">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                      <span className="text-[10px] font-mono text-accent-dark font-bold uppercase tracking-wider">
-                        1,000+ Chapter Nodes
-                      </span>
-                    </div>
-                    <Link href="/join" className="block">
-                      <Button variant="outline" size="sm" className="w-full justify-between uppercase font-bold tracking-wider text-[10px] py-2 border-primary/30 text-primary">
-                        <span>Register Chapter Node</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
-                      </Button>
+                  <div className="pt-6 border-t border-zinc-200/80 space-y-3">
+                    <Link href="/chapters" className="group/btn flex items-center justify-between text-xs font-bold text-primary hover:text-primary-dark transition-colors uppercase tracking-wider font-sans">
+                      <span>View Chapters Registry</span>
+                      <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
                     </Link>
                   </div>
                 </div>
 
-                {/* Right Side: Grid of 4 Action Cards */}
-                <div className="col-span-8 p-6 grid grid-cols-2 gap-4 bg-white">
-                  {/* Card 1: Academic Chapters */}
-                  <Link href="/chapters" className="border border-zinc-100 hover:border-primary/20 bg-white hover:bg-mint/30 p-4.5 rounded-xl transition-all group/card flex flex-col justify-between">
-                    <div className="space-y-2.5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded bg-primary/10 text-primary flex items-center justify-center group-hover/card:bg-primary group-hover/card:text-white transition-colors">
-                          <Landmark className="w-4 h-4" />
-                        </div>
-                        <h4 className="text-xs font-extrabold text-zinc-800 group-hover/card:text-primary transition-colors">
-                          Academic Chapters
-                        </h4>
-                      </div>
-                      <p className="text-[11px] text-zinc-500 leading-relaxed">
-                        Access the directory of affiliated STEM college chapters and coordinators.
-                      </p>
-                    </div>
-                    <div className="mt-4 pt-3 border-t border-zinc-100/60 flex items-center justify-between text-[9px] font-mono font-bold text-accent-dark">
-                      <span>CHAPTERS</span>
-                      <span>CAMPUS REGISTRY</span>
-                    </div>
-                  </Link>
+                {/* Right Side: 3-Column Directory Link Grid */}
+                <div className="col-span-9 p-8 grid grid-cols-3 gap-8 bg-white">
+                  {/* Column 1: Academic Nodes */}
+                  <div className="space-y-4">
+                    <h4 className="text-[11px] font-bold tracking-wider text-zinc-400 uppercase font-sans">
+                      Academic Chapters
+                    </h4>
+                    <div className="flex flex-col gap-4.5">
+                      <Link href="/chapters" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
+                          STEM Chapters Directory
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          Directory of approved college chapters and coordinators
+                        </span>
+                      </Link>
 
-                  {/* Card 2: State Coordinator Board */}
-                  <Link href="/chapters" className="border border-zinc-100 hover:border-primary/20 bg-white hover:bg-mint/30 p-4.5 rounded-xl transition-all group/card flex flex-col justify-between">
-                    <div className="space-y-2.5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded bg-accent/25 text-accent-dark flex items-center justify-center group-hover/card:bg-accent group-hover/card:text-white transition-colors">
-                          <Globe className="w-4 h-4" />
-                        </div>
-                        <h4 className="text-xs font-extrabold text-zinc-800 group-hover/card:text-primary transition-colors">
+                      <Link href="/chapters" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
+                          Register Chapter Node
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          Portal for STEM college affiliation requests
+                        </span>
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Column 2: Governance & State board */}
+                  <div className="space-y-4">
+                    <h4 className="text-[11px] font-bold tracking-wider text-zinc-400 uppercase font-sans">
+                      Liaison &amp; Governance
+                    </h4>
+                    <div className="flex flex-col gap-4.5">
+                      <Link href="/chapters" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
                           State Liaison Desks
-                        </h4>
-                      </div>
-                      <p className="text-[11px] text-zinc-500 leading-relaxed">
-                        Direct coordinator contact points and regional policy boards for each state.
-                      </p>
-                    </div>
-                    <div className="mt-4 pt-3 border-t border-zinc-100/60 flex items-center justify-between text-[9px] font-mono font-bold text-accent-dark">
-                      <span>LIAISON</span>
-                      <span>STATE BOARD</span>
-                    </div>
-                  </Link>
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          Direct contact points for regional policy boards
+                        </span>
+                      </Link>
 
-                  {/* Card 3: Research Fellowships */}
-                  <Link href="/opportunities" className="border border-zinc-100 hover:border-primary/20 bg-white hover:bg-mint/30 p-4.5 rounded-xl transition-all group/card flex flex-col justify-between">
-                    <div className="space-y-2.5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded bg-purple-50 text-purple-600 flex items-center justify-center group-hover/card:bg-purple-600 group-hover/card:text-white transition-colors">
-                          <Award className="w-4 h-4" />
-                        </div>
-                        <h4 className="text-xs font-extrabold text-zinc-800 group-hover/card:text-primary transition-colors">
+                      <Link href="/opportunities" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
                           Centenary Fellowships
-                        </h4>
-                      </div>
-                      <p className="text-[11px] text-zinc-500 leading-relaxed">
-                        Postgraduate deep-tech research allowances and fellowships to validate blueprints.
-                      </p>
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          Postgraduate deep-tech research allowances
+                        </span>
+                      </Link>
                     </div>
-                    <div className="mt-4 pt-3 border-t border-zinc-100/60 flex items-center justify-between text-[9px] font-mono font-bold text-accent-dark">
-                      <span>FELLOWSHIPS</span>
-                      <span>₹45K/MO STIPEND</span>
-                    </div>
-                  </Link>
+                  </div>
 
-                  {/* Card 4: Registry Documents */}
-                  <Link href="/media" className="border border-zinc-100 hover:border-primary/20 bg-white hover:bg-mint/30 p-4.5 rounded-xl transition-all group/card flex flex-col justify-between">
-                    <div className="space-y-2.5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded bg-blue-50 text-blue-600 flex items-center justify-center group-hover/card:bg-blue-600 group-hover/card:text-white transition-colors">
-                          <FileText className="w-4 h-4" />
-                        </div>
-                        <h4 className="text-xs font-extrabold text-zinc-800 group-hover/card:text-primary transition-colors">
-                          Documents &amp; Circulars
-                        </h4>
-                      </div>
-                      <p className="text-[11px] text-zinc-500 leading-relaxed">
-                        Official policy blueprints, manual downloads, and public announcements archive.
-                      </p>
+                  {/* Column 3: Policy Documents */}
+                  <div className="space-y-4">
+                    <h4 className="text-[11px] font-bold tracking-wider text-zinc-400 uppercase font-sans">
+                      Policy &amp; Media
+                    </h4>
+                    <div className="flex flex-col gap-4.5">
+                      <Link href="/media" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
+                          Circulars &amp; Guidelines Archive
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          Download rules PDFs and policy manuals
+                        </span>
+                      </Link>
+
+                      <Link href="/media" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
+                          Public Press Releases
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          NCIE announcements and media briefs
+                        </span>
+                      </Link>
                     </div>
-                    <div className="mt-4 pt-3 border-t border-zinc-100/60 flex items-center justify-between text-[9px] font-mono font-bold text-accent-dark">
-                      <span>PUBLIC ARCHIVE</span>
-                      <span>GUIDELINES PDF</span>
-                    </div>
-                  </Link>
+                  </div>
                 </div>
               </div>
             </motion.div>

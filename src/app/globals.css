@@ -79,6 +79,11 @@ body {
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+@media (max-width: 768px) {
+  .animate-marquee {
+    animation-duration: 15s !important;
+  }
+}
 
 /* Mobile drawer */
 .animate-slide-down {
