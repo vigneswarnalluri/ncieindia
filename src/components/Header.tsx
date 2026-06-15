@@ -281,32 +281,32 @@ export default function Header() {
             </div>
 
             {/* Mobile Menu Toggle */}
-            <div className="lg:hidden flex items-center gap-1">
+            <div className="lg:hidden flex items-center gap-1.5">
               <button 
                 onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-                className="flex items-center justify-center w-9 h-9 cursor-pointer text-zinc-600 hover:text-primary hover:bg-zinc-50 rounded-lg transition-colors"
+                className="flex items-center justify-center w-11 h-11 cursor-pointer text-zinc-600 hover:text-primary hover:bg-zinc-50 rounded-lg transition-colors"
                 title={language === "en" ? "हिन्दी में बदलें" : "Switch to English"}
               >
-                <LanguageIcon className="w-4.5 h-4.5 shrink-0" />
+                <LanguageIcon className="w-5.5 h-5.5 shrink-0" />
               </button>
 
               <button
                 onClick={() => setAccessibilityOpen(true)}
-                className="flex items-center justify-center w-9 h-9 cursor-pointer text-zinc-600 hover:text-primary hover:bg-zinc-50 rounded-lg transition-colors"
+                className="flex items-center justify-center w-11 h-11 cursor-pointer text-zinc-600 hover:text-primary hover:bg-zinc-50 rounded-lg transition-colors"
                 title="Accessibility Controls"
               >
-                <AccessibilityIcon className="w-4.5 h-4.5 shrink-0" />
+                <AccessibilityIcon className="w-5.5 h-5.5 shrink-0" />
               </button>
               
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center justify-center w-9 h-9 text-zinc-600 hover:text-primary hover:bg-zinc-50 rounded-lg transition-colors cursor-pointer"
+                className="flex items-center justify-center w-11 h-11 text-zinc-600 hover:text-primary hover:bg-zinc-50 rounded-lg transition-colors cursor-pointer"
                 aria-label="Toggle navigation menu"
               >
                 {isOpen ? (
-                  <X className="w-4.5 h-4.5" />
+                  <X className="w-5.5 h-5.5" />
                 ) : (
-                  <div className="w-4.5 h-3 flex flex-col justify-between">
+                  <div className="w-5.5 h-3.5 flex flex-col justify-between">
                     <span className="w-full h-[2px] bg-current rounded-full" />
                     <span className="w-full h-[2px] bg-current rounded-full" />
                     <span className="w-full h-[2px] bg-current rounded-full" />
@@ -761,6 +761,12 @@ export default function Header() {
                 {/* Footer section with CTA, socials and support details */}
                 <div className="space-y-4.5 mt-auto pt-5 border-t border-zinc-200">
                   <div className="flex flex-col gap-2.5">
+                    <Link href="/login" className="w-full">
+                      <Button variant="outline" className="w-full justify-center py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+                        <Lock className="w-3.5 h-3.5 shrink-0" />
+                        {t("nav_login")}
+                      </Button>
+                    </Link>
                     <Link href="/join" className="w-full">
                       <Button variant="primary" className="w-full justify-center py-2.5 text-xs font-bold uppercase tracking-wider">
                         {t("register_member")}
