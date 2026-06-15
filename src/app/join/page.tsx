@@ -20,6 +20,7 @@ export default function JoinPage() {
   const handleRoleSelect = (selectedRole: "student" | "chapter" | "partner") => {
     setRole(selectedRole);
     setStep("form");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -30,6 +31,7 @@ export default function JoinPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setStep("success");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -223,7 +225,10 @@ export default function JoinPage() {
         {step === "form" && (
           <div className="space-y-6 animate-slide-down">
             <button
-              onClick={() => setStep("select")}
+              onClick={() => {
+                setStep("select");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
               className="inline-flex items-center gap-2 px-4.5 py-2 text-xs font-bold text-zinc-650 hover:text-primary transition-all duration-200 cursor-pointer bg-white border border-zinc-200/80 rounded-full shadow-sm hover:shadow hover:border-zinc-300"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -455,6 +460,7 @@ export default function JoinPage() {
                 onClick={() => {
                   setFormData({ fullName: "", email: "", orgName: "", city: "", proposal: "", designation: "", mobile: "" });
                   setStep("select");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
               >
                 Start New Registration
