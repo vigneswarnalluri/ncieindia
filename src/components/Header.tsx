@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
-  Menu,
   X,
   Globe,
   ChevronRight,
@@ -18,7 +17,6 @@ import {
   Award,
 } from "lucide-react";
 import {
-  FaFacebook,
   FaYoutube,
   FaInstagram,
   FaWhatsapp,
@@ -119,12 +117,14 @@ export default function Header() {
 
   // Close mobile menu when page changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsOpen(false);
     setMobileExpanded({});
   }, [pathname]);
 
   // Close mega menu when page changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setActiveMenu(null);
   }, [pathname]);
 
@@ -281,10 +281,10 @@ export default function Header() {
             </div>
 
             {/* Mobile Menu Toggle */}
-            <div className="lg:hidden flex items-center gap-3">
+            <div className="lg:hidden flex items-center gap-1">
               <button 
                 onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-                className="flex items-center justify-center p-1.5 border border-zinc-100 rounded-lg cursor-pointer text-zinc-650 hover:text-primary"
+                className="flex items-center justify-center w-9 h-9 cursor-pointer text-zinc-600 hover:text-primary hover:bg-zinc-50 rounded-lg transition-colors"
                 title={language === "en" ? "हिन्दी में बदलें" : "Switch to English"}
               >
                 <LanguageIcon className="w-4.5 h-4.5 shrink-0" />
@@ -292,17 +292,26 @@ export default function Header() {
 
               <button
                 onClick={() => setAccessibilityOpen(true)}
-                className="flex items-center justify-center text-zinc-650 hover:text-primary p-1.5 border border-zinc-100 rounded-lg cursor-pointer"
+                className="flex items-center justify-center w-9 h-9 cursor-pointer text-zinc-600 hover:text-primary hover:bg-zinc-50 rounded-lg transition-colors"
                 title="Accessibility Controls"
               >
                 <AccessibilityIcon className="w-4.5 h-4.5 shrink-0" />
               </button>
+              
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-2 rounded-xl text-zinc-600 hover:text-primary hover:bg-zinc-50 border border-transparent hover:border-zinc-200/50 transition-all cursor-pointer"
+                className="flex items-center justify-center w-9 h-9 text-zinc-600 hover:text-primary hover:bg-zinc-50 rounded-lg transition-colors cursor-pointer"
                 aria-label="Toggle navigation menu"
               >
-                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {isOpen ? (
+                  <X className="w-4.5 h-4.5" />
+                ) : (
+                  <div className="w-4.5 h-3 flex flex-col justify-between">
+                    <span className="w-full h-[2px] bg-current rounded-full" />
+                    <span className="w-full h-[2px] bg-current rounded-full" />
+                    <span className="w-full h-[2px] bg-current rounded-full" />
+                  </div>
+                )}
               </button>
             </div>
           </div>
@@ -586,7 +595,7 @@ export default function Header() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 z-40 bg-black/30 lg:hidden"
+              className="fixed inset-0 z-40 bg-black/50 lg:hidden"
             />
 
             {/* Drawer Panel */}
@@ -594,12 +603,12 @@ export default function Header() {
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ type: "tween", duration: 0.25, ease: "easeOut" }}
-              className="fixed right-0 top-0 bottom-0 z-50 w-80 max-w-[85vw] h-full bg-white shadow-2xl flex flex-col lg:hidden"
+              transition={{ type: "tween", duration: 0.22, ease: "easeOut" }}
+              className="fixed right-0 top-0 bottom-0 z-50 w-80 max-w-[85vw] h-full bg-white shadow-xl flex flex-col lg:hidden border-l border-zinc-200"
             >
               {/* Drawer Header */}
-              <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-150 shrink-0">
-                <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-200 bg-zinc-50 shrink-0">
+                <div className="flex items-center">
                   <Image
                     src="/logo-new.png"
                     alt="NCIE Logo"
@@ -612,7 +621,7 @@ export default function Header() {
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-2 -mr-2 text-zinc-505 hover:text-primary rounded-lg transition-colors cursor-pointer"
+                  className="p-1.5 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/50 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-zinc-200"
                   aria-label="Close menu"
                 >
                   <X className="w-5 h-5" />
@@ -620,8 +629,8 @@ export default function Header() {
               </div>
 
               {/* Drawer Content */}
-              <div className="flex-1 overflow-y-auto px-4 py-6 flex flex-col gap-6">
-                <nav className="flex flex-col gap-1.5">
+              <div className="flex-1 overflow-y-auto px-4 py-5 flex flex-col justify-between gap-6">
+                <nav className="flex flex-col gap-1">
                   {NAV_LINKS.map((link) => {
                     const isActive = pathname === link.href;
                     const hasMega = link.hasMega;
@@ -633,10 +642,10 @@ export default function Header() {
                           <button
                             onClick={() => toggleMobileExpanded(link.key)}
                             className={cn(
-                              "flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all cursor-pointer text-left w-full",
+                              "flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer text-left w-full",
                               isActive
-                                ? "bg-mint text-primary font-bold"
-                                : "text-zinc-655 hover:bg-zinc-50 hover:text-primary"
+                                ? "bg-mint text-primary font-bold border-l-4 border-primary pl-2.5"
+                                : "text-zinc-700 hover:bg-zinc-50 hover:text-primary"
                             )}
                           >
                             <span>{t(link.key)}</span>
@@ -656,31 +665,31 @@ export default function Header() {
                                 animate={{ height: "auto", opacity: 1 }}
                                 exit={{ height: 0, opacity: 0 }}
                                 transition={{ duration: 0.2, ease: "easeInOut" }}
-                                className="overflow-hidden flex flex-col pl-6 pr-4 py-1.5 gap-2 border-l-2 border-zinc-150 ml-4 mt-1"
+                                className="overflow-hidden flex flex-col pl-4 pr-3 py-1 gap-1.5 border-l border-zinc-200 ml-4 mt-1"
                               >
                                 {hasMega === "programs" ? (
                                   <>
                                     <Link
                                       href="/programs"
-                                      className="text-xs font-bold text-zinc-500 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50 uppercase tracking-wide"
+                                      className="text-xs font-bold text-primary hover:underline py-1.5 px-2 uppercase tracking-wide"
                                     >
                                       {language === "en" ? "• All Programs Overview" : "• सभी कार्यक्रम अवलोकन"}
                                     </Link>
                                     <Link
                                       href="/programs/nidhi-cis"
-                                      className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
+                                      className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
                                     >
                                       NIDHI College Innovation
                                     </Link>
                                     <Link
                                       href="/programs/seed-pipeline"
-                                      className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
+                                      className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
                                     >
                                       Seed Capital Pipeline
                                     </Link>
                                     <Link
                                       href="/programs/makerspace-empowerment"
-                                      className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
+                                      className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
                                     >
                                       Makerspace Fabrication
                                     </Link>
@@ -689,31 +698,31 @@ export default function Header() {
                                   <>
                                     <Link
                                       href="/chapters"
-                                      className="text-xs font-bold text-zinc-500 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50 uppercase tracking-wide"
+                                      className="text-xs font-bold text-primary hover:underline py-1.5 px-2 uppercase tracking-wide"
                                     >
                                       {language === "en" ? "• All Chapters Overview" : "• सभी शाखाएं अवलोकन"}
                                     </Link>
                                     <Link
                                       href="/chapters"
-                                      className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
+                                      className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
                                     >
                                       Academic Chapters
                                     </Link>
                                     <Link
                                       href="/chapters"
-                                      className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
+                                      className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
                                     >
                                       State Liaison Desks
                                     </Link>
                                     <Link
                                       href="/opportunities"
-                                      className="text-xs font-medium text-zinc-650 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
+                                      className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
                                     >
                                       Centenary Fellowships
                                     </Link>
                                     <Link
                                       href="/media"
-                                      className="text-xs font-medium text-zinc-655 hover:text-primary py-1.5 px-2 rounded hover:bg-zinc-50"
+                                      className="text-xs font-medium text-zinc-650 hover:text-primary hover:underline py-1 px-2"
                                     >
                                       Documents & Circulars
                                     </Link>
@@ -731,10 +740,10 @@ export default function Header() {
                         key={link.key}
                         href={link.href}
                         className={cn(
-                          "flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all",
+                          "flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors",
                           isActive
-                            ? "bg-mint text-primary font-bold"
-                            : "text-zinc-655 hover:bg-zinc-50 hover:text-primary"
+                            ? "bg-mint text-primary font-bold border-l-4 border-primary pl-2.5"
+                            : "text-zinc-700 hover:bg-zinc-50 hover:text-primary"
                         )}
                       >
                         <span>{t(link.key)}</span>
@@ -748,13 +757,57 @@ export default function Header() {
                     );
                   })}
                 </nav>
-                <div className="h-px bg-zinc-100 my-2" />
-                <div className="flex flex-col gap-3">
-                  <Link href="/join" className="w-full">
-                    <Button variant="primary" className="w-full justify-center">
-                      {t("register_member")}
-                    </Button>
-                  </Link>
+
+                {/* Footer section with CTA, socials and support details */}
+                <div className="space-y-4.5 mt-auto pt-5 border-t border-zinc-200">
+                  <div className="flex flex-col gap-2.5">
+                    <Link href="/join" className="w-full">
+                      <Button variant="primary" className="w-full justify-center py-2.5 text-xs font-bold uppercase tracking-wider">
+                        {t("register_member")}
+                      </Button>
+                    </Link>
+                  </div>
+
+                  <div className="h-px bg-zinc-150" />
+
+                  {/* Social Icons */}
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center justify-center gap-2.5">
+                      <a href="https://www.linkedin.com/company/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+                        className="w-8 h-8 rounded bg-zinc-100 hover:bg-primary hover:text-white text-zinc-600 flex items-center justify-center transition-colors">
+                        <FaLinkedinIn className="w-3.5 h-3.5" />
+                      </a>
+                      <a href="https://www.instagram.com/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
+                        className="w-8 h-8 rounded bg-zinc-100 hover:bg-primary hover:text-white text-zinc-600 flex items-center justify-center transition-colors">
+                        <FaInstagram className="w-3.5 h-3.5" />
+                      </a>
+                      <a href="https://x.com/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="Twitter / X"
+                        className="w-8 h-8 rounded bg-zinc-100 hover:bg-primary hover:text-white text-zinc-600 flex items-center justify-center transition-colors">
+                        <FaXTwitter className="w-3.5 h-3.5" />
+                      </a>
+                      <a href="https://youtube.com/@ncie.9" target="_blank" rel="noopener noreferrer" aria-label="YouTube"
+                        className="w-8 h-8 rounded bg-zinc-100 hover:bg-primary hover:text-white text-zinc-600 flex items-center justify-center transition-colors">
+                        <FaYoutube className="w-3.5 h-3.5" />
+                      </a>
+                      <a href="https://whatsapp.com/channel/0029Vb7s9A430LKNIB0OxD1w" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
+                        className="w-8 h-8 rounded bg-zinc-100 hover:bg-primary hover:text-white text-zinc-600 flex items-center justify-center transition-colors">
+                        <FaWhatsapp className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+                    
+                    {/* Support Details */}
+                    <div className="text-center space-y-0.5 bg-zinc-50 p-2.5 rounded-lg border border-zinc-200">
+                      <p className="text-[9px] uppercase font-bold tracking-widest text-zinc-400">
+                        {t("toll_free")}
+                      </p>
+                      <p className="text-xs font-bold text-primary">
+                        1800 123 4567
+                      </p>
+                      <p className="text-[9px] text-zinc-400">
+                        {t("timings")}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>

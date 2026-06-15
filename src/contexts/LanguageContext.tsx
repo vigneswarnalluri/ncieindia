@@ -28,6 +28,25 @@ const translations: Record<Language, Record<string, string>> = {
     apply_now: "Apply Now",
     register_member: "Register as Member",
 
+    // Homepage
+    home_latest_news: "Latest News",
+    home_news_1: "[APPLICATIONS] Applications for National Student Incubation Cohort 2026 are now open. Closing July 31.",
+    home_news_2: "[POLICY] Regional College Chapters policy guidelines document v1.2 has been released.",
+    home_news_3: "[FELLOWSHIPS] Viksit Bharat Postgraduate Research Fellowships funding allocation finalized.",
+    home_hero_title_1: "National Council for",
+    home_hero_title_2: "Innovation",
+    home_hero_title_3: "Entrepreneurship",
+    home_hero_desc: "Aligning academic research with industry networks to build India's largest innovation engine. NCIE acts as a central registry and resource desk connecting student founders, college chapters, and capital partners in a single unified ecosystem.",
+    home_chapter_dir: "Chapter Directory",
+    home_chapter_desc: "Explore active university innovation cells and state coordinators.",
+    home_search_chapters: "Search Chapters",
+    home_schemes_reg: "Schemes Registry",
+    home_schemes_desc: "Review active grants, seed funding programs, and corporate fellowship circulars.",
+    home_view_schemes: "View Schemes",
+    home_btn_apply: "Apply for Registration",
+    home_btn_profile: "Read Organization Profile",
+    home_footer_info: "NCIE India is the statutory apex body coordinating technical campus innovation networks.",
+
     // Login Page General
     login_title: "Portal Authorization",
     login_subtitle: "Authorized sign-in gateway for registered users.",
@@ -150,6 +169,25 @@ const translations: Record<Language, Record<string, string>> = {
     timings: "(पूर्वाहन 10:00 से अपराहन 05:30 तक)",
     apply_now: "आवेदन करें",
     register_member: "सदस्य के रूप में पंजीकरण करें",
+
+    // Homepage
+    home_latest_news: "नवीनतम समाचार",
+    home_news_1: "[आवेदन] राष्ट्रीय छात्र इनक्यूबेशन कोहोर्ट 2026 के लिए आवेदन अब खुले हैं। अंतिम तिथि 31 जुलाई।",
+    home_news_2: "[नीति] क्षेत्रीय कॉलेज शाखाओं के नीति दिशानिर्देश दस्तावेज़ v1.2 जारी किए गए हैं।",
+    home_news_3: "[फेलोशिप] विकसित भारत स्नातकोत्तर अनुसंधान फेलोशिप वित्तपोषण आवंटन को अंतिम रूप दिया गया।",
+    home_hero_title_1: "राष्ट्रीय",
+    home_hero_title_2: "नवाचार",
+    home_hero_title_3: "एवं उद्यमिता परिषद",
+    home_hero_desc: "भारत के सबसे बड़े नवाचार इंजन के निर्माण के लिए उद्योग नेटवर्क के साथ शैक्षणिक अनुसंधान को संरेखित करना। NCIE एक केंद्रीय रजिस्ट्री और संसाधन डेस्क के रूप में कार्य करता है जो छात्र संस्थापकों, कॉलेज शाखाओं और पूंजी भागीदारों को एक एकीकृत पारिस्थितिकी तंत्र में जोड़ता है।",
+    home_chapter_dir: "शाखा निर्देशिका",
+    home_chapter_desc: "सक्रिय विश्वविद्यालय नवाचार सेल और राज्य समन्वयकों का पता लगाएं।",
+    home_search_chapters: "शाखाएं खोजें",
+    home_schemes_reg: "योजनाएं रजिस्ट्री",
+    home_schemes_desc: "सक्रिय अनुदान, बीज निधि कार्यक्रम और कॉर्पोरेट फेलोशिप परिपत्रों की समीक्षा करें।",
+    home_view_schemes: "योजनाएं देखें",
+    home_btn_apply: "पंजीकरण के लिए आवेदन करें",
+    home_btn_profile: "संगठन प्रोफ़ाइल पढ़ें",
+    home_footer_info: "NCIE भारत तकनीकी परिसर नवाचार नेटवर्क का समन्वय करने वाला वैधानिक शीर्ष निकाय है।",
 
     // Login Page General
     login_title: "पोर्टल प्राधिकरण",

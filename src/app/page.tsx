@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   ArrowRight,
   Award,
@@ -144,6 +145,7 @@ const CIRCULARS = [
 ];
 
 export default function Home() {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState("all");
   const noticeRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
@@ -202,17 +204,17 @@ export default function Home() {
         <div className="max-w-7xl mx-auto flex items-center gap-3">
           <span className="flex items-center gap-1 bg-[#C9A24B] text-zinc-950 font-bold px-2.5 py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0">
             <span className="w-1.5 h-1.5 rounded-full bg-zinc-900 inline-block" />
-            <span>Latest News</span>
+            <span>{t("home_latest_news")}</span>
           </span>
           <div className="overflow-hidden relative w-full">
             <div className="flex gap-12 whitespace-nowrap animate-marquee" aria-live="off">
-              <span className="text-zinc-100">[APPLICATIONS] Applications for National Student Incubation Cohort 2026 are now open. Closing July 31.</span>
-              <span className="text-zinc-100">[POLICY] Regional College Chapters policy guidelines document v1.2 has been released.</span>
-              <span className="text-zinc-100">[FELLOWSHIPS] Viksit Bharat Postgraduate Research Fellowships funding allocation finalized.</span>
+              <span className="text-zinc-100">{t("home_news_1")}</span>
+              <span className="text-zinc-100">{t("home_news_2")}</span>
+              <span className="text-zinc-100">{t("home_news_3")}</span>
               {/* Duplicate for seamless loop */}
-              <span className="text-zinc-100" aria-hidden>[APPLICATIONS] Applications for National Student Incubation Cohort 2026 are now open. Closing July 31.</span>
-              <span className="text-zinc-100" aria-hidden>[POLICY] Regional College Chapters policy guidelines document v1.2 has been released.</span>
-              <span className="text-zinc-100" aria-hidden>[FELLOWSHIPS] Viksit Bharat Postgraduate Research Fellowships funding allocation finalized.</span>
+              <span className="text-zinc-100" aria-hidden>{t("home_news_1")}</span>
+              <span className="text-zinc-100" aria-hidden>{t("home_news_2")}</span>
+              <span className="text-zinc-100" aria-hidden>{t("home_news_3")}</span>
             </div>
           </div>
         </div>
@@ -226,11 +228,13 @@ export default function Home() {
             {/* Left Column: Official Welcome & Mission Statement */}
             <div className="lg:col-span-7 space-y-6">
               <h1 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-extrabold tracking-tight text-zinc-900 leading-tight">
-                National Council for <span className="text-[#0D6B4F]">Innovation</span> &amp; <span className="text-[#A68034]">Entrepreneurship</span>
+                {t("home_hero_title_1")}{" "}
+                <span className="text-[#0D6B4F]">{t("home_hero_title_2")}</span>{" "}
+                <span className="text-[#A68034]">{t("home_hero_title_3")}</span>
               </h1>
               
               <p className="text-sm text-zinc-700 leading-relaxed text-justify font-sans">
-                Aligning academic research with industry networks to build India&apos;s largest innovation engine. NCIE acts as a central registry and resource desk connecting student founders, college chapters, and capital partners in a single unified ecosystem.
+                {t("home_hero_desc")}
               </p>
 
               {/* Quick Directories / Access Points */}
@@ -239,14 +243,14 @@ export default function Home() {
                   <div>
                     <h3 className="text-sm font-bold text-zinc-900 uppercase tracking-wider flex items-center gap-1.5 border-b border-zinc-200 pb-2">
                       <UserCheck className="w-4.5 h-4.5 text-primary" />
-                      <span>Chapter Directory</span>
+                      <span>{t("home_chapter_dir")}</span>
                     </h3>
                     <p className="text-xs text-zinc-500 mt-2 leading-relaxed">
-                      Explore active university innovation cells and state coordinators.
+                      {t("home_chapter_desc")}
                     </p>
                   </div>
                   <Link href="/chapters" className="text-xs text-primary font-bold hover:underline inline-flex items-center gap-1 mt-4">
-                    <span>Search Chapters</span>
+                    <span>{t("home_search_chapters")}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
@@ -255,14 +259,14 @@ export default function Home() {
                   <div>
                     <h3 className="text-sm font-bold text-zinc-900 uppercase tracking-wider flex items-center gap-1.5 border-b border-zinc-200 pb-2">
                       <FileText className="w-4.5 h-4.5 text-primary" />
-                      <span>Schemes Registry</span>
+                      <span>{t("home_schemes_reg")}</span>
                     </h3>
                     <p className="text-xs text-zinc-500 mt-2 leading-relaxed">
-                      Review active grants, seed funding programs, and corporate fellowship circulars.
+                      {t("home_schemes_desc")}
                     </p>
                   </div>
                   <Link href="/programs" className="text-xs text-primary font-bold hover:underline inline-flex items-center gap-1 mt-4">
-                    <span>View Schemes</span>
+                    <span>{t("home_view_schemes")}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
@@ -271,19 +275,19 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row items-center gap-3 pt-4">
                 <Link href="/join" className="w-full sm:w-auto">
                   <button className="w-full sm:w-auto bg-[#0D6B4F] hover:bg-[#074733] text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 transition-colors cursor-pointer">
-                    Apply for Registration
+                    {t("home_btn_apply")}
                   </button>
                 </Link>
                 <Link href="/about" className="w-full sm:w-auto">
                   <button className="w-full sm:w-auto border border-zinc-300 hover:bg-zinc-50 text-zinc-700 font-bold text-xs uppercase tracking-wider px-6 py-3.5 transition-colors cursor-pointer">
-                    Read Organization Profile
+                    {t("home_btn_profile")}
                   </button>
                 </Link>
               </div>
 
               <div className="flex items-center gap-2 pt-2 text-[10px] sm:text-xs text-zinc-550 font-medium">
                 <Info className="w-4.5 h-4.5 text-zinc-400 shrink-0" />
-                <span>NCIE India is the statutory apex body coordinating technical campus innovation networks.</span>
+                <span>{t("home_footer_info")}</span>
               </div>
             </div>
 
