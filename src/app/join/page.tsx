@@ -15,6 +15,12 @@ export default function JoinPage() {
     proposal: "",
     designation: "",
     mobile: "",
+    deptYear: "",
+    instType: "",
+    accreditationCode: "",
+    partnerCategory: "",
+    regNumber: "",
+    websiteUrl: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -53,6 +59,21 @@ export default function JoinPage() {
     setStep("form");
     setValidationError(null);
     setFiles({ consentForm: null, idCard: null, proposalRoster: null });
+    setFormData({
+      fullName: "",
+      email: "",
+      orgName: "",
+      city: "",
+      proposal: "",
+      designation: "",
+      mobile: "",
+      deptYear: "",
+      instType: "",
+      accreditationCode: "",
+      partnerCategory: "",
+      regNumber: "",
+      websiteUrl: "",
+    });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -234,7 +255,21 @@ export default function JoinPage() {
                     localStorage.removeItem("ncie_submission_details");
                     setExistingSubmission(null);
                     setRegId("");
-                    setFormData({ fullName: "", email: "", orgName: "", city: "", proposal: "", designation: "", mobile: "" });
+                    setFormData({
+                      fullName: "",
+                      email: "",
+                      orgName: "",
+                      city: "",
+                      proposal: "",
+                      designation: "",
+                      mobile: "",
+                      deptYear: "",
+                      instType: "",
+                      accreditationCode: "",
+                      partnerCategory: "",
+                      regNumber: "",
+                      websiteUrl: "",
+                    });
                     setFiles({ consentForm: null, idCard: null, proposalRoster: null });
                     setStep("select");
                     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -447,9 +482,12 @@ export default function JoinPage() {
 
                   <form onSubmit={handleSubmit} className="p-6 space-y-4">
                     
+                    {/* Row 1: Representative Name & Designation */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Full Legal Name</label>
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
+                          {role === "student" ? "Full Legal Name" : role === "chapter" ? "Name of Institutional Head" : "Authorized Liaison Name"}
+                        </label>
                         <input
                           name="fullName"
                           type="text"
@@ -457,7 +495,7 @@ export default function JoinPage() {
                           value={formData.fullName}
                           onChange={handleInputChange}
                           className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                          placeholder="e.g. Sneha Sen"
+                          placeholder={role === "student" ? "e.g. Sneha Sen" : role === "chapter" ? "e.g. Dr. A. K. Sharma" : "e.g. Rajesh Kumar"}
                           required
                         />
                       </div>
@@ -471,15 +509,18 @@ export default function JoinPage() {
                           value={formData.designation}
                           onChange={handleInputChange}
                           className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                          placeholder="e.g. Student Coordinator or Dean"
+                          placeholder={role === "student" ? "e.g. Student Lead, Team Representative" : role === "chapter" ? "e.g. Principal, Dean of R&D, Registrar" : "e.g. CSR Head, Partnerships Lead"}
                           required
                         />
                       </div>
                     </div>
 
+                    {/* Row 2: Contact Details (Email & Phone) */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Official Email Address</label>
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
+                          {role === "student" ? "Official Email Address" : role === "chapter" ? "Official Institutional Email" : "Official Corporate Email"}
+                        </label>
                         <input
                           name="email"
                           type="email"
@@ -487,7 +528,7 @@ export default function JoinPage() {
                           value={formData.email}
                           onChange={handleInputChange}
                           className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                          placeholder="e.g. sneha@institute.edu.in"
+                          placeholder={role === "student" ? "e.g. sneha@institute.edu.in" : role === "chapter" ? "e.g. principal@institute.edu.in" : "e.g. partnerships@corporation.com"}
                           required
                         />
                       </div>
@@ -508,22 +549,125 @@ export default function JoinPage() {
                       </div>
                     </div>
 
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
-                        {role === "student" ? "College or University Name" : "Institution / Corporation Legal Entity"}
-                      </label>
-                      <input
-                        name="orgName"
-                        type="text"
-                        maxLength={200}
-                        value={formData.orgName}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                        placeholder="e.g. Indian Institute of Technology"
-                        required
-                      />
+                    {/* Row 3: Organization / Entity Details */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
+                          {role === "student" ? "College or University Name" : role === "chapter" ? "College/University Name" : "Corporation / Venture Legal Entity"}
+                        </label>
+                        <input
+                          name="orgName"
+                          type="text"
+                          maxLength={200}
+                          value={formData.orgName}
+                          onChange={handleInputChange}
+                          className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                          placeholder={role === "student" || role === "chapter" ? "e.g. Indian Institute of Technology" : "e.g. Peak Founders or Tata Trusts"}
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        {role === "student" && (
+                          <>
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Department &amp; Year of Study</label>
+                            <input
+                              name="deptYear"
+                              type="text"
+                              maxLength={100}
+                              value={formData.deptYear}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                              placeholder="e.g. Computer Science, 3rd Year"
+                              required
+                            />
+                          </>
+                        )}
+                        {role === "chapter" && (
+                          <>
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Institution Type</label>
+                            <input
+                              name="instType"
+                              type="text"
+                              maxLength={100}
+                              value={formData.instType}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                              placeholder="e.g. Engineering College, State University, R&D Hub"
+                              required
+                            />
+                          </>
+                        )}
+                        {role === "partner" && (
+                          <>
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Partner Category / Sector</label>
+                            <input
+                              name="partnerCategory"
+                              type="text"
+                              maxLength={100}
+                              value={formData.partnerCategory}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                              placeholder="e.g. Venture Capital, Incubator, Accelerator, CSR Sponsor"
+                              required
+                            />
+                          </>
+                        )}
+                      </div>
                     </div>
 
+                    {/* Row 4: Custom specific ID / Info */}
+                    {(role === "chapter" || role === "partner") && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {role === "chapter" && (
+                          <div className="space-y-1.5 col-span-2 sm:col-span-1">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">AICTE / UGC / NAAC Code</label>
+                            <input
+                              name="accreditationCode"
+                              type="text"
+                              maxLength={100}
+                              value={formData.accreditationCode}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                              placeholder="e.g. AICTE-1-12345678 or NAAC-A++"
+                              required
+                            />
+                          </div>
+                        )}
+                        {role === "partner" && (
+                          <>
+                            <div className="space-y-1.5">
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Corporate Registration (CIN / GSTIN / PAN)</label>
+                              <input
+                                name="regNumber"
+                                type="text"
+                                maxLength={100}
+                                value={formData.regNumber}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                                placeholder="e.g. 27AAAAA1111A1Z1 or CIN/PAN"
+                                required
+                              />
+                            </div>
+                            <div className="space-y-1.5">
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Corporate Website URL</label>
+                              <input
+                                name="websiteUrl"
+                                type="url"
+                                maxLength={150}
+                                value={formData.websiteUrl}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                                placeholder="e.g. https://www.corporation.com"
+                                required
+                              />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )}
+
+                    {/* City & State */}
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">City &amp; State</label>
                       <input
@@ -538,8 +682,15 @@ export default function JoinPage() {
                       />
                     </div>
 
+                    {/* Proposal / Textarea */}
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Proposal Abstract / Support Required</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
+                        {role === "student" 
+                          ? "Project Title & Abstract" 
+                          : role === "chapter" 
+                            ? "Chapter Objectives & Planned Student Scope" 
+                            : "Resource Support & Proposed Partnership Program"}
+                      </label>
                       <textarea
                         name="proposal"
                         rows={4}
@@ -547,7 +698,13 @@ export default function JoinPage() {
                         value={formData.proposal}
                         onChange={handleInputChange}
                         className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 resize-y"
-                        placeholder="State your student group focus, chapter objectives, or specific resources required from the NCIE national registry..."
+                        placeholder={
+                          role === "student"
+                            ? "Provide a detailed title and abstract of your innovation, prototype, or start-up concept..."
+                            : role === "chapter"
+                              ? "Describe the objectives, planned student events, and laboratory/makerspace infrastructure you plan to allocate for the proposed chapter..."
+                              : "Describe the resources, funding allocation, mentoring programs, or incubation physical access you plan to align with the NCIE ecosystem..."
+                        }
                         required
                       />
                     </div>
@@ -557,9 +714,16 @@ export default function JoinPage() {
                       <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Required Verification Documents</p>
                       
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        
+                        {/* File 1: Consent Form */}
                         <div className="space-y-1.5">
                           <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block">
-                            Affiliation Consent Form <span className="text-red-500">*</span>
+                            {role === "student" 
+                              ? "HOD Consent / Support Letter" 
+                              : role === "chapter" 
+                                ? "Institutional Consent Form" 
+                                : "Partnership Intent Letter"}{" "}
+                            <span className="text-red-500">*</span>
                           </label>
                           <input
                             type="file"
@@ -568,35 +732,75 @@ export default function JoinPage() {
                             onChange={(e) => handleFileChange(e, "consentForm", [".pdf"], 2)}
                             className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
                           />
-                          <span className="text-[9px] text-zinc-400 block font-medium">Signed PDF (Max 2MB)</span>
+                          <span className="text-[9px] text-zinc-400 block font-medium">
+                            {role === "student" 
+                              ? "Signed PDF by HOD (Max 2MB)" 
+                              : role === "chapter" 
+                                ? "Signed & Sealed PDF by Dean/Principal (Max 2MB)" 
+                                : "Signed PDF on Corporate Letterhead (Max 2MB)"}
+                          </span>
                         </div>
 
+                        {/* File 2: ID Card */}
                         <div className="space-y-1.5">
                           <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block">
-                            Institutional ID Card <span className="text-red-500">*</span>
+                            {role === "student" 
+                              ? "Student ID Card" 
+                              : role === "chapter" 
+                                ? "Institutional Accreditation Certificate" 
+                                : "Certificate of Incorporation / GST"}{" "}
+                            <span className="text-red-500">*</span>
                           </label>
                           <input
                             type="file"
-                            accept=".jpg,.jpeg,.png,.pdf"
+                            accept=".pdf,.jpg,.jpeg,.png"
                             required
-                            onChange={(e) => handleFileChange(e, "idCard", [".jpg", ".jpeg", ".png", ".pdf"], 2)}
+                            onChange={(e) => handleFileChange(
+                              e, 
+                              "idCard", 
+                              [".jpg", ".jpeg", ".png", ".pdf"], 
+                              2
+                            )}
                             className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
                           />
-                          <span className="text-[9px] text-zinc-400 block font-medium">JPEG, PNG, or PDF (Max 2MB)</span>
+                          <span className="text-[9px] text-zinc-400 block font-medium">
+                            {role === "student" 
+                              ? "JPEG, PNG, or PDF (Max 2MB)" 
+                              : role === "chapter" 
+                                ? "PDF or Image Certificate (Max 2MB)" 
+                                : "PDF or Image Document (Max 2MB)"}
+                          </span>
                         </div>
 
+                        {/* File 3: Proposal Roster */}
                         <div className="space-y-1.5">
                           <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block">
-                            Chapter Proposal Roster <span className="text-red-500">*</span>
+                            {role === "student" 
+                              ? "Project Team Roster" 
+                              : role === "chapter" 
+                                ? "Chapter Committee Roster" 
+                                : "Corporate Program Overview"}{" "}
+                            <span className="text-red-500">*</span>
                           </label>
                           <input
                             type="file"
-                            accept=".pdf,.docx,.doc"
+                            accept={role === "partner" ? ".pdf" : ".pdf,.docx,.doc"}
                             required
-                            onChange={(e) => handleFileChange(e, "proposalRoster", [".pdf", ".docx", ".doc"], 2)}
+                            onChange={(e) => handleFileChange(
+                              e, 
+                              "proposalRoster", 
+                              role === "partner" ? [".pdf"] : [".pdf", ".docx", ".doc"], 
+                              2
+                            )}
                             className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
                           />
-                          <span className="text-[9px] text-zinc-400 block font-medium">PDF or DOCX (Max 2MB)</span>
+                          <span className="text-[9px] text-zinc-400 block font-medium">
+                            {role === "student" 
+                              ? "PDF or DOCX (Max 2MB)" 
+                              : role === "chapter" 
+                                ? "PDF or DOCX list of coordinators (Max 2MB)" 
+                                : "PDF Brochure (Max 2MB)"}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -657,7 +861,13 @@ export default function JoinPage() {
                         <FileText className="w-3.5 h-3.5" />
                       </div>
                       <div>
-                        <p className="text-xs font-bold text-zinc-800">Affiliation Consent Form</p>
+                        <p className="text-xs font-bold text-zinc-800">
+                          {role === "student" 
+                            ? "HOD Consent / Support Letter" 
+                            : role === "chapter" 
+                              ? "Institutional Consent Form" 
+                              : "Partnership Intent Letter"}
+                        </p>
                         <span className="text-[10px] text-zinc-400 font-medium">Signed PDF</span>
                       </div>
                     </div>
@@ -667,8 +877,16 @@ export default function JoinPage() {
                         <FileText className="w-3.5 h-3.5" />
                       </div>
                       <div>
-                        <p className="text-xs font-bold text-zinc-800">Institutional ID Card</p>
-                        <span className="text-[10px] text-zinc-400 font-medium">JPEG / PDF</span>
+                        <p className="text-xs font-bold text-zinc-800">
+                          {role === "student" 
+                            ? "Student ID Card" 
+                            : role === "chapter" 
+                              ? "Institutional Accreditation Certificate" 
+                              : "Certificate of Incorporation / GST"}
+                        </p>
+                        <span className="text-[10px] text-zinc-400 font-medium">
+                          {role === "student" ? "JPEG / PNG / PDF" : "PDF / Image"}
+                        </span>
                       </div>
                     </div>
 
@@ -677,13 +895,20 @@ export default function JoinPage() {
                         <FileText className="w-3.5 h-3.5" />
                       </div>
                       <div>
-                        <p className="text-xs font-bold text-zinc-800">Chapter Proposal Roster</p>
-                        <span className="text-[10px] text-zinc-400 font-medium">PDF / DOCX</span>
+                        <p className="text-xs font-bold text-zinc-800">
+                          {role === "student" 
+                            ? "Project Team Roster" 
+                            : role === "chapter" 
+                              ? "Chapter Committee Roster" 
+                              : "Corporate Program Overview"}
+                        </p>
+                        <span className="text-[10px] text-zinc-400 font-medium">
+                          {role === "partner" ? "PDF Only" : "PDF / DOCX"}
+                        </span>
                       </div>
                     </div>
                   </div>
                 </div>
-
               </div>
 
             </div>
@@ -727,7 +952,21 @@ export default function JoinPage() {
                     localStorage.removeItem("ncie_submission_details");
                     setExistingSubmission(null);
                     setRegId("");
-                    setFormData({ fullName: "", email: "", orgName: "", city: "", proposal: "", designation: "", mobile: "" });
+                    setFormData({
+                      fullName: "",
+                      email: "",
+                      orgName: "",
+                      city: "",
+                      proposal: "",
+                      designation: "",
+                      mobile: "",
+                      deptYear: "",
+                      instType: "",
+                      accreditationCode: "",
+                      partnerCategory: "",
+                      regNumber: "",
+                      websiteUrl: "",
+                    });
                     setFiles({ consentForm: null, idCard: null, proposalRoster: null });
                     setStep("select");
                     window.scrollTo({ top: 0, behavior: "smooth" });
