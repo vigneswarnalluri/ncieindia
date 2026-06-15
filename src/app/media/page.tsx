@@ -11,7 +11,7 @@ const MEDIA_ANNOUNCEMENTS = [
     date: "June 12, 2026",
     title: "NCIE National Incubation Cohort 2026 Applications Open",
     category: "Cohort",
-    desc: "Collegiate tech start-ups and university-nominated research groups can now submit application dossiers for seed alignment.",
+    desc: "Collegiate tech start-ups and university-nominated research groups can now submit applications for seed alignment.",
   },
   {
     date: "June 08, 2026",

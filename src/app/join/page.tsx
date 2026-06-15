@@ -175,7 +175,7 @@ export default function JoinPage() {
               </span>
               <div>
                 <p className="text-[10px] uppercase font-bold tracking-wider text-zinc-400">Step 2</p>
-                <p className={`text-xs ${step === "form" ? "text-primary font-bold" : "text-zinc-650"}`}>Dossier Submission</p>
+                <p className={`text-xs ${step === "form" ? "text-primary font-bold" : "text-zinc-650"}`}>Application Submission</p>
               </div>
             </div>
 
@@ -191,7 +191,7 @@ export default function JoinPage() {
               </span>
               <div>
                 <p className="text-[10px] uppercase font-bold tracking-wider text-zinc-400">Step 3</p>
-                <p className={`text-xs ${step === "success" ? "text-primary font-bold" : "text-zinc-650"}`}>Dossier Verification</p>
+                <p className={`text-xs ${step === "success" ? "text-primary font-bold" : "text-zinc-650"}`}>Application Verification</p>
               </div>
             </div>
 
@@ -210,7 +210,7 @@ export default function JoinPage() {
             <div className="space-y-2">
               <h2 className="text-lg font-bold text-zinc-800 uppercase tracking-wider">Active Registration Found</h2>
               <p className="text-xs text-zinc-500 leading-relaxed max-w-md mx-auto">
-                An active onboarding registration dossier for <span className="font-semibold text-zinc-800">{existingSubmission.orgName}</span> has already been submitted from this device under credentials:
+                An active onboarding registration application for <span className="font-semibold text-zinc-800">{existingSubmission.orgName}</span> has already been submitted from this device under credentials:
               </p>
               <div className="pt-2">
                 <span className="font-mono font-bold text-accent-dark bg-amber-50 px-4 py-1.5 rounded text-xs border border-accent/20 select-all shadow-sm">
@@ -222,7 +222,7 @@ export default function JoinPage() {
             <div className="bg-zinc-50 border border-zinc-200 rounded p-4 text-left flex gap-3 text-xs text-zinc-650 leading-relaxed">
               <Info className="w-5 h-5 text-accent-dark shrink-0 mt-0.5" />
               <span>
-                <strong>Submission Lock:</strong> To prevent multiple dossier registry conflicts, resubmission under the same session is restricted. Verification updates have been queued for <strong className="text-primary">{existingSubmission.email}</strong>.
+                <strong>Submission Lock:</strong> To prevent multiple registration conflicts, resubmission under the same session is restricted. Verification updates have been queued for <strong className="text-primary">{existingSubmission.email}</strong>.
               </span>
             </div>
 
@@ -264,7 +264,7 @@ export default function JoinPage() {
               <div className="h-0.5 w-24 bg-accent mx-auto" />
               
               <p className="text-xs sm:text-sm text-zinc-500 max-w-2xl mx-auto leading-relaxed">
-                Affiliate your credentials under the National Council framework. Please choose the appropriate registry pathway below to submit your organizational dossier.
+                Affiliate your credentials under the National Council framework. Please choose the appropriate registry pathway below to submit your organizational details.
               </p>
             </div>
 
@@ -426,14 +426,14 @@ export default function JoinPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
               
-              {/* Left Column: Form dossier */}
+              {/* Left Column: Form Details */}
               <div className="lg:col-span-8">
                 <div className="bg-white border border-zinc-200 rounded shadow-sm overflow-hidden">
                   
                   {/* Form Header */}
                   <div className="bg-zinc-50 px-6 py-4 border-b border-zinc-200">
                     <span className="text-[10px] font-bold text-accent-dark tracking-wider uppercase bg-white border border-zinc-200 px-2 py-0.5 rounded shadow-sm">
-                      {role === "student" ? "Innovator Dossier" : role === "chapter" ? "Chapter Affiliation" : "Partner Liaison"}
+                      {role === "student" ? "Innovator Application" : role === "chapter" ? "Chapter Affiliation" : "Partner Liaison"}
                     </span>
                     <h2 className="text-base font-extrabold text-zinc-800 mt-2 uppercase tracking-wide">Nomination Entry Form</h2>
                   </div>
@@ -605,7 +605,7 @@ export default function JoinPage() {
                     <div className="p-3 bg-zinc-50 border border-zinc-200 rounded flex gap-2.5 items-start text-[11px] text-zinc-650">
                       <input type="checkbox" required className="mt-0.5 focus:ring-primary h-4 w-4 border-zinc-300 rounded shrink-0 cursor-pointer accent-primary" />
                       <span>
-                        <strong>Under Section 4 Guidelines:</strong> I hereby declare that all details entered in this dossier are true, legal, and represent coordinates authorized by my affiliated academic or corporate entity.
+                        <strong>Under Section 4 Guidelines:</strong> I hereby declare that all details entered in this application are true, legal, and represent coordinates authorized by my affiliated academic or corporate entity.
                       </span>
                     </div>
 
@@ -619,10 +619,10 @@ export default function JoinPage() {
                       {isSubmitting ? (
                         <>
                           <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin shrink-0" />
-                          <span>Processing Dossier...</span>
+                          <span>Processing Application...</span>
                         </>
                       ) : (
-                        <span>Submit Nomination Dossier</span>
+                        <span>Submit Nomination Form</span>
                       )}
                     </button>
 
@@ -701,9 +701,9 @@ export default function JoinPage() {
             </div>
             
             <div className="space-y-2">
-              <h2 className="text-lg font-bold text-zinc-800 uppercase tracking-wider">Dossier Saved Successfully</h2>
+              <h2 className="text-lg font-bold text-zinc-800 uppercase tracking-wider">Application Submitted Successfully</h2>
               <p className="text-xs text-zinc-500 leading-relaxed max-w-md mx-auto">
-                Thank you, <span className="font-bold text-primary">{formData.fullName}</span>. Your registration dossier for <span className="font-semibold text-zinc-800">{formData.orgName}</span> has been logged under registry credentials below:
+                Thank you, <span className="font-bold text-primary">{formData.fullName}</span>. Your registration details for <span className="font-semibold text-zinc-800">{formData.orgName}</span> have been logged under registry credentials below:
               </p>
               <div className="pt-2">
                 <span className="font-mono font-bold text-accent-dark bg-amber-50 px-4 py-1.5 rounded text-xs border border-accent/20 select-all shadow-sm">
@@ -715,7 +715,7 @@ export default function JoinPage() {
             <div className="bg-zinc-50 border border-zinc-200 rounded p-4 text-left flex gap-3 text-xs text-zinc-650 leading-relaxed">
               <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
               <span>
-                <strong>Next Step:</strong> Our regional chapter liaison desk has received your dossier and uploaded verification documents. A verification confirmation reference will be sent to <strong className="text-primary">{formData.email}</strong>. The review process will take 3-5 business days, and credentials will be issued once approved.
+                <strong>Next Step:</strong> Our regional chapter liaison desk has received your application and uploaded verification documents. A verification confirmation reference will be sent to <strong className="text-primary">{formData.email}</strong>. The review process will take 3-5 business days, and credentials will be issued once approved.
               </span>
             </div>
 

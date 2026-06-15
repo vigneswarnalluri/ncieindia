@@ -108,7 +108,7 @@ export default function ContactPage() {
                 <div className="space-y-2">
                   <h3 className="text-xl font-bold text-zinc-900">Inquiry Logged</h3>
                   <p className="text-sm text-zinc-500 leading-relaxed">
-                    Thank you, <span className="font-semibold text-primary">{formData.name}</span>. Your <span className="capitalize font-semibold text-accent">{activeTab} inquiry</span> dossier has been successfully submitted to our regional coordinator.
+                    Thank you, <span className="font-semibold text-primary">{formData.name}</span>. Your <span className="capitalize font-semibold text-accent">{activeTab} inquiry</span> has been successfully submitted to our regional coordinator.
                   </p>
                 </div>
 
