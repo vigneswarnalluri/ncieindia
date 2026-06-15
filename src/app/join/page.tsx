@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { User, Landmark, Building, CheckCircle, ArrowLeft, ArrowRight, ShieldCheck, Info, FileText, Check } from "lucide-react";
 import Link from "next/link";
 
@@ -20,6 +20,13 @@ export default function JoinPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
   
+  const [existingSubmission, setExistingSubmission] = useState<{
+    email: string;
+    orgName: string;
+    regId: string;
+  } | null>(null);
+  const [regId, setRegId] = useState<string>("");
+
   const [files, setFiles] = useState<{
     consentForm: File | null;
     idCard: File | null;
@@ -29,6 +36,17 @@ export default function JoinPage() {
     idCard: null,
     proposalRoster: null,
   });
+
+  useEffect(() => {
+    const savedSubmission = localStorage.getItem("ncie_submission_details");
+    if (savedSubmission) {
+      try {
+        setExistingSubmission(JSON.parse(savedSubmission));
+      } catch (err) {
+        localStorage.removeItem("ncie_submission_details");
+      }
+    }
+  }, []);
 
   const handleRoleSelect = (selectedRole: "student" | "chapter" | "partner") => {
     setRole(selectedRole);
@@ -105,6 +123,17 @@ export default function JoinPage() {
     // Simulating database storage latency
     setTimeout(() => {
       setIsSubmitting(false);
+      const generatedId = `REG-2026-${Math.floor(Math.random() * 9000) + 1000}`;
+      setRegId(generatedId);
+
+      const submissionDetails = {
+        email: formData.email,
+        orgName: formData.orgName,
+        regId: generatedId,
+      };
+      localStorage.setItem("ncie_submission_details", JSON.stringify(submissionDetails));
+      setExistingSubmission(submissionDetails);
+
       setStep("success");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }, 1200);
@@ -169,8 +198,57 @@ export default function JoinPage() {
           </div>
         </div>
 
+        {/* Client-side Duplicate Block (Active Registration Warning) */}
+        {existingSubmission && step !== "success" && (
+          <div className="max-w-xl mx-auto text-center space-y-6 py-12 bg-white border border-zinc-200 rounded p-8 shadow-sm relative overflow-hidden animate-slide-down mb-8">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-[#C9A24B]" />
+            
+            <div className="w-12 h-12 rounded-full bg-amber-50 text-[#A68034] flex items-center justify-center mx-auto border border-accent/20 shadow-sm mb-2">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            
+            <div className="space-y-2">
+              <h2 className="text-lg font-bold text-zinc-800 uppercase tracking-wider">Active Registration Found</h2>
+              <p className="text-xs text-zinc-500 leading-relaxed max-w-md mx-auto">
+                An active onboarding registration dossier for <span className="font-semibold text-zinc-800">{existingSubmission.orgName}</span> has already been submitted from this device under credentials:
+              </p>
+              <div className="pt-2">
+                <span className="font-mono font-bold text-accent-dark bg-amber-50 px-4 py-1.5 rounded text-xs border border-accent/20 select-all shadow-sm">
+                  {existingSubmission.regId}
+                </span>
+              </div>
+            </div>
+
+            <div className="bg-zinc-50 border border-zinc-200 rounded p-4 text-left flex gap-3 text-xs text-zinc-650 leading-relaxed">
+              <Info className="w-5 h-5 text-accent-dark shrink-0 mt-0.5" />
+              <span>
+                <strong>Submission Lock:</strong> To prevent multiple dossier registry conflicts, resubmission under the same session is restricted. Verification updates have been queued for <strong className="text-primary">{existingSubmission.email}</strong>.
+              </span>
+            </div>
+
+            <div className="pt-4 flex justify-center gap-4">
+              <button
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-zinc-300 hover:bg-zinc-50 rounded font-bold uppercase tracking-wider text-xs transition-colors cursor-pointer shadow-sm text-zinc-700"
+                onClick={() => {
+                  if (window.confirm("Warning: Resetting will clear your active local session details. Proceed?")) {
+                    localStorage.removeItem("ncie_submission_details");
+                    setExistingSubmission(null);
+                    setRegId("");
+                    setFormData({ fullName: "", email: "", orgName: "", city: "", proposal: "", designation: "", mobile: "" });
+                    setFiles({ consentForm: null, idCard: null, proposalRoster: null });
+                    setStep("select");
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                }}
+              >
+                Reset &amp; Start New Registration
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Step 1: Select Role */}
-        {step === "select" && (
+        {step === "select" && !existingSubmission && (
           <div className="space-y-8 animate-slide-down">
             {/* Government Seal & Official Header */}
             <div className="text-center max-w-3xl mx-auto space-y-3">
@@ -629,7 +707,7 @@ export default function JoinPage() {
               </p>
               <div className="pt-2">
                 <span className="font-mono font-bold text-accent-dark bg-amber-50 px-4 py-1.5 rounded text-xs border border-accent/20 select-all shadow-sm">
-                  REG-2026-{(Math.floor(Math.random() * 9000) + 1000)}
+                  {regId || (existingSubmission ? existingSubmission.regId : "")}
                 </span>
               </div>
             </div>
@@ -645,9 +723,15 @@ export default function JoinPage() {
               <button
                 className="inline-flex items-center gap-2 px-5 py-2.5 border border-primary text-primary hover:bg-emerald-50 rounded font-bold uppercase tracking-wider text-xs transition-colors cursor-pointer shadow-sm"
                 onClick={() => {
-                  setFormData({ fullName: "", email: "", orgName: "", city: "", proposal: "", designation: "", mobile: "" });
-                  setStep("select");
-                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  if (window.confirm("Warning: Resetting will clear your active local session details. Proceed?")) {
+                    localStorage.removeItem("ncie_submission_details");
+                    setExistingSubmission(null);
+                    setRegId("");
+                    setFormData({ fullName: "", email: "", orgName: "", city: "", proposal: "", designation: "", mobile: "" });
+                    setFiles({ consentForm: null, idCard: null, proposalRoster: null });
+                    setStep("select");
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }
                 }}
               >
                 Start New Registration
