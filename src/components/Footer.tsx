@@ -46,27 +46,27 @@ export default function Footer() {
             {/* Social Icons */}
             <div className="flex items-center space-x-2.5 pt-2">
               <a href="https://www.linkedin.com/company/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-accent hover:text-[#063b2c] text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-black hover:text-white text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
                 <FaLinkedinIn className="w-4 h-4" />
               </a>
               <a href="https://www.facebook.com/ncieindiaofficial" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-accent hover:text-[#063b2c] text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-black hover:text-white text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
                 <FaFacebook className="w-4 h-4" />
               </a>
               <a href="https://www.instagram.com/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-accent hover:text-[#063b2c] text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-black hover:text-white text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
                 <FaInstagram className="w-4 h-4" />
               </a>
               <a href="https://x.com/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="Twitter / X"
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-accent hover:text-[#063b2c] text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-black hover:text-white text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
                 <FaXTwitter className="w-4 h-4" />
               </a>
               <a href="https://youtube.com/@ncie.9" target="_blank" rel="noopener noreferrer" aria-label="YouTube"
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-accent hover:text-[#063b2c] text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-black hover:text-white text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
                 <FaYoutube className="w-4 h-4" />
               </a>
               <a href="https://whatsapp.com/channel/0029Vb7s9A430LKNIB0OxD1w" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-accent hover:text-[#063b2c] text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-black hover:text-white text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
                 <FaWhatsapp className="w-4 h-4" />
               </a>
             </div>
