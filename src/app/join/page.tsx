@@ -1063,6 +1063,42 @@ export default function JoinPage() {
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Stream / Branch</label>
+                            <select
+                              name="stream"
+                              value={formData.stream}
+                              onChange={handleInputChange}
+                              className={`w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 cursor-pointer ${
+                                formData.stream ? "text-primary font-bold" : "text-zinc-500"
+                              }`}
+                              required
+                            >
+                              <option value="" className="text-zinc-500">Select Stream</option>
+                              {STREAMS.map((str) => (
+                                <option key={str} value={str} className="text-zinc-800">{str}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Year of Study</label>
+                            <select
+                              name="yearOfStudy"
+                              value={formData.yearOfStudy}
+                              onChange={handleInputChange}
+                              className={`w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 cursor-pointer ${
+                                formData.yearOfStudy ? "text-primary font-bold" : "text-zinc-500"
+                              }`}
+                              required
+                            >
+                              <option value="" className="text-zinc-500">Select Year</option>
+                              {YEARS_OF_STUDY.map((year) => (
+                                <option key={year} value={year} className="text-zinc-800">{year}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
                             <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Department</label>
                             <select
                               name="department"
@@ -1098,42 +1134,6 @@ export default function JoinPage() {
                               ) : (
                                 <option value="" disabled className="text-zinc-400">Please select a Department first</option>
                               )}
-                            </select>
-                          </div>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Stream / Branch</label>
-                            <select
-                              name="stream"
-                              value={formData.stream}
-                              onChange={handleInputChange}
-                              className={`w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 cursor-pointer ${
-                                formData.stream ? "text-primary font-bold" : "text-zinc-500"
-                              }`}
-                              required
-                            >
-                              <option value="" className="text-zinc-500">Select Stream</option>
-                              {STREAMS.map((str) => (
-                                <option key={str} value={str} className="text-zinc-800">{str}</option>
-                              ))}
-                            </select>
-                          </div>
-                          <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Year of Study</label>
-                            <select
-                              name="yearOfStudy"
-                              value={formData.yearOfStudy}
-                              onChange={handleInputChange}
-                              className={`w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 cursor-pointer ${
-                                formData.yearOfStudy ? "text-primary font-bold" : "text-zinc-500"
-                              }`}
-                              required
-                            >
-                              <option value="" className="text-zinc-500">Select Year</option>
-                              {YEARS_OF_STUDY.map((year) => (
-                                <option key={year} value={year} className="text-zinc-800">{year}</option>
-                              ))}
                             </select>
                           </div>
                         </div>
