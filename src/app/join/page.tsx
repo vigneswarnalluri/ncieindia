@@ -4,6 +4,427 @@ import React, { useState, useEffect } from "react";
 import { User, Landmark, Building, CheckCircle, ArrowLeft, ArrowRight, ShieldCheck, Info, FileText, Check } from "lucide-react";
 import Link from "next/link";
 
+const DEPARTMENTS = [
+  "Computer Science & Engineering",
+  "Information Technology",
+  "Electronics & Communication Engineering",
+  "Electrical & Electronics Engineering",
+  "Mechanical Engineering",
+  "Civil Engineering",
+  "Chemical Engineering",
+  "Biotechnology",
+  "Science & Humanities",
+  "Business Administration",
+  "Other"
+];
+
+const STREAMS = [
+  "B.Tech / B.E.",
+  "M.Tech / M.E.",
+  "BCA",
+  "MCA",
+  "B.Sc",
+  "M.Sc",
+  "B.Com",
+  "M.Com",
+  "BBA",
+  "MBA",
+  "Ph.D.",
+  "Other"
+];
+
+const YEARS_OF_STUDY = [
+  "1st Year",
+  "2nd Year",
+  "3rd Year",
+  "4th Year",
+  "5th Year",
+  "Postgraduate"
+];
+
+const COLLEGES = [
+  "Indian Institute of Technology (IIT), Delhi",
+  "Indian Institute of Technology (IIT), Bombay",
+  "Indian Institute of Technology (IIT), Madras",
+  "Indian Institute of Technology (IIT), Kharagpur",
+  "Indian Institute of Technology (IIT), Kanpur",
+  "Indian Institute of Technology (IIT), Roorkee",
+  "Indian Institute of Technology (IIT), Guwahati",
+  "Indian Institute of Technology (IIT), Hyderabad",
+  "Indian Institute of Science (IISc), Bangalore",
+  "Birla Institute of Technology and Science (BITS), Pilani",
+  "Birla Institute of Technology and Science (BITS), Hyderabad",
+  "Birla Institute of Technology and Science (BITS), Goa",
+  "National Institute of Technology (NIT), Trichy",
+  "National Institute of Technology (NIT), Surathkal",
+  "National Institute of Technology (NIT), Warangal",
+  "National Institute of Technology (NIT), Calicut",
+  "National Institute of Technology (NIT), Rourkela",
+  "Delhi Technological University (DTU), Delhi",
+  "Netaji Subhas University of Technology (NSUT), Delhi",
+  "Indian Institute of Information Technology (IIIT), Allahabad",
+  "Indian Institute of Information Technology (IIIT), Gwalior",
+  "International Institute of Information Technology (IIIT), Hyderabad",
+  "International Institute of Information Technology (IIIT), Bangalore",
+  "Anna University, Chennai",
+  "College of Engineering, Guindy (CEG), Chennai",
+  "PSG College of Technology, Coimbatore",
+  "Vellore Institute of Technology (VIT), Vellore",
+  "Vellore Institute of Technology (VIT), Chennai",
+  "SRM Institute of Science and Technology, Chennai",
+  "Amity University, Noida",
+  "Manipal Academy of Higher Education, Manipal",
+  "Jadavpur University, Kolkata",
+  "Banaras Hindu University (BHU), Varanasi",
+  "Aligarh Muslim University (AMU), Aligarh",
+  "Jamia Millia Islamia, New Delhi",
+  "University of Delhi (DU), Delhi",
+  "Jawaharlal Nehru University (JNU), New Delhi",
+  "Savitribai Phule Pune University, Pune",
+  "College of Engineering, Pune (COEP), Pune",
+  "Veermata Jijabai Technological Institute (VJTI), Mumbai",
+  "University of Mumbai, Mumbai",
+  "Thapar Institute of Engineering and Technology, Patiala",
+  "Pec University of Technology, Chandigarh",
+  "Panjab University, Chandigarh",
+  "Harcourt Butler Technical University (HBTU), Kanpur",
+  "Madan Mohan Malaviya University of Technology (MMMUT), Gorakhpur",
+  "Motilal Nehru National Institute of Technology (MNNIT), Allahabad",
+  "Indian Institute of Engineering Science and Technology (IIEST), Shibpur",
+  "Heritage Institute of Technology, Kolkata",
+  "KIIT University, Bhubaneswar",
+  "Siksha 'O' Anusandhan (SOA) University, Bhubaneswar",
+  "Amrita Vishwa Vidyapeetham, Coimbatore",
+  "Cochin University of Science and Technology (CUSAT), Kochi",
+  "Visvesvaraya Technological University (VTU), Belagavi",
+  "R.V. College of Engineering (RVCE), Bengaluru",
+  "M.S. Ramaiah Institute of Technology (MSRIT), Bengaluru",
+  "BMS College of Engineering (BMSCE), Bengaluru",
+  "University Visvesvaraya College of Engineering (UVCE), Bengaluru",
+  "Osmania University, Hyderabad",
+  "Jawaharlal Nehru Technological University (JNTU), Hyderabad",
+  "Chaitanya Bharathi Institute of Technology (CBIT), Hyderabad",
+  "Andhra University, Visakhapatnam",
+  "Lovely Professional University (LPU), Phagwara",
+  "SRM University, Sonepat",
+  "Nirma University, Ahmedabad",
+  "Dhirubhai Ambani Institute of Information and Communication Technology (DA-IICT), Gandhinagar",
+  "Pandit Deendayal Energy University (PDEU), Gandhinagar",
+  "Symbiosis International University, Pune",
+  "Vellore Institute of Technology (VIT), Andhra Pradesh",
+  "KKR & KSR Institute of Technology & Sciences (KITS), Guntur",
+  "Vasireddy Venkatadri Institute of Technology (VVIT), Guntur",
+  "RVR & JC College of Engineering, Guntur",
+  "Gokaraju Rangaraju Institute of Engineering and Technology (GRIET), Hyderabad",
+  "VNR Vignana Jyothi Institute of Engineering and Technology (VNR VJIET), Hyderabad",
+  "Maturi Venkata Subba Rao (MVSR) Engineering College, Hyderabad",
+  "Vasavi College of Engineering (VCE), Hyderabad",
+  "PES University, Bengaluru",
+  "Nitte Meenakshi Institute of Technology (NMIT), Bengaluru",
+  "Sri Sivasubramaniya Nadar (SSN) College of Engineering, Chennai",
+  "Sathyabama Institute of Science and Technology, Chennai",
+  "PSG College of Technology, Coimbatore",
+  "COEP Technological University, Pune",
+  "Veermata Jijabai Technological Institute (VJTI), Mumbai",
+  "K. J. Somaiya College of Engineering, Mumbai",
+  "Thadomal Shahani Engineering College, Mumbai",
+  "L.D. College of Engineering, Ahmedabad",
+  "Dharmsinh Desai University, Nadiad",
+  "Other"
+];
+
+const CITIES_BY_STATE: Record<string, string[]> = {
+  "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Tirupati", "Kurnool", "Rajahmundry", "Kakinada", "Kadapa", "Anantapur", "Other"],
+  "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Tawang", "Pasighat", "Ziro", "Other"],
+  "Assam": ["Guwahati", "Dibrugarh", "Silchar", "Tezpur", "Jorhat", "Nagaon", "Tinsukia", "Other"],
+  "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia", "Darbhanga", "Bihar Sharif", "Arrah", "Other"],
+  "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba", "Rajnandgaon", "Jagdalpur", "Other"],
+  "Goa": ["Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda", "Other"],
+  "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Gandhinagar", "Bhavnagar", "Jamnagar", "Junagadh", "Anand", "Other"],
+  "Haryana": ["Gurugram", "Faridabad", "Panipat", "Ambala", "Karnal", "Rohtak", "Hisar", "Sonipat", "Panchkula", "Other"],
+  "Himachal Pradesh": ["Shimla", "Dharamshala", "Solan", "Mandi", "Baddi", "Other"],
+  "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Deoghar", "Hazaribagh", "Other"],
+  "Karnataka": ["Bengaluru", "Mysuru", "Hubballi-Dharwad", "Mangaluru", "Belagavi", "Davangere", "Ballari", "Tumakuru", "Shivamogga", "Other"],
+  "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Thrissur", "Kollam", "Alappuzha", "Kannur", "Palakkad", "Kottayam", "Other"],
+  "Madhya Pradesh": ["Indore", "Bhopal", "Jabalpur", "Gwalior", "Ujjain", "Sagar", "Dewas", "Satna", "Ratlam", "Other"],
+  "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane", "Nashik", "Aurangabad", "Navi Mumbai", "Solapur", "Kolhapur", "Amravati", "Other"],
+  "Manipur": ["Imphal", "Thoubal", "Kakching", "Other"],
+  "Meghalaya": ["Shillong", "Tura", "Jowai", "Other"],
+  "Mizoram": ["Aizawl", "Lunglei", "Champhai", "Other"],
+  "Nagaland": ["Kohima", "Dimapur", "Mokokchung", "Other"],
+  "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Sambalpur", "Puri", "Balasore", "Other"],
+  "Punjab": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala", "Bathinda", "Mohali", "Pathankot", "Other"],
+  "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Kota", "Bikaner", "Ajmer", "Bhilwara", "Alwar", "Sikar", "Other"],
+  "Sikkim": ["Gangtok", "Namchi", "Geyzing", "Other"],
+  "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Trichy", "Salem", "Tirunelveli", "Erode", "Vellore", "Thoothukudi", "Other"],
+  "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Khammam", "Ramagundam", "Other"],
+  "Tripura": ["Agartala", "Dharmanagar", "Udaipur", "Other"],
+  "Uttar Pradesh": ["Lucknow", "Kanpur", "Noida", "Ghaziabad", "Agra", "Varanasi", "Meerut", "Prayagraj", "Bareilly", "Aligarh", "Moradabad", "Jhansi", "Gorakhpur", "Other"],
+  "Uttarakhand": ["Dehradun", "Haridwar", "Haldwani", "Roorkee", "Rudrapur", "Other"],
+  "West Bengal": ["Kolkata", "Howrah", "Darjeeling", "Siliguri", "Asansol", "Durgapur", "Kharagpur", "Haldia", "Other"],
+  "Andaman and Nicobar Islands": ["Port Blair", "Other"],
+  "Chandigarh": ["Chandigarh", "Other"],
+  "Dadra and Nagar Haveli and Daman and Diu": ["Daman", "Diu", "Silvassa", "Other"],
+  "Delhi": ["New Delhi", "North Delhi", "South Delhi", "West Delhi", "East Delhi", "Other"],
+  "Jammu and Kashmir": ["Srinagar", "Jammu", "Anantnag", "Baramulla", "Other"],
+  "Ladakh": ["Leh", "Kargil", "Other"],
+  "Lakshadweep": ["Kavaratti", "Other"],
+  "Puducherry": ["Puducherry", "Karaikal", "Mahe", "Yanam", "Other"]
+};
+
+const STATES = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+  "Andaman and Nicobar Islands",
+  "Chandigarh",
+  "Dadra and Nagar Haveli and Daman and Diu",
+  "Delhi",
+  "Jammu and Kashmir",
+  "Ladakh",
+  "Lakshadweep",
+  "Puducherry"
+];
+
+const SPECIALIZATIONS: Record<string, string[]> = {
+  "Computer Science & Engineering": [
+    "Artificial Intelligence",
+    "Machine Learning",
+    "Data Science",
+    "Cyber Security",
+    "Software Engineering",
+    "Cloud Computing",
+    "Internet of Things (IoT)",
+    "Blockchain",
+    "Other"
+  ],
+  "Information Technology": [
+    "Artificial Intelligence",
+    "Machine Learning",
+    "Data Science",
+    "Cyber Security",
+    "Software Engineering",
+    "Cloud Computing",
+    "Internet of Things (IoT)",
+    "Blockchain",
+    "Other"
+  ],
+  "Electronics & Communication Engineering": [
+    "VLSI Design",
+    "Embedded Systems",
+    "Robotics & Automation",
+    "Signal Processing",
+    "Communication Systems",
+    "Other"
+  ],
+  "Electrical & Electronics Engineering": [
+    "Power Electronics",
+    "Robotics & Automation",
+    "Smart Grid Technologies",
+    "Renewable Energy Systems",
+    "Control Systems",
+    "Other"
+  ],
+  "Mechanical Engineering": [
+    "Robotics & Automation",
+    "CAD/CAM & Design",
+    "Thermal Engineering",
+    "Manufacturing Technologies",
+    "Mechatronics",
+    "Automotive Engineering",
+    "Other"
+  ],
+  "Civil Engineering": [
+    "Structural Engineering",
+    "Geotechnical Engineering",
+    "Transportation Engineering",
+    "Environmental Engineering",
+    "Construction Management",
+    "Other"
+  ],
+  "Chemical Engineering": [
+    "Nanotechnology",
+    "Process Control & Safety",
+    "Environmental Chemical Engineering",
+    "Biochemical Engineering",
+    "Other"
+  ],
+  "Biotechnology": [
+    "Bioinformatics",
+    "Genetic Engineering",
+    "Bioprocess Technology",
+    "Nanotechnology",
+    "Other"
+  ],
+  "Science & Humanities": [
+    "Physics / Materials Science",
+    "Applied Mathematics",
+    "Computational Chemistry",
+    "Technical Writing / Communication",
+    "Other"
+  ],
+  "Business Administration": [
+    "Finance & Investment",
+    "Marketing & Analytics",
+    "Human Resource Management",
+    "Operations & Supply Chain",
+    "Entrepreneurship & Innovation",
+    "Other"
+  ],
+  "Other": [
+    "General Innovation",
+    "Core Engineering",
+    "Pure Sciences",
+    "Social Entrepreneurship",
+    "Other"
+  ]
+};
+
+interface SearchableSelectProps {
+  name: string;
+  value: string;
+  placeholder: string;
+  options: string[];
+  onChange: (name: string, value: string) => void;
+  disabled?: boolean;
+}
+
+const SearchableSelect: React.FC<SearchableSelectProps> = ({
+  name,
+  value,
+  placeholder,
+  options,
+  onChange,
+  disabled = false,
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState(value);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setSearch(value);
+  }, [value]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+        setSearch(value);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [value]);
+
+  const filteredOptions = options.filter((opt) =>
+    opt.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSearch(val);
+    onChange(name, val);
+    setIsOpen(true);
+  };
+
+  const handleOptionSelect = (opt: string) => {
+    setSearch(opt);
+    onChange(name, opt);
+    setIsOpen(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setIsOpen(false);
+    }
+  };
+
+  const isSearchLongEnough = search.trim().length >= 3;
+
+  return (
+    <div className="relative w-full" ref={containerRef}>
+      <div className="relative">
+        <input
+          type="text"
+          value={search}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          onFocus={() => {
+            if (!disabled) setIsOpen(true);
+          }}
+          disabled={disabled}
+          className={`w-full px-3 py-2 pr-8 text-xs border border-zinc-350 rounded focus:outline-none focus:border-primary bg-zinc-50/50 disabled:opacity-50 disabled:cursor-not-allowed ${
+            value ? "text-primary font-bold" : "text-zinc-800"
+          }`}
+          placeholder={placeholder}
+          required
+        />
+        <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-zinc-400">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+
+      {isOpen && !disabled && (
+        <div className="absolute z-55 left-0 right-0 mt-1 max-h-48 overflow-y-auto bg-white border border-zinc-200 rounded shadow-md text-xs">
+          {!isSearchLongEnough ? (
+            <div className="px-3 py-2 text-zinc-400 italic select-none">
+              Please type at least 3 characters to search...
+            </div>
+          ) : (
+            <>
+              {filteredOptions.map((opt) => (
+                <div
+                  key={opt}
+                  onClick={() => handleOptionSelect(opt)}
+                  className="px-3 py-2 cursor-pointer hover:bg-primary hover:text-white transition-colors"
+                >
+                  {opt}
+                </div>
+              ))}
+              <div
+                onClick={() => handleOptionSelect(search)}
+                className="px-3 py-2 border-t border-zinc-150 cursor-pointer hover:bg-[#0D6B4F] hover:text-white transition-colors text-primary font-bold"
+              >
+                + Use "{search}" as custom name
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function JoinPage() {
   const [step, setStep] = useState<"select" | "form" | "success">("select");
   const [role, setRole] = useState<"student" | "chapter" | "partner">("student");
@@ -11,11 +432,15 @@ export default function JoinPage() {
     fullName: "",
     email: "",
     orgName: "",
+    state: "",
     city: "",
     proposal: "",
     designation: "",
     mobile: "",
-    deptYear: "",
+    department: "",
+    specialization: "",
+    stream: "",
+    yearOfStudy: "",
     instType: "",
     accreditationCode: "",
     partnerCategory: "",
@@ -43,6 +468,42 @@ export default function JoinPage() {
     proposalRoster: null,
   });
 
+  const [collegesCache, setCollegesCache] = useState<Record<string, string[]>>({});
+  const loadingLetters = React.useRef<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (!formData.orgName) return;
+    const firstChar = formData.orgName.trim().charAt(0).toLowerCase();
+    const letter = (firstChar >= "a" && firstChar <= "z") ? firstChar : "other";
+
+    if (collegesCache[letter] || loadingLetters.current[letter]) return;
+
+    loadingLetters.current[letter] = true;
+    fetch(`/colleges/${letter}.json`)
+      .then((res) => {
+        if (!res.ok) throw new Error("File not found");
+        return res.json();
+      })
+      .then((data: string[]) => {
+        if (Array.isArray(data)) {
+          setCollegesCache((prev) => ({ ...prev, [letter]: data }));
+        }
+      })
+      .catch((err) => {
+        console.error(`Failed to load colleges for letter ${letter}:`, err);
+      })
+      .finally(() => {
+        loadingLetters.current[letter] = false;
+      });
+  }, [formData.orgName, collegesCache]);
+
+  const collegeSearchLetter = formData.orgName ? formData.orgName.trim().charAt(0).toLowerCase() : "";
+  const currentLetterColleges = (collegeSearchLetter >= "a" && collegeSearchLetter <= "z")
+    ? collegesCache[collegeSearchLetter] || []
+    : (collegeSearchLetter ? collegesCache["other"] || [] : []);
+
+  const displayedColleges = Array.from(new Set([...COLLEGES, ...currentLetterColleges])).sort();
+
   useEffect(() => {
     const savedSubmission = localStorage.getItem("ncie_submission_details");
     if (savedSubmission) {
@@ -63,11 +524,15 @@ export default function JoinPage() {
       fullName: "",
       email: "",
       orgName: "",
+      state: "",
       city: "",
       proposal: "",
       designation: "",
       mobile: "",
-      deptYear: "",
+      department: "",
+      specialization: "",
+      stream: "",
+      yearOfStudy: "",
       instType: "",
       accreditationCode: "",
       partnerCategory: "",
@@ -77,12 +542,30 @@ export default function JoinPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     
     // Security: basic sanitization to strip script tags
-    const sanitizedValue = value.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+    let sanitizedValue = value.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
     
+    if (name === "mobile") {
+      // Strip all non-digits
+      sanitizedValue = sanitizedValue.replace(/\D/g, "");
+      // Limit to 10 characters max
+      sanitizedValue = sanitizedValue.slice(0, 10);
+    }
+
+    if (name === "department") {
+      setFormData((prev) => ({ ...prev, department: sanitizedValue, specialization: "" }));
+    } else if (name === "state") {
+      setFormData((prev) => ({ ...prev, state: sanitizedValue, city: "" }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
+    }
+  };
+
+  const handleDropdownChange = (name: string, value: string) => {
+    let sanitizedValue = value.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
     setFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
   };
 
@@ -135,6 +618,16 @@ export default function JoinPage() {
     const mobilePattern = /^[0-9]{10}$/;
     if (!mobilePattern.test(formData.mobile)) {
       setValidationError("Validation Error: Please enter a valid 10-digit mobile number.");
+      return;
+    }
+
+    // Validate that city and orgName are not empty
+    if (!formData.city.trim()) {
+      setValidationError("Validation Error: Please specify your city.");
+      return;
+    }
+    if ((role === "student" || role === "chapter") && !formData.orgName.trim()) {
+      setValidationError("Validation Error: Please specify your college or university name.");
       return;
     }
 
@@ -259,11 +752,15 @@ export default function JoinPage() {
                       fullName: "",
                       email: "",
                       orgName: "",
+                      state: "",
                       city: "",
                       proposal: "",
                       designation: "",
                       mobile: "",
-                      deptYear: "",
+                      department: "",
+                      specialization: "",
+                      stream: "",
+                      yearOfStudy: "",
                       instType: "",
                       accreditationCode: "",
                       partnerCategory: "",
@@ -550,71 +1047,158 @@ export default function JoinPage() {
                     </div>
 
                     {/* Row 3: Organization / Entity Details */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
-                          {role === "student" ? "College or University Name" : role === "chapter" ? "College/University Name" : "Corporation / Venture Legal Entity"}
-                        </label>
-                        <input
-                          name="orgName"
-                          type="text"
-                          maxLength={200}
-                          value={formData.orgName}
-                          onChange={handleInputChange}
-                          className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                          placeholder={role === "student" || role === "chapter" ? "e.g. Indian Institute of Technology" : "e.g. Peak Founders or Tata Trusts"}
-                          required
-                        />
+                    {role === "student" ? (
+                      <div className="space-y-4">
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
+                            College or University Name
+                          </label>
+                          <SearchableSelect
+                            name="orgName"
+                            value={formData.orgName}
+                            placeholder="Type to search or enter College / University..."
+                            options={displayedColleges}
+                            onChange={handleDropdownChange}
+                          />
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Department</label>
+                            <select
+                              name="department"
+                              value={formData.department}
+                              onChange={handleInputChange}
+                              className={`w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 cursor-pointer ${
+                                formData.department ? "text-primary font-bold" : "text-zinc-500"
+                              }`}
+                              required
+                            >
+                              <option value="" className="text-zinc-500">Select Department</option>
+                              {DEPARTMENTS.map((dept) => (
+                                <option key={dept} value={dept} className="text-zinc-800">{dept}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Specialization</label>
+                            <select
+                              name="specialization"
+                              value={formData.specialization}
+                              onChange={handleInputChange}
+                              className={`w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 cursor-pointer ${
+                                formData.specialization ? "text-primary font-bold" : "text-zinc-500"
+                              }`}
+                              required
+                            >
+                              <option value="" className="text-zinc-500">Select Specialization</option>
+                              {formData.department && SPECIALIZATIONS[formData.department] ? (
+                                SPECIALIZATIONS[formData.department].map((spec) => (
+                                  <option key={spec} value={spec} className="text-zinc-800">{spec}</option>
+                                ))
+                              ) : (
+                                <option value="" disabled className="text-zinc-400">Please select a Department first</option>
+                              )}
+                            </select>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Stream / Branch</label>
+                            <select
+                              name="stream"
+                              value={formData.stream}
+                              onChange={handleInputChange}
+                              className={`w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 cursor-pointer ${
+                                formData.stream ? "text-primary font-bold" : "text-zinc-500"
+                              }`}
+                              required
+                            >
+                              <option value="" className="text-zinc-500">Select Stream</option>
+                              {STREAMS.map((str) => (
+                                <option key={str} value={str} className="text-zinc-800">{str}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Year of Study</label>
+                            <select
+                              name="yearOfStudy"
+                              value={formData.yearOfStudy}
+                              onChange={handleInputChange}
+                              className={`w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 cursor-pointer ${
+                                formData.yearOfStudy ? "text-primary font-bold" : "text-zinc-500"
+                              }`}
+                              required
+                            >
+                              <option value="" className="text-zinc-500">Select Year</option>
+                              {YEARS_OF_STUDY.map((year) => (
+                                <option key={year} value={year} className="text-zinc-800">{year}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
                       </div>
-
-                      <div className="space-y-1.5">
-                        {role === "student" && (
-                          <>
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Department &amp; Year of Study</label>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
+                            {role === "chapter" ? "College/University Name" : "Corporation / Venture Legal Entity"}
+                          </label>
+                          {role === "chapter" ? (
+                            <SearchableSelect
+                              name="orgName"
+                              value={formData.orgName}
+                              placeholder="Type to search or enter College / University..."
+                              options={displayedColleges}
+                              onChange={handleDropdownChange}
+                            />
+                          ) : (
                             <input
-                              name="deptYear"
+                              name="orgName"
                               type="text"
-                              maxLength={100}
-                              value={formData.deptYear}
+                              maxLength={200}
+                              value={formData.orgName}
                               onChange={handleInputChange}
                               className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                              placeholder="e.g. Computer Science, 3rd Year"
+                              placeholder="e.g. Peak Founders or Tata Trusts"
                               required
                             />
-                          </>
-                        )}
-                        {role === "chapter" && (
-                          <>
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Institution Type</label>
-                            <input
-                              name="instType"
-                              type="text"
-                              maxLength={100}
-                              value={formData.instType}
-                              onChange={handleInputChange}
-                              className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                              placeholder="e.g. Engineering College, State University, R&D Hub"
-                              required
-                            />
-                          </>
-                        )}
-                        {role === "partner" && (
-                          <>
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Partner Category / Sector</label>
-                            <input
-                              name="partnerCategory"
-                              type="text"
-                              maxLength={100}
-                              value={formData.partnerCategory}
-                              onChange={handleInputChange}
-                              className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                              placeholder="e.g. Venture Capital, Incubator, Accelerator, CSR Sponsor"
-                              required
-                            />
-                          </>
-                        )}
+                          )}
+                        </div>
+                        <div className="space-y-1.5">
+                          {role === "chapter" && (
+                            <>
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Institution Type</label>
+                              <input
+                                name="instType"
+                                type="text"
+                                maxLength={100}
+                                value={formData.instType}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                                placeholder="e.g. Engineering College, State University, R&D Hub"
+                                required
+                              />
+                            </>
+                          )}
+                          {role === "partner" && (
+                            <>
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Partner Category / Sector</label>
+                              <input
+                                name="partnerCategory"
+                                type="text"
+                                maxLength={100}
+                                value={formData.partnerCategory}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                                placeholder="e.g. Venture Capital, Incubator, Accelerator, CSR Sponsor"
+                                required
+                              />
+                            </>
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                     {/* Row 4: Custom specific ID / Info */}
                     {(role === "chapter" || role === "partner") && (
@@ -667,19 +1251,36 @@ export default function JoinPage() {
                       </div>
                     )}
 
-                    {/* City & State */}
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">City &amp; State</label>
-                      <input
-                        name="city"
-                        type="text"
-                        maxLength={150}
-                        value={formData.city}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                        placeholder="e.g. New Delhi, Delhi"
-                        required
-                      />
+                    {/* State & City */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">State</label>
+                        <select
+                          name="state"
+                          value={formData.state}
+                          onChange={handleInputChange}
+                          className={`w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 cursor-pointer ${
+                            formData.state ? "text-primary font-bold" : "text-zinc-500"
+                          }`}
+                          required
+                        >
+                          <option value="" className="text-zinc-500">Select State</option>
+                          {STATES.map((st) => (
+                            <option key={st} value={st} className="text-zinc-800">{st}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">City</label>
+                        <SearchableSelect
+                          name="city"
+                          value={formData.city}
+                          placeholder={formData.state ? "Type to search or enter City..." : "Please select a State first"}
+                          options={formData.state ? CITIES_BY_STATE[formData.state] || [] : []}
+                          onChange={handleDropdownChange}
+                          disabled={!formData.state}
+                        />
+                      </div>
                     </div>
 
                     {/* Proposal / Textarea */}
@@ -707,6 +1308,9 @@ export default function JoinPage() {
                         }
                         required
                       />
+                      <div className="flex justify-end text-[10px] text-zinc-400 font-bold select-none">
+                        <span>{formData.proposal.length} / 2,000 characters</span>
+                      </div>
                     </div>
 
                     {/* Verification Documents Upload */}
@@ -717,12 +1321,12 @@ export default function JoinPage() {
                         
                         {/* File 1: Consent Form */}
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block min-h-[30px]">
                             {role === "student" 
                               ? "HOD Consent / Support Letter" 
                               : role === "chapter" 
                                 ? "Institutional Consent Form" 
-                                : "Partnership Intent Letter"}{" "}
+                                : "Partnership Intent Letter"}{"\u00A0"}
                             <span className="text-red-500">*</span>
                           </label>
                           <input
@@ -743,12 +1347,12 @@ export default function JoinPage() {
 
                         {/* File 2: ID Card */}
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block min-h-[30px]">
                             {role === "student" 
                               ? "Student ID Card" 
                               : role === "chapter" 
                                 ? "Institutional Accreditation Certificate" 
-                                : "Certificate of Incorporation / GST"}{" "}
+                                : "Certificate of Incorporation / GST"}{"\u00A0"}
                             <span className="text-red-500">*</span>
                           </label>
                           <input
@@ -774,12 +1378,12 @@ export default function JoinPage() {
 
                         {/* File 3: Proposal Roster */}
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block min-h-[30px]">
                             {role === "student" 
-                              ? "Project Team Roster" 
+                              ? "Team Members List" 
                               : role === "chapter" 
-                                ? "Chapter Committee Roster" 
-                                : "Corporate Program Overview"}{" "}
+                                ? "Coordinators List" 
+                                : "Corporate Program Overview"}{"\u00A0"}
                             <span className="text-red-500">*</span>
                           </label>
                           <input
@@ -897,9 +1501,9 @@ export default function JoinPage() {
                       <div>
                         <p className="text-xs font-bold text-zinc-800">
                           {role === "student" 
-                            ? "Project Team Roster" 
+                            ? "Team Members List" 
                             : role === "chapter" 
-                              ? "Chapter Committee Roster" 
+                              ? "Coordinators List" 
                               : "Corporate Program Overview"}
                         </p>
                         <span className="text-[10px] text-zinc-400 font-medium">
@@ -956,11 +1560,15 @@ export default function JoinPage() {
                       fullName: "",
                       email: "",
                       orgName: "",
+                      state: "",
                       city: "",
                       proposal: "",
                       designation: "",
                       mobile: "",
-                      deptYear: "",
+                      department: "",
+                      specialization: "",
+                      stream: "",
+                      yearOfStudy: "",
                       instType: "",
                       accreditationCode: "",
                       partnerCategory: "",
