@@ -13,9 +13,15 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-primary text-zinc-100 border-t-4 border-accent relative overflow-hidden">
-      {/* Background Subtle Patterns */}
-      <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-[size:10px_10px] pointer-events-none" />
+    <footer className="bg-gradient-to-br from-[#063b2c] via-[#0D6B4F] to-[#042118] text-zinc-100 border-t-4 border-accent relative overflow-hidden">
+      {/* Background Subtle Patterns & Glowing Orbs */}
+      <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none" />
+      <div className="absolute inset-0 opacity-[0.015] bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-[size:10px_10px] pointer-events-none" />
+      
+      {/* Premium Blur Orbs */}
+      <div className="absolute -top-[30%] -left-[10%] w-[550px] h-[550px] rounded-full bg-emerald-400/15 blur-[120px] pointer-events-none" />
+      <div className="absolute -bottom-[20%] right-[5%] w-[450px] h-[450px] rounded-full bg-accent/10 blur-[130px] pointer-events-none" />
+      <div className="absolute top-[20%] right-[30%] w-[350px] h-[350px] rounded-full bg-primary-light/5 blur-[90px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
@@ -38,29 +44,29 @@ export default function Footer() {
             </p>
 
             {/* Social Icons */}
-            <div className="flex items-center space-x-2 pt-2">
+            <div className="flex items-center space-x-2.5 pt-2">
               <a href="https://www.linkedin.com/company/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
-                className="w-9 h-9 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center hover:scale-105 transition-all shrink-0">
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-accent hover:text-[#063b2c] text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
                 <FaLinkedinIn className="w-4 h-4" />
               </a>
               <a href="https://www.facebook.com/ncieindiaofficial" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
-                className="w-9 h-9 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center hover:scale-105 transition-all shrink-0">
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-accent hover:text-[#063b2c] text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
                 <FaFacebook className="w-4 h-4" />
               </a>
               <a href="https://www.instagram.com/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
-                className="w-9 h-9 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center hover:scale-105 transition-all shrink-0">
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-accent hover:text-[#063b2c] text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
                 <FaInstagram className="w-4 h-4" />
               </a>
               <a href="https://x.com/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="Twitter / X"
-                className="w-9 h-9 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center hover:scale-105 transition-all shrink-0">
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-accent hover:text-[#063b2c] text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
                 <FaXTwitter className="w-4 h-4" />
               </a>
               <a href="https://youtube.com/@ncie.9" target="_blank" rel="noopener noreferrer" aria-label="YouTube"
-                className="w-9 h-9 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center hover:scale-105 transition-all shrink-0">
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-accent hover:text-[#063b2c] text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
                 <FaYoutube className="w-4 h-4" />
               </a>
               <a href="https://whatsapp.com/channel/0029Vb7s9A430LKNIB0OxD1w" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
-                className="w-9 h-9 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center hover:scale-105 transition-all shrink-0">
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-accent hover:text-[#063b2c] text-white flex items-center justify-center hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 shrink-0">
                 <FaWhatsapp className="w-4 h-4" />
               </a>
             </div>
