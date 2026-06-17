@@ -99,25 +99,66 @@ export default function LoginPage() {
 
   // OTP Verification state
   const [otp, setOtp] = useState("");
+  const [otpEmail, setOtpEmail] = useState(""); // Store email in state (not just ref) to survive re-renders
   const [otpError, setOtpError] = useState<string | null>(null);
   const [verifyingOtp, setVerifyingOtp] = useState(false);
+  const [resendCountdown, setResendCountdown] = useState(0);
+  const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const startResendCooldown = () => {
+    setResendCountdown(60);
+    if (countdownRef.current) clearInterval(countdownRef.current);
+    countdownRef.current = setInterval(() => {
+      setResendCountdown(prev => {
+        if (prev <= 1) { clearInterval(countdownRef.current!); return 0; }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const handleResendOtp = async () => {
+    if (resendCountdown > 0) return;
+    setOtpError(null);
+    setOtp("");
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: otpEmail,
+        options: { shouldCreateUser: true },
+      });
+      if (error) {
+        setOtpError(getCleanErrorMessage(error));
+      } else {
+        startResendCooldown();
+        setOtpError(null);
+      }
+    } catch {
+      setOtpError("Failed to resend OTP. Please try again.");
+    }
+  };
 
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setVerifyingOtp(true);
     setOtpError(null);
 
+    // Use state value (otpEmail) — more reliable than ref which can reset on page refresh
+    const emailToVerify = otpEmail || emailRef.current;
+    if (!emailToVerify) {
+      setOtpError("Session lost. Please go back and re-enter your email.");
+      setVerifyingOtp(false);
+      return;
+    }
+
     try {
       const { error } = await supabase.auth.verifyOtp({
-        email: emailRef.current,
-        token: otp,
+        email: emailToVerify,
+        token: otp.trim(),
         type: "email",
       });
       if (error) {
         setOtpError(getCleanErrorMessage(error));
       } else {
-        const email = emailRef.current || "";
-        const isOfficial = email.endsWith(".gov.in") || role === "official";
+        const isOfficial = emailToVerify.endsWith(".gov.in") || role === "official";
         const targetRole = isOfficial ? "official" : "institution";
         router.push(`/dashboard/${targetRole}`);
       }
@@ -184,6 +225,7 @@ export default function LoginPage() {
       // id field contains email for both roles
       const email = id.trim();
       emailRef.current = email;
+      setOtpEmail(email); // Also store in state for reliability
 
       const { error } = await supabase.auth.signInWithOtp({
         email,
@@ -195,6 +237,7 @@ export default function LoginPage() {
         generateCaptcha();
       } else {
         setSuccess(true);
+        startResendCooldown();
       }
     } catch {
       setAuthError("An unexpected error occurred. Please try again.");
@@ -514,6 +557,11 @@ export default function LoginPage() {
                 <p className="text-[11px] text-zinc-500 max-w-xs mx-auto leading-relaxed">
                   {t("mfa_desc")}
                 </p>
+                {otpEmail && (
+                  <p className="text-[10px] text-zinc-400 mt-1">
+                    OTP sent to: <span className="font-bold text-zinc-700">{otpEmail}</span>
+                  </p>
+                )}
               </div>
 
               {/* Secure 6-Digit OTP Verification Form */}
@@ -560,6 +608,16 @@ export default function LoginPage() {
                     <Lock className="w-3 h-3" />
                   )}
                   {verifyingOtp ? "Verifying..." : "Verify & Proceed"}
+                </button>
+
+                {/* Resend OTP */}
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  disabled={resendCountdown > 0}
+                  className="w-full text-[10px] text-zinc-500 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-semibold cursor-pointer pt-1"
+                >
+                  {resendCountdown > 0 ? `Resend OTP in ${resendCountdown}s` : "Didn't receive it? Resend OTP"}
                 </button>
               </form>
 
