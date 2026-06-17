@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://ncieindia.org/logo-new.png",
+        url: "https://ncieindia.org/logo-new.svg",
         width: 800,
         height: 600,
         alt: "NCIE India Logo",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     title: "NCIE India | National Council for Innovation and Entrepreneurship",
     description:
       "Building India's largest student innovation and entrepreneurship ecosystem under the Ministry of Education (MoE). Explore collegiate chapters, KAPILA patent support, SIH hackathons, and incubation grants.",
-    images: ["https://ncieindia.org/logo-new.png"],
+    images: ["https://ncieindia.org/logo-new.svg"],
   },
 };
 
@@ -56,7 +56,7 @@ export default function Page() {
     "name": "National Council for Innovation and Entrepreneurship (NCIE) India",
     "alternateName": "NCIE India",
     "url": "https://ncieindia.org",
-    "logo": "https://ncieindia.org/logo-new.png",
+    "logo": "https://ncieindia.org/logo-new.svg",
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "0863 232 1417",

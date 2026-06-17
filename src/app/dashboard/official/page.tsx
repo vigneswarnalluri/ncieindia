@@ -121,7 +121,7 @@ export default function OfficialDashboard() {
           >
             <Menu className="w-5 h-5" />
           </button>
-          <Image src="/logo-new.png" alt="NCIE India" width={200} height={54} className="h-8 xs:h-10 sm:h-12 w-auto object-contain" unoptimized />
+          <Image src="/logo-new.svg" alt="NCIE India" width={200} height={54} className="h-8 xs:h-10 sm:h-12 w-auto object-contain" unoptimized />
           <div className="w-px h-10 bg-zinc-200 hidden sm:block" />
           <div className="hidden sm:block">
             <p className="text-[11px] font-bold text-[#0D6B4F] uppercase tracking-widest">Central Administrative Command</p>

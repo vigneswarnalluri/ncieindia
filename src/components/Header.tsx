@@ -197,7 +197,7 @@ export default function Header() {
             {/* Logo Area */}
             <Link href="/" className="focus:outline-none shrink-0 acc-logo-container" aria-label="NCIE India Home">
               <Image
-                src="/logo-new.png"
+                src="/logo-new.svg"
                 alt="NCIE India Logo"
                 width={280}
                 height={80}
@@ -583,7 +583,7 @@ export default function Header() {
               <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-200 bg-zinc-50 shrink-0">
                 <div className="flex items-center">
                   <Image
-                    src="/logo-new.png"
+                    src="/logo-new.svg"
                     alt="NCIE Logo"
                     width={110}
                     height={32}

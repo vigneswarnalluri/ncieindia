@@ -303,7 +303,7 @@ export default function LoginPage() {
           </div>
           
           <Image
-            src="/logo-new.png"
+            src="/logo-new.svg"
             alt="NCIE India Logo"
             width={170}
             height={48}

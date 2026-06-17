@@ -36,7 +36,7 @@ export default function Footer() {
           <div className="lg:col-span-2 flex flex-col space-y-4">
             <Link href="/" className="block focus:outline-none w-fit">
               <Image
-                src="/logo-new.png"
+                src="/logo-new.svg"
                 alt="NCIE India Logo"
                 width={240}
                 height={68}
