@@ -70,8 +70,8 @@ export default function ContactPage() {
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-zinc-900">MoE Innovation Cell Secretariat</h4>
-                  <p className="text-zinc-500 mt-0.5">D-Block, Shastri Bhawan, New Delhi — 110001</p>
+                  <h4 className="font-bold text-zinc-900">NCIE Secretariat / Desk</h4>
+                  <p className="text-zinc-500 mt-0.5">NCIE Desk, Guntur, Andhra Pradesh, India</p>
                 </div>
               </div>
 

@@ -470,7 +470,7 @@ export default function MediaPage() {
                       <p className="text-[9px] font-bold text-zinc-400 uppercase">Office Address</p>
                       <p className="text-xs text-zinc-700 font-medium leading-relaxed mt-0.5">
                         NCIE Secretariat (Press Wing),<br />
-                        Nodal Office Complex, New Delhi, India
+                        NCIE Desk, Guntur, Andhra Pradesh, India
                       </p>
                     </div>
                   </div>
