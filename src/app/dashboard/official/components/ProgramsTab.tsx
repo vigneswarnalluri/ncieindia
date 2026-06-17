@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Plus, Edit2, Trash2, HelpCircle, AlertCircle, Award, Database, Coins, ListChecks } from "lucide-react";
+import { Plus, Edit2, Trash2, HelpCircle, AlertCircle, Award, Coins, ListChecks } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { PROGRAMS_DATA, Program } from "@/app/programs/page";
 
@@ -167,11 +167,6 @@ export default function ProgramsTab({ onToast }: Props) {
           <p className="text-[11px] text-zinc-500 mt-0.5">Scout, edit, and publish official MoE/NCIE funding and student initiatives.</p>
         </div>
         <div className="flex gap-2">
-          {dbStatus === "offline" && (
-            <span className="text-[9px] bg-amber-50 text-amber-800 border border-amber-300 font-mono font-bold px-2 py-1 uppercase tracking-wider flex items-center gap-1.5 rounded">
-              <AlertCircle className="w-3.5 h-3.5 text-amber-700" /> Offline Mock Mode
-            </span>
-          )}
           <button
             onClick={openAddEditor}
             className="bg-[#0D6B4F] hover:bg-[#0a5840] text-white text-xs font-bold px-3 py-1.5 flex items-center gap-1 cursor-pointer transition-all"
@@ -181,17 +176,7 @@ export default function ProgramsTab({ onToast }: Props) {
         </div>
       </div>
 
-      {/* RLS Setup Guide Callout (only shown if offline mode is active) */}
-      {dbStatus === "offline" && (
-        <div className="bg-amber-50/70 border border-amber-200 p-4 space-y-2 text-xs">
-          <p className="font-bold text-amber-800 flex items-center gap-1.5">
-            <Database className="w-4 h-4" /> Setup Recommendation: Connect Supabase Tables
-          </p>
-          <p className="text-amber-700 leading-relaxed">
-            The database table <code>programs</code> was not detected in your project. We have successfully loaded local catalog fallbacks, but edits will not persist across reloads. Run the SQL snippet inside the <strong>[supabase_setup.md](file:///C:/Users/Administrator/.gemini/antigravity-ide/brain/6b834bb1-3ad8-4443-a5a4-917a59881ef5/supabase_setup.md)</strong> instructions in your Supabase console to resolve this.
-          </p>
-        </div>
-      )}
+
 
       {/* Schemes Registry Register */}
       <div className="bg-white border border-zinc-200">
