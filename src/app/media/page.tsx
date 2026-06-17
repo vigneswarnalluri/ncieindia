@@ -479,8 +479,8 @@ export default function MediaPage() {
                     <Mail className="w-4.5 h-4.5 text-[#0D6B4F] shrink-0 mt-0.5" />
                     <div>
                       <p className="text-[9px] font-bold text-zinc-400 uppercase">PRO Email Desk</p>
-                      <a href="mailto:press@ncie.org.in" className="text-xs text-primary font-bold hover:underline block mt-0.5">
-                        press@ncie.org.in
+                      <a href="mailto:office@ncieindia.org" className="text-xs text-primary font-bold hover:underline block mt-0.5">
+                        office@ncieindia.org
                       </a>
                     </div>
                   </div>
@@ -490,7 +490,7 @@ export default function MediaPage() {
                     <div>
                       <p className="text-[9px] font-bold text-zinc-400 uppercase">Media Helpline</p>
                       <p className="text-xs text-zinc-700 font-bold mt-0.5">
-                        +91 (11) 2345-6780
+                        08632321417
                       </p>
                     </div>
                   </div>

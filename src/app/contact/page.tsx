@@ -80,8 +80,8 @@ export default function ContactPage() {
                   <Mail className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-zinc-900">IIC Support Email</h4>
-                  <p className="text-zinc-500 mt-0.5">support-iic@mic.gov.in</p>
+                  <h4 className="font-bold text-zinc-900">Official Support Email</h4>
+                  <p className="text-zinc-500 mt-0.5">office@ncieindia.org</p>
                 </div>
               </div>
 
@@ -91,7 +91,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="font-bold text-zinc-900">Toll-Free Helpdesk</h4>
-                  <p className="text-zinc-500 mt-0.5">1800-180-0093 (Mon–Sat, 9:00 AM – 5:30 PM IST)</p>
+                  <p className="text-zinc-500 mt-0.5">08632321417 (Mon–Sat, 9:00 AM – 5:30 PM IST)</p>
                 </div>
               </div>
             </div>

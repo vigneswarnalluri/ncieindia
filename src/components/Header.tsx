@@ -176,7 +176,7 @@ export default function Header() {
           {/* Right: Support Contact */}
           <div className="flex items-center text-white font-sans tracking-wide font-medium">
             <span>{t("toll_free")} : </span>
-            <span className="text-accent font-bold ml-1.5">1800 123 4567</span>
+            <span className="text-accent font-bold ml-1.5">08632321417</span>
             <span className="text-zinc-200 ml-1.5">{t("timings")}</span>
           </div>
         </div>
@@ -426,12 +426,12 @@ export default function Header() {
                         </span>
                       </Link>
 
-                      <a href="tel:18001234567" className="group/item flex flex-col gap-1">
+                      <a href="tel:08632321417" className="group/item flex flex-col gap-1">
                         <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
                           Official Toll-Free Helpdesk
                         </span>
                         <span className="text-xs text-zinc-500 font-sans leading-normal">
-                          Support line: 1800 123 4567
+                          Support line: 08632321417
                         </span>
                       </a>
                     </div>
@@ -784,7 +784,7 @@ export default function Header() {
                         {t("toll_free")}
                       </p>
                       <p className="text-xs font-bold text-primary">
-                        1800 123 4567
+                        08632321417
                       </p>
                       <p className="text-[9px] text-zinc-400">
                         {t("timings")}

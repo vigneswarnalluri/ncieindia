@@ -312,7 +312,7 @@ export default function PrivacyPage() {
                   <Link href="/contact" className="text-primary font-bold hover:underline">
                     संपर्क पृष्ठ
                   </Link>{" "}
-                  के माध्यम से संपर्क करें या support-iic@mic.gov.in पर ईमेल करें।
+                  के माध्यम से संपर्क करें या office@ncieindia.org पर ईमेल करें।
                 </p>
               ) : (
                 <p>
@@ -320,7 +320,7 @@ export default function PrivacyPage() {
                   <Link href="/contact" className="text-primary font-bold hover:underline">
                     Contact Desk
                   </Link>{" "}
-                  or email support-iic@mic.gov.in.
+                  or email office@ncieindia.org.
                 </p>
               )}
             </div>

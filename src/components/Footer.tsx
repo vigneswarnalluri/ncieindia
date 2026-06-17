@@ -105,8 +105,8 @@ export default function Footer() {
             <h4 className="text-sm font-semibold tracking-wider uppercase text-accent">Contact Desk</h4>
             <p className="text-sm text-zinc-300 leading-relaxed">
               NCIE Desk, New Delhi, India<br />
-              Email: contact@ncie.org.in<br />
-              Phone: +91 (11) 2345-6789
+              Email: office@ncieindia.org<br />
+              Phone: 08632321417
             </p>
           </div>
 

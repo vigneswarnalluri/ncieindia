@@ -471,7 +471,7 @@ export default function AboutPage() {
                   <Phone className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
                   <div className="space-y-0.5">
                     <p className="font-semibold text-zinc-800">{t("helpline_phone").split(":")[0] || "Helpdesk"}</p>
-                    <p className="text-zinc-500 font-mono font-semibold">{t("helpline_phone").split(":")[1]?.trim() || "1800 123 4567"}</p>
+                    <p className="text-zinc-500 font-mono font-semibold">{t("helpline_phone").split(":")[1]?.trim() || "08632321417"}</p>
                   </div>
                 </div>
 

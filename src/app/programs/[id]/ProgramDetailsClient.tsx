@@ -251,7 +251,7 @@ export default function ProgramDetailPage() {
 
                 <div className="flex items-center gap-2 text-xs text-zinc-500 justify-center">
                   <Mail className="w-3.5 h-3.5" />
-                  <span>support@ncie.org.in</span>
+                  <span>office@ncieindia.org</span>
                 </div>
               </CardContent>
             </Card>

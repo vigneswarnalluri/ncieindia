@@ -194,8 +194,8 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
                 {/* Footer note */}
                 <p className="text-center text-[11px] text-zinc-400 leading-relaxed pt-1">
                   For access credentials, write to{" "}
-                  <a href="mailto:helpdesk@ncie.gov.in" className="text-primary hover:underline">
-                    helpdesk@ncie.gov.in
+                  <a href="mailto:office@ncieindia.org" className="text-primary hover:underline">
+                    office@ncieindia.org
                   </a>
                 </p>
               </form>
