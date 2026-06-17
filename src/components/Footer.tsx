@@ -126,9 +126,9 @@ export default function Footer() {
             </p>
           </div>
           <div className="flex items-center gap-4">
-            <a href="#" className="hover:underline hover:text-white text-zinc-300 transition-colors">Terms of Use</a>
+            <Link href="/terms" className="hover:underline hover:text-white text-zinc-300 transition-colors">Terms of Use</Link>
             <span className="w-1 h-1 rounded-full bg-white/20" />
-            <a href="#" className="hover:underline hover:text-white text-zinc-300 transition-colors">Privacy Policy</a>
+            <Link href="/privacy" className="hover:underline hover:text-white text-zinc-300 transition-colors">Privacy Policy</Link>
           </div>
         </div>
 
