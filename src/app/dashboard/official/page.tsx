@@ -29,30 +29,10 @@ const MENU: { tab: Tab; label: string; icon: React.ReactNode }[] = [
   { tab: "security",  label: "Audit & System Logs",  icon: <Activity className="w-4 h-4" /> },
 ];
 
-const INIT_REQUESTS: ChapterReq[] = [
-  { id:"CR1", aishe:"C-11054", name:"Delhi Technological University",   state:"Delhi",       type:"Deemed University",   spoc:"Dr. Alok Kumar",    spocEmail:"alok@dtu.ac.in",     docUrl:"AICTE_DTU_2026.pdf",  status:"pending"  },
-  { id:"CR2", aishe:"C-41220", name:"College of Engineering, Pune",     state:"Maharashtra", type:"Autonomous College",  spoc:"Prof. S. R. Joshi", spocEmail:"sr.joshi@coep.ac.in",docUrl:"UGC_COEP_2026.pdf",   status:"pending"  },
-  { id:"CR3", aishe:"C-39502", name:"Jadavpur University",             state:"West Bengal", type:"State University",    spoc:"Prof. T. Dey",      spocEmail:"t.dey@ju.edu",       docUrl:"JU_Accred_2026.pdf",  status:"approved" },
-  { id:"CR4", aishe:"C-12055", name:"RV College of Engineering",       state:"Karnataka",   type:"Autonomous College",  spoc:"Dr. H. N. Harish",  spocEmail:"harish@rvce.edu.in", docUrl:"RVCE_Affil_2026.pdf", status:"pending"  },
-];
-
-const INIT_GRANTS: GrantRow[] = [
-  { id:"G1", college:"IIT Madras",                 scheme:"Makerspace Setup Fund",       san:"NCIE/MSF/2026/IIT-MDR/001", amount:1000000, uc:"approved",      tranche:2, status:"pending"   },
-  { id:"G2", college:"Delhi Technological Univ.",  scheme:"Prototype Sandbox Seed Pool", san:"NCIE/PSP/2026/DTU/004",     amount:250000,  uc:"pending_audit", tranche:1, status:"pending"   },
-  { id:"G3", college:"College of Engg., Pune",     scheme:"Makerspace Setup Fund",       san:"NCIE/MSF/2026/COEP/002",    amount:1500000, uc:"approved",      tranche:1, status:"disbursed"  },
-];
-
-const INIT_CIRCULARS: Circular[] = [
-  { id:"C1", ref:"NCIE/NCRC/2026/18", title:"NIDHI-CIS Grant Deadline Extension",             date:"16-Jun-2026", type:"Circular",  priority:"High"   },
-  { id:"C2", ref:"NCIE/FIN/2026/11",  title:"UC Submission Mandate — Phase 1 Beneficiaries", date:"10-Jun-2026", type:"Directive", priority:"High"   },
-  { id:"C3", ref:"NCIE/ADM/2026/09",  title:"MIC Star Rating Self-Assessment Portal Open",    date:"02-Jun-2026", type:"Notice",    priority:"Normal" },
-];
-
-const INIT_LOGS: AuditLog[] = [
-  { id:"L1", ts:"2026-06-16 12:15:30", code:"AUTH_LOGIN",       actor:"nic-admin@ncie.gov.in", ip:"10.150.4.88", details:"Successful MFA login. Role: NODAL_ADMIN."                                  },
-  { id:"L2", ts:"2026-06-16 11:45:12", code:"CHAPTER_APPROVED", actor:"nic-admin@ncie.gov.in", ip:"10.150.4.88", details:"Approved chapter affiliation — Jadavpur University (C-39502)."            },
-  { id:"L3", ts:"2026-06-16 10:20:05", code:"GRANT_DISBURSED",  actor:"fin-ctrl@ncie.gov.in",  ip:"10.150.6.12", details:"Tranche-1 disbursed (₹15L) to College of Engineering, Pune."             },
-];
+const INIT_REQUESTS: ChapterReq[] = [];
+const INIT_GRANTS: GrantRow[] = [];
+const INIT_CIRCULARS: Circular[] = [];
+const INIT_LOGS: AuditLog[] = [];
 
 export default function OfficialDashboard() {
   const router = useRouter();

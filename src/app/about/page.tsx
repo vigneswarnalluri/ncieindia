@@ -133,26 +133,12 @@ export default function AboutPage() {
         <h2 className="text-base font-bold uppercase tracking-wider text-zinc-900 border-l-4 border-primary pl-3 py-0.5">
           {t("about_from_desk")}
         </h2>
-        <div className="flex flex-col md:flex-row gap-8 items-start">
-          <div className="flex-1 space-y-4 text-xs sm:text-sm text-zinc-700 leading-relaxed text-justify">
-            <p className="indent-8">{t("about_msg_para1")}</p>
-            <p className="indent-8">{t("about_msg_para2")}</p>
-            <div className="pt-4 border-t border-zinc-150">
-              <p className="font-bold text-zinc-900">Dr. Arpan Sen</p>
-              <p className="text-xs text-zinc-500 font-semibold uppercase tracking-wider">{t("about_sig_label")}</p>
-            </div>
-          </div>
-          {/* Simple Structured Portrait Card */}
-          <div className="w-full md:w-48 bg-zinc-50 border border-zinc-200 p-4 flex flex-col items-center text-center shrink-0 self-center md:self-start">
-            <div className="w-24 h-24 bg-zinc-200 border border-zinc-300 text-zinc-600 flex items-center justify-center font-bold text-xl mb-3">
-              AS
-            </div>
-            <h4 className="text-xs font-bold text-zinc-900">Dr. Arpan Sen</h4>
-            <p className="text-[10px] text-zinc-500 mt-1 uppercase font-bold tracking-wider leading-tight">
-              National Coordinator
-            </p>
-            <p className="text-[9px] text-zinc-400 font-medium">NCIE India</p>
-          </div>
+        <div className="flex flex-col items-center justify-center py-10 text-center space-y-3 text-zinc-400">
+          <svg className="w-10 h-10 text-zinc-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+          </svg>
+          <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Coordinator details not yet added</p>
+          <p className="text-[11px] text-zinc-400">Leadership information will be published once officially designated.</p>
         </div>
       </div>
 
@@ -183,20 +169,11 @@ export default function AboutPage() {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-zinc-200 hover:bg-zinc-50/50 bg-white">
-                <td className="px-4 py-3.5 text-xs sm:text-sm text-zinc-600 font-mono border-r border-zinc-200 text-center font-bold">1</td>
-                <td className="px-4 py-3.5 text-xs sm:text-sm text-zinc-900 font-bold border-r border-zinc-200">Dr. Arpan Sen</td>
-                <td className="px-4 py-3.5 text-xs sm:text-sm text-zinc-650">{t("about_member_1_role")}</td>
-              </tr>
-              <tr className="border-b border-zinc-200 hover:bg-zinc-50/50 bg-zinc-50/20">
-                <td className="px-4 py-3.5 text-xs sm:text-sm text-zinc-600 font-mono border-r border-zinc-200 text-center font-bold">2</td>
-                <td className="px-4 py-3.5 text-xs sm:text-sm text-zinc-900 font-bold border-r border-zinc-200">Prof. Smriti Mukta</td>
-                <td className="px-4 py-3.5 text-xs sm:text-sm text-zinc-650">{t("about_member_2_role")}</td>
-              </tr>
-              <tr className="hover:bg-zinc-50/50 bg-white">
-                <td className="px-4 py-3.5 text-xs sm:text-sm text-zinc-600 font-mono border-r border-zinc-200 text-center font-bold">3</td>
-                <td className="px-4 py-3.5 text-xs sm:text-sm text-zinc-900 font-bold border-r border-zinc-200">Dr. Raghavan Iyer</td>
-                <td className="px-4 py-3.5 text-xs sm:text-sm text-zinc-650">{t("about_member_3_role")}</td>
+              <tr>
+                <td colSpan={3} className="px-4 py-10 text-center text-zinc-400">
+                  <p className="text-xs font-semibold uppercase tracking-wider">No council members added yet</p>
+                  <p className="text-[11px] mt-1">Advisory council members will be listed here once officially constituted.</p>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -332,29 +309,6 @@ export default function AboutPage() {
   );
 
   const renderDirectoryContent = () => {
-    const zones = [
-      {
-        title: t("about_zone_north"),
-        location: "IIT Delhi Campus, New Delhi",
-        email: "liaison.north@ncie.gov.in"
-      },
-      {
-        title: t("about_zone_west"),
-        location: "IIT Bombay Campus, Mumbai",
-        email: "liaison.west@ncie.gov.in"
-      },
-      {
-        title: t("about_zone_south"),
-        location: "IIT Madras Campus, Chennai",
-        email: "liaison.south@ncie.gov.in"
-      },
-      {
-        title: t("about_zone_east"),
-        location: "IIT Kharagpur Campus, Kharagpur",
-        email: "liaison.east@ncie.gov.in"
-      }
-    ];
-
     return (
       <div className="space-y-8 animate-fadeIn">
         {/* Liaison Zones Table */}
@@ -387,24 +341,12 @@ export default function AboutPage() {
                 </tr>
               </thead>
               <tbody>
-                {zones.map((zone, idx) => (
-                  <tr key={idx} className="border-b border-zinc-200 last:border-b-0 hover:bg-zinc-50/50 odd:bg-white even:bg-zinc-50/20">
-                    <td className="px-4 py-3.5 text-xs sm:text-sm text-zinc-600 font-mono border-r border-zinc-200 text-center font-bold">
-                      {idx + 1}
-                    </td>
-                    <td className="px-4 py-3.5 text-xs sm:text-sm text-zinc-900 font-bold border-r border-zinc-200">
-                      {zone.title}
-                    </td>
-                    <td className="px-4 py-3.5 text-xs sm:text-sm text-zinc-650 border-r border-zinc-200">
-                      {zone.location}
-                    </td>
-                    <td className="px-4 py-3.5 text-xs sm:text-sm border-r border-zinc-200 last:border-r-0 font-mono">
-                      <a href={`mailto:${zone.email}`} className="text-primary hover:underline font-semibold">
-                        {zone.email}
-                      </a>
-                    </td>
-                  </tr>
-                ))}
+                <tr>
+                  <td colSpan={4} className="px-4 py-10 text-center text-zinc-400">
+                    <p className="text-xs font-semibold uppercase tracking-wider">No regional contacts added yet</p>
+                    <p className="text-[11px] mt-1">Regional liaison desks will be listed here once officially designated.</p>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
