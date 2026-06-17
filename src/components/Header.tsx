@@ -129,6 +129,8 @@ export default function Header() {
     setActiveMenu(null);
   }, [pathname]);
 
+  if (pathname?.startsWith("/dashboard")) return null;
+
   return (
     <>
       <header className="sticky top-0 z-50 w-full flex flex-col">

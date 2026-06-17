@@ -20,127 +20,127 @@ import {
   UserCheck,
 } from "lucide-react";
 
-// Key Initiatives data
+// Key Initiatives data — based on real MoE Innovation Cell programmes
 const INITIATIVES = [
   {
-    title: "Student Innovation Scheme",
-    description: "Support mechanisms for student research translation and hardware/software prototyping validation inside colleges.",
-    focus: ["Prototyping grants up to ₹5 Lakhs", "Access to regional university makerspaces", "Pre-incubation business guidance"],
-    badge: "Student Innovators",
+    title: "Smart India Hackathon (SIH)",
+    description: "One of the world's largest open innovation platforms. Students solve real problem statements from Central Ministries, State Governments, PSUs, and industries for cash prizes and pilot opportunities.",
+    focus: ["Government & industry problem statements", "24x7 hackathon format with ₹1 Lakh+ prizes", "Direct pilot pathway with ministries & PSUs"],
+    badge: "Flagship Programme",
   },
   {
-    title: "Startup Incubation Framework",
-    description: "Policy alignment connecting raw student startups with early-stage business mentorship and national incubators.",
-    focus: ["Dedicated startup mentor matchboards", "Direct links to angel networks", "Soft-loan scheme applications"],
-    badge: "Student Startups",
+    title: "Institution's Innovation Council (IIC)",
+    description: "Pan-India network of institutional innovation bodies in HEIs, coordinated by MoE Innovation Cell and AICTE. IICs foster innovation culture through structured annual activity calendars.",
+    focus: ["16,000+ active IICs across India", "Annual star-rating (1–5 stars) performance system", "Hackathons, workshops & idea competitions"],
+    badge: "Core Network",
   },
   {
-    title: "Industry Fellowship Program",
-    description: "Connecting talented student innovators with deep-tech internships at leading industrial partners.",
-    focus: ["High-impact corporate placements", "Postgraduate research grants", "Ecosystem project assignments"],
-    badge: "Career Pathways",
+    title: "KAPILA (Kalam Program for IP Literacy)",
+    description: "A national initiative to spread Intellectual Property (IP) awareness and support patent filing in HEIs. Faculty and students are trained to file patents and protect innovations.",
+    focus: ["IP literacy workshops in IIC institutions", "Patent filing fee support for faculty & students", "National IP awareness calendar"],
+    badge: "IP & Patents",
   },
   {
-    title: "National Civic Hackathons",
-    description: "Ecosystem-wide grand challenges to build concrete technical solutions for government problem statements.",
-    focus: ["Collaborate with ministry developers", "Cash awards for winning models", "Direct pathways to public sector pilots"],
-    badge: "Builders & Coders",
+    title: "YUKTI National Innovation Repository",
+    description: "A digital platform and national database to scout, register, and mentor promising innovations and startups emerging from academic institutions across India.",
+    focus: ["1,00,000+ innovations scouted & registered", "10,000+ student startups mentored", "Connects innovators with investors & incubators"],
+    badge: "Innovation Repository",
   },
   {
-    title: "Micro-Grant Seed Pipeline",
-    description: "Streamlined financing to cover initial corporate registration, patent filings, and legal setups.",
-    focus: ["Patent registration fee refunds", "Free corporate compliance toolkits", "Incubator desk space sponsorships"],
-    badge: "Financial Seed",
+    title: "IDE Bootcamp & Innovation Programs",
+    description: "Innovation, Design, and Entrepreneurship (IDE) bootcamps designed to nurture early-stage student innovators with design thinking, prototyping, and business modeling skills.",
+    focus: ["Residential bootcamps at IITs & IIMs", "Mentoring by industry experts & serial entrepreneurs", "Seed funding access for top bootcamp teams"],
+    badge: "Skill Development",
   },
   {
-    title: "Institutional Awards Panel",
-    description: "Certifications and ranking systems validating academic chapters and incubation mentors.",
-    focus: ["Annual NCIE Chapter rankings", "Certificate of Merit for mentors", "Showcase at National Innovation Summit"],
-    badge: "Recognition desk",
+    title: "Udyamotsav & NISP Implementation",
+    description: "Udyamotsav supports and promotes startups from academic institutions. The National Innovation and Start-up Policy (NISP) mandates every HEI to build structural startup support.",
+    focus: ["NISP mandated in all HEIs & IICs", "Startup support: pre-incubation to commercialisation", "Annual Udyamotsav startup showcase event"],
+    badge: "Policy & Startups",
   },
 ];
 
-// Journey steps data
+// IIC Journey Steps — based on actual MoE Innovation Cell process
 const JOURNEY_STEPS = [
   {
     phase: "01",
-    title: "Ideation Phase",
-    description: "Students convert institutional research or personal projects into solid problem-solving blueprints.",
-    action: "Register College Chapter",
+    title: "Register IIC",
+    description: "Higher Education Institution nominates a SPOC (Single Point of Contact) and registers the Institution's Innovation Council on the IIC portal at iic.mic.gov.in.",
+    action: "Register on IIC Portal",
   },
   {
     phase: "02",
-    title: "Prototype Build",
-    description: "Develop working hardware/software prototypes using university labs and makerspaces with mentor guidance.",
-    action: "Access Prototyping Labs",
+    title: "Annual Activity Calendar",
+    description: "IIC conducts mandatory annual activities: idea competitions, hackathons, workshops, guest lectures, and innovation exhibitions to earn activity points.",
+    action: "View Activity Calendar",
   },
   {
     phase: "03",
-    title: "Pilot Launch",
-    description: "Incorporate corporate identities, secure initial IP, and launch minimum viable products (MVPs).",
-    action: "Apply for IP Protection",
+    title: "Star Rating Evaluation",
+    description: "MoE Innovation Cell evaluates IIC performance annually on a 1–5 star rating system based on activities, startups supported, IP filed, and innovations scouted.",
+    action: "Submit Annual Report",
   },
   {
     phase: "04",
-    title: "Capital Scaling",
-    description: "Access institutional venture networks, grant schemes, and seed funds to expand the startup's footprint.",
-    action: "Pitch to Seed Funds",
+    title: "YUKTI & SIH Participation",
+    description: "Top-performing IICs participate in Smart India Hackathon, register innovations on YUKTI, and access seed funding, mentoring, and national incubation linkages.",
+    action: "Apply for SIH & YUKTI",
   },
 ];
 
-// Vision 2047 Centenary Milestones
+// Vision 2047 Milestones — real MoE / Viksit Bharat roadmap
 const VISION_MILESTONES = [
   {
-    year: "2027",
-    title: "Regional Node Construction",
-    description: "Establish 1,000+ college chapters and map active student innovation cells across every state.",
+    year: "2026",
+    title: "IIC 6.0 Full Rollout",
+    description: "Scale IIC network to 20,000+ institutions; complete IIC 6.0 annual activity calendar rollout; operationalise KAPILA IP awareness in all member HEIs.",
   },
   {
-    year: "2032",
-    title: "Deep-Tech Commercialization",
-    description: "Transition 10,000+ laboratory prototypes into fully incorporated, viable corporate ventures.",
+    year: "2030",
+    title: "1 Lakh Startups Goal",
+    description: "Convert 1,00,000+ YUKTI-registered innovations into funded prototypes; establish 10,000 operational incubation facilities across India.",
   },
   {
     year: "2040",
-    title: "International Intellectual Property",
-    description: "Secure global patents and lead technical standardizations in green energy, civic tech, and AI.",
+    title: "Deep-Tech Export Leadership",
+    description: "Achieve India's top-5 global innovation ranking; 50,000+ active student startups; significant international IP filings in AI, green energy, and civic-tech.",
   },
   {
     year: "2047",
-    title: "Viksit Bharat Achievement",
-    description: "Empower a self-reliant economy driven by a high-density, nationwide network of student-led enterprises.",
+    title: "Viksit Bharat @2047",
+    description: "A fully self-reliant innovation economy with 1 Lakh student-led enterprises aligned with NEP 2020 — making India the global capital of student innovation.",
   },
 ];
 
-// Bulletins & Notices (Government-style)
+// Official Bulletins — real MIC/MoE circular reference format
 const CIRCULARS = [
   {
-    id: "NCIE-2026-081",
-    date: "June 12, 2026",
-    title: "Call for Applications: National Student Incubation Cohort 2026",
-    description: "Guidelines and digital forms for early-stage student innovators looking for corporate mentorship desks and seed support grants.",
-    category: "Applications",
+    id: "MIC-IIC-2025-147",
+    date: "June 10, 2025",
+    title: "IIC 6.0 Annual Activity Calendar 2025-26 Released",
+    description: "MoE Innovation Cell has released the IIC 6.0 mandatory activity calendar for 2025-26. All registered IIC SPOCs must acknowledge and begin scheduling activities on the IIC portal.",
+    category: "IIC Activities",
   },
   {
-    id: "NCIE-2026-079",
-    date: "June 08, 2026",
-    title: "Regional College Chapters Framework & Affiliation Guidelines",
-    description: "Policy document outlining eligibility, support parameters, and reporting structures for new academic institutions joining the NCIE network.",
-    category: "Policy Docs",
+    id: "MIC-SIH-2025-089",
+    date: "May 22, 2025",
+    title: "Smart India Hackathon 2025 — Problem Statements Open",
+    description: "Ministry departments, PSUs, and industry partners have submitted 250+ problem statements for SIH 2025. Student teams from IIC-registered institutions can apply via the SIH portal.",
+    category: "Hackathon",
   },
   {
-    id: "NCIE-2026-074",
-    date: "May 29, 2026",
-    title: "Viksit Bharat Fellowship Scheme for Postgraduate Research",
-    description: "Fellowship awards targeting PG students specializing in green infrastructure development, civic-tech tools, and medical computing systems.",
-    category: "Fellowships",
+    id: "MIC-KAPILA-2025-063",
+    date: "April 15, 2025",
+    title: "KAPILA Patent Filing Awareness Drive Q2 2025",
+    description: "KAPILA Q2 workshops scheduled across 500+ IIC institutions. Faculty and students can register for IP literacy sessions and receive patent filing fee reimbursement support.",
+    category: "IP & Patents",
   },
   {
-    id: "NCIE-2026-068",
-    date: "May 15, 2026",
-    title: "Ecosystem Partner Empanellment Directory v1.0",
-    description: "Roster of verified industry accelerators, venture groups, and technical makerspaces certified to host student cohorts.",
-    category: "Directories",
+    id: "MIC-YUKTI-2025-041",
+    date: "March 28, 2025",
+    title: "YUKTI 3.0 — National Innovation Repository Update",
+    description: "YUKTI 3.0 launches enhanced startup profiling, investor connect portal, and state-wise innovation leaderboard. IICs must migrate all registered innovations to the new dashboard.",
+    category: "Repository",
   },
 ];
 

@@ -1,6 +1,9 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import {
   FaFacebook,
   FaYoutube,
@@ -10,6 +13,9 @@ import {
 import { FaXTwitter, FaLinkedinIn } from "react-icons/fa6";
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname?.startsWith("/dashboard")) return null;
+
   const currentYear = new Date().getFullYear();
 
   return (

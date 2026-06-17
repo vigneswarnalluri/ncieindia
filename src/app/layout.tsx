@@ -43,7 +43,10 @@ export default function RootLayout({
       className={`${poppins.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-white text-charcoal selection:bg-primary/10 selection:text-primary">
+      <body 
+        className="min-h-full flex flex-col bg-white text-charcoal selection:bg-primary/10 selection:text-primary"
+        suppressHydrationWarning
+      >
         <LanguageProvider>
           <Header />
           <main className="flex-1 flex flex-col">{children}</main>

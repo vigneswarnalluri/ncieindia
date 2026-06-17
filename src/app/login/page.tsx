@@ -18,8 +18,61 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 
 type Role = "institution" | "official";
+
+const DEMO_ACCOUNTS = [
+  {
+    role: "institution" as Role,
+    label: "Institution SPOC",
+    email: "spoc@iitmadras.ac.in",
+    name: "Prof. V. K. Prasad",
+    org: "IIT Madras — NCIE Chapter",
+  },
+  {
+    role: "official" as Role,
+    label: "Govt. Official",
+    email: "admin@ncie.gov.in",
+    name: "Nodal Administrator",
+    org: "Ministry of Education — NCIE Desk",
+  },
+];
+
+const getCleanErrorMessage = (error: any): string => {
+  if (!error) return "An unexpected error occurred.";
+  let msg = error.message;
+  
+  // Attempt to parse JSON string error messages
+  try {
+    if (msg && typeof msg === "string" && msg.trim().startsWith("{")) {
+      const parsed = JSON.parse(msg);
+      msg = parsed.error_description || parsed.message || parsed.error || msg;
+    }
+  } catch {}
+
+  // Fallbacks for empty or generic object errors
+  if (!msg || msg === "{}" || typeof msg !== "string") {
+    if (error.status === 429) {
+      return "Email rate limit exceeded. Please configure custom SMTP or try again in a few minutes.";
+    }
+    if (error.status === 400) {
+      return "Invalid email request or captcha. Please check and try again.";
+    }
+    return `Authentication failed (Status ${error.status || 'unknown'}). Please verify connection.`;
+  }
+
+  // Translate common raw error codes into clean user-friendly text
+  if (msg.includes("rate limit exceeded")) {
+    return "Email rate limit exceeded. Please configure custom SMTP or try again in a few minutes.";
+  }
+  if (msg.includes("Signup is disabled")) {
+    return "Registration is closed. Access is limited to already registered emails.";
+  }
+
+  return msg;
+};
 
 export default function LoginPage() {
   const [role, setRole] = useState<Role>("institution");
@@ -29,8 +82,51 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [ssoLoading, setSsoLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const emailRef = useRef<string>("");
   const firstInputRef = useRef<HTMLInputElement>(null);
   const { t } = useLanguage();
+  const router = useRouter();
+
+  const handleDemoLogin = (account: typeof DEMO_ACCOUNTS[0]) => {
+    const sessionData = JSON.stringify({ email: account.email, role: account.role, name: account.name, org: account.org });
+    // Store in localStorage for client-side useAuthGuard
+    localStorage.setItem("ncie_demo_session", sessionData);
+    // Also set a cookie so server-side proxy.ts can see it
+    document.cookie = `ncie_demo_session=${encodeURIComponent(sessionData)}; path=/; max-age=86400; SameSite=Lax`;
+    router.push(`/dashboard/${account.role}`);
+  };
+
+  // OTP Verification state
+  const [otp, setOtp] = useState("");
+  const [otpError, setOtpError] = useState<string | null>(null);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setVerifyingOtp(true);
+    setOtpError(null);
+
+    try {
+      const { error } = await supabase.auth.verifyOtp({
+        email: emailRef.current,
+        token: otp,
+        type: "email",
+      });
+      if (error) {
+        setOtpError(getCleanErrorMessage(error));
+      } else {
+        const email = emailRef.current || "";
+        const isOfficial = email.endsWith(".gov.in") || role === "official";
+        const targetRole = isOfficial ? "official" : "institution";
+        router.push(`/dashboard/${targetRole}`);
+      }
+    } catch {
+      setOtpError("Verification failed. Please try again.");
+    } finally {
+      setVerifyingOtp(false);
+    }
+  };
 
   // Captcha state
   const [captchaCode, setCaptchaCode] = useState("");
@@ -72,9 +168,10 @@ export default function LoginPage() {
     ? t("id_placeholder_institution")
     : t("id_placeholder_official");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setAuthError(null);
+
     // Captcha validation
     if (captchaInput.toUpperCase() !== captchaCode) {
       setCaptchaError(true);
@@ -83,11 +180,28 @@ export default function LoginPage() {
     }
 
     setLoading(true);
-    // Simulate auth
-    setTimeout(() => {
+    try {
+      // id field contains email for both roles
+      const email = id.trim();
+      emailRef.current = email;
+
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: { shouldCreateUser: true },
+      });
+
+      if (error) {
+        setAuthError(getCleanErrorMessage(error));
+        generateCaptcha();
+      } else {
+        setSuccess(true);
+      }
+    } catch {
+      setAuthError("An unexpected error occurred. Please try again.");
+      generateCaptcha();
+    } finally {
       setLoading(false);
-      setSuccess(true);
-    }, 1500);
+    }
   };
 
   const handleSsoLogin = () => {
@@ -220,24 +334,20 @@ export default function LoginPage() {
               {/* Form elements */}
               <form onSubmit={handleSubmit} className="space-y-3">
                 
-                {/* ID input */}
+                {/* Email input */}
                 <div className="space-y-1.5">
                   <label htmlFor="login-id" className="block text-xs font-semibold text-zinc-700">
                     {idLabel}
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400">
-                      {role === "institution" ? (
-                        <Building2 className="w-4 h-4" />
-                      ) : (
-                        <Mail className="w-4 h-4" />
-                      )}
+                      <Mail className="w-4 h-4" />
                     </div>
                     <input
                       ref={firstInputRef}
                       id="login-id"
-                      type="text"
-                      autoComplete="username"
+                      type="email"
+                      autoComplete="email"
                       value={id}
                       onChange={(e) => setId(e.target.value)}
                       placeholder={idPlaceholder}
@@ -247,34 +357,10 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                {/* Password input */}
-                <div className="space-y-1.5">
-                  <label htmlFor="login-password" className="block text-xs font-semibold text-zinc-700">
-                    {t("password_label")}
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400">
-                      <Lock className="w-4 h-4" />
-                    </div>
-                    <input
-                      id="login-password"
-                      type={showPass ? "text" : "password"}
-                      autoComplete="current-password"
-                      value={pass}
-                      onChange={(e) => setPass(e.target.value)}
-                      placeholder="••••••••"
-                      required
-                      className="w-full bg-white border border-zinc-200 rounded-xl pl-10 pr-11 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-primary/15 focus:border-primary transition-all shadow-sm"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPass((v) => !v)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 transition-colors cursor-pointer"
-                      aria-label={showPass ? "Hide password" : "Show password"}
-                    >
-                      {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                  </div>
+                {/* Passwordless notice */}
+                <div className="flex items-center gap-2 bg-emerald-50/60 border border-emerald-200/60 rounded-xl px-3 py-2">
+                  <Lock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <p className="text-[10px] text-emerald-800">A secure <strong>6-digit OTP</strong> will be sent to your email — no password required.</p>
                 </div>
 
                 {/* CAPTCHA validation card */}
@@ -344,6 +430,14 @@ export default function LoginPage() {
                   </a>
                 </div>
 
+                {/* Auth error */}
+                {authError && (
+                  <div className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-xl px-3 py-2.5">
+                    <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                    <p className="text-xs text-red-700 font-medium">{authError}</p>
+                  </div>
+                )}
+
                 {/* Login submission button */}
                 <button
                   id="login-submit"
@@ -381,6 +475,26 @@ export default function LoginPage() {
                 )}
                 <span>{t("national_sso")}</span>
               </button>
+
+              {/* Demo Access Tiles */}
+              <div className="pt-1">
+                <p className="text-center text-[9px] font-bold text-zinc-400 uppercase tracking-widest mb-2">— Demo Access —</p>
+                <div className="grid grid-cols-1 xs:grid-cols-2 gap-2">
+                  {DEMO_ACCOUNTS.map((acc) => (
+                    <button
+                      key={acc.role}
+                      type="button"
+                      onClick={() => handleDemoLogin(acc)}
+                      className="flex flex-col items-start gap-0.5 p-2.5 bg-[#e8f5f0] hover:bg-[#d0ecdf] border border-[#b0d9c4] hover:border-[#0D6B4F] rounded-xl transition-all cursor-pointer text-left group"
+                    >
+                      <span className="text-[9px] font-bold text-[#0D6B4F] uppercase tracking-widest group-hover:text-[#0a5840]">{acc.label}</span>
+                      <span className="text-[10px] font-bold text-zinc-800 leading-tight">{acc.name}</span>
+                      <span className="text-[9px] text-zinc-500 leading-tight">{acc.org}</span>
+                    </button>
+                  ))}
+                </div>
+                <p className="text-center text-[9px] text-zinc-400 mt-1.5">Demo tiles bypass OTP — for testing only</p>
+              </div>
             </motion.div>
           ) : (
             // Success Verification Dispatched
@@ -388,25 +502,80 @@ export default function LoginPage() {
               key="auth-success-pane"
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="text-center space-y-6 py-4"
+              className="text-center space-y-5 py-3"
             >
-              <div className="w-14 h-14 bg-emerald-50 border border-emerald-100 rounded-full flex items-center justify-center mx-auto text-emerald-500">
-                <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+              <div className="w-12 h-12 bg-emerald-50 border border-emerald-100 rounded-full flex items-center justify-center mx-auto text-emerald-500">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-bold text-zinc-900">{t("mfa_sent")}</h3>
-                <p className="text-xs text-zinc-500 max-w-xs mx-auto leading-relaxed">
+              <div className="space-y-1">
+                <h3 className="text-base font-bold text-zinc-900">{t("mfa_sent")}</h3>
+                <p className="text-[11px] text-zinc-500 max-w-xs mx-auto leading-relaxed">
                   {t("mfa_desc")}
                 </p>
               </div>
-              <div className="bg-zinc-50 border border-zinc-200/60 rounded-xl p-3.5 text-xs font-mono text-zinc-500">
+
+              {/* Secure 6-Digit OTP Verification Form */}
+              <form onSubmit={handleVerifyOtp} className="space-y-3 max-w-[260px] mx-auto pt-1">
+                <div className="space-y-1.5">
+                  <label htmlFor="otp-input" className="block text-[10px] font-bold text-zinc-500 text-left uppercase tracking-wider">
+                    Enter 6-Digit Secure OTP
+                  </label>
+                  <input
+                    id="otp-input"
+                    type="text"
+                    maxLength={6}
+                    pattern="\d{6}"
+                    placeholder="••••••"
+                    value={otp}
+                    onChange={(e) => {
+                      setOtp(e.target.value.replace(/\D/g, ""));
+                      setOtpError(null);
+                    }}
+                    required
+                    className={`w-full bg-white border rounded-xl px-3 py-2 text-center text-base font-mono tracking-[0.4em] focus:outline-none transition-all shadow-sm ${
+                      otpError
+                        ? "border-red-400 focus:ring-2 focus:ring-red-100"
+                        : "border-zinc-200 focus:ring-2 focus:ring-primary/15 focus:border-primary"
+                    }`}
+                  />
+                  {otpError && (
+                    <p className="text-red-500 text-[10px] text-left flex items-center gap-1 mt-1">
+                      <AlertCircle className="w-3 h-3 shrink-0" />
+                      {otpError}
+                    </p>
+                  )}
+                </div>
+                
+                <button
+                  id="otp-verify-submit"
+                  type="submit"
+                  disabled={verifyingOtp}
+                  className="w-full flex items-center justify-center gap-2 bg-[#0D6B4F] hover:bg-[#0b5c43] text-white font-semibold text-xs rounded-xl py-2 transition-all shadow-md disabled:opacity-75 cursor-pointer"
+                >
+                  {verifyingOtp ? (
+                    <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <Lock className="w-3 h-3" />
+                  )}
+                  {verifyingOtp ? "Verifying..." : "Verify & Proceed"}
+                </button>
+              </form>
+
+              <div className="bg-zinc-50 border border-zinc-200/60 rounded-xl p-2.5 text-[10px] font-mono text-zinc-500">
                 {t("tx_id")}:<br />
                 <span className="font-bold text-zinc-800 select-all">NCIE-AUTH-{Math.floor(100000 + Math.random() * 900000)}</span>
               </div>
               <button
-                onClick={() => setSuccess(false)}
+                type="button"
+                onClick={() => {
+                  setSuccess(false);
+                  setOtp("");
+                  setOtpError(null);
+                  setAuthError(null);
+                  generateCaptcha();
+                }}
                 className="text-xs text-primary hover:underline font-bold"
               >
                 {t("go_back_login")}

@@ -17,6 +17,8 @@
   --font-sans: var(--font-poppins), system-ui, sans-serif;
   --font-display: var(--font-poppins), system-ui, sans-serif;
 
+  --breakpoint-xs: 480px;
+
   --animate-marquee: marquee 28s linear infinite;
   --animate-slide-down: slideDown 0.22s cubic-bezier(0.4, 0, 0.2, 1);
   --animate-scroll-up: scrollUp 18s linear infinite;

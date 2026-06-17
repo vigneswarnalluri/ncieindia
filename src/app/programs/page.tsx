@@ -27,186 +27,112 @@ export interface Program {
 
 export const PROGRAMS_DATA: Program[] = [
   {
-    id: "nidhi-cis",
-    title: "NIDHI College Innovation Scheme",
-    subtitle: "Prototyping grants for collegiate projects",
+    id: "smart-india-hackathon",
+    title: "Smart India Hackathon (SIH)",
+    subtitle: "World's largest open innovation platform for students",
     category: "student",
-    budget: "Up to ₹5,00,000 per team",
-    duration: "12 Months support",
-    description: "Supports engineering, science, and design students to convert their final-year projects or research papers into functional hardware/software prototypes.",
+    budget: "Prize pool ₹1,00,000+ per team",
+    duration: "36-hour hackathon format",
+    description: "SIH is a nationwide initiative to provide students a platform to solve pressing problems faced by government ministries, departments, PSUs, and industries. It fosters a culture of product innovation and problem-solving mindset.",
     benefits: [
-      "Milestone-based prototyping grant of up to ₹5 Lakhs",
-      "Assigned industry mentor & patent validation services",
-      "Direct entry to regional bootcamps and startup clinics",
-    ],
-    tranches: [
-      {
-        name: "Tranche 1",
-        stage: "Stage 1: Explore → Idea",
-        amount: "₹10,000",
-        note: "= ₹10,00,000 total allocation",
-        trigger: "Released after idea screening and selection"
-      },
-      {
-        name: "Tranche 2",
-        stage: "Stage 2: Idea → Ideation",
-        amount: "₹25,000 × shortlisted startups",
-        note: "based on performance",
-        trigger: "Released after concept validation and feasibility approval"
-      },
-      {
-        name: "Tranche 3",
-        stage: "Stage 3: Ideation → Prototype",
-        amount: "₹75,000 × selected startups",
-        trigger: "Released after ideation review and prototype approval"
-      },
-      {
-        name: "Tranche 4",
-        stage: "Stage 4: Prototype → Commercialization",
-        amount: "₹1,50,000 × top-performing startups",
-        trigger: "Released after prototype validation and market readiness"
-      },
-      {
-        name: "Tranche 5",
-        stage: "Stage 5: Commercialization → Establishment",
-        amount: "₹2,40,000 × final selected startups",
-        trigger: "Released after final establishment milestone approval"
-      }
-    ],
-  },
-  {
-    id: "seed-pipeline",
-    title: "NCIE Seed Pipeline Program",
-    subtitle: "Early equity-free capital for launch-ready student ventures",
-    category: "startup",
-    budget: "Up to ₹25,00,000 seed grant",
-    duration: "6 Months cohort",
-    description: "Designed for incorporated student ventures with a validated MVP who need growth runway to test market fit and scale operations.",
-    benefits: [
-      "Equity-free seed funding of up to ₹25 Lakhs",
-      "Incubation alignment with A-grade regional tech parks",
-      "Direct showcase to venture capitalists and angel networks",
-    ],
-  },
-  {
-    id: "makerspace-empowerment",
-    title: "Makerspace Empowerment Grant",
-    subtitle: "Funding for academic labs to establish open fabrication shops",
-    category: "institution",
-    budget: "Up to ₹50,00,000 institutional support",
-    duration: "2 Years rollout support",
-    description: "Funds academic institutions (colleges/universities) to establish modern fabrication shops and makerspaces accessible to all students.",
-    benefits: [
-      "Capital grants for buying 3D printers, CNC mills, and testing kits",
-      "Operational grant for lab technicians and student workshops",
-      "Integration with NCIE nationwide innovation database",
-    ],
-  },
-  {
-    id: "corporate-csr",
-    title: "Corporate-CSR Innovation Bridges",
-    subtitle: "Industry-sponsored thematic tracks with corporate POC alignment",
-    category: "corporate",
-    budget: "Sponsored by corporate partners",
-    duration: "Thematic cohorts",
-    description: "Connects large corporate sponsors with student groups working on specific industrial challenges in energy, agritech, and AI.",
-    benefits: [
-      "Access to corporate data sets, hardware nodes, and APIs",
-      "Paid proof-of-concept (POC) trials with potential vendor onboarding",
-      "CSR-sponsored funding allocations and lab grants",
-    ],
-  },
-  {
-    id: "internship-ecosystem",
-    title: "10-Core Paid Internship Ecosystem",
-    subtitle: "Structured national internship framework across all UG sectors",
-    category: "student",
-    budget: "Paid stipend (Industry & Gov-sponsored)",
-    duration: "2 to 6 Months per cohort",
-    description: "A structured national framework established across 10 core undergraduate sectors, ensuring that every student in India gains real-time industry exposure and practical, skill-based learning opportunities in verified work environments.",
-    benefits: [
-      "Covers 10 core sectors including Engineering, AI, Healthcare, Finance, and Social Innovation",
-      "Paid, structured, and practical learning experiences with verified corporate and research partners",
-      "Direct pathway to make undergraduate students industry-ready before graduation",
+      "Cash prizes of ₹1 Lakh+ for winning teams at each nodal centre",
+      "Direct interface with problem statement owners from Central Ministries & PSUs",
+      "Winning solutions considered for pilot deployment by respective ministries",
     ],
     stages: [
-      { title: "Stage 1: Profile Registration & Skill Assessment", desc: "Submit your academic credentials, technical skills, and portfolio on the national portal." },
-      { title: "Stage 2: Sector Matching", desc: "Our system matches your skills with projects in one of the 10 core sectors based on company requirements." },
-      { title: "Stage 3: Corporate Selection & Onboarding", desc: "Participate in corporate screening rounds/interviews before commencing your paid placement." },
+      { title: "Stage 1: Problem Statement Registration", desc: "Ministries, PSUs, and industries submit problem statements on the SIH portal. Teams from IIC-registered institutions apply." },
+      { title: "Stage 2: Idea Submission & Screening", desc: "Teams submit initial solutions. Shortlisted teams invited to participate in the 36-hour grand finale hackathon." },
+      { title: "Stage 3: Grand Finale", desc: "Teams build and present working solutions to a jury at nodal centres. Winners receive cash prizes and recognition." },
     ]
   },
   {
-    id: "mass-startup-funding",
-    title: "Mass Student Startup Funding Program",
-    subtitle: "Flagship scale-up launchpad for student-led ventures",
-    category: "startup",
-    budget: "₹5,00,000 seed grant per startup",
-    duration: "Milestone-based release",
-    description: "A national initiative backed by a ₹1,000 Crore allocation aiming to fund 20,000 student-led startups. Releases equity-free seed grants to remove financial barriers for young innovators.",
+    id: "iic-network",
+    title: "Institution's Innovation Council (IIC)",
+    subtitle: "Pan-India institutional innovation network — 16,000+ HEIs",
+    category: "institution",
+    budget: "Activity-based grants & incentives",
+    duration: "Annual cycle (IIC 6.0: 2024-25)",
+    description: "IICs are established within Higher Education Institutions in coordination with AICTE to systematically foster innovation and startup activities. 16,000+ IICs are active and rated annually on a 1–5 star system.",
     benefits: [
-      "Equity-free seed funding of up to ₹5,00,000 per selected startup",
-      "Structured 5-Stage release plan tracking idea to commercial establishment",
-      "Continuous incubation alignment and business development mentorship",
-    ],
-    tranches: [
-      {
-        name: "Tranche 1",
-        stage: "Stage 1: Explore → Idea",
-        amount: "₹10,000",
-        note: "= ₹10,00,000 initial batch allocation",
-        trigger: "Released after idea screening and selection"
-      },
-      {
-        name: "Tranche 2",
-        stage: "Stage 2: Idea → Ideation",
-        amount: "₹25,000 × shortlisted startups",
-        note: "based on performance",
-        trigger: "Released after concept validation and feasibility approval"
-      },
-      {
-        name: "Tranche 3",
-        stage: "Stage 3: Ideation → Prototype",
-        amount: "₹75,000 × selected startups",
-        trigger: "Released after ideation review and prototype approval"
-      },
-      {
-        name: "Tranche 4",
-        stage: "Stage 4: Prototype → Commercialization",
-        amount: "₹1,50,000 × top-performing startups",
-        trigger: "Released after prototype validation and market readiness"
-      },
-      {
-        name: "Tranche 5",
-        stage: "Stage 5: Commercialization → Establishment",
-        amount: "₹2,40,000 × final selected startups",
-        trigger: "Released after final establishment milestone approval"
-      }
+      "Annual star-rating (1–5 stars) with rewards for top-performing IICs",
+      "Access to MoE Innovation Cell resources, toolkits, and mentor networks",
+      "Preferential eligibility for SIH, KAPILA, YUKTI, and IDE Bootcamp programs",
     ],
     stages: [
-      { title: "Stage 1: Ideation Screening & Selection", desc: "Submit your initial startup proposal. Shortlisted projects receive Tranche 1 funding." },
-      { title: "Stage 2: Feasibility & Concept Validation", desc: "Audit and validate the concept feasibility with a domain expert panel." },
-      { title: "Stage 3: Prototype & Market Validation", desc: "Design a functional product prototype and validate it through pilot customer testing." },
-      { title: "Stage 4: Commercial Registration & Launch", desc: "Incorporate your student business entity and register intellectual property." },
+      { title: "Step 1: IIC Registration", desc: "Institution nominates a SPOC and registers on iic.mic.gov.in with complete institutional details." },
+      { title: "Step 2: Annual Activity Calendar", desc: "IIC conducts mandatory activities — idea competitions, workshops, bootcamps, hackathons — and earns activity points." },
+      { title: "Step 3: Annual Star Rating", desc: "MoE evaluates IIC performance and assigns 1–5 star rating. Top-rated IICs receive recognition and preferential grant access." },
     ]
   },
   {
-    id: "institutional-development-fund",
-    title: "Institutional Development & Incubation Fund",
-    subtitle: "Infrastructure grants to build centers of innovation excellence",
-    category: "institution",
-    budget: "₹20,00,000 to ₹50,00,000 per institution",
-    duration: "24 Months rollout support",
-    description: "A parallel ₹1,000 Crore national infrastructure fund allocated to technical and non-technical educational institutions to build incubation centers, innovation labs, and entrepreneurship cells.",
+    id: "kapila",
+    title: "KAPILA — Kalam Program for IP Literacy",
+    subtitle: "IP awareness & patent filing support for HEIs",
+    category: "student",
+    budget: "Patent filing fee reimbursement",
+    duration: "Year-round (quarterly drives)",
+    description: "KAPILA (Kalam Program for IP Literacy and Awareness) is a national initiative to spread awareness about Intellectual Property rights and support patent filing within Higher Education Institutions. Faculty and students are trained on IP basics and provided filing support.",
     benefits: [
-      "Dedicated capital grants ranging from ₹20 Lakhs to ₹50 Lakhs per institution",
-      "Funding strictly allocated for incubation centers, innovation labs, and startup spaces",
-      "Full integration with the nationwide Innovation India Council database and mentors",
+      "IP literacy workshops and training sessions in IIC institutions",
+      "Patent filing fee reimbursement for faculty and student innovators",
+      "Access to national patent data and prior art search tools",
     ],
     stages: [
-      { title: "Stage 1: Proposal Submission & Audit", desc: "Submit detailed campus infrastructure maps, faculty resources, and ED Cell proposals." },
-      { title: "Stage 2: Technical Committee Evaluation", desc: "Joint audit by the Innovation India Council and state coordinator liaison desks." },
-      { title: "Stage 3: First Installment & Lab Set Up", desc: "Disbursement of initial capital grants for purchasing machinery, 3D printers, and CNC mills." },
-      { title: "Stage 4: Annual Audit & Incubation Launch", desc: "Verification of operational labs before releasing subsequent milestone support." },
+      { title: "Step 1: IP Awareness Workshop", desc: "KAPILA-certified trainer conducts IP basics, patent search, and filing process workshop at the institution." },
+      { title: "Step 2: Innovation Disclosure", desc: "Faculty or student files a formal invention disclosure form; screened for patentability by IP expert panel." },
+      { title: "Step 3: Patent Filing Support", desc: "Selected innovations receive fee reimbursement and expert assistance through the patent filing process." },
+    ]
+  },
+  {
+    id: "yukti",
+    title: "YUKTI National Innovation Repository",
+    subtitle: "National database of academic innovations & startups",
+    category: "startup",
+    budget: "Platform access + mentoring support",
+    duration: "Continuous (YUKTI 3.0 live)",
+    description: "YUKTI (Young India Combating COVID with Knowledge, Technology and Innovation) is a national digital repository to scout, register, and commercially scale innovations and startups from HEIs. 1,00,000+ innovations registered; 10,000+ startups mentored.",
+    benefits: [
+      "National visibility for registered innovations and student startups",
+      "Connect with investors, incubators, and industry partners via YUKTI portal",
+      "State-wise innovation leaderboard and IIC performance benchmarking",
+    ],
+  },
+  {
+    id: "ide-bootcamp",
+    title: "IDE Bootcamp — Innovation, Design & Entrepreneurship",
+    subtitle: "Residential bootcamps to nurture student innovators",
+    category: "student",
+    budget: "Fully funded (travel & accommodation covered)",
+    duration: "5–7 Day residential bootcamps",
+    description: "IDE Bootcamps are residential immersive programs designed to nurture early-stage student innovators. Bootcamps are held at IITs, IIMs, and partner institutions. Participants receive design thinking, lean startup, and business modelling mentoring.",
+    benefits: [
+      "Fully funded residential experience at IITs / IIMs (travel + stay)",
+      "Intensive mentoring by industry experts, VCs, and serial entrepreneurs",
+      "Top bootcamp teams gain direct seed funding access and incubation support",
+    ],
+    stages: [
+      { title: "Stage 1: Application & Screening", desc: "Students apply via IIC portal with a brief innovation pitch. Shortlisted candidates receive bootcamp invitation." },
+      { title: "Stage 2: Residential Bootcamp", desc: "5–7 day immersive program: design thinking, prototyping, business modelling, and investor pitch workshops." },
+      { title: "Stage 3: Demo Day", desc: "Teams present to a jury of investors and industry leaders. Top teams selected for incubation and seed support." },
+    ]
+  },
+  {
+    id: "udyamotsav",
+    title: "Udyamotsav & NISP Implementation",
+    subtitle: "National startup festival & HEI startup policy mandate",
+    category: "institution",
+    budget: "Institution grants under NISP framework",
+    duration: "Annual event + ongoing NISP mandate",
+    description: "Udyamotsav is an annual national event to celebrate, support, and promote startups from academic institutions. The National Innovation and Start-up Policy (NISP) mandates all HEIs to create structural startup support including pre-incubation cells, IP units, and seed fund access.",
+    benefits: [
+      "NISP compliance unlocks grant eligibility for IIC institutions",
+      "Annual Udyamotsav provides national showcase platform for student startups",
+      "Structural support mandate: pre-incubation cells, IP units, and seed fund access",
+    ],
+    stages: [
+      { title: "Step 1: NISP Adoption", desc: "Institution formally adopts and notifies the National Innovation & Start-up Policy (NISP) for its students and faculty." },
+      { title: "Step 2: Infrastructure Setup", desc: "HEI establishes pre-incubation facility, IP Cell, and Entrepreneurship Development Cell per NISP guidelines." },
+      { title: "Step 3: Udyamotsav Participation", desc: "Registered student startups participate in annual Udyamotsav showcase, gaining visibility and investor connections." },
     ]
   },
 ];

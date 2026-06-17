@@ -70,8 +70,8 @@ export default function ContactPage() {
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-zinc-900">Liaison Office</h4>
-                  <p className="text-zinc-500 mt-0.5">NCIE Desk, New Delhi, India</p>
+                  <h4 className="font-bold text-zinc-900">MoE Innovation Cell Secretariat</h4>
+                  <p className="text-zinc-500 mt-0.5">D-Block, Shastri Bhawan, New Delhi — 110001</p>
                 </div>
               </div>
 
@@ -80,8 +80,8 @@ export default function ContactPage() {
                   <Mail className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-zinc-900">General Inquiries</h4>
-                  <p className="text-zinc-500 mt-0.5">contact@ncie.org.in</p>
+                  <h4 className="font-bold text-zinc-900">IIC Support Email</h4>
+                  <p className="text-zinc-500 mt-0.5">support-iic@mic.gov.in</p>
                 </div>
               </div>
 
@@ -90,8 +90,8 @@ export default function ContactPage() {
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-zinc-900">Phone Helpdesk</h4>
-                  <p className="text-zinc-500 mt-0.5">+91 (11) 2345-6789</p>
+                  <h4 className="font-bold text-zinc-900">Toll-Free Helpdesk</h4>
+                  <p className="text-zinc-500 mt-0.5">1800-180-0093 (Mon–Sat, 9:00 AM – 5:30 PM IST)</p>
                 </div>
               </div>
             </div>

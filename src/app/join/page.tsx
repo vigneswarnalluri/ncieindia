@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { User, Landmark, Building, CheckCircle, ArrowLeft, ArrowRight, ShieldCheck, Info, FileText, Check } from "lucide-react";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
+
 
 const DEPARTMENTS = [
   "Computer Science & Engineering",
@@ -605,7 +607,7 @@ export default function JoinPage() {
     setFiles((prev) => ({ ...prev, [fileKey]: file }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Safety check: ensure files are selected
@@ -634,12 +636,48 @@ export default function JoinPage() {
     setIsSubmitting(true);
     setValidationError(null);
 
-    // Simulating database storage latency
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
       const generatedId = `REG-2026-${Math.floor(Math.random() * 9000) + 1000}`;
-      setRegId(generatedId);
 
+      // Insert registration record into Supabase
+      const { error } = await supabase
+        .from("registrations")
+        .insert([{
+          reg_id: generatedId,
+          role,
+          full_name: formData.fullName,
+          email: formData.email,
+          org_name: formData.orgName,
+          state: formData.state,
+          city: formData.city,
+          proposal: formData.proposal,
+          designation: formData.designation,
+          mobile: formData.mobile,
+          department: formData.department,
+          specialization: formData.specialization,
+          stream: formData.stream,
+          year_of_study: formData.yearOfStudy,
+          inst_type: formData.instType,
+          accreditation_code: formData.accreditationCode,
+          partner_category: formData.partnerCategory,
+          reg_number: formData.regNumber,
+          website_url: formData.websiteUrl,
+          status: "pending",
+          submitted_at: new Date().toISOString(),
+        }]);
+
+      if (error) {
+        // Handle duplicate email gracefully
+        if (error.code === "23505") {
+          setValidationError("A registration with this email already exists. Please check your inbox for the confirmation email.");
+        } else {
+          setValidationError(`Submission failed: ${error.message}`);
+        }
+        setIsSubmitting(false);
+        return;
+      }
+
+      setRegId(generatedId);
       const submissionDetails = {
         email: formData.email,
         orgName: formData.orgName,
@@ -647,11 +685,15 @@ export default function JoinPage() {
       };
       localStorage.setItem("ncie_submission_details", JSON.stringify(submissionDetails));
       setExistingSubmission(submissionDetails);
-
       setStep("success");
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 1200);
+    } catch (err) {
+      setValidationError("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
 
   return (
     <div className="flex-1 bg-[#F8FAFC] py-12 md:py-16 border-t border-zinc-200">
