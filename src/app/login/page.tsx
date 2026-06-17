@@ -158,9 +158,11 @@ export default function LoginPage() {
       if (error) {
         setOtpError(getCleanErrorMessage(error));
       } else {
+        // Use full page navigation (not router.push) so the middleware
+        // can read the newly-set Supabase session cookie on the next request.
         const isOfficial = emailToVerify.endsWith(".gov.in") || role === "official";
         const targetRole = isOfficial ? "official" : "institution";
-        router.push(`/dashboard/${targetRole}`);
+        window.location.href = `/dashboard/${targetRole}`;
       }
     } catch {
       setOtpError("Verification failed. Please try again.");
