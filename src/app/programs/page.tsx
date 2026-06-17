@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Filter } from "lucide-react";
+import { ArrowRight, Filter, DatabaseBackup } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export interface Tranche {
   name: string;
@@ -90,7 +91,7 @@ export const PROGRAMS_DATA: Program[] = [
     category: "startup",
     budget: "Platform access + mentoring support",
     duration: "Continuous (YUKTI 3.0 live)",
-    description: "YUKTI (Young India Combating COVID with Knowledge, Technology and Innovation) is a national digital repository to scout, register, and commercially scale innovations and startups from HEIs. 1,00,000+ innovations registered; 10,000+ startups mentored.",
+    description: "YUKTI (Young India Combating COVID with Knowledge, Technology and Innovation) is a national digital repository to scout, register, and commercially scale innovations and startups from HEIs. 1,00,000+ innovations registered; 10,050+ startups mentored.",
     benefits: [
       "National visibility for registered innovations and student startups",
       "Connect with investors, incubators, and industry partners via YUKTI portal",
@@ -147,11 +148,33 @@ const CATEGORIES = [
 
 export default function ProgramsPage() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [programs, setPrograms] = useState<Program[]>(PROGRAMS_DATA);
+  const [dbOffline, setDbOffline] = useState<boolean>(false);
+
+  useEffect(() => {
+    async function loadPrograms() {
+      try {
+        const { data, error } = await supabase
+          .from("programs")
+          .select("*")
+          .order("created_at", { ascending: true });
+        
+        if (error) throw error;
+        if (data && data.length > 0) {
+          setPrograms(data as Program[]);
+        }
+      } catch (err) {
+        console.warn("Supabase fetch failed. Falling back to code-level PROGRAMS_DATA.", err);
+        setDbOffline(true);
+      }
+    }
+    loadPrograms();
+  }, []);
 
   const filteredPrograms =
     activeCategory === "all"
-      ? PROGRAMS_DATA
-      : PROGRAMS_DATA.filter((p) => p.category === activeCategory);
+      ? programs
+      : programs.filter((p) => p.category === activeCategory);
 
   return (
     <div className="flex-1 bg-[#F9FAFB] pb-16">
@@ -201,6 +224,17 @@ export default function ProgramsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         <div className="bg-white border border-zinc-200 p-6 sm:p-8">
           
+          {dbOffline && (
+            <div className="mb-6 bg-amber-50 border border-amber-250 p-4 text-xs rounded text-amber-800 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <DatabaseBackup className="w-4 h-4 text-amber-600 shrink-0" />
+                <div>
+                  <span className="font-bold">Offline Fallback Mode:</span> The database table <code className="bg-amber-100/80 px-1 py-0.5 rounded font-mono text-[10px]">public.programs</code> was not detected. Showing built-in catalog data. Follow the <a href="file:///C:/Users/Administrator/.gemini/antigravity-ide/brain/6b834bb1-3ad8-4443-a5a4-917a59881ef5/supabase_setup.md" className="underline font-bold text-amber-900 hover:text-amber-950">Supabase Setup Guide</a> to complete the database configuration.
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center gap-2 pb-4 mb-6 border-b border-zinc-200 border-l-4 border-primary pl-3">
             <h2 className="text-base font-bold uppercase tracking-wider text-zinc-900">
               NCIE Registry Programs Directory

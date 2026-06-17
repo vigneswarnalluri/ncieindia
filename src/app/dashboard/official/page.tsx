@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import {
   LayoutDashboard, Building2, Landmark, FileText, Activity,
   LogOut, CheckCircle, ChevronRight, Printer, Download,
-  Menu, X
+  Menu, X, Award
 } from "lucide-react";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { supabase } from "@/lib/supabase";
@@ -16,14 +16,16 @@ import ChapterTab, { ChapterReq } from "./components/ChapterTab";
 import GrantsTab, { GrantRow } from "./components/GrantsTab";
 import CircularsTab, { Circular } from "./components/CircularsTab";
 import SecurityTab, { AuditLog } from "./components/SecurityTab";
+import ProgramsTab from "./components/ProgramsTab";
 
-type Tab = "overview" | "verify" | "grants" | "circulars" | "security";
+type Tab = "overview" | "verify" | "grants" | "circulars" | "security" | "programs";
 
 const MENU: { tab: Tab; label: string; icon: React.ReactNode }[] = [
   { tab: "overview",  label: "Ecosystem Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
   { tab: "verify",    label: "Chapter Affiliation",  icon: <Building2 className="w-4 h-4" /> },
   { tab: "grants",    label: "Grants Disbursement",  icon: <Landmark className="w-4 h-4" /> },
   { tab: "circulars", label: "Gazette & Circulars",  icon: <FileText className="w-4 h-4" /> },
+  { tab: "programs",  label: "Program Registry",     icon: <Award className="w-4 h-4" /> },
   { tab: "security",  label: "Audit & System Logs",  icon: <Activity className="w-4 h-4" /> },
 ];
 
@@ -234,6 +236,7 @@ export default function OfficialDashboard() {
             {activeTab === "verify"    && <ChapterTab requests={requests} onVerify={handleVerify} />}
             {activeTab === "grants"    && <GrantsTab grants={grants} onDisburse={handleDisburse} />}
             {activeTab === "circulars" && <CircularsTab circulars={circulars} onAdd={handleAddCircular} />}
+            {activeTab === "programs"  && <ProgramsTab onToast={showToast} />}
             {activeTab === "security"  && <SecurityTab logs={auditLogs} />}
           </div>
 

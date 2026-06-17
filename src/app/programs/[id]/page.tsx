@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft, CheckCircle, Calendar, ShieldCheck, Mail, Users, ArrowRight, Coins } from "lucide-react";
-import { PROGRAMS_DATA } from "../page";
+import { supabase } from "@/lib/supabase";
+import { PROGRAMS_DATA, Program } from "../page";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,7 +13,44 @@ import { Card, CardContent } from "@/components/ui/card";
 export default function ProgramDetailPage() {
   const params = useParams();
   const id = params.id as string;
-  const program = PROGRAMS_DATA.find((p) => p.id === id);
+  const [program, setProgram] = useState<Program | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadProgram() {
+      try {
+        const { data, error } = await supabase
+          .from("programs")
+          .select("*")
+          .eq("id", id)
+          .single();
+        
+        if (error) throw error;
+        if (data) {
+          setProgram(data);
+        } else {
+          const fallback = PROGRAMS_DATA.find((p) => p.id === id);
+          setProgram(fallback || null);
+        }
+      } catch (err) {
+        console.warn("Supabase single program fetch failed, using fallback:", err);
+        const fallback = PROGRAMS_DATA.find((p) => p.id === id);
+        setProgram(fallback || null);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadProgram();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex-1 bg-white flex flex-col items-center justify-center py-20 px-4 text-center">
+        <div className="w-8 h-8 border-4 border-[#0D6B4F]/30 border-t-[#0D6B4F] rounded-full animate-spin mx-auto mb-2" />
+        <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest">Loading Program Details...</p>
+      </div>
+    );
+  }
 
   if (!program) {
     return (
