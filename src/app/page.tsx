@@ -59,7 +59,7 @@ export default function Page() {
     "logo": "https://ncieindia.org/logo-new.png",
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "08632321417",
+      "telephone": "0863 232 1417",
       "contactType": "technical support",
       "email": "office@ncieindia.org",
       "areaServed": "IN",

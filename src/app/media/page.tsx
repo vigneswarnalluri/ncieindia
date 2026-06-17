@@ -490,7 +490,7 @@ export default function MediaPage() {
                     <div>
                       <p className="text-[9px] font-bold text-zinc-400 uppercase">Media Helpline</p>
                       <p className="text-xs text-zinc-700 font-bold mt-0.5">
-                        08632321417
+                        0863 232 1417
                       </p>
                     </div>
                   </div>

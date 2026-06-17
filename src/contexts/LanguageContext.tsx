@@ -70,7 +70,7 @@ const translations: Record<Language, Record<string, string>> = {
     nic_secure: "TLS 1.3 SECURE",
     back_to_portal: "Back to Portal",
     helpline_email: "office@ncieindia.org",
-    helpline_phone: "Helpdesk: 08632321417",
+    helpline_phone: "Helpdesk: 0863 232 1417",
     copyright: "© 2026 National Council for Innovation and Entrepreneurship, Ministry of Education, Govt. of India. All Rights Reserved.",
 
     // Success Screen
@@ -212,7 +212,7 @@ const translations: Record<Language, Record<string, string>> = {
     nic_secure: "TLS 1.3 सुरक्षित",
     back_to_portal: "पोर्टल पर वापस जाएं",
     helpline_email: "office@ncieindia.org",
-    helpline_phone: "हेल्पडेस्क: 08632321417",
+    helpline_phone: "हेल्पडेस्क: 0863 232 1417",
     copyright: "© 2026 राष्ट्रीय नवाचार और उद्यमिता परिषद। सर्वाधिकार सुरक्षित।",
 
     // Success Screen

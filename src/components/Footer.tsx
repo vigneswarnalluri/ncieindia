@@ -106,7 +106,7 @@ export default function Footer() {
             <p className="text-sm text-zinc-300 leading-relaxed">
               NCIE Desk, New Delhi, India<br />
               Email: office@ncieindia.org<br />
-              Phone: 08632321417
+              Phone: 0863 232 1417
             </p>
           </div>
 
