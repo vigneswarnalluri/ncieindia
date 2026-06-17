@@ -360,7 +360,7 @@ export default function LoginPage() {
                 {/* Passwordless notice */}
                 <div className="flex items-center gap-2 bg-emerald-50/60 border border-emerald-200/60 rounded-xl px-3 py-2">
                   <Lock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <p className="text-[10px] text-emerald-800">A secure <strong>OTP code</strong> will be sent to your email — no password required.</p>
+                  <p className="text-[10px] text-emerald-800">A secure <strong>6-digit OTP</strong> will be sent to your email — no password required.</p>
                 </div>
 
                 {/* CAPTCHA validation card */}
@@ -516,18 +516,18 @@ export default function LoginPage() {
                 </p>
               </div>
 
-              {/* Secure OTP Verification Form */}
+              {/* Secure 6-Digit OTP Verification Form */}
               <form onSubmit={handleVerifyOtp} className="space-y-3 max-w-[260px] mx-auto pt-1">
                 <div className="space-y-1.5">
                   <label htmlFor="otp-input" className="block text-[10px] font-bold text-zinc-500 text-left uppercase tracking-wider">
-                    Enter Secure OTP
+                    Enter 6-Digit Secure OTP
                   </label>
                   <input
                     id="otp-input"
                     type="text"
-                    maxLength={8}
-                    pattern="\d{6,8}"
-                    placeholder="••••••••"
+                    maxLength={6}
+                    pattern="\d{6}"
+                    placeholder="••••••"
                     value={otp}
                     onChange={(e) => {
                       setOtp(e.target.value.replace(/\D/g, ""));
