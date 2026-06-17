@@ -165,16 +165,6 @@ export default function MediaPage() {
               Central clearinghouse for gazette notifications, operational directives, institutional circulars, and official photographic archives for technical campus innovation cells.
             </p>
           </div>
-
-          {/* Bilingual Emblem Column */}
-          <div className="hidden lg:flex items-center gap-4 bg-white/5 border border-white/10 p-3 rounded-lg shadow-sm backdrop-blur-sm shrink-0">
-            <div className="text-right border-r border-white/10 pr-4">
-              <p className="text-[10px] text-zinc-300 font-bold uppercase tracking-wider">Government of India</p>
-              <p className="text-[9px] text-[#C9A24B] font-medium leading-none mt-1">Ministry of Education Liaison</p>
-            </div>
-            <img src="/gov-emblem.png" alt="Gov Emblem" className="h-12 w-auto object-contain brightness-0 invert opacity-85" />
-            <img src="/ministry-logo.png" alt="Ministry Emblem" className="h-12 w-auto object-contain brightness-0 invert opacity-85" />
-          </div>
         </div>
       </div>
 
