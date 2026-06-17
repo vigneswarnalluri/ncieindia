@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, HelpCircle, AlertCircle, Award, Coins, ListChecks } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import { PROGRAMS_DATA, Program } from "@/app/programs/page";
+import { PROGRAMS_DATA, Program, Tranche } from "@/app/programs/ProgramsClient";
 
 interface Props {
   onToast: (msg: string) => void;
@@ -79,10 +79,10 @@ export default function ProgramsTab({ onToast }: Props) {
     setFormDuration(p.duration);
     setFormDescription(p.description);
     setFormBenefits(p.benefits.length > 0 ? [...p.benefits] : [""]);
-    setFormStages(p.stages && p.stages.length > 0 ? p.stages.map(s => ({ ...s })) : [{ title: "", desc: "" }]);
+    setFormStages(p.stages && p.stages.length > 0 ? p.stages.map((s: { title: string; desc: string }) => ({ ...s })) : [{ title: "", desc: "" }]);
     setFormTranches(
       p.tranches && p.tranches.length > 0 
-        ? p.tranches.map(t => ({ name: t.name, stage: t.stage, amount: t.amount, trigger: t.trigger, note: t.note || "" })) 
+        ? p.tranches.map((t: Tranche) => ({ name: t.name, stage: t.stage, amount: t.amount, trigger: t.trigger, note: t.note || "" })) 
         : [{ name: "Tranche-1", stage: "Initial Setup", amount: "₹0", trigger: "On sanction sign-off", note: "" }]
     );
     setEditorOpen(true);
