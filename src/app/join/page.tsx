@@ -713,6 +713,35 @@ export default function JoinPage() {
       }
 
       setRegId(generatedId);
+
+      // Real-time sync to Google Sheets Webhook in background
+      const webhookUrl = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_WEBHOOK_URL;
+      if (webhookUrl) {
+        fetch(webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            reg_id: generatedId,
+            submitted_at: new Date().toISOString(),
+            role,
+            full_name: formData.fullName,
+            email: formData.email,
+            mobile: formData.mobile,
+            org_name: formData.orgName,
+            reg_number: formData.regNumber,
+            state: formData.state,
+            city: formData.city,
+            department: formData.department,
+            specialization: formData.specialization,
+            stream: formData.stream,
+            year_of_study: formData.yearOfStudy,
+            proposal: finalProposal,
+            status: "pending",
+          }),
+          mode: "no-cors",
+        }).catch((err) => console.error("Google Sheets sync failed:", err));
+      }
+
       const submissionDetails = {
         email: formData.email,
         orgName: formData.orgName,

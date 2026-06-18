@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import {
   LayoutDashboard, Building2, Landmark, FileText, Activity,
   LogOut, CheckCircle, ChevronRight, Printer, Download,
-  Menu, X, Award
+  Menu, X, Award, RefreshCw
 } from "lucide-react";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { supabase } from "@/lib/supabase";
@@ -239,6 +239,56 @@ export default function OfficialDashboard() {
     showToast(`CSV export downloaded: ${filename}`);
   };
 
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const handleSyncToSheets = async () => {
+    const webhookUrl = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_WEBHOOK_URL;
+    if (!webhookUrl) {
+      showToast("Google Sheets Webhook URL is not configured. Please add NEXT_PUBLIC_GOOGLE_SHEETS_WEBHOOK_URL to your environment.");
+      return;
+    }
+
+    setIsSyncing(true);
+    showToast("Starting synchronization of all registrations from database...");
+
+    try {
+      // Fetch all registrations from Supabase
+      const { data, error } = await supabase
+        .from("registrations")
+        .select("*")
+        .order("submitted_at", { ascending: false });
+
+      if (error) {
+        console.error("Failed to fetch registrations for sync:", error);
+        showToast(`Sync failed: ${error.message}`);
+        setIsSyncing(false);
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        showToast("No registrations found in database to sync.");
+        setIsSyncing(false);
+        return;
+      }
+
+      // POST to the Google Sheets script
+      await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+        mode: "no-cors",
+      });
+
+      showToast(`Successfully synchronized ${data.length} records to Google Sheets!`);
+      addLog("GOOGLE_SHEET_SYNC", `Synchronized ${data.length} registration records.`);
+    } catch (err: any) {
+      console.error("Sync error:", err);
+      showToast(`Sync encountered an error: ${err.message || err}`);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
   const pendingChapters = requests.filter(r => r.status === "pending").length;
 
   // Loading / auth guard spinner
@@ -368,6 +418,10 @@ export default function OfficialDashboard() {
               <span className="font-bold text-zinc-800">{MENU.find(m => m.tab === activeTab)?.label}</span>
             </div>
             <div className="flex items-center gap-3 text-[10px] text-zinc-500">
+              <button onClick={handleSyncToSheets} disabled={isSyncing} className="flex items-center gap-1 hover:text-zinc-800 cursor-pointer disabled:opacity-50">
+                <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? "animate-spin" : ""}`} /> 
+                {isSyncing ? "Syncing..." : "Sync to Google Sheets"}
+              </button>
               <button onClick={handlePrint} className="flex items-center gap-1 hover:text-zinc-800 cursor-pointer"><Printer className="w-3 h-3"/> Print</button>
               <button onClick={handleExport} className="flex items-center gap-1 hover:text-zinc-800 cursor-pointer"><Download className="w-3 h-3"/> Export</button>
             </div>
