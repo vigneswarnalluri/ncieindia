@@ -4,6 +4,7 @@ import { useState } from "react";
 export interface Project {
   id: string; title: string; teamLeader: string;
   stream: string; trl: number; status: "draft" | "submitted" | "endorsed";
+  isDbRecord?: boolean;
 }
 interface Props { projects: Project[]; onEndorse: (id: string) => void; onAdd: (p: Omit<Project, "id" | "status">) => void; }
 

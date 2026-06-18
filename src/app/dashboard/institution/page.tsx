@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
@@ -61,18 +61,119 @@ export default function InstitutionDashboard() {
   const userOrg = demoSession?.org || "Indian Institute of Technology, Madras";
   const userRole = demoSession?.role === "official" ? "Nodal Desk" : "SPOC";
 
+  // Load real registration records from Supabase
+  useEffect(() => {
+    const fetchRegistrations = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("registrations")
+          .select("*")
+          .in("role", ["student", "internship"]);
+        if (error) {
+          console.error("Error fetching registrations:", error);
+          return;
+        }
+
+        if (data && data.length > 0) {
+          // Normalization check helper for same organization
+          const isSameOrg = (org1: string, org2: string) => {
+            const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+            return norm(org1).includes(norm(org2)) || norm(org2).includes(norm(org1));
+          };
+
+          const yearMap: Record<string, string> = {
+            "1st Year": "I",
+            "2nd Year": "II",
+            "3rd Year": "III",
+            "4th Year": "IV",
+            "5th Year": "V",
+            "Postgraduate": "PG",
+          };
+
+          // Filter matching org_name
+          const matched = data.filter((rec: any) => isSameOrg(rec.org_name, userOrg));
+
+          const dbStudents: Student[] = matched.map((rec: any) => ({
+            id: rec.reg_id,
+            name: rec.full_name,
+            rollNo: rec.email.split("@")[0].toUpperCase() || rec.reg_id,
+            stream: rec.stream || "Engineering & Tech",
+            year: yearMap[rec.year_of_study] || rec.year_of_study || "I",
+            status: (rec.status || "pending") as Student["status"],
+            isDbRecord: true,
+          }));
+
+          const dbProjects: Project[] = matched
+            .filter((rec: any) => rec.proposal)
+            .map((rec: any) => {
+              const cleanTitle = rec.proposal.startsWith("Course:")
+                ? rec.proposal.split(" | ")[0]
+                : (rec.proposal ? rec.proposal.slice(0, 50) + (rec.proposal.length > 50 ? "..." : "") : "Untitled Innovation");
+              return {
+                id: rec.reg_id,
+                title: cleanTitle,
+                teamLeader: rec.full_name,
+                stream: rec.stream || "Innovation",
+                trl: 3,
+                status: (rec.status === "approved" ? "endorsed" : "draft") as Project["status"],
+                isDbRecord: true,
+              };
+            });
+
+          setStudents([...dbStudents, ...INIT_STUDENTS]);
+          setProjects([...dbProjects, ...INIT_PROJECTS]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch registrations from Supabase:", err);
+      }
+    };
+
+    fetchRegistrations();
+  }, [userOrg]);
+
   const showToast = (msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(null), 3500);
   };
 
-  const handleStudentAction = (id: string, action: "approved" | "rejected") => {
+  const handleStudentAction = async (id: string, action: "approved" | "rejected") => {
     setStudents(prev => prev.map(s => s.id === id ? { ...s, status: action } : s));
+    
+    // Check if it is a DB record
+    const student = students.find(s => s.id === id);
+    if (student?.isDbRecord || id.startsWith("REG-")) {
+      try {
+        const { error } = await supabase
+          .from("registrations")
+          .update({ status: action })
+          .eq("reg_id", id);
+        if (error) {
+          console.error("Failed to update registration status in DB:", error);
+          showToast(`Error updating status: ${error.message}`);
+          return;
+        }
+      } catch (err) {
+        console.error("Error updating registration status:", err);
+      }
+    }
     showToast(`Membership ${action}. Ref: NCIE-VRF-${Date.now().toString().slice(-6)}`);
   };
 
-  const handleEndorse = (id: string) => {
+  const handleEndorse = async (id: string) => {
     setProjects(prev => prev.map(p => p.id === id ? { ...p, status: "endorsed" } : p));
+    if (id.startsWith("REG-") || !id.startsWith("P")) {
+      try {
+        const { error } = await supabase
+          .from("registrations")
+          .update({ status: "approved" })
+          .eq("reg_id", id);
+        if (error) {
+          console.error("Failed to update endorsement in Supabase:", error);
+        }
+      } catch (err) {
+        console.error("Error endorsing project:", err);
+      }
+    }
     showToast("Project endorsed and forwarded to NCIE National Selection Pool.");
   };
 

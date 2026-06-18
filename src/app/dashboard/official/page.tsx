@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
@@ -29,7 +29,11 @@ const MENU: { tab: Tab; label: string; icon: React.ReactNode }[] = [
   { tab: "security",  label: "Audit & System Logs",  icon: <Activity className="w-4 h-4" /> },
 ];
 
-const INIT_REQUESTS: ChapterReq[] = [];
+const INIT_REQUESTS: ChapterReq[] = [
+  { id: "R1", aishe: "C-41221", name: "PSG College of Technology", state: "Tamil Nadu", type: "Engineering College", spoc: "Dr. G. Ramesh", spocEmail: "ramesh@psgtech.edu", docUrl: "AICTE_Affiliation_PSG.pdf", status: "pending" },
+  { id: "R2", aishe: "U-0122", name: "Anna University", state: "Tamil Nadu", type: "State University", spoc: "Prof. S. Kumar", spocEmail: "registrar@annauniv.edu", docUrl: "UGC_Approval_Anna.pdf", status: "approved" },
+  { id: "R3", aishe: "C-1109", name: "Veermata Jijabai Technological Institute", state: "Maharashtra", type: "Autonomous College", spoc: "Dr. N. M. Patel", spocEmail: "director@vjti.ac.in", docUrl: "VJTI_Govt_Letter.pdf", status: "pending" },
+];
 const INIT_GRANTS: GrantRow[] = [];
 const INIT_CIRCULARS: Circular[] = [];
 const INIT_LOGS: AuditLog[] = [];
@@ -49,6 +53,42 @@ export default function OfficialDashboard() {
   const userName = demoSession?.name || (session?.user?.email ? session.user.email.split("@")[0] : "Nodal Administrator");
   const userRole = "NODAL ADMINISTRATOR";
 
+  // Load real registration records from Supabase
+  useEffect(() => {
+    const fetchRegistrations = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("registrations")
+          .select("*")
+          .in("role", ["chapter", "partner"]);
+        if (error) {
+          console.error("Error fetching registrations:", error);
+          return;
+        }
+
+        if (data) {
+          const dbRequests = data.map((rec: any) => ({
+            id: rec.reg_id,
+            aishe: rec.accreditation_code || rec.reg_number || ("AISHE-TEMP-" + rec.reg_id.slice(-4)),
+            name: rec.org_name,
+            state: rec.state || "India",
+            type: rec.role === "chapter" ? (rec.inst_type || "STEM College") : (rec.partner_category || "Corporate Partner"),
+            spoc: rec.full_name,
+            spocEmail: rec.email,
+            docUrl: rec.website_url || "Letter_of_Intent.pdf",
+            status: rec.status || "pending",
+          }));
+
+          setRequests([...dbRequests, ...INIT_REQUESTS]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch registrations from Supabase:", err);
+      }
+    };
+
+    fetchRegistrations();
+  }, []);
+
   const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 3500); };
 
   const addLog = (code: string, details: string) => {
@@ -56,9 +96,26 @@ export default function OfficialDashboard() {
     setAuditLogs(prev => [log, ...prev]);
   };
 
-  const handleVerify = (id: string, action: "approved" | "rejected") => {
+  const handleVerify = async (id: string, action: "approved" | "rejected") => {
     const r = requests.find(r => r.id === id);
     setRequests(prev => prev.map(r => r.id === id ? { ...r, status: action } : r));
+
+    if (id.startsWith("REG-")) {
+      try {
+        const { error } = await supabase
+          .from("registrations")
+          .update({ status: action })
+          .eq("reg_id", id);
+        if (error) {
+          console.error("Failed to update verification status in Supabase:", error);
+          showToast(`Error updating status: ${error.message}`);
+          return;
+        }
+      } catch (err) {
+        console.error("Error verifying registration status:", err);
+      }
+    }
+
     showToast(`Chapter ${action}. Automated notification dispatched to institution SPOC.`);
     addLog(`CHAPTER_${action.toUpperCase()}`, `${action === "approved" ? "Approved" : "Rejected"} chapter for ${r?.name} (${r?.aishe}).`);
   };

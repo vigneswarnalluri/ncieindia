@@ -4,6 +4,7 @@ import { ClipboardList } from "lucide-react";
 export interface Student {
   id: string; name: string; rollNo: string;
   stream: string; year: string; status: "pending" | "approved" | "rejected";
+  isDbRecord?: boolean;
 }
 interface Props { students: Student[]; onAction: (id: string, action: "approved" | "rejected") => void; }
 
