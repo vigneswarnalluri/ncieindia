@@ -91,13 +91,78 @@ export default function ChapterTab({ requests, onVerify }: Props) {
                   ))}
                 </tbody>
               </table>
-              <div className="border border-zinc-200 p-3 flex items-center justify-between bg-zinc-50">
-                <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-[#0D6B4F]" />
-                  <span className="text-xs font-bold text-zinc-800">{selected.docUrl}</span>
-                </div>
-                <button className="text-[#0D6B4F] hover:underline text-[10px] font-bold flex items-center gap-1 cursor-pointer"><Download className="w-3.5 h-3.5"/>Download</button>
-              </div>
+              {/* Parse document URLs JSON */}
+              {(() => {
+                let docObj: { consentForm?: string; idCard?: string; proposalRoster?: string } | null = null;
+                try {
+                  if (selected.docUrl && selected.docUrl.startsWith("{")) {
+                    docObj = JSON.parse(selected.docUrl);
+                  }
+                } catch (e) {}
+
+                if (docObj) {
+                  return (
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Submitted Verification Documents</p>
+                      
+                      {docObj.consentForm && (
+                        <div className="border border-zinc-200 p-2.5 flex items-center justify-between bg-zinc-50 rounded">
+                          <div className="flex items-center gap-2">
+                            <FileText className="w-4 h-4 text-[#0D6B4F]" />
+                            <span className="text-xs font-bold text-zinc-700">Institutional Consent Form</span>
+                          </div>
+                          <a href={docObj.consentForm} target="_blank" rel="noreferrer" className="text-[#0D6B4F] hover:underline text-[10px] font-bold flex items-center gap-1 cursor-pointer">
+                            <Download className="w-3.5 h-3.5"/>Download
+                          </a>
+                        </div>
+                      )}
+
+                      {docObj.idCard && (
+                        <div className="border border-zinc-200 p-2.5 flex items-center justify-between bg-zinc-50 rounded">
+                          <div className="flex items-center gap-2">
+                            <FileText className="w-4 h-4 text-[#0D6B4F]" />
+                            <span className="text-xs font-bold text-zinc-700">Accreditation / Incorporation Cert</span>
+                          </div>
+                          <a href={docObj.idCard} target="_blank" rel="noreferrer" className="text-[#0D6B4F] hover:underline text-[10px] font-bold flex items-center gap-1 cursor-pointer">
+                            <Download className="w-3.5 h-3.5"/>Download
+                          </a>
+                        </div>
+                      )}
+
+                      {docObj.proposalRoster && (
+                        <div className="border border-zinc-200 p-2.5 flex items-center justify-between bg-zinc-50 rounded">
+                          <div className="flex items-center gap-2">
+                            <FileText className="w-4 h-4 text-[#0D6B4F]" />
+                            <span className="text-xs font-bold text-zinc-700">Coordinators / Program Overview</span>
+                          </div>
+                          <a href={docObj.proposalRoster} target="_blank" rel="noreferrer" className="text-[#0D6B4F] hover:underline text-[10px] font-bold flex items-center gap-1 cursor-pointer">
+                            <Download className="w-3.5 h-3.5"/>Download
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
+                // Fallback for single document / plain url
+                return (
+                  <div className="border border-zinc-200 p-3 flex items-center justify-between bg-zinc-50 rounded">
+                    <div className="flex items-center gap-2">
+                      <FileText className="w-4 h-4 text-[#0D6B4F]" />
+                      <span className="text-xs font-bold text-zinc-800">{selected.docUrl}</span>
+                    </div>
+                    {selected.docUrl && selected.docUrl.startsWith("http") ? (
+                      <a href={selected.docUrl} target="_blank" rel="noreferrer" className="text-[#0D6B4F] hover:underline text-[10px] font-bold flex items-center gap-1 cursor-pointer">
+                        <Download className="w-3.5 h-3.5"/>Download
+                      </a>
+                    ) : (
+                      <button className="text-[#0D6B4F] hover:underline text-[10px] font-bold flex items-center gap-1 cursor-pointer">
+                        <Download className="w-3.5 h-3.5"/>Download
+                      </button>
+                    )}
+                  </div>
+                );
+              })()}
               <div className="text-[10px] bg-amber-50 border border-amber-200 px-3 py-2 text-zinc-500">Verify AICTE/UGC affiliation document authenticity before approving. Approval generates the Chapter Registration Certificate automatically.</div>
               <div className="flex justify-end gap-3 pt-1">
                 <button onClick={() => { onVerify(selected.id,"rejected"); setSelected(null); }} className="bg-white hover:bg-red-50 text-red-700 text-xs font-bold px-4 py-2 border border-red-400 cursor-pointer transition-all">✕ Reject Application</button>

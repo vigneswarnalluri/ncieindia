@@ -114,6 +114,7 @@ export default function InstitutionDashboard() {
             stream: rec.stream || "Engineering & Tech",
             year: yearMap[rec.year_of_study] || rec.year_of_study || "I",
             status: (rec.status || "pending") as Student["status"],
+            docUrl: rec.website_url,
             isDbRecord: true,
           }));
 

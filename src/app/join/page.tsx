@@ -5,6 +5,22 @@ import { User, Landmark, Building, CheckCircle, ArrowLeft, ArrowRight, ShieldChe
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
+const uploadFile = async (file: File, path: string) => {
+  const { data, error } = await supabase.storage
+    .from("ncie-documents")
+    .upload(path, file, {
+      cacheControl: "3600",
+      upsert: true
+    });
+  if (error) throw error;
+  
+  const { data: { publicUrl } } = supabase.storage
+    .from("ncie-documents")
+    .getPublicUrl(path);
+    
+  return publicUrl;
+};
+
 
 const DEPARTMENTS = [
   "Computer Science & Engineering",
@@ -669,9 +685,37 @@ export default function JoinPage() {
     try {
       const generatedId = `REG-2026-${Math.floor(Math.random() * 9000) + 1000}`;
 
+      // Upload binary files to Supabase Storage
+      let consentFormUrl = "";
+      let idCardUrl = "";
+      let proposalRosterUrl = "";
+
+      if (files.consentForm) {
+        const ext = files.consentForm.name.split(".").pop();
+        consentFormUrl = await uploadFile(files.consentForm, `${role}/${generatedId}/consentForm.${ext}`);
+      }
+      if (files.idCard) {
+        const ext = files.idCard.name.split(".").pop();
+        idCardUrl = await uploadFile(files.idCard, `${role}/${generatedId}/idCard.${ext}`);
+      }
+      if (files.proposalRoster) {
+        const ext = files.proposalRoster.name.split(".").pop();
+        proposalRosterUrl = await uploadFile(files.proposalRoster, `${role}/${generatedId}/proposalRoster.${ext}`);
+      }
+
+      const fileUrlsObj = {
+        consentForm: consentFormUrl || null,
+        idCard: idCardUrl || null,
+        proposalRoster: proposalRosterUrl || null,
+      };
+      const filesJson = JSON.stringify(fileUrlsObj);
+
       let finalProposal = formData.proposal;
       if (role === "internship") {
         finalProposal = `Course: ${formData.selectedCourse} | SOP: ${formData.proposal}`;
+      } else if (role === "partner") {
+        // Prepend custom corporate website url to proposal
+        finalProposal = `Website: ${formData.websiteUrl} | Proposal: ${formData.proposal}`;
       }
 
       // Insert registration record into Supabase
@@ -696,7 +740,7 @@ export default function JoinPage() {
           accreditation_code: formData.accreditationCode,
           partner_category: formData.partnerCategory,
           reg_number: formData.regNumber,
-          website_url: formData.websiteUrl,
+          website_url: filesJson,
           status: "pending",
           submitted_at: new Date().toISOString(),
         }]);
@@ -736,6 +780,7 @@ export default function JoinPage() {
             stream: formData.stream,
             year_of_study: formData.yearOfStudy,
             proposal: finalProposal,
+            website_url: filesJson,
             status: "pending",
           }),
           mode: "no-cors",
@@ -751,8 +796,8 @@ export default function JoinPage() {
       setExistingSubmission(submissionDetails);
       setStep("success");
       window.scrollTo({ top: 0, behavior: "smooth" });
-    } catch (err) {
-      setValidationError("An unexpected error occurred. Please try again.");
+    } catch (err: any) {
+      setValidationError(err.message || "An unexpected error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

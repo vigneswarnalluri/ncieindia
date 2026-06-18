@@ -1,14 +1,17 @@
 "use client";
-import { ClipboardList } from "lucide-react";
+import React, { useState } from "react";
+import { ClipboardList, Eye, FileText, Download } from "lucide-react";
 
 export interface Student {
   id: string; name: string; rollNo: string;
   stream: string; year: string; status: "pending" | "approved" | "rejected";
+  docUrl?: string;
   isDbRecord?: boolean;
 }
 interface Props { students: Student[]; onAction: (id: string, action: "approved" | "rejected") => void; }
 
 export default function VerifyTab({ students, onAction }: Props) {
+  const [selected, setSelected] = useState<Student | null>(null);
   const pendingCount = students.filter(s => s.status === "pending").length;
   return (
     <div className="space-y-4">
@@ -54,10 +57,17 @@ export default function VerifyTab({ students, onAction }: Props) {
                     <td className="px-4 py-2.5 text-center">
                       {s.status === "pending" ? (
                         <div className="flex justify-center gap-2">
-                          <button onClick={() => onAction(s.id, "approved")} className="bg-[#0D6B4F] hover:bg-[#0a5840] text-white text-[10px] font-bold px-3 py-1 border border-[#0D6B4F] cursor-pointer transition-all">✓ Approve</button>
-                          <button onClick={() => onAction(s.id, "rejected")} className="bg-white hover:bg-red-50 text-red-700 text-[10px] font-bold px-3 py-1 border border-red-400 cursor-pointer transition-all">✕ Reject</button>
+                          <button onClick={() => setSelected(s)} className="bg-[#0D6B4F] hover:bg-[#0a5840] text-white text-[10px] font-bold px-3 py-1 border border-[#0D6B4F] cursor-pointer transition-all flex items-center gap-1">
+                            <Eye className="w-3 h-3" /> Audit
+                          </button>
                         </div>
-                      ) : <span className="text-[10px] text-zinc-400">— Processed —</span>}
+                      ) : (
+                        <div className="flex justify-center gap-2">
+                          <button onClick={() => setSelected(s)} className="text-zinc-550 hover:text-zinc-700 text-[10px] font-bold px-2 py-1 border border-zinc-200 cursor-pointer transition-all flex items-center gap-1">
+                            <Eye className="w-3.5 h-3.5" /> View Docs
+                          </button>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))
@@ -75,6 +85,117 @@ export default function VerifyTab({ students, onAction }: Props) {
           Showing {students.length} records &nbsp;|&nbsp; Page 1 of 1
         </div>
       </div>
+
+      {/* Student Audit Modal */}
+      {selected && (
+        <div className="fixed inset-0 z-55 bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-white border border-zinc-350 w-full max-w-xl shadow-2xl rounded overflow-hidden">
+            <div className="bg-[#0D6B4F] text-white px-5 py-3 flex justify-between items-center">
+              <div>
+                <p className="text-[9px] font-bold text-emerald-200 uppercase tracking-widest">Student Document Audit</p>
+                <p className="text-sm font-bold">{selected.name} ({selected.rollNo})</p>
+              </div>
+              <button onClick={() => setSelected(null)} className="text-white/70 hover:text-white text-xs border border-white/30 px-2 py-1 cursor-pointer rounded">✕ Close</button>
+            </div>
+            
+            <div className="p-5 space-y-4">
+              <table className="w-full text-xs border border-zinc-200">
+                <tbody className="divide-y divide-zinc-100">
+                  {[
+                    ["Student Name", selected.name],
+                    ["Roll Number", selected.rollNo],
+                    ["Stream / Branch", selected.stream],
+                    ["Year of Study", `Year ${selected.year}`],
+                    ["Verification Status", selected.status.toUpperCase()]
+                  ].map(([k, v]) => (
+                    <tr key={k} className="even:bg-zinc-50">
+                      <td className="px-4 py-2.5 font-bold text-zinc-600 w-44">{k}</td>
+                      <td className="px-4 py-2.5 text-zinc-850 font-mono">{v}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {/* Document Download Section */}
+              {(() => {
+                let docObj: { consentForm?: string; idCard?: string; proposalRoster?: string } | null = null;
+                try {
+                  if (selected.docUrl && selected.docUrl.startsWith("{")) {
+                    docObj = JSON.parse(selected.docUrl);
+                  }
+                } catch (e) {}
+
+                if (docObj) {
+                  return (
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Uploaded Verification Files</p>
+                      
+                      {docObj.consentForm && (
+                        <div className="border border-zinc-200 p-2.5 flex items-center justify-between bg-zinc-50 rounded">
+                          <div className="flex items-center gap-2">
+                            <FileText className="w-4 h-4 text-[#0D6B4F]" />
+                            <span className="text-xs font-bold text-zinc-700">HOD Consent Letter</span>
+                          </div>
+                          <a href={docObj.consentForm} target="_blank" rel="noreferrer" className="text-[#0D6B4F] hover:underline text-[10px] font-bold flex items-center gap-1 cursor-pointer">
+                            <Download className="w-3.5 h-3.5"/>Download
+                          </a>
+                        </div>
+                      )}
+
+                      {docObj.idCard && (
+                        <div className="border border-zinc-200 p-2.5 flex items-center justify-between bg-zinc-50 rounded">
+                          <div className="flex items-center gap-2">
+                            <FileText className="w-4 h-4 text-[#0D6B4F]" />
+                            <span className="text-xs font-bold text-zinc-700">Student ID Card</span>
+                          </div>
+                          <a href={docObj.idCard} target="_blank" rel="noreferrer" className="text-[#0D6B4F] hover:underline text-[10px] font-bold flex items-center gap-1 cursor-pointer">
+                            <Download className="w-3.5 h-3.5"/>Download
+                          </a>
+                        </div>
+                      )}
+
+                      {docObj.proposalRoster && (
+                        <div className="border border-zinc-200 p-2.5 flex items-center justify-between bg-zinc-50 rounded">
+                          <div className="flex items-center gap-2">
+                            <FileText className="w-4 h-4 text-[#0D6B4F]" />
+                            <span className="text-xs font-bold text-zinc-700">Team Roster / SOP Resume</span>
+                          </div>
+                          <a href={docObj.proposalRoster} target="_blank" rel="noreferrer" className="text-[#0D6B4F] hover:underline text-[10px] font-bold flex items-center gap-1 cursor-pointer">
+                            <Download className="w-3.5 h-3.5"/>Download
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
+                return (
+                  <div className="text-xs text-zinc-450 italic bg-zinc-50 p-4 border border-dashed border-zinc-200 rounded text-center">
+                    No active digital verification documents submitted (Legacy Record).
+                  </div>
+                );
+              })()}
+
+              {selected.status === "pending" && (
+                <div className="flex justify-end gap-3 pt-3 border-t border-zinc-200">
+                  <button
+                    onClick={() => { onAction(selected.id, "rejected"); setSelected(null); }}
+                    className="bg-white hover:bg-red-50 text-red-700 text-xs font-bold px-4 py-2 border border-red-400 cursor-pointer transition-all"
+                  >
+                    ✕ Reject Membership
+                  </button>
+                  <button
+                    onClick={() => { onAction(selected.id, "approved"); setSelected(null); }}
+                    className="bg-[#0D6B4F] hover:bg-[#0a5840] text-white text-xs font-bold px-4 py-2 border border-[#0D6B4F] cursor-pointer transition-all"
+                  >
+                    ✓ Approve Student
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
