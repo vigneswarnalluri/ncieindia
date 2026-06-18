@@ -5,9 +5,10 @@ interface Props {
   pendingCount: number;
   verifiedCount: number;
   ideasCount: number;
+  grantsReceived: string;
 }
 
-export default function OverviewTab({ pendingCount, verifiedCount, ideasCount }: Props) {
+export default function OverviewTab({ pendingCount, verifiedCount, ideasCount, grantsReceived }: Props) {
   return (
     <div className="space-y-5">
       <div className="flex flex-col sm:flex-row justify-between items-start gap-2 sm:gap-0">
@@ -23,7 +24,7 @@ export default function OverviewTab({ pendingCount, verifiedCount, ideasCount }:
           { label: "Verified Students", value: String(verifiedCount),    sub: "Active Members",    color: "border-t-[#0D6B4F]", icon: <Users className="w-5 h-5 text-[#0D6B4F]" /> },
           { label: "Ideas Submitted",   value: String(ideasCount),      sub: "TRL 3-6 range",     color: "border-t-blue-600",  icon: <Lightbulb className="w-5 h-5 text-blue-600" /> },
           { label: "MIC Star Rating",   value: "4.5 ★", sub: "NCIE Evaluation",   color: "border-t-amber-500", icon: <Star className="w-5 h-5 text-amber-500" /> },
-          { label: "Grants Received",   value: "₹12.5 L",sub: "FY 2025–26",       color: "border-t-purple-600",icon: <Landmark className="w-5 h-5 text-purple-600" /> },
+          { label: "Grants Received",   value: grantsReceived,          sub: "FY 2025–26",       color: "border-t-purple-600",icon: <Landmark className="w-5 h-5 text-purple-600" /> },
         ].map(card => (
           <div key={card.label} className={`bg-white border border-zinc-200 border-t-4 ${card.color} p-4`}>
             <div className="flex justify-between items-start">

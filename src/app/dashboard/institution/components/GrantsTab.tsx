@@ -2,9 +2,20 @@
 import { useState } from "react";
 import { Upload, FileText, CheckCircle } from "lucide-react";
 
-interface Props { onToast: (msg: string) => void; }
+export interface Grant {
+  scheme: string;
+  san: string;
+  amt: string;
+  tr: string;
+  uc: "submitted" | "pending";
+}
 
-export default function GrantsTab({ onToast }: Props) {
+interface Props {
+  grants: Grant[];
+  onToast: (msg: string) => void;
+}
+
+export default function GrantsTab({ grants, onToast }: Props) {
   const [ucUploaded, setUcUploaded] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -18,11 +29,8 @@ export default function GrantsTab({ onToast }: Props) {
     }, 1600);
   };
 
-  const ROWS = [
-    { scheme: "Makerspace Setup Fund (MSF-2025)",       san: "NCIE/MSF/2025/IIT-MDR/001", amt: "10,00,000", tr: "Tranche-1", uc: "submitted" },
-    { scheme: "Prototype Sandbox Seed Pool (PSP-2026)", san: "NCIE/PSP/2026/IIT-MDR/004", amt: "2,50,000",  tr: "Tranche-1", uc: "submitted" },
-    { scheme: "Makerspace Equipment Fund Phase-2",      san: "NCIE/MEF/2026/IIT-MDR/007", amt: "15,00,000", tr: "Tranche-2", uc: "pending"   },
-  ];
+  const totalApprovedVal = grants.reduce((sum, r) => sum + parseInt(r.amt.replace(/,/g, ""), 10), 0);
+  const formattedTotal = totalApprovedVal.toLocaleString("en-IN");
 
   return (
     <div className="space-y-5">
@@ -48,7 +56,7 @@ export default function GrantsTab({ onToast }: Props) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-100">
-                {ROWS.map((r, i) => (
+                {grants.map((r, i) => (
                   <tr key={i} className={`${i % 2 === 0 ? "bg-white" : "bg-zinc-50/50"} hover:bg-[#e8f5f0]/40`}>
                     <td className="px-4 py-2.5 font-semibold text-zinc-900">{r.scheme}</td>
                     <td className="px-4 py-2.5 font-mono text-[10px] text-zinc-500">{r.san}</td>
@@ -64,7 +72,7 @@ export default function GrantsTab({ onToast }: Props) {
               <tfoot>
                 <tr className="bg-zinc-100 border-t-2 border-zinc-300">
                   <td colSpan={2} className="px-4 py-2 text-xs font-bold text-zinc-700 uppercase">Total Approved</td>
-                  <td className="px-4 py-2 text-right text-xs font-bold text-zinc-900">₹27,50,000</td>
+                  <td className="px-4 py-2 text-right text-xs font-bold text-zinc-900">₹{formattedTotal}</td>
                   <td colSpan={2} />
                 </tr>
               </tfoot>

@@ -14,7 +14,7 @@ import { supabase } from "@/lib/supabase";
 import OverviewTab from "./components/OverviewTab";
 import VerifyTab, { Student } from "./components/VerifyTab";
 import InnovationsTab, { Project } from "./components/InnovationsTab";
-import GrantsTab from "./components/GrantsTab";
+import GrantsTab, { Grant } from "./components/GrantsTab";
 import ActivitiesTab from "./components/ActivitiesTab";
 
 type Tab = "overview" | "verify" | "innovations" | "grants" | "activities";
@@ -31,10 +31,9 @@ const INIT_STUDENTS: Student[] = [];
 
 const INIT_PROJECTS: Project[] = [];
 
-const INIT_EVENTS = [
-  { id: "E1", title: "State-level Prototype Bootcamp", type: "Workshop",  date: "2026-05-12", attendees: 120, status: "approved" },
-  { id: "E2", title: "NCIE Ideation Contest 2026",     type: "Hackathon", date: "2026-06-05", attendees: 250, status: "pending"  },
-];
+const INIT_EVENTS: any[] = [];
+
+const INIT_GRANTS: Grant[] = [];
 
 export default function InstitutionDashboard() {
   const router = useRouter();
@@ -45,6 +44,7 @@ export default function InstitutionDashboard() {
   const [students, setStudents] = useState<Student[]>(INIT_STUDENTS);
   const [projects, setProjects] = useState<Project[]>(INIT_PROJECTS);
   const [events, setEvents]     = useState(INIT_EVENTS);
+  const [grants, setGrants]     = useState<Grant[]>(INIT_GRANTS);
 
   const userEmail = session?.user?.email || demoSession?.email || "spoc@iitmadras.ac.in";
   const userName = demoSession?.name || (session?.user?.email ? session.user.email.split("@")[0] : "Prof. V. K. Prasad");
@@ -318,16 +318,21 @@ export default function InstitutionDashboard() {
           </div>
 
           <div className="p-4 sm:p-6">
-            {activeTab === "overview"    && (
-              <OverviewTab
-                pendingCount={pendingCount}
-                verifiedCount={students.filter(s => s.status === "approved").length}
-                ideasCount={projects.length}
-              />
-            )}
+            {activeTab === "overview"    && (() => {
+              const totalGrantsVal = grants.reduce((sum, g) => sum + parseInt(g.amt.replace(/,/g, ""), 10), 0);
+              const grantsReceivedStr = totalGrantsVal > 0 ? `₹${(totalGrantsVal / 100000).toLocaleString("en-IN")}`.replace(/\.0$/, "") + " L" : "₹0";
+              return (
+                <OverviewTab
+                  pendingCount={pendingCount}
+                  verifiedCount={students.filter(s => s.status === "approved").length}
+                  ideasCount={projects.length}
+                  grantsReceived={grantsReceivedStr}
+                />
+              );
+            })()}
             {activeTab === "verify"      && <VerifyTab      students={students} onAction={handleStudentAction} />}
             {activeTab === "innovations" && <InnovationsTab projects={projects} onEndorse={handleEndorse} onAdd={handleAddProject} />}
-            {activeTab === "grants"      && <GrantsTab      onToast={showToast} />}
+            {activeTab === "grants"      && <GrantsTab      grants={grants} onToast={showToast} />}
             {activeTab === "activities"  && <ActivitiesTab  events={events} onAdd={handleAddEvent} />}
           </div>
 
