@@ -318,7 +318,13 @@ export default function InstitutionDashboard() {
           </div>
 
           <div className="p-4 sm:p-6">
-            {activeTab === "overview"    && <OverviewTab    pendingCount={pendingCount} />}
+            {activeTab === "overview"    && (
+              <OverviewTab
+                pendingCount={pendingCount}
+                verifiedCount={students.filter(s => s.status === "approved").length}
+                ideasCount={projects.length}
+              />
+            )}
             {activeTab === "verify"      && <VerifyTab      students={students} onAction={handleStudentAction} />}
             {activeTab === "innovations" && <InnovationsTab projects={projects} onEndorse={handleEndorse} onAdd={handleAddProject} />}
             {activeTab === "grants"      && <GrantsTab      onToast={showToast} />}

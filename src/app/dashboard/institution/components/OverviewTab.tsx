@@ -1,9 +1,13 @@
 "use client";
 import { Users, Lightbulb, Star, Landmark, Bell, AlertCircle } from "lucide-react";
 
-interface Props { pendingCount: number; }
+interface Props {
+  pendingCount: number;
+  verifiedCount: number;
+  ideasCount: number;
+}
 
-export default function OverviewTab({ pendingCount }: Props) {
+export default function OverviewTab({ pendingCount, verifiedCount, ideasCount }: Props) {
   return (
     <div className="space-y-5">
       <div className="flex flex-col sm:flex-row justify-between items-start gap-2 sm:gap-0">
@@ -16,8 +20,8 @@ export default function OverviewTab({ pendingCount }: Props) {
 
       <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: "Verified Students", value: "141",    sub: "+12 this month",    color: "border-t-[#0D6B4F]", icon: <Users className="w-5 h-5 text-[#0D6B4F]" /> },
-          { label: "Ideas Submitted",   value: "3",      sub: "TRL 4-6 range",     color: "border-t-blue-600",  icon: <Lightbulb className="w-5 h-5 text-blue-600" /> },
+          { label: "Verified Students", value: String(verifiedCount),    sub: "Active Members",    color: "border-t-[#0D6B4F]", icon: <Users className="w-5 h-5 text-[#0D6B4F]" /> },
+          { label: "Ideas Submitted",   value: String(ideasCount),      sub: "TRL 3-6 range",     color: "border-t-blue-600",  icon: <Lightbulb className="w-5 h-5 text-blue-600" /> },
           { label: "MIC Star Rating",   value: "4.5 ★", sub: "NCIE Evaluation",   color: "border-t-amber-500", icon: <Star className="w-5 h-5 text-amber-500" /> },
           { label: "Grants Received",   value: "₹12.5 L",sub: "FY 2025–26",       color: "border-t-purple-600",icon: <Landmark className="w-5 h-5 text-purple-600" /> },
         ].map(card => (
