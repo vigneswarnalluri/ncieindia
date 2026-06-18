@@ -345,9 +345,10 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
     };
   }, [value]);
 
-  const filteredOptions = options.filter((opt) =>
-    opt.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredOptions = options.filter((opt) => {
+    const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+    return normalize(opt).includes(normalize(search));
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
