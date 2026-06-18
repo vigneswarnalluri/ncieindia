@@ -11,9 +11,11 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 import { FaXTwitter, FaLinkedinIn } from "react-icons/fa6";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Footer() {
   const pathname = usePathname();
+  const { t } = useLanguage();
   if (pathname?.startsWith("/dashboard")) return null;
 
   const currentYear = new Date().getFullYear();
@@ -37,7 +39,7 @@ export default function Footer() {
             <Link href="/" className="block focus:outline-none w-fit">
               <Image
                 src="/logo-new.svg"
-                alt="NCIE India Logo"
+                alt={t("footer_logo_alt")}
                 width={240}
                 height={68}
                 className="h-14 w-auto object-contain brightness-0 invert opacity-85 hover:opacity-100 transition-opacity duration-200"
@@ -46,7 +48,7 @@ export default function Footer() {
             </Link>
             
             <p className="text-sm text-zinc-300 max-w-sm leading-relaxed">
-              Fostering India&apos;s national student innovation and start-up ecosystem through institutional chapters, incubation alignment, and mentorship frameworks.
+              {t("footer_desc")}
             </p>
 
             {/* Social Icons */}
@@ -80,33 +82,33 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div className="flex flex-col space-y-3">
-            <h4 className="text-sm font-semibold tracking-wider uppercase text-accent">Ecosystem</h4>
+            <h4 className="text-sm font-semibold tracking-wider uppercase text-accent">{t("footer_ecosystem")}</h4>
             <ul className="space-y-2 text-sm text-zinc-300">
-              <li><Link href="/about" className="hover:text-accent transition-colors">About NCIE</Link></li>
-              <li><Link href="/programs" className="hover:text-accent transition-colors">Initiatives & Schemes</Link></li>
-              <li><Link href="/opportunities" className="hover:text-accent transition-colors">Open Opportunities</Link></li>
-              <li><Link href="/chapters" className="hover:text-accent transition-colors">Regional Chapters</Link></li>
+              <li><Link href="/about" className="hover:text-accent transition-colors">{t("footer_about")}</Link></li>
+              <li><Link href="/programs" className="hover:text-accent transition-colors">{t("footer_initiatives")}</Link></li>
+              <li><Link href="/opportunities" className="hover:text-accent transition-colors">{t("footer_opportunities")}</Link></li>
+              <li><Link href="/chapters" className="hover:text-accent transition-colors">{t("footer_chapters")}</Link></li>
             </ul>
           </div>
 
           {/* Resources Links */}
           <div className="flex flex-col space-y-3">
-            <h4 className="text-sm font-semibold tracking-wider uppercase text-accent">Engage</h4>
+            <h4 className="text-sm font-semibold tracking-wider uppercase text-accent">{t("footer_engage")}</h4>
             <ul className="space-y-2 text-sm text-zinc-300">
-              <li><Link href="/join" className="hover:text-accent transition-colors">Join the Network</Link></li>
-              <li><Link href="/media" className="hover:text-accent transition-colors">Press & Media</Link></li>
-              <li><Link href="/vision-2047" className="hover:text-accent transition-colors">Vision 2047</Link></li>
-              <li><Link href="/contact" className="hover:text-accent transition-colors">Inquiries & Help</Link></li>
+              <li><Link href="/join" className="hover:text-accent transition-colors">{t("footer_join")}</Link></li>
+              <li><Link href="/media" className="hover:text-accent transition-colors">{t("footer_media")}</Link></li>
+              <li><Link href="/vision-2047" className="hover:text-accent transition-colors">{t("footer_vision")}</Link></li>
+              <li><Link href="/contact" className="hover:text-accent transition-colors">{t("footer_contact_inquiries")}</Link></li>
             </ul>
           </div>
 
           {/* Legal / Contact Summary */}
           <div className="flex flex-col space-y-3">
-            <h4 className="text-sm font-semibold tracking-wider uppercase text-accent">Contact Desk</h4>
+            <h4 className="text-sm font-semibold tracking-wider uppercase text-accent">{t("footer_contact_desk")}</h4>
             <p className="text-sm text-zinc-300 leading-relaxed">
-              NCIE Desk, Guntur, Andhra Pradesh, India<br />
-              Email: office@ncieindia.org<br />
-              Phone: 0863 232 1417
+              {t("footer_address")}<br />
+              {t("footer_email")}<br />
+              {t("footer_phone")}
             </p>
           </div>
 
@@ -119,16 +121,16 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-zinc-300">
           <div className="max-w-2xl text-center md:text-left leading-relaxed">
             <p className="mb-2 text-zinc-100">
-              © {currentYear} National Council for Innovation and Entrepreneurship (NCIE) India. All Rights Reserved.
+              {t("footer_copyright").replace("{year}", String(currentYear))}
             </p>
             <p className="text-[11px] text-zinc-300/85 font-medium leading-relaxed">
-              NCIE India is an independent innovation ecosystem platform focused on innovation, entrepreneurship, collaboration, and institutional development.
+              {t("footer_disclaimer")}
             </p>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/terms" className="hover:underline hover:text-white text-zinc-300 transition-colors">Terms of Use</Link>
+            <Link href="/terms" className="hover:underline hover:text-white text-zinc-300 transition-colors">{t("footer_terms")}</Link>
             <span className="w-1 h-1 rounded-full bg-white/20" />
-            <Link href="/privacy" className="hover:underline hover:text-white text-zinc-300 transition-colors">Privacy Policy</Link>
+            <Link href="/privacy" className="hover:underline hover:text-white text-zinc-300 transition-colors">{t("footer_privacy")}</Link>
           </div>
         </div>
 
