@@ -29,11 +29,7 @@ const MENU: { tab: Tab; label: string; icon: React.ReactNode }[] = [
   { tab: "security",  label: "Audit & System Logs",  icon: <Activity className="w-4 h-4" /> },
 ];
 
-const INIT_REQUESTS: ChapterReq[] = [
-  { id: "R1", aishe: "C-41221", name: "PSG College of Technology", state: "Tamil Nadu", type: "Engineering College", spoc: "Dr. G. Ramesh", spocEmail: "ramesh@psgtech.edu", docUrl: "AICTE_Affiliation_PSG.pdf", status: "pending" },
-  { id: "R2", aishe: "U-0122", name: "Anna University", state: "Tamil Nadu", type: "State University", spoc: "Prof. S. Kumar", spocEmail: "registrar@annauniv.edu", docUrl: "UGC_Approval_Anna.pdf", status: "approved" },
-  { id: "R3", aishe: "C-1109", name: "Veermata Jijabai Technological Institute", state: "Maharashtra", type: "Autonomous College", spoc: "Dr. N. M. Patel", spocEmail: "director@vjti.ac.in", docUrl: "VJTI_Govt_Letter.pdf", status: "pending" },
-];
+const INIT_REQUESTS: ChapterReq[] = [];
 const INIT_GRANTS: GrantRow[] = [];
 const INIT_CIRCULARS: Circular[] = [];
 const INIT_LOGS: AuditLog[] = [];

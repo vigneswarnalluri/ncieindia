@@ -27,19 +27,9 @@ const MENU: { tab: Tab; label: string; icon: React.ReactNode }[] = [
   { tab: "activities",  label: "Activity Reporting",     icon: <Award className="w-4 h-4" /> },
 ];
 
-const INIT_STUDENTS: Student[] = [
-  { id: "S1", name: "Aarav Sharma",  rollNo: "21CSE042", stream: "Computer Science & Engineering", year: "III", status: "pending"  },
-  { id: "S2", name: "Priya Patel",   rollNo: "22ECE105", stream: "Electronics & Communication",    year: "II",  status: "pending"  },
-  { id: "S3", name: "Rahul Verma",   rollNo: "20ME019",  stream: "Mechanical Engineering",         year: "IV",  status: "approved" },
-  { id: "S4", name: "Sneha Reddy",   rollNo: "21IT088",  stream: "Information Technology",         year: "III", status: "pending"  },
-  { id: "S5", name: "Vikram Singh",  rollNo: "25EE003",  stream: "Electrical Engineering",         year: "I",   status: "rejected" },
-];
+const INIT_STUDENTS: Student[] = [];
 
-const INIT_PROJECTS: Project[] = [
-  { id: "P1", title: "IoT Smart Irrigation Node",            teamLeader: "Rahul Verma",  stream: "Mechanical Engineering",         trl: 5, status: "endorsed"  },
-  { id: "P2", title: "AI Nodule Detection in Chest X-Rays", teamLeader: "Aarav Sharma", stream: "Computer Science & Engineering", trl: 4, status: "draft"     },
-  { id: "P3", title: "Solar Decathlon Energy System",        teamLeader: "Sneha Reddy",  stream: "Information Technology",         trl: 6, status: "submitted" },
-];
+const INIT_PROJECTS: Project[] = [];
 
 const INIT_EVENTS = [
   { id: "E1", title: "State-level Prototype Bootcamp", type: "Workshop",  date: "2026-05-12", attendees: 120, status: "approved" },
