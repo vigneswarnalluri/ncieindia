@@ -654,6 +654,10 @@ export default function JoinPage() {
       setValidationError("Validation Error: Please specify your college or university name.");
       return;
     }
+    if ((role === "student" || role === "internship") && !formData.regNumber.trim()) {
+      setValidationError("Validation Error: Please specify your Roll Number / Student ID.");
+      return;
+    }
     if (role === "internship" && !formData.selectedCourse) {
       setValidationError("Validation Error: Please select an internship course.");
       return;
@@ -1194,17 +1198,34 @@ export default function JoinPage() {
                             </p>
                           </div>
                         )}
-                        <div className="space-y-1.5">
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
-                            College or University Name
-                          </label>
-                          <SearchableSelect
-                            name="orgName"
-                            value={formData.orgName}
-                            placeholder="Type to search or enter College / University..."
-                            options={displayedColleges}
-                            onChange={handleDropdownChange}
-                          />
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                          <div className="space-y-1.5 sm:col-span-2">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
+                              College or University Name
+                            </label>
+                            <SearchableSelect
+                              name="orgName"
+                              value={formData.orgName}
+                              placeholder="Type to search or enter College / University..."
+                              options={displayedColleges}
+                              onChange={handleDropdownChange}
+                            />
+                          </div>
+                          <div className="space-y-1.5 sm:col-span-1">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
+                              Roll Number / Student ID
+                            </label>
+                            <input
+                              name="regNumber"
+                              type="text"
+                              maxLength={50}
+                              value={formData.regNumber}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                              placeholder="e.g. 21CS001"
+                              required
+                            />
+                          </div>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-1.5">

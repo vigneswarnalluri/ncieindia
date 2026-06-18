@@ -110,7 +110,7 @@ export default function InstitutionDashboard() {
           const dbStudents: Student[] = matched.map((rec: any) => ({
             id: rec.reg_id,
             name: rec.full_name,
-            rollNo: rec.email.split("@")[0].toUpperCase() || rec.reg_id,
+            rollNo: rec.reg_number || rec.email.split("@")[0].toUpperCase() || rec.reg_id,
             stream: rec.stream || "Engineering & Tech",
             year: yearMap[rec.year_of_study] || rec.year_of_study || "I",
             status: (rec.status || "pending") as Student["status"],
