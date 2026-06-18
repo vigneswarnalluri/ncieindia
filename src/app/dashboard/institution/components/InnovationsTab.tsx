@@ -44,24 +44,32 @@ export default function InnovationsTab({ projects, onEndorse, onAdd }: Props) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-100">
-                {projects.map((p, i) => (
-                  <tr key={p.id} className={`${i % 2 === 0 ? "bg-white" : "bg-zinc-50/50"} hover:bg-[#e8f5f0]/40`}>
-                    <td className="px-4 py-2.5 text-zinc-500">{i + 1}</td>
-                    <td className="px-4 py-2.5 font-semibold text-zinc-900">{p.title}</td>
-                    <td className="px-4 py-2.5 text-zinc-700">{p.teamLeader}</td>
-                    <td className="px-4 py-2.5 text-center font-mono font-bold text-zinc-700">TRL-{p.trl}</td>
-                    <td className="px-4 py-2.5 text-center">
-                      {p.status === "draft"     && <span className="text-[9px] font-bold px-2 py-0.5 bg-zinc-100 text-zinc-700 border border-zinc-300 uppercase">Draft</span>}
-                      {p.status === "submitted" && <span className="text-[9px] font-bold px-2 py-0.5 bg-blue-50 text-blue-800 border border-blue-300 uppercase">Submitted</span>}
-                      {p.status === "endorsed"  && <span className="text-[9px] font-bold px-2 py-0.5 bg-green-50 text-green-800 border border-green-300 uppercase">Endorsed</span>}
-                    </td>
-                    <td className="px-4 py-2.5 text-center">
-                      {p.status !== "endorsed"
-                        ? <button onClick={() => onEndorse(p.id)} className="bg-[#0D6B4F] hover:bg-[#0a5840] text-white text-[10px] font-bold px-3 py-1 border border-[#0D6B4F] cursor-pointer">Endorse</button>
-                        : <span className="text-[10px] text-zinc-400">—</span>}
+                {projects.length > 0 ? (
+                  projects.map((p, i) => (
+                    <tr key={p.id} className={`${i % 2 === 0 ? "bg-white" : "bg-zinc-50/50"} hover:bg-[#e8f5f0]/40`}>
+                      <td className="px-4 py-2.5 text-zinc-500">{i + 1}</td>
+                      <td className="px-4 py-2.5 font-semibold text-zinc-900">{p.title}</td>
+                      <td className="px-4 py-2.5 text-zinc-700">{p.teamLeader}</td>
+                      <td className="px-4 py-2.5 text-center font-mono font-bold text-zinc-700">TRL-{p.trl}</td>
+                      <td className="px-4 py-2.5 text-center">
+                        {p.status === "draft"     && <span className="text-[9px] font-bold px-2 py-0.5 bg-zinc-100 text-zinc-700 border border-zinc-300 uppercase">Draft</span>}
+                        {p.status === "submitted" && <span className="text-[9px] font-bold px-2 py-0.5 bg-blue-50 text-blue-800 border border-blue-300 uppercase">Submitted</span>}
+                        {p.status === "endorsed"  && <span className="text-[9px] font-bold px-2 py-0.5 bg-green-50 text-green-800 border border-green-300 uppercase">Endorsed</span>}
+                      </td>
+                      <td className="px-4 py-2.5 text-center">
+                        {p.status !== "endorsed"
+                          ? <button onClick={() => onEndorse(p.id)} className="bg-[#0D6B4F] hover:bg-[#0a5840] text-white text-[10px] font-bold px-3 py-1 border border-[#0D6B4F] cursor-pointer">Endorse</button>
+                          : <span className="text-[10px] text-zinc-400">—</span>}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="px-4 py-8 text-center text-zinc-400 italic">
+                      No projects registered in the Innovation Repository
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>

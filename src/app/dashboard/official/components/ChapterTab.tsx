@@ -37,25 +37,33 @@ export default function ChapterTab({ requests, onVerify }: Props) {
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-100">
-              {requests.map((r, i) => (
-                <tr key={r.id} className={`${i%2===0?"bg-white":"bg-zinc-50/50"} hover:bg-[#e8f5f0]/40`}>
-                  <td className="px-4 py-2.5 font-mono text-zinc-600 font-bold">{r.aishe}</td>
-                  <td className="px-4 py-2.5 font-semibold text-zinc-900">{r.name}</td>
-                  <td className="px-4 py-2.5 text-zinc-600">{r.type}</td>
-                  <td className="px-4 py-2.5 text-zinc-700">{r.state}</td>
-                  <td className="px-4 py-2.5"><p className="font-semibold text-zinc-800">{r.spoc}</p><p className="text-[10px] text-zinc-400">{r.spocEmail}</p></td>
-                  <td className="px-4 py-2.5 text-center">
-                    {r.status==="pending"  && <span className="text-[9px] font-bold px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-300 uppercase">Pending</span>}
-                    {r.status==="approved" && <span className="text-[9px] font-bold px-2 py-0.5 bg-green-50 text-green-800 border border-green-300 uppercase">Approved</span>}
-                    {r.status==="rejected" && <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 text-red-800 border border-red-300 uppercase">Rejected</span>}
-                  </td>
-                  <td className="px-4 py-2.5 text-center">
-                    {r.status==="pending"
-                      ? <button onClick={() => setSelected(r)} className="bg-[#0D6B4F] hover:bg-[#0a5840] text-white text-[10px] font-bold px-3 py-1 cursor-pointer inline-flex items-center gap-1"><Eye className="w-3 h-3"/>Audit</button>
-                      : <span className="text-[10px] text-zinc-400">Processed</span>}
+              {requests.length > 0 ? (
+                requests.map((r, i) => (
+                  <tr key={r.id} className={`${i%2===0?"bg-white":"bg-zinc-50/50"} hover:bg-[#e8f5f0]/40`}>
+                    <td className="px-4 py-2.5 font-mono text-zinc-600 font-bold">{r.aishe}</td>
+                    <td className="px-4 py-2.5 font-semibold text-zinc-900">{r.name}</td>
+                    <td className="px-4 py-2.5 text-zinc-600">{r.type}</td>
+                    <td className="px-4 py-2.5 text-zinc-700">{r.state}</td>
+                    <td className="px-4 py-2.5"><p className="font-semibold text-zinc-800">{r.spoc}</p><p className="text-[10px] text-zinc-400">{r.spocEmail}</p></td>
+                    <td className="px-4 py-2.5 text-center">
+                      {r.status==="pending"  && <span className="text-[9px] font-bold px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-300 uppercase">Pending</span>}
+                      {r.status==="approved" && <span className="text-[9px] font-bold px-2 py-0.5 bg-green-50 text-green-800 border border-green-300 uppercase">Approved</span>}
+                      {r.status==="rejected" && <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 text-red-800 border border-red-300 uppercase">Rejected</span>}
+                    </td>
+                    <td className="px-4 py-2.5 text-center">
+                      {r.status==="pending"
+                        ? <button onClick={() => setSelected(r)} className="bg-[#0D6B4F] hover:bg-[#0a5840] text-white text-[10px] font-bold px-3 py-1 cursor-pointer inline-flex items-center gap-1"><Eye className="w-3 h-3"/>Audit</button>
+                        : <span className="text-[10px] text-zinc-400">Processed</span>}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={7} className="px-4 py-8 text-center text-zinc-400 italic">
+                    No pending chapter affiliation requests
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

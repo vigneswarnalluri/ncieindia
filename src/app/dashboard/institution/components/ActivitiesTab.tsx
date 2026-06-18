@@ -38,19 +38,27 @@ export default function ActivitiesTab({ events, onAdd }: Props) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-100">
-                {events.map((ev, i) => (
-                  <tr key={ev.id} className={`${i % 2 === 0 ? "bg-white" : "bg-zinc-50/50"} hover:bg-[#e8f5f0]/40`}>
-                    <td className="px-4 py-2.5 text-zinc-500">{i + 1}</td>
-                    <td className="px-4 py-2.5 font-semibold text-zinc-900">{ev.title}</td>
-                    <td className="px-4 py-2.5 text-zinc-700">{ev.type}</td>
-                    <td className="px-4 py-2.5 font-mono text-zinc-600">{ev.date}</td>
-                    <td className="px-4 py-2.5 text-center text-zinc-700">{ev.attendees}</td>
-                    <td className="px-4 py-2.5 text-center">
-                      {ev.status === "approved" && <span className="text-[9px] font-bold px-2 py-0.5 bg-green-50 text-green-800 border border-green-300 uppercase">Verified</span>}
-                      {ev.status === "pending"  && <span className="text-[9px] font-bold px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-300 uppercase">Under Review</span>}
+                {events.length > 0 ? (
+                  events.map((ev, i) => (
+                    <tr key={ev.id} className={`${i % 2 === 0 ? "bg-white" : "bg-zinc-50/50"} hover:bg-[#e8f5f0]/40`}>
+                      <td className="px-4 py-2.5 text-zinc-500">{i + 1}</td>
+                      <td className="px-4 py-2.5 font-semibold text-zinc-900">{ev.title}</td>
+                      <td className="px-4 py-2.5 text-zinc-700">{ev.type}</td>
+                      <td className="px-4 py-2.5 font-mono text-zinc-600">{ev.date}</td>
+                      <td className="px-4 py-2.5 text-center text-zinc-700">{ev.attendees}</td>
+                      <td className="px-4 py-2.5 text-center">
+                        {ev.status === "approved" && <span className="text-[9px] font-bold px-2 py-0.5 bg-green-50 text-green-800 border border-green-300 uppercase">Verified</span>}
+                        {ev.status === "pending"  && <span className="text-[9px] font-bold px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-300 uppercase">Under Review</span>}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="px-4 py-8 text-center text-zinc-400 italic">
+                      No activities reported for this academic year
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>

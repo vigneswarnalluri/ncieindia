@@ -200,40 +200,48 @@ export default function ProgramsTab({ onToast }: Props) {
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-100">
-              {programs.map((p, idx) => (
-                <tr key={p.id} className={`${idx % 2 === 0 ? "bg-white" : "bg-zinc-50/50"} hover:bg-[#e8f5f0]/40`}>
-                  <td className="px-4 py-3 font-mono text-zinc-500 font-bold text-center">{p.id}</td>
-                  <td className="px-4 py-3 font-semibold text-zinc-900">
-                    <p>{p.title}</p>
-                    <p className="text-[10px] text-zinc-400 font-medium font-serif mt-0.5">{p.subtitle}</p>
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="text-[10px] font-bold px-2 py-0.5 bg-zinc-150 text-zinc-650 border border-zinc-250 uppercase font-mono rounded">
-                      {p.category}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 font-bold text-emerald-800">{p.budget}</td>
-                  <td className="px-4 py-3 text-zinc-600 font-medium">{p.duration}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center justify-center gap-2">
-                      <button
-                        onClick={() => openEditEditor(p)}
-                        className="bg-white hover:bg-zinc-50 text-zinc-700 hover:text-zinc-900 border border-zinc-350 p-1 rounded cursor-pointer transition-colors"
-                        title="Edit Details"
-                      >
-                        <Edit2 className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(p.id)}
-                        className="bg-white hover:bg-red-50 text-red-750 hover:text-red-900 border border-red-350 p-1 rounded cursor-pointer transition-colors"
-                        title="Delete Entry"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
+              {programs.length > 0 ? (
+                programs.map((p, idx) => (
+                  <tr key={p.id} className={`${idx % 2 === 0 ? "bg-white" : "bg-zinc-50/50"} hover:bg-[#e8f5f0]/40`}>
+                    <td className="px-4 py-3 font-mono text-zinc-500 font-bold text-center">{p.id}</td>
+                    <td className="px-4 py-3 font-semibold text-zinc-900">
+                      <p>{p.title}</p>
+                      <p className="text-[10px] text-zinc-400 font-medium font-serif mt-0.5">{p.subtitle}</p>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className="text-[10px] font-bold px-2 py-0.5 bg-zinc-150 text-zinc-650 border border-zinc-250 uppercase font-mono rounded">
+                        {p.category}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 font-bold text-emerald-800">{p.budget}</td>
+                    <td className="px-4 py-3 text-zinc-600 font-medium">{p.duration}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => openEditEditor(p)}
+                          className="bg-white hover:bg-zinc-50 text-zinc-700 hover:text-zinc-900 border border-zinc-350 p-1 rounded cursor-pointer transition-colors"
+                          title="Edit Details"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(p.id)}
+                          className="bg-white hover:bg-red-50 text-red-750 hover:text-red-900 border border-red-350 p-1 rounded cursor-pointer transition-colors"
+                          title="Delete Entry"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={6} className="px-4 py-8 text-center text-zinc-400 italic">
+                    No active schemes registered in the database
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

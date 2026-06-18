@@ -37,17 +37,25 @@ export default function CircularsTab({ circulars, onAdd }: Props) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-100">
-                {circulars.map((c, i) => (
-                  <tr key={c.id} className={`${i%2===0?"bg-white":"bg-zinc-50/50"} hover:bg-[#e8f5f0]/40`}>
-                    <td className="px-4 py-2.5 font-mono text-[10px] text-zinc-500 font-bold">{c.ref}</td>
-                    <td className="px-4 py-2.5 font-semibold text-zinc-900">{c.title}</td>
-                    <td className="px-4 py-2.5 text-zinc-600">{c.type}</td>
-                    <td className="px-4 py-2.5 text-zinc-600">{c.date}</td>
-                    <td className="px-4 py-2.5 text-center">
-                      <span className={`text-[9px] font-bold px-2 py-0.5 border uppercase ${c.priority==="High"?"bg-red-50 text-red-800 border-red-300":"bg-zinc-100 text-zinc-600 border-zinc-300"}`}>{c.priority}</span>
+                {circulars.length > 0 ? (
+                  circulars.map((c, i) => (
+                    <tr key={c.id} className={`${i%2===0?"bg-white":"bg-zinc-50/50"} hover:bg-[#e8f5f0]/40`}>
+                      <td className="px-4 py-2.5 font-mono text-[10px] text-zinc-500 font-bold">{c.ref}</td>
+                      <td className="px-4 py-2.5 font-semibold text-zinc-900">{c.title}</td>
+                      <td className="px-4 py-2.5 text-zinc-600">{c.type}</td>
+                      <td className="px-4 py-2.5 text-zinc-600">{c.date}</td>
+                      <td className="px-4 py-2.5 text-center">
+                        <span className={`text-[9px] font-bold px-2 py-0.5 border uppercase ${c.priority==="High"?"bg-red-50 text-red-800 border-red-300":"bg-zinc-100 text-zinc-600 border-zinc-300"}`}>{c.priority}</span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={5} className="px-4 py-8 text-center text-zinc-400 italic">
+                      No official circulars dispatched
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>

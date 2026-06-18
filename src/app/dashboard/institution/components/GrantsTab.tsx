@@ -56,18 +56,26 @@ export default function GrantsTab({ grants, onToast }: Props) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-100">
-                {grants.map((r, i) => (
-                  <tr key={i} className={`${i % 2 === 0 ? "bg-white" : "bg-zinc-50/50"} hover:bg-[#e8f5f0]/40`}>
-                    <td className="px-4 py-2.5 font-semibold text-zinc-900">{r.scheme}</td>
-                    <td className="px-4 py-2.5 font-mono text-[10px] text-zinc-500">{r.san}</td>
-                    <td className="px-4 py-2.5 text-right font-bold text-zinc-800">₹{r.amt}</td>
-                    <td className="px-4 py-2.5 text-center font-mono text-zinc-600">{r.tr}</td>
-                    <td className="px-4 py-2.5 text-center">
-                      {r.uc === "submitted" && <span className="text-[9px] font-bold px-2 py-0.5 bg-green-50 text-green-800 border border-green-300 uppercase">Submitted</span>}
-                      {r.uc === "pending"   && <span className="text-[9px] font-bold px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-300 uppercase">Pending</span>}
+                {grants.length > 0 ? (
+                  grants.map((r, i) => (
+                    <tr key={i} className={`${i % 2 === 0 ? "bg-white" : "bg-zinc-50/50"} hover:bg-[#e8f5f0]/40`}>
+                      <td className="px-4 py-2.5 font-semibold text-zinc-900">{r.scheme}</td>
+                      <td className="px-4 py-2.5 font-mono text-[10px] text-zinc-500">{r.san}</td>
+                      <td className="px-4 py-2.5 text-right font-bold text-zinc-800">₹{r.amt}</td>
+                      <td className="px-4 py-2.5 text-center font-mono text-zinc-600">{r.tr}</td>
+                      <td className="px-4 py-2.5 text-center">
+                        {r.uc === "submitted" && <span className="text-[9px] font-bold px-2 py-0.5 bg-green-50 text-green-800 border border-green-300 uppercase">Submitted</span>}
+                        {r.uc === "pending"   && <span className="text-[9px] font-bold px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-300 uppercase">Pending</span>}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={5} className="px-4 py-8 text-center text-zinc-400 italic">
+                      No central fund disbursements found
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
               <tfoot>
                 <tr className="bg-zinc-100 border-t-2 border-zinc-300">

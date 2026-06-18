@@ -68,20 +68,11 @@ export default function OverviewTab({ pendingCount, verifiedCount, ideasCount, g
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-100">
-              {[
-                { ref: "NCIE/DIR/2026/42", date: "16-Jun-26", msg: "NIDHI-CIS Prototyping Grant applications close 31 July. Ensure project submissions are verified and endorsed by SPOC before forwarding.", pri: "High" },
-                { ref: "NCIE/FIN/2026/11", date: "10-Jun-26", msg: "Utilisation Certificates (Phase-1) must be submitted to the Regional Nodal Desk by 30 June to release Tranche-2 disbursement.", pri: "High" },
-                { ref: "NCIE/ADM/2026/09", date: "02-Jun-26", msg: "Annual performance self-assessment for MIC Star Rating is open on the portal until 15 July 2026.", pri: "Normal" },
-              ].map(d => (
-                <tr key={d.ref} className="hover:bg-zinc-50">
-                  <td className="px-4 py-2.5 font-mono text-[10px] text-zinc-500">{d.ref}</td>
-                  <td className="px-4 py-2.5 text-zinc-600 whitespace-nowrap">{d.date}</td>
-                  <td className="px-4 py-2.5 text-zinc-700 leading-relaxed">{d.msg}</td>
-                  <td className="px-4 py-2.5 text-center">
-                    <span className={`text-[9px] font-bold px-2 py-0.5 uppercase border ${d.pri === "High" ? "bg-red-50 text-red-700 border-red-200" : "bg-zinc-100 text-zinc-600 border-zinc-300"}`}>{d.pri}</span>
-                  </td>
-                </tr>
-              ))}
+              <tr>
+                <td colSpan={4} className="px-4 py-8 text-center text-zinc-400 italic">
+                  No active directives from Central Nodal Desk
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

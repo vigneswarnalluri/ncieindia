@@ -32,15 +32,23 @@ export default function SecurityTab({ logs }: Props) {
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-100">
-              {logs.map((log, i) => (
-                <tr key={log.id} className={`${i%2===0?"bg-white":"bg-zinc-50/50"} font-mono text-[11px] hover:bg-[#e8f5f0]/40`}>
-                  <td className="px-4 py-2 text-zinc-500 whitespace-nowrap">{log.ts}</td>
-                  <td className="px-4 py-2 font-bold text-zinc-800">{log.code}</td>
-                  <td className="px-4 py-2 text-[#0D6B4F]">{log.actor}</td>
-                  <td className="px-4 py-2 text-zinc-500">{log.ip}</td>
-                  <td className="px-4 py-2 text-zinc-700 font-sans">{log.details}</td>
+              {logs.length > 0 ? (
+                logs.map((log, i) => (
+                  <tr key={log.id} className={`${i%2===0?"bg-white":"bg-zinc-50/50"} font-mono text-[11px] hover:bg-[#e8f5f0]/40`}>
+                    <td className="px-4 py-2 text-zinc-500 whitespace-nowrap">{log.ts}</td>
+                    <td className="px-4 py-2 font-bold text-zinc-800">{log.code}</td>
+                    <td className="px-4 py-2 text-[#0D6B4F]">{log.actor}</td>
+                    <td className="px-4 py-2 text-zinc-500">{log.ip}</td>
+                    <td className="px-4 py-2 text-zinc-700 font-sans">{log.details}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="px-4 py-8 text-center text-zinc-400 italic font-sans">
+                    No system audit logs found
+                  </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
