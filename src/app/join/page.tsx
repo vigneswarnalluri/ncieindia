@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { User, Landmark, Building, CheckCircle, ArrowLeft, ArrowRight, ShieldCheck, Info, FileText, Check, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const uploadFile = async (file: File, path: string) => {
   const { data, error } = await supabase.storage
@@ -340,6 +341,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
   onChange,
   disabled = false,
 }) => {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState(value);
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -400,7 +402,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
             if (!disabled) setIsOpen(true);
           }}
           disabled={disabled}
-          className={`w-full px-3 py-2 pr-8 text-xs border border-zinc-350 rounded focus:outline-none focus:border-primary bg-zinc-50/50 disabled:opacity-50 disabled:cursor-not-allowed ${
+          className={`w-full px-3 py-2 pr-8 text-xs border border-zinc-355 rounded focus:outline-none focus:border-primary bg-zinc-50/50 disabled:opacity-50 disabled:cursor-not-allowed ${
             value ? "text-primary font-bold" : "text-zinc-800"
           }`}
           placeholder={placeholder}
@@ -417,7 +419,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
         <div className="absolute z-55 left-0 right-0 mt-1 max-h-48 overflow-y-auto bg-white border border-zinc-200 rounded shadow-md text-xs">
           {!isSearchLongEnough ? (
             <div className="px-3 py-2 text-zinc-400 italic select-none">
-              Please type at least 3 characters to search...
+              {t("search_min_chars")}
             </div>
           ) : (
             <>
@@ -434,7 +436,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
                 onClick={() => handleOptionSelect(search)}
                 className="px-3 py-2 border-t border-zinc-150 cursor-pointer hover:bg-[#0D6B4F] hover:text-white transition-colors text-primary font-bold"
               >
-                + Use "{search}" as custom name
+                {t("search_custom_use").replace("{search}", search)}
               </div>
             </>
           )}
@@ -445,6 +447,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
 };
 
 export default function JoinPage() {
+  const { t } = useLanguage();
   const [step, setStep] = useState<"select" | "form" | "success">("select");
   const [role, setRole] = useState<"student" | "chapter" | "partner" | "internship">("student");
   const [formData, setFormData] = useState({
@@ -821,8 +824,8 @@ export default function JoinPage() {
                 {step !== "select" ? <Check className="w-3.5 h-3.5" /> : "1"}
               </span>
               <div>
-                <p className="text-[10px] uppercase font-bold tracking-wider text-zinc-400">Step 1</p>
-                <p className={`text-xs ${step === "select" ? "text-primary font-bold" : "text-zinc-650"}`}>Select Onboarding Pathway</p>
+                <p className="text-[10px] uppercase font-bold tracking-wider text-zinc-400">{t("join_step_label_1")}</p>
+                <p className={`text-xs ${step === "select" ? "text-primary font-bold" : "text-zinc-650"}`}>{t("join_step_1")}</p>
               </div>
             </div>
 
@@ -839,8 +842,8 @@ export default function JoinPage() {
                 {step === "success" ? <Check className="w-3.5 h-3.5" /> : "2"}
               </span>
               <div>
-                <p className="text-[10px] uppercase font-bold tracking-wider text-zinc-400">Step 2</p>
-                <p className={`text-xs ${step === "form" ? "text-primary font-bold" : "text-zinc-650"}`}>Application Submission</p>
+                <p className="text-[10px] uppercase font-bold tracking-wider text-zinc-400">{t("join_step_label_2")}</p>
+                <p className={`text-xs ${step === "form" ? "text-primary font-bold" : "text-zinc-650"}`}>{t("join_step_2")}</p>
               </div>
             </div>
 
@@ -855,8 +858,8 @@ export default function JoinPage() {
                 3
               </span>
               <div>
-                <p className="text-[10px] uppercase font-bold tracking-wider text-zinc-400">Step 3</p>
-                <p className={`text-xs ${step === "success" ? "text-primary font-bold" : "text-zinc-650"}`}>Application Verification</p>
+                <p className="text-[10px] uppercase font-bold tracking-wider text-zinc-400">{t("join_step_label_3")}</p>
+                <p className={`text-xs ${step === "success" ? "text-primary font-bold" : "text-zinc-650"}`}>{t("join_step_3")}</p>
               </div>
             </div>
 
@@ -873,9 +876,11 @@ export default function JoinPage() {
             </div>
             
             <div className="space-y-2">
-              <h2 className="text-lg font-bold text-zinc-800 uppercase tracking-wider">Active Registration Found</h2>
+              <h2 className="text-lg font-bold text-zinc-800 uppercase tracking-wider">{t("join_active_reg_found")}</h2>
               <p className="text-xs text-zinc-500 leading-relaxed max-w-md mx-auto">
-                An active onboarding registration application for <span className="font-semibold text-zinc-800">{existingSubmission.orgName}</span> has already been submitted from this device under credentials:
+                {t("join_active_reg_desc").split("{orgName}")[0]}
+                <span className="font-semibold text-zinc-800">{existingSubmission.orgName}</span>
+                {t("join_active_reg_desc").split("{orgName}")[1]}
               </p>
               <div className="pt-2">
                 <span className="font-mono font-bold text-accent-dark bg-amber-50 px-4 py-1.5 rounded text-xs border border-accent/20 select-all shadow-sm">
@@ -887,7 +892,7 @@ export default function JoinPage() {
             <div className="bg-zinc-50 border border-zinc-200 rounded p-4 text-left flex gap-3 text-xs text-zinc-650 leading-relaxed">
               <Info className="w-5 h-5 text-accent-dark shrink-0 mt-0.5" />
               <span>
-                <strong>Submission Lock:</strong> To prevent multiple registration conflicts, resubmission under the same session is restricted. Verification updates have been queued for <strong className="text-primary">{existingSubmission.email}</strong>.
+                <strong>{t("join_sub_lock")}</strong> {t("join_sub_lock_desc")} <strong className="text-primary">{existingSubmission.email}</strong>.
               </span>
             </div>
 
@@ -895,7 +900,7 @@ export default function JoinPage() {
               <button
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-zinc-300 hover:bg-zinc-50 rounded font-bold uppercase tracking-wider text-xs transition-colors cursor-pointer shadow-sm text-zinc-700"
                 onClick={() => {
-                  if (window.confirm("Warning: Resetting will clear your active local session details. Proceed?")) {
+                  if (window.confirm(t("confirm_reset"))) {
                     localStorage.removeItem("ncie_submission_details");
                     setExistingSubmission(null);
                     setRegId("");
@@ -926,7 +931,7 @@ export default function JoinPage() {
                   }
                 }}
               >
-                Reset &amp; Start New Registration
+                {t("join_btn_reset")}
               </button>
             </div>
           </div>
@@ -939,17 +944,17 @@ export default function JoinPage() {
             <div className="text-center max-w-3xl mx-auto space-y-3">
               <div className="flex justify-center items-center gap-1.5 text-xs font-bold tracking-widest text-[#0D6B4F] uppercase">
                 <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
-                <span>National Innovation Registry</span>
+                <span>{t("join_registry")}</span>
               </div>
               
               <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 uppercase tracking-tight">
-                Ecosystem Node Registration Portal
+                {t("join_portal_title")}
               </h1>
               
               <div className="h-0.5 w-24 bg-accent mx-auto" />
               
               <p className="text-xs sm:text-sm text-zinc-500 max-w-2xl mx-auto leading-relaxed">
-                Affiliate your credentials under the National Council framework. Please choose the appropriate registry pathway below to submit your organizational details.
+                {t("join_portal_desc")}
               </p>
             </div>
 
@@ -964,28 +969,28 @@ export default function JoinPage() {
                       <User className="w-4.5 h-4.5" />
                     </div>
                     <h3 className="text-sm font-extrabold text-zinc-800 uppercase tracking-wider">
-                      Student Innovator
+                      {t("join_role_student")}
                     </h3>
                   </div>
                   
                   <p className="text-xs text-zinc-500 leading-relaxed">
-                    Registry for students seeking prototyping support, micro-grants, and pre-seed capital.
+                    {t("join_role_student_desc")}
                   </p>
                   
                   <div className="pt-2 space-y-2.5">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Registry Features:</p>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{t("join_features")}</p>
                     <ul className="space-y-1.5 text-xs text-zinc-650">
                       <li className="flex items-start gap-2">
                         <Check className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
-                        <span>Log raw research prototypes</span>
+                        <span>{t("join_feat_student_1")}</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <Check className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
-                        <span>Match with certified mentors</span>
+                        <span>{t("join_feat_student_2")}</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <Check className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
-                        <span>Apply for pre-seed grants</span>
+                        <span>{t("join_feat_student_3")}</span>
                       </li>
                     </ul>
                   </div>
@@ -996,7 +1001,7 @@ export default function JoinPage() {
                     onClick={() => handleRoleSelect("student")}
                     className="w-full bg-primary hover:bg-[#08533d] text-white font-bold text-xs uppercase py-2.5 rounded shadow-sm transition-colors text-center cursor-pointer"
                   >
-                    Open Registry Form
+                    {t("join_btn_student")}
                   </button>
                 </div>
               </div>
@@ -1009,28 +1014,28 @@ export default function JoinPage() {
                       <BookOpen className="w-4.5 h-4.5" />
                     </div>
                     <h3 className="text-sm font-extrabold text-zinc-800 uppercase tracking-wider">
-                      Internship Student
+                      {t("join_role_intern")}
                     </h3>
                   </div>
                   
                   <p className="text-xs text-zinc-500 leading-relaxed">
-                    Registrations for course-integrated internships under the engineering &amp; technology domain.
+                    {t("join_role_intern_desc")}
                   </p>
                   
                   <div className="pt-2 space-y-2.5">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Internship Features:</p>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{t("join_features_intern")}</p>
                     <ul className="space-y-1.5 text-xs text-zinc-650">
                       <li className="flex items-start gap-2">
                         <Check className="w-3.5 h-3.5 text-accent-dark shrink-0 mt-0.5" />
-                        <span>Select specialized course track</span>
+                        <span>{t("join_feat_intern_1")}</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <Check className="w-3.5 h-3.5 text-accent-dark shrink-0 mt-0.5" />
-                        <span>One-time registration (₹700)</span>
+                        <span>{t("join_feat_intern_2")}</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <Check className="w-3.5 h-3.5 text-accent-dark shrink-0 mt-0.5" />
-                        <span>Direct placement certificate</span>
+                        <span>{t("join_feat_intern_3")}</span>
                       </li>
                     </ul>
                   </div>
@@ -1041,7 +1046,7 @@ export default function JoinPage() {
                     onClick={() => handleRoleSelect("internship")}
                     className="w-full bg-[#0D6B4F] hover:bg-[#074733] text-white font-bold text-xs uppercase py-2.5 rounded shadow-sm transition-colors text-center cursor-pointer"
                   >
-                    Open Course Form
+                    {t("join_btn_intern")}
                   </button>
                 </div>
               </div>
@@ -1054,28 +1059,28 @@ export default function JoinPage() {
                       <Landmark className="w-4.5 h-4.5" />
                     </div>
                     <h3 className="text-sm font-extrabold text-zinc-800 uppercase tracking-wider">
-                      Academic Chapter
+                      {t("join_role_chapter")}
                     </h3>
                   </div>
                   
                   <p className="text-xs text-zinc-500 leading-relaxed">
-                    Official registry for university deans or college cell administrators looking to affiliate.
+                    {t("join_role_chapter_desc")}
                   </p>
                   
                   <div className="pt-2 space-y-2.5">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Chapters Portal Access:</p>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{t("join_features_chapter")}</p>
                     <ul className="space-y-1.5 text-xs text-zinc-650">
                       <li className="flex items-start gap-2">
                         <Check className="w-3.5 h-3.5 text-accent-dark shrink-0 mt-0.5" />
-                        <span>Establish campus Innovation Cell</span>
+                        <span>{t("join_feat_chapter_1")}</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <Check className="w-3.5 h-3.5 text-accent-dark shrink-0 mt-0.5" />
-                        <span>Apply for Makerspace funding</span>
+                        <span>{t("join_feat_chapter_2")}</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <Check className="w-3.5 h-3.5 text-accent-dark shrink-0 mt-0.5" />
-                        <span>State coordinator board voting</span>
+                        <span>{t("join_feat_chapter_3")}</span>
                       </li>
                     </ul>
                   </div>
@@ -1086,7 +1091,7 @@ export default function JoinPage() {
                     onClick={() => handleRoleSelect("chapter")}
                     className="w-full bg-[#111827] hover:bg-black text-white font-bold text-xs uppercase py-2.5 rounded shadow-sm transition-colors text-center cursor-pointer"
                   >
-                    Apply for Affiliation
+                    {t("join_btn_chapter")}
                   </button>
                 </div>
               </div>
@@ -1099,28 +1104,28 @@ export default function JoinPage() {
                       <Building className="w-4.5 h-4.5" />
                     </div>
                     <h3 className="text-sm font-extrabold text-zinc-800 uppercase tracking-wider">
-                      Ecosystem Partner
+                      {t("join_role_partner")}
                     </h3>
                   </div>
                   
                   <p className="text-xs text-zinc-500 leading-relaxed">
-                    Affiliation for corporate sponsors, venture partners, accelerators, or makerspaces.
+                    {t("join_role_partner_desc")}
                   </p>
                   
                   <div className="pt-2 space-y-2.5">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Partner Desktop Access:</p>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{t("join_features_partner")}</p>
                     <ul className="space-y-1.5 text-xs text-zinc-650">
                       <li className="flex items-start gap-2">
                         <Check className="w-3.5 h-3.5 text-purple-700 shrink-0 mt-0.5" />
-                        <span>Host national student programs</span>
+                        <span>{t("join_feat_partner_1")}</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <Check className="w-3.5 h-3.5 text-purple-700 shrink-0 mt-0.5" />
-                        <span>Deploy CSR sponsored briefs</span>
+                        <span>{t("join_feat_partner_2")}</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <Check className="w-3.5 h-3.5 text-purple-700 shrink-0 mt-0.5" />
-                        <span>Access national innovation pool</span>
+                        <span>{t("join_feat_partner_3")}</span>
                       </li>
                     </ul>
                   </div>
@@ -1131,7 +1136,7 @@ export default function JoinPage() {
                     onClick={() => handleRoleSelect("partner")}
                     className="w-full bg-[#111827] hover:bg-black text-white font-bold text-xs uppercase py-2.5 rounded shadow-sm transition-colors text-center cursor-pointer"
                   >
-                    Open Partner Registry
+                    {t("join_btn_partner")}
                   </button>
                 </div>
               </div>
@@ -1151,7 +1156,7 @@ export default function JoinPage() {
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-zinc-600 hover:text-primary transition-colors cursor-pointer bg-white border border-zinc-200 rounded"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Back to Registry List</span>
+              <span>{t("btn_back")}</span>
             </button>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -1163,9 +1168,9 @@ export default function JoinPage() {
                   {/* Form Header */}
                   <div className="bg-zinc-50 px-6 py-4 border-b border-zinc-200">
                     <span className="text-[10px] font-bold text-accent-dark tracking-wider uppercase bg-white border border-zinc-200 px-2 py-0.5 rounded shadow-sm">
-                      {role === "student" ? "Innovator Application" : role === "internship" ? "Course Internship Application" : role === "chapter" ? "Chapter Affiliation" : "Partner Liaison"}
+                      {role === "student" ? t("role_appl_student") : role === "internship" ? t("role_appl_internship") : role === "chapter" ? t("role_appl_chapter") : t("role_appl_partner")}
                     </span>
-                    <h2 className="text-base font-extrabold text-zinc-800 mt-2 uppercase tracking-wide">Nomination Entry Form</h2>
+                    <h2 className="text-base font-extrabold text-zinc-800 mt-2 uppercase tracking-wide">{t("form_title")}</h2>
                   </div>
 
                   {validationError && (
@@ -1181,7 +1186,7 @@ export default function JoinPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
-                          {role === "student" || role === "internship" ? "Full Legal Name" : role === "chapter" ? "Name of Institutional Head" : "Authorized Liaison Name"}
+                          {role === "student" || role === "internship" ? t("label_fullname_student") : role === "chapter" ? t("label_fullname_chapter") : t("label_fullname_partner")}
                         </label>
                         <input
                           name="fullName"
@@ -1190,13 +1195,13 @@ export default function JoinPage() {
                           value={formData.fullName}
                           onChange={handleInputChange}
                           className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                          placeholder={role === "student" || role === "internship" ? "e.g. Sneha Sen" : role === "chapter" ? "e.g. Dr. A. K. Sharma" : "e.g. Rajesh Kumar"}
+                          placeholder={role === "student" || role === "internship" ? t("placeholder_fullname_student") : role === "chapter" ? t("placeholder_fullname_chapter") : t("placeholder_fullname_partner")}
                           required
                         />
                       </div>
 
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Designation / Role</label>
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_designation")}</label>
                         <input
                           name="designation"
                           type="text"
@@ -1204,7 +1209,7 @@ export default function JoinPage() {
                           value={formData.designation}
                           onChange={handleInputChange}
                           className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                          placeholder={role === "student" ? "e.g. Student Lead, Team Representative" : role === "internship" ? "e.g. Student, Graduate" : role === "chapter" ? "e.g. Principal, Dean of R&D, Registrar" : "e.g. CSR Head, Partnerships Lead"}
+                          placeholder={role === "student" ? t("placeholder_designation_student") : role === "internship" ? t("placeholder_designation_internship") : role === "chapter" ? t("placeholder_designation_chapter") : t("placeholder_designation_partner")}
                           required
                         />
                       </div>
@@ -1214,7 +1219,7 @@ export default function JoinPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
-                          {role === "student" || role === "internship" ? "Official Email Address" : role === "chapter" ? "Official Institutional Email" : "Official Corporate Email"}
+                          {role === "student" || role === "internship" ? t("label_email_student") : role === "chapter" ? t("label_email_chapter") : t("label_email_partner")}
                         </label>
                         <input
                           name="email"
@@ -1223,13 +1228,13 @@ export default function JoinPage() {
                           value={formData.email}
                           onChange={handleInputChange}
                           className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                          placeholder={role === "student" || role === "internship" ? "e.g. sneha@institute.edu.in" : role === "chapter" ? "e.g. principal@institute.edu.in" : "e.g. partnerships@corporation.com"}
+                          placeholder={role === "student" || role === "internship" ? t("placeholder_email_student") : role === "chapter" ? t("placeholder_email_chapter") : t("placeholder_email_partner")}
                           required
                         />
                       </div>
 
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">10-Digit Mobile Number</label>
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_mobile")}</label>
                         <input
                           name="mobile"
                           type="tel"
@@ -1238,7 +1243,7 @@ export default function JoinPage() {
                           value={formData.mobile}
                           onChange={handleInputChange}
                           className="w-full px-3 py-2 text-xs border border-zinc-355 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                          placeholder="e.g. 9876543210"
+                          placeholder={t("placeholder_mobile")}
                           required
                         />
                       </div>
@@ -1250,7 +1255,7 @@ export default function JoinPage() {
                         {role === "internship" && (
                           <div className="space-y-1.5 bg-amber-50/45 border border-[#C9A24B]/20 p-4 mb-4 rounded animate-slide-down">
                             <label className="text-[10px] font-bold uppercase tracking-wider text-[#A68034] block font-sans">
-                              Select Internship Course <span className="text-red-500">*</span>
+                              {t("label_select_internship_course")} <span className="text-red-500">*</span>
                             </label>
                             <select
                               name="selectedCourse"
@@ -1259,35 +1264,35 @@ export default function JoinPage() {
                               className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-white text-primary font-bold cursor-pointer"
                               required
                             >
-                              <option value="" className="text-zinc-500 font-sans">-- Select Course (Fee: ₹700) --</option>
+                              <option value="" className="text-zinc-500 font-sans">{t("placeholder_select_course")}</option>
                               <option value="Innovational & Technology Management" className="text-zinc-800 font-sans">
-                                Innovational &amp; Technology Management (Fee: ₹700)
+                                {t("course_itm_option")}
                               </option>
                               <option value="AI Business & Startup Innovation" className="text-zinc-800 font-sans">
-                                AI Business &amp; Startup Innovation (Fee: ₹700)
+                                {t("course_absi_option")}
                               </option>
                             </select>
                             <p className="text-[10px] text-zinc-450 leading-normal mt-1 font-sans">
-                              Please select the specialized course track you want to register for in your remote internship.
+                              {t("internship_course_help")}
                             </p>
                           </div>
                         )}
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                           <div className="space-y-1.5 sm:col-span-2">
                             <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
-                              College or University Name
+                              {t("label_collegename")}
                             </label>
                             <SearchableSelect
                               name="orgName"
                               value={formData.orgName}
-                              placeholder="Type to search or enter College / University..."
+                              placeholder={t("placeholder_search_college")}
                               options={displayedColleges}
                               onChange={handleDropdownChange}
                             />
                           </div>
                           <div className="space-y-1.5 sm:col-span-1">
                             <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
-                              Roll Number / Student ID
+                              {t("label_rollno")}
                             </label>
                             <input
                               name="regNumber"
@@ -1296,14 +1301,14 @@ export default function JoinPage() {
                               value={formData.regNumber}
                               onChange={handleInputChange}
                               className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                              placeholder="e.g. 21CS001"
+                              placeholder={t("placeholder_rollno")}
                               required
                             />
                           </div>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Stream / Branch</label>
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_stream")}</label>
                             <select
                               name="stream"
                               value={formData.stream}
@@ -1313,14 +1318,14 @@ export default function JoinPage() {
                               }`}
                               required
                             >
-                              <option value="" className="text-zinc-500">Select Stream</option>
+                              <option value="" className="text-zinc-500">{t("placeholder_select_stream")}</option>
                               {STREAMS.map((str) => (
                                 <option key={str} value={str} className="text-zinc-800">{str}</option>
                               ))}
                             </select>
                           </div>
                           <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Year of Study</label>
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_year")}</label>
                             <select
                               name="yearOfStudy"
                               value={formData.yearOfStudy}
@@ -1330,7 +1335,7 @@ export default function JoinPage() {
                               }`}
                               required
                             >
-                              <option value="" className="text-zinc-500">Select Year</option>
+                              <option value="" className="text-zinc-500">{t("placeholder_select_year")}</option>
                               {YEARS_OF_STUDY.map((year) => (
                                 <option key={year} value={year} className="text-zinc-800">{year}</option>
                               ))}
@@ -1339,7 +1344,7 @@ export default function JoinPage() {
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Department</label>
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_department")}</label>
                             <select
                               name="department"
                               value={formData.department}
@@ -1349,14 +1354,14 @@ export default function JoinPage() {
                               }`}
                               required
                             >
-                              <option value="" className="text-zinc-500">Select Department</option>
+                              <option value="" className="text-zinc-500">{t("placeholder_select_dept")}</option>
                               {DEPARTMENTS.map((dept) => (
                                 <option key={dept} value={dept} className="text-zinc-800">{dept}</option>
                               ))}
                             </select>
                           </div>
                           <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Specialization</label>
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_specialization")}</label>
                             <select
                               name="specialization"
                               value={formData.specialization}
@@ -1366,13 +1371,13 @@ export default function JoinPage() {
                               }`}
                               required
                             >
-                              <option value="" className="text-zinc-500">Select Specialization</option>
+                              <option value="" className="text-zinc-500">{t("placeholder_select_spec")}</option>
                               {formData.department && SPECIALIZATIONS[formData.department] ? (
                                 SPECIALIZATIONS[formData.department].map((spec) => (
                                   <option key={spec} value={spec} className="text-zinc-800">{spec}</option>
                                 ))
                               ) : (
-                                <option value="" disabled className="text-zinc-400">Please select a Department first</option>
+                                <option value="" disabled className="text-zinc-400">{t("placeholder_select_dept_first")}</option>
                               )}
                             </select>
                           </div>
@@ -1382,13 +1387,13 @@ export default function JoinPage() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-1.5">
                           <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
-                            {role === "chapter" ? "College/University Name" : "Corporation / Venture Legal Entity"}
+                            {role === "chapter" ? t("label_college_uni_name") : t("label_corp_entity_name")}
                           </label>
                           {role === "chapter" ? (
                             <SearchableSelect
                               name="orgName"
                               value={formData.orgName}
-                              placeholder="Type to search or enter College / University..."
+                              placeholder={t("placeholder_search_college")}
                               options={displayedColleges}
                               onChange={handleDropdownChange}
                             />
@@ -1400,7 +1405,7 @@ export default function JoinPage() {
                               value={formData.orgName}
                               onChange={handleInputChange}
                               className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                              placeholder="e.g. Peak Founders or Tata Trusts"
+                              placeholder={t("placeholder_org_partner")}
                               required
                             />
                           )}
@@ -1408,7 +1413,7 @@ export default function JoinPage() {
                         <div className="space-y-1.5">
                           {role === "chapter" && (
                             <>
-                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Institution Type</label>
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_inst_type")}</label>
                               <input
                                 name="instType"
                                 type="text"
@@ -1416,14 +1421,14 @@ export default function JoinPage() {
                                 value={formData.instType}
                                 onChange={handleInputChange}
                                 className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                                placeholder="e.g. Engineering College, State University, R&D Hub"
+                                placeholder={t("placeholder_inst_type")}
                                 required
                               />
                             </>
                           )}
                           {role === "partner" && (
                             <>
-                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Partner Category / Sector</label>
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_partner_category")}</label>
                               <input
                                 name="partnerCategory"
                                 type="text"
@@ -1431,7 +1436,7 @@ export default function JoinPage() {
                                 value={formData.partnerCategory}
                                 onChange={handleInputChange}
                                 className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                                placeholder="e.g. Venture Capital, Incubator, Accelerator, CSR Sponsor"
+                                placeholder={t("placeholder_partner_category")}
                                 required
                               />
                             </>
@@ -1445,7 +1450,7 @@ export default function JoinPage() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {role === "chapter" && (
                           <div className="space-y-1.5 col-span-2 sm:col-span-1">
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">AICTE / UGC / NAAC Code</label>
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_accreditation_code")}</label>
                             <input
                               name="accreditationCode"
                               type="text"
@@ -1453,7 +1458,7 @@ export default function JoinPage() {
                               value={formData.accreditationCode}
                               onChange={handleInputChange}
                               className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                              placeholder="e.g. AICTE-1-12345678 or NAAC-A++"
+                              placeholder={t("placeholder_accreditation_code")}
                               required
                             />
                           </div>
@@ -1461,7 +1466,7 @@ export default function JoinPage() {
                         {role === "partner" && (
                           <>
                             <div className="space-y-1.5">
-                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Corporate Registration (CIN / GSTIN / PAN)</label>
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_corporate_reg")}</label>
                               <input
                                 name="regNumber"
                                 type="text"
@@ -1469,12 +1474,12 @@ export default function JoinPage() {
                                 value={formData.regNumber}
                                 onChange={handleInputChange}
                                 className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                                placeholder="e.g. 27AAAAA1111A1Z1 or CIN/PAN"
+                                placeholder={t("placeholder_corporate_reg")}
                                 required
                               />
                             </div>
                             <div className="space-y-1.5">
-                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Corporate Website URL</label>
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_corporate_website")}</label>
                               <input
                                 name="websiteUrl"
                                 type="url"
@@ -1482,7 +1487,7 @@ export default function JoinPage() {
                                 value={formData.websiteUrl}
                                 onChange={handleInputChange}
                                 className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
-                                placeholder="e.g. https://www.corporation.com"
+                                placeholder={t("placeholder_corporate_website")}
                                 required
                               />
                             </div>
@@ -1494,7 +1499,7 @@ export default function JoinPage() {
                     {/* State & City */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">State</label>
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_state")}</label>
                         <select
                           name="state"
                           value={formData.state}
@@ -1504,18 +1509,18 @@ export default function JoinPage() {
                           }`}
                           required
                         >
-                          <option value="" className="text-zinc-500">Select State</option>
+                          <option value="" className="text-zinc-500">{t("placeholder_select_state")}</option>
                           {STATES.map((st) => (
                             <option key={st} value={st} className="text-zinc-800">{st}</option>
                           ))}
                         </select>
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">City</label>
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_city")}</label>
                         <SearchableSelect
                           name="city"
                           value={formData.city}
-                          placeholder={formData.state ? "Type to search or enter City..." : "Please select a State first"}
+                          placeholder={formData.state ? t("placeholder_search_city") : t("placeholder_select_state_first")}
                           options={formData.state ? CITIES_BY_STATE[formData.state] || [] : []}
                           onChange={handleDropdownChange}
                           disabled={!formData.state}
@@ -1527,12 +1532,12 @@ export default function JoinPage() {
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
                         {role === "student" 
-                          ? "Project Title & Abstract" 
+                          ? t("label_proposal_student") 
                           : role === "internship"
-                            ? "Statement of Purpose (SOP) & Learning Goals"
+                            ? t("label_proposal_intern")
                             : role === "chapter" 
-                              ? "Chapter Objectives & Planned Student Scope" 
-                              : "Resource Support & Proposed Partnership Program"}
+                              ? t("label_proposal_chapter") 
+                              : t("label_proposal_partner")}
                       </label>
                       <textarea
                         name="proposal"
@@ -1543,23 +1548,23 @@ export default function JoinPage() {
                         className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 resize-y"
                         placeholder={
                           role === "student"
-                            ? "Provide a detailed title and abstract of your innovation, prototype, or start-up concept..."
+                            ? t("placeholder_proposal_student")
                             : role === "internship"
-                              ? "Explain why you want to enroll in this internship course, your technical interests, and what you hope to achieve during the 8 weeks..."
+                              ? t("placeholder_proposal_intern")
                               : role === "chapter"
-                                ? "Describe the objectives, planned student events, and laboratory/makerspace infrastructure you plan to allocate for the proposed chapter..."
-                                : "Describe the resources, funding allocation, mentoring programs, or incubation physical access you plan to align with the NCIE ecosystem..."
+                                ? t("placeholder_proposal_chapter")
+                                : t("placeholder_proposal_partner")
                         }
                         required
                       />
                       <div className="flex justify-end text-[10px] text-zinc-400 font-bold select-none font-mono">
-                        <span>{formData.proposal.length} / 2,000 characters</span>
+                        <span>{formData.proposal.length} / 2,000 {t("char_count_label")}</span>
                       </div>
                     </div>
 
                     {/* Verification Documents Upload */}
                     <div className="border-t border-zinc-200 pt-5 mt-5 space-y-4">
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Required Verification Documents</p>
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{t("form_required_docs")}</p>
                       
                       <div className={`grid grid-cols-1 ${role === "internship" ? "sm:grid-cols-1" : "sm:grid-cols-3"} gap-4`}>
                         
@@ -1568,10 +1573,10 @@ export default function JoinPage() {
                           <div className="space-y-1.5">
                             <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block min-h-[30px]">
                               {role === "student"
-                                ? "HOD Consent / Support Letter" 
+                                ? t("label_file_consent_student") 
                                 : role === "chapter" 
-                                  ? "Institutional Consent Form" 
-                                  : "Partnership Intent Letter"}{"\u00A0"}
+                                  ? t("label_file_consent_chapter") 
+                                  : t("label_file_consent_partner")}{"\u00A0"}
                               <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -1583,10 +1588,10 @@ export default function JoinPage() {
                             />
                             <span className="text-[9px] text-zinc-400 block font-medium">
                               {role === "student"
-                                ? "Signed PDF by HOD (Max 2MB)" 
+                                ? t("help_file_consent_student") 
                                 : role === "chapter" 
-                                  ? "Signed & Sealed PDF by Dean/Principal (Max 2MB)" 
-                                  : "Signed PDF on Corporate Letterhead (Max 2MB)"}
+                                  ? t("help_file_consent_chapter") 
+                                  : t("help_file_consent_partner")}
                             </span>
                           </div>
                         )}
@@ -1596,10 +1601,10 @@ export default function JoinPage() {
                           <div className="space-y-1.5">
                             <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block min-h-[30px]">
                               {role === "student"
-                                ? "Student ID Card" 
+                                ? t("label_file_id_student") 
                                 : role === "chapter" 
-                                  ? "Institutional Accreditation Certificate" 
-                                  : "Certificate of Incorporation / GST"}{"\u00A0"}
+                                  ? t("label_file_id_chapter") 
+                                  : t("label_file_id_partner")}{"\u00A0"}
                               <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -1616,10 +1621,10 @@ export default function JoinPage() {
                             />
                             <span className="text-[9px] text-zinc-400 block font-medium">
                               {role === "student"
-                                ? "JPEG, PNG, or PDF (Max 2MB)" 
+                                ? t("help_file_id_student") 
                                 : role === "chapter" 
-                                  ? "PDF or Image Certificate (Max 2MB)" 
-                                  : "PDF or Image Document (Max 2MB)"}
+                                  ? t("help_file_id_chapter") 
+                                  : t("help_file_id_partner")}
                             </span>
                           </div>
                         )}
@@ -1628,12 +1633,12 @@ export default function JoinPage() {
                         <div className="space-y-1.5">
                           <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block min-h-[30px]">
                             {role === "student" 
-                              ? "Team Members List" 
+                              ? t("label_file_roster_student") 
                               : role === "internship"
-                                ? "Latest Resume / CV"
+                                ? t("label_file_roster_internship")
                                 : role === "chapter" 
-                                  ? "Coordinators List" 
-                                  : "Corporate Program Overview"}{"\u00A0"}
+                                  ? t("label_file_roster_chapter") 
+                                  : t("label_file_roster_partner")}{"\u00A0"}
                             <span className="text-red-500">*</span>
                           </label>
                           <input
@@ -1650,12 +1655,12 @@ export default function JoinPage() {
                           />
                           <span className="text-[9px] text-zinc-400 block font-medium">
                             {role === "student" 
-                              ? "PDF or DOCX (Max 2MB)" 
+                              ? t("help_file_roster_student") 
                               : role === "internship"
-                                ? "PDF or DOCX format Resume / CV (Max 2MB)"
+                                ? t("help_file_roster_internship")
                                 : role === "chapter" 
-                                  ? "PDF or DOCX list of coordinators (Max 2MB)" 
-                                  : "PDF Brochure (Max 2MB)"}
+                                  ? t("help_file_roster_chapter") 
+                                  : t("help_file_roster_partner")}
                           </span>
                         </div>
                       </div>
@@ -1665,7 +1670,7 @@ export default function JoinPage() {
                     <div className="p-3 bg-zinc-50 border border-zinc-200 rounded flex gap-2.5 items-start text-[11px] text-zinc-650">
                       <input type="checkbox" required className="mt-0.5 focus:ring-primary h-4 w-4 border-zinc-300 rounded shrink-0 cursor-pointer accent-primary" />
                       <span>
-                        <strong>Under Section 4 Guidelines:</strong> I hereby declare that all details entered in this application are true, legal, and represent coordinates authorized by my affiliated academic or corporate entity.
+                        <strong>{t("form_decl_title")}:</strong> {t("form_decl_body")}
                       </span>
                     </div>
 
@@ -1679,10 +1684,10 @@ export default function JoinPage() {
                       {isSubmitting ? (
                         <>
                           <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin shrink-0" />
-                          <span>Processing Application...</span>
+                          <span>{t("btn_submitting")}</span>
                         </>
                       ) : (
-                        <span>Submit Nomination Form</span>
+                        <span>{t("btn_submit")}</span>
                       )}
                     </button>
 
@@ -1698,10 +1703,10 @@ export default function JoinPage() {
                   <div className="absolute top-0 left-0 right-0 h-1 bg-primary" />
                   <div className="flex items-center gap-1.5 text-primary">
                     <Info className="w-4 h-4 shrink-0" />
-                    <h3 className="text-xs font-bold uppercase tracking-wider">Onboarding Process</h3>
+                    <h3 className="text-xs font-bold uppercase tracking-wider">{t("form_process_title")}</h3>
                   </div>
                   <p className="text-xs text-zinc-500 leading-relaxed">
-                    Submissions are cataloged under the state registry desk. The review process takes approximately 3-5 business days. Once verified, chapter deans will receive credential keys via official mail.
+                    {t("form_process_note")}
                   </p>
                 </div>
 
@@ -1709,7 +1714,7 @@ export default function JoinPage() {
                 <div className="bg-white border border-zinc-200 rounded p-5 shadow-sm space-y-4">
                   <div className="flex items-center gap-1.5 text-zinc-800 pb-2 border-b border-zinc-150">
                     <FileText className="w-4 h-4 text-accent-dark" />
-                    <h3 className="text-xs font-bold uppercase tracking-wider">Required Documentation</h3>
+                    <h3 className="text-xs font-bold uppercase tracking-wider">{t("label_required_docs_sidebar")}</h3>
                   </div>
                   <div className="space-y-3">
                     {role !== "internship" && (
@@ -1721,12 +1726,12 @@ export default function JoinPage() {
                           <div>
                             <p className="text-xs font-bold text-zinc-800">
                               {role === "student" 
-                                ? "HOD Consent / Support Letter" 
+                                ? t("label_file_consent_student") 
                                 : role === "chapter" 
-                                  ? "Institutional Consent Form" 
-                                  : "Partnership Intent Letter"}
+                                  ? t("label_file_consent_chapter") 
+                                  : t("label_file_consent_partner")}
                             </p>
-                            <span className="text-[10px] text-zinc-400 font-medium">Signed PDF</span>
+                            <span className="text-[10px] text-zinc-400 font-medium">{t("help_signed_pdf")}</span>
                           </div>
                         </div>
                         
@@ -1737,13 +1742,13 @@ export default function JoinPage() {
                           <div>
                             <p className="text-xs font-bold text-zinc-800">
                               {role === "student" 
-                                ? "Student ID Card" 
+                                ? t("label_file_id_student") 
                                 : role === "chapter" 
-                                  ? "Institutional Accreditation Certificate" 
-                                  : "Certificate of Incorporation / GST"}
+                                  ? t("label_file_id_chapter") 
+                                  : t("label_file_id_partner")}
                             </p>
                             <span className="text-[10px] text-zinc-400 font-medium">
-                              {role === "student" ? "JPEG / PNG / PDF" : "PDF / Image"}
+                              {role === "student" ? t("help_id_type_student") : t("help_id_type_other")}
                             </span>
                           </div>
                         </div>
@@ -1757,15 +1762,15 @@ export default function JoinPage() {
                       <div>
                         <p className="text-xs font-bold text-zinc-800">
                           {role === "student" 
-                            ? "Team Members List" 
+                            ? t("label_file_roster_student") 
                             : role === "internship"
-                              ? "Latest Resume / CV"
+                              ? t("label_file_roster_internship")
                               : role === "chapter" 
-                                ? "Coordinators List" 
-                                : "Corporate Program Overview"}
+                                ? t("label_file_roster_chapter") 
+                                : t("label_file_roster_partner")}
                         </p>
                         <span className="text-[10px] text-zinc-400 font-medium">
-                          {role === "partner" ? "PDF Only" : "PDF / DOCX"}
+                          {role === "partner" ? t("help_roster_type_partner") : t("help_roster_type_other")}
                         </span>
                       </div>
                     </div>
@@ -1788,9 +1793,13 @@ export default function JoinPage() {
             </div>
             
             <div className="space-y-2">
-              <h2 className="text-lg font-bold text-zinc-800 uppercase tracking-wider">Application Submitted Successfully</h2>
+              <h2 className="text-lg font-bold text-zinc-800 uppercase tracking-wider">{t("success_title")}</h2>
               <p className="text-xs text-zinc-500 leading-relaxed max-w-md mx-auto">
-                Thank you, <span className="font-bold text-primary">{formData.fullName}</span>. Your registration details for <span className="font-semibold text-zinc-800">{formData.orgName}</span> have been logged under registry credentials below:
+                {t("success_msg").split("{fullName}")[0]}
+                <span className="font-bold text-primary">{formData.fullName}</span>
+                {t("success_msg").split("{fullName}")[1]?.split("{orgName}")[0]}
+                <span className="font-semibold text-zinc-800">{formData.orgName}</span>
+                {t("success_msg").split("{fullName}")[1]?.split("{orgName}")[1]}
               </p>
               <div className="pt-2">
                 <span className="font-mono font-bold text-accent-dark bg-amber-50 px-4 py-1.5 rounded text-xs border border-accent/20 select-all shadow-sm">
@@ -1802,7 +1811,7 @@ export default function JoinPage() {
             <div className="bg-zinc-50 border border-zinc-200 rounded p-4 text-left flex gap-3 text-xs text-zinc-650 leading-relaxed">
               <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
               <span>
-                <strong>Next Step:</strong> Our regional chapter liaison desk has received your application and uploaded verification documents. A verification confirmation reference will be sent to <strong className="text-primary">{formData.email}</strong>. The review process will take 3-5 business days, and credentials will be issued once approved.
+                <strong>{t("success_next_step")}</strong> {t("success_next_step_desc").split("{email}")[0]}<strong className="text-primary">{formData.email}</strong>{t("success_next_step_desc").split("{email}")[1]}
               </span>
             </div>
 
@@ -1810,7 +1819,7 @@ export default function JoinPage() {
               <button
                 className="inline-flex items-center gap-2 px-5 py-2.5 border border-primary text-primary hover:bg-emerald-50 rounded font-bold uppercase tracking-wider text-xs transition-colors cursor-pointer shadow-sm"
                 onClick={() => {
-                  if (window.confirm("Warning: Resetting will clear your active local session details. Proceed?")) {
+                  if (window.confirm(t("confirm_reset"))) {
                     localStorage.removeItem("ncie_submission_details");
                     setExistingSubmission(null);
                     setRegId("");
@@ -1841,7 +1850,7 @@ export default function JoinPage() {
                   }
                 }}
               >
-                Start New Registration
+                {t("btn_start_new")}
               </button>
             </div>
           </div>
