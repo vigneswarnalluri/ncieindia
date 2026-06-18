@@ -17,6 +17,7 @@ import GrantsTab, { GrantRow } from "./components/GrantsTab";
 import CircularsTab, { Circular } from "./components/CircularsTab";
 import SecurityTab, { AuditLog } from "./components/SecurityTab";
 import ProgramsTab from "./components/ProgramsTab";
+import { PROGRAMS_DATA } from "@/app/programs/ProgramsClient";
 
 type Tab = "overview" | "verify" | "grants" | "circulars" | "security" | "programs";
 
@@ -128,6 +129,114 @@ export default function OfficialDashboard() {
     setCirculars(prev => [newC, ...prev]);
     showToast(`Circular ${newC.ref} dispatched to all chapter nodes.`);
     addLog("CIRCULAR_DISPATCH", `Dispatched: ${newC.title} (${newC.ref}).`);
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleExport = () => {
+    let dataToExport: any[] = [];
+    let filename = `ncie_official_export_${activeTab}_${Date.now()}.csv`;
+
+    switch (activeTab) {
+      case "verify":
+        dataToExport = requests.map(r => ({
+          AISHE: r.aishe,
+          Institution: r.name,
+          Type: r.type,
+          State: r.state,
+          SPOC: r.spoc,
+          Email: r.spocEmail,
+          Status: r.status,
+        }));
+        break;
+      case "grants":
+        dataToExport = grants.map(g => ({
+          SanctionNo: g.san,
+          College: g.college,
+          Scheme: g.scheme,
+          Amount: `₹${(g.amount / 100000).toFixed(2)} L`,
+          Tranche: `Tranche-${g.tranche}`,
+          UCStatus: g.uc,
+          Status: g.status,
+        }));
+        break;
+      case "circulars":
+        dataToExport = circulars.map(c => ({
+          RefNo: c.ref,
+          Title: c.title,
+          Type: c.type,
+          Date: c.date,
+          Priority: c.priority,
+        }));
+        break;
+      case "programs":
+        dataToExport = PROGRAMS_DATA.map(p => ({
+          ID: p.id,
+          Title: p.title,
+          Subtitle: p.subtitle,
+          Category: p.category,
+          Budget: p.budget,
+          Duration: p.duration,
+        }));
+        break;
+      case "security":
+        dataToExport = auditLogs.map(l => ({
+          Timestamp: l.ts,
+          Code: l.code,
+          Actor: l.actor,
+          IP: l.ip,
+          Details: l.details,
+        }));
+        break;
+      default:
+        dataToExport = [
+          {
+            Metric: "Ecosystem Chapters",
+            Value: requests.length,
+          },
+          {
+            Metric: "Pending Audits",
+            Value: requests.filter(r => r.status === "pending").length,
+          },
+          {
+            Metric: "Total Grants Disbursed",
+            Value: `₹${(grants.reduce((a, g) => a + g.amount, 0) / 100000).toFixed(2)} L`,
+          },
+        ];
+        break;
+    }
+
+    if (dataToExport.length === 0) {
+      showToast("No records available to export for this tab.");
+      return;
+    }
+
+    const headers = Object.keys(dataToExport[0]);
+    const csvContent = [
+      headers.join(","),
+      ...dataToExport.map(row =>
+        headers
+          .map(header => {
+            const val = String(row[header] || "");
+            const escaped = val.replace(/"/g, '""');
+            return escaped.includes(",") || escaped.includes("\n") || escaped.includes('"') ? `"${escaped}"` : escaped;
+          })
+          .join(",")
+      ),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast(`CSV export downloaded: ${filename}`);
   };
 
   const pendingChapters = requests.filter(r => r.status === "pending").length;
@@ -259,8 +368,8 @@ export default function OfficialDashboard() {
               <span className="font-bold text-zinc-800">{MENU.find(m => m.tab === activeTab)?.label}</span>
             </div>
             <div className="flex items-center gap-3 text-[10px] text-zinc-500">
-              <button className="flex items-center gap-1 hover:text-zinc-800 cursor-pointer"><Printer className="w-3 h-3"/> Print</button>
-              <button className="flex items-center gap-1 hover:text-zinc-800 cursor-pointer"><Download className="w-3 h-3"/> Export</button>
+              <button onClick={handlePrint} className="flex items-center gap-1 hover:text-zinc-800 cursor-pointer"><Printer className="w-3 h-3"/> Print</button>
+              <button onClick={handleExport} className="flex items-center gap-1 hover:text-zinc-800 cursor-pointer"><Download className="w-3 h-3"/> Export</button>
             </div>
           </div>
 

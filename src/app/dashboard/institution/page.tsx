@@ -177,6 +177,103 @@ export default function InstitutionDashboard() {
     showToast("Activity report submitted for nodal desk verification.");
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleExport = () => {
+    let dataToExport: any[] = [];
+    let filename = `ncie_export_${activeTab}_${Date.now()}.csv`;
+
+    switch (activeTab) {
+      case "verify":
+        dataToExport = students.map(s => ({
+          ID: s.id,
+          Name: s.name,
+          "Roll Number": s.rollNo,
+          Stream: s.stream,
+          Year: s.year,
+          Status: s.status,
+        }));
+        break;
+      case "innovations":
+        dataToExport = projects.map(p => ({
+          ID: p.id,
+          Title: p.title,
+          "Team Leader": p.teamLeader,
+          Stream: p.stream,
+          TRL: `TRL-${p.trl}`,
+          Status: p.status,
+        }));
+        break;
+      case "grants":
+        dataToExport = grants.map(g => ({
+          Scheme: g.scheme,
+          "Sanction No": g.san,
+          Amount: g.amt,
+          Tranche: g.tr,
+          "UC Status": g.uc,
+        }));
+        break;
+      case "activities":
+        dataToExport = events.map(e => ({
+          ID: e.id,
+          Title: e.title,
+          Category: e.type,
+          Date: e.date,
+          Attendees: e.attendees,
+          Status: e.status,
+        }));
+        break;
+      default:
+        dataToExport = [
+          {
+            Metric: "Verified Students",
+            Value: students.filter(s => s.status === "approved").length,
+          },
+          {
+            Metric: "Ideas Submitted",
+            Value: projects.length,
+          },
+          {
+            Metric: "Grants Received",
+            Value: grants.reduce((sum, g) => sum + parseInt(g.amt.replace(/,/g, ""), 10), 0).toLocaleString("en-IN"),
+          },
+        ];
+        break;
+    }
+
+    if (dataToExport.length === 0) {
+      showToast("No records available to export for this tab.");
+      return;
+    }
+
+    const headers = Object.keys(dataToExport[0]);
+    const csvContent = [
+      headers.join(","),
+      ...dataToExport.map(row =>
+        headers
+          .map(header => {
+            const val = String(row[header] || "");
+            const escaped = val.replace(/"/g, '""');
+            return escaped.includes(",") || escaped.includes("\n") || escaped.includes('"') ? `"${escaped}"` : escaped;
+          })
+          .join(",")
+      ),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast(`CSV export downloaded: ${filename}`);
+  };
+
   const pendingCount = students.filter(s => s.status === "pending").length;
 
   // Loading / auth guard spinner
@@ -312,8 +409,8 @@ export default function InstitutionDashboard() {
               <span className="font-bold text-zinc-800">{MENU.find(m => m.tab === activeTab)?.label}</span>
             </div>
             <div className="flex items-center gap-3 text-[10px] text-zinc-500">
-              <button className="flex items-center gap-1 hover:text-zinc-800 cursor-pointer"><Printer className="w-3 h-3" /> Print</button>
-              <button className="flex items-center gap-1 hover:text-zinc-800 cursor-pointer"><Download className="w-3 h-3" /> Export</button>
+              <button onClick={handlePrint} className="flex items-center gap-1 hover:text-zinc-800 cursor-pointer"><Printer className="w-3 h-3" /> Print</button>
+              <button onClick={handleExport} className="flex items-center gap-1 hover:text-zinc-800 cursor-pointer"><Download className="w-3 h-3" /> Export</button>
             </div>
           </div>
 
