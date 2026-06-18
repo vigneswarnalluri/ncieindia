@@ -17,20 +17,7 @@ export function useAuthGuard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 1. Check for demo session first (instant, no network)
-    try {
-      const raw = localStorage.getItem("ncie_demo_session");
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        setDemoSession(parsed);
-        setLoading(false);
-        return; // demo session is valid — no need to check Supabase
-      }
-    } catch {
-      localStorage.removeItem("ncie_demo_session");
-    }
-
-    // 2. Check real Supabase session
+    // Check real Supabase session
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
         router.replace("/login");
@@ -48,12 +35,8 @@ export function useAuthGuard() {
       setLoading(false);
     });
 
-    // 3. Subscribe to auth state changes (logout / token refresh)
+    // Subscribe to auth state changes (logout / token refresh)
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      // Don't redirect if demo session is active
-      const demoRaw = localStorage.getItem("ncie_demo_session");
-      if (demoRaw) return;
-
       if (!session) {
         router.replace("/login");
       } else {

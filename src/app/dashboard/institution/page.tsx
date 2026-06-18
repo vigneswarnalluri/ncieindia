@@ -46,14 +46,38 @@ export default function InstitutionDashboard() {
   const [events, setEvents]     = useState(INIT_EVENTS);
   const [grants, setGrants]     = useState<Grant[]>(INIT_GRANTS);
 
+  const [userOrg, setUserOrg] = useState("Indian Institute of Technology, Madras");
+  const [userName, setUserName] = useState("Prof. V. K. Prasad");
   const userEmail = session?.user?.email || demoSession?.email || "spoc@iitmadras.ac.in";
-  const userName = demoSession?.name || (session?.user?.email ? session.user.email.split("@")[0] : "Prof. V. K. Prasad");
-  const userOrg = demoSession?.org || "Indian Institute of Technology, Madras";
-  const userRole = demoSession?.role === "official" ? "Nodal Desk" : "SPOC";
+  const userRole = "SPOC";
 
-  // Load real registration records from Supabase
+  // Load real SPOC profile and registrations from Supabase
   useEffect(() => {
-    const fetchRegistrations = async () => {
+    const loadData = async () => {
+      let resolvedOrg = "Indian Institute of Technology, Madras";
+      const email = session?.user?.email || demoSession?.email;
+      
+      if (email) {
+        try {
+          const { data: profile } = await supabase
+            .from("registrations")
+            .select("org_name, full_name")
+            .eq("email", email)
+            .maybeSingle();
+          if (profile) {
+            if (profile.org_name) {
+              resolvedOrg = profile.org_name;
+              setUserOrg(profile.org_name);
+            }
+            if (profile.full_name) {
+              setUserName(profile.full_name);
+            }
+          }
+        } catch (err) {
+          console.error("Failed to fetch SPOC profile:", err);
+        }
+      }
+
       try {
         const { data, error } = await supabase
           .from("registrations")
@@ -64,7 +88,7 @@ export default function InstitutionDashboard() {
           return;
         }
 
-        if (data && data.length > 0) {
+        if (data) {
           // Normalization check helper for same organization
           const isSameOrg = (org1: string, org2: string) => {
             const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -81,7 +105,7 @@ export default function InstitutionDashboard() {
           };
 
           // Filter matching org_name
-          const matched = data.filter((rec: any) => isSameOrg(rec.org_name, userOrg));
+          const matched = data.filter((rec: any) => isSameOrg(rec.org_name, resolvedOrg));
 
           const dbStudents: Student[] = matched.map((rec: any) => ({
             id: rec.reg_id,
@@ -118,8 +142,10 @@ export default function InstitutionDashboard() {
       }
     };
 
-    fetchRegistrations();
-  }, [userOrg]);
+    if (!loading) {
+      loadData();
+    }
+  }, [session, demoSession, loading]);
 
   const showToast = (msg: string) => {
     setToast(msg);

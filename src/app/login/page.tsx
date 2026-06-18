@@ -23,23 +23,6 @@ import { supabase } from "@/lib/supabase";
 
 type Role = "institution" | "official";
 
-const DEMO_ACCOUNTS = [
-  {
-    role: "institution" as Role,
-    label: "Institution SPOC",
-    email: "spoc@iitmadras.ac.in",
-    name: "Prof. V. K. Prasad",
-    org: "IIT Madras — NCIE Chapter",
-  },
-  {
-    role: "official" as Role,
-    label: "Govt. Official",
-    email: "admin@ncie.gov.in",
-    name: "Nodal Administrator",
-    org: "Ministry of Education — NCIE Desk",
-  },
-];
-
 const getCleanErrorMessage = (error: any): string => {
   if (!error) return "An unexpected error occurred.";
   let msg = error.message;
@@ -88,14 +71,6 @@ export default function LoginPage() {
   const { t } = useLanguage();
   const router = useRouter();
 
-  const handleDemoLogin = (account: typeof DEMO_ACCOUNTS[0]) => {
-    const sessionData = JSON.stringify({ email: account.email, role: account.role, name: account.name, org: account.org });
-    // Store in localStorage for client-side useAuthGuard
-    localStorage.setItem("ncie_demo_session", sessionData);
-    // Also set a cookie so server-side proxy.ts can see it
-    document.cookie = `ncie_demo_session=${encodeURIComponent(sessionData)}; path=/; max-age=86400; SameSite=Lax`;
-    router.push(`/dashboard/${account.role}`);
-  };
 
   // OTP Verification state
   const [otp, setOtp] = useState("");
@@ -521,25 +496,6 @@ export default function LoginPage() {
                 <span>{t("national_sso")}</span>
               </button>
 
-              {/* Demo Access Tiles */}
-              <div className="pt-1">
-                <p className="text-center text-[9px] font-bold text-zinc-400 uppercase tracking-widest mb-2">— Demo Access —</p>
-                <div className="grid grid-cols-1 xs:grid-cols-2 gap-2">
-                  {DEMO_ACCOUNTS.map((acc) => (
-                    <button
-                      key={acc.role}
-                      type="button"
-                      onClick={() => handleDemoLogin(acc)}
-                      className="flex flex-col items-start gap-0.5 p-2.5 bg-[#e8f5f0] hover:bg-[#d0ecdf] border border-[#b0d9c4] hover:border-[#0D6B4F] rounded-xl transition-all cursor-pointer text-left group"
-                    >
-                      <span className="text-[9px] font-bold text-[#0D6B4F] uppercase tracking-widest group-hover:text-[#0a5840]">{acc.label}</span>
-                      <span className="text-[10px] font-bold text-zinc-800 leading-tight">{acc.name}</span>
-                      <span className="text-[9px] text-zinc-500 leading-tight">{acc.org}</span>
-                    </button>
-                  ))}
-                </div>
-                <p className="text-center text-[9px] text-zinc-400 mt-1.5">Demo tiles bypass OTP — for testing only</p>
-              </div>
             </motion.div>
           ) : (
             // Success Verification Dispatched

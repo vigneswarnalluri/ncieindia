@@ -24,10 +24,7 @@ export function proxy(request: NextRequest) {
     (c) => c.name.startsWith("sb-") && c.name.endsWith("-auth-token")
   );
 
-  // Check for demo session cookie (set by handleDemoLogin via document.cookie)
-  const hasDemoCookie = allCookies.some((c) => c.name === "ncie_demo_session");
-
-  if (!hasSupabaseCookie && !hasDemoCookie) {
+  if (!hasSupabaseCookie) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirected", "1");
     return NextResponse.redirect(loginUrl);
