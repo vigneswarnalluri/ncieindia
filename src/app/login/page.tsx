@@ -255,7 +255,7 @@ export default function LoginPage() {
       </div>
 
       {/* Main Login Card */}
-      <div className="w-full max-w-md bg-white/90 backdrop-blur-lg border border-white/30 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-6 relative overflow-hidden z-10">
+      <div className="w-full max-w-md bg-white/90 backdrop-blur-lg border border-white/30 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-4 xs:p-5 sm:p-6 relative overflow-hidden z-10">
         
         {/* Elegant Top Decorative Border */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary" />
@@ -322,23 +322,23 @@ export default function LoginPage() {
                   id="role-institution"
                   type="button"
                   onClick={() => setRole("institution")}
-                  className={`relative z-10 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer ${
+                  className={`relative z-10 py-1.5 sm:py-2 px-1 sm:px-2.5 text-[9.5px] xs:text-xs font-bold uppercase tracking-normal xs:tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center gap-1 xs:gap-1.5 cursor-pointer whitespace-nowrap ${
                     role === "institution" ? "text-primary font-black" : "text-zinc-500 hover:text-zinc-900"
                   }`}
                 >
-                  <Building2 className="w-3.5 h-3.5" />
-                  {t("role_institution")}
+                  <Building2 className="w-3.5 h-3.5 shrink-0" />
+                  <span>{t("role_institution")}</span>
                 </button>
                 <button
                   id="role-official"
                   type="button"
                   onClick={() => setRole("official")}
-                  className={`relative z-10 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer ${
+                  className={`relative z-10 py-1.5 sm:py-2 px-1 sm:px-2.5 text-[9.5px] xs:text-xs font-bold uppercase tracking-normal xs:tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center gap-1 xs:gap-1.5 cursor-pointer whitespace-nowrap ${
                     role === "official" ? "text-primary font-black" : "text-zinc-500 hover:text-zinc-900"
                   }`}
                 >
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  {t("role_official")}
+                  <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+                  <span>{t("role_official")}</span>
                 </button>
 
                 {/* Slider Indicator */}
