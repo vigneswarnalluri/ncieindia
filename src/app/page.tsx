@@ -20,6 +20,10 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "https://ncieindia.org",
+    languages: {
+      "en-IN": "https://ncieindia.org/?lang=en",
+      "hi-IN": "https://ncieindia.org/?lang=hi",
+    },
   },
   openGraph: {
     title: "NCIE India | National Council for Innovation and Entrepreneurship",

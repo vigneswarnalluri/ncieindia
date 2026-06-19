@@ -22,6 +22,18 @@ async function getProgramData(id: string) {
   return PROGRAMS_DATA.find((p) => p.id === id) || null;
 }
 
+export async function generateStaticParams() {
+  try {
+    const { data } = await supabase.from("programs").select("id");
+    if (data && data.length > 0) {
+      return data.map((p) => ({ id: p.id }));
+    }
+  } catch (err) {
+    console.warn("generateStaticParams query failed, using static fallbacks:", err);
+  }
+  return PROGRAMS_DATA.map((p) => ({ id: p.id }));
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const program = await getProgramData(id);
@@ -83,11 +95,38 @@ export default async function Page({ params }: PageProps) {
     ],
   };
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is equity taken in seed grant schemes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, all student grants provided under the seed funding programs are entirely equity-free.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "Can we apply without an established college chapter?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, you can register as an independent student member and receive general ecosystem support, but direct institutional nominations require an active campus chapter.",
+        },
+      },
+    ],
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <ProgramDetailPageClient />
     </>
