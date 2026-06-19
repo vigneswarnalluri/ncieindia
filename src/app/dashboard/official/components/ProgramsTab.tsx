@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, HelpCircle, AlertCircle, Award, Coins, ListChecks } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import { PROGRAMS_DATA, Program, Tranche } from "@/app/programs/ProgramsClient";
+import { PROGRAMS_DATA, Program, Tranche } from "@/data/programsData";
 
 interface Props {
   onToast: (msg: string) => void;

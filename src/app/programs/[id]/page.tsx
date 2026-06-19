@@ -1,7 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
 import { supabase } from "@/lib/supabase";
-import { PROGRAMS_DATA } from "../ProgramsClient";
+import { PROGRAMS_DATA } from "@/data/programsData";
 import ProgramDetailPageClient from "./ProgramDetailsClient";
 
 interface PageProps {

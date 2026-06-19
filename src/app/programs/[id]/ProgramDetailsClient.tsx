@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft, CheckCircle, Calendar, ShieldCheck, Mail, Users, ArrowRight, Coins } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import { PROGRAMS_DATA, Program } from "../ProgramsClient";
+import { PROGRAMS_DATA, Program } from "@/data/programsData";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";

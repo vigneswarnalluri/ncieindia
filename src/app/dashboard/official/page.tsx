@@ -17,7 +17,7 @@ import GrantsTab, { GrantRow } from "./components/GrantsTab";
 import CircularsTab, { Circular } from "./components/CircularsTab";
 import SecurityTab, { AuditLog } from "./components/SecurityTab";
 import ProgramsTab from "./components/ProgramsTab";
-import { PROGRAMS_DATA } from "@/app/programs/ProgramsClient";
+import { PROGRAMS_DATA } from "@/data/programsData";
 
 type Tab = "overview" | "verify" | "grants" | "circulars" | "security" | "programs";
 
