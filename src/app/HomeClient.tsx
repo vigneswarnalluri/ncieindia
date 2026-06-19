@@ -158,9 +158,37 @@ export default function Home() {
   const rafRef = useRef<number | null>(null);
   const pausedRef = useRef(false);
 
+  // Tab mapping keys
+  const tabLabels: Record<string, string> = {
+    all: "notice_tab_all",
+    Applications: "notice_tab_applications",
+    "Policy Docs": "notice_tab_policy_docs",
+    Fellowships: "notice_tab_fellowships",
+  };
+
+  // Category translation keys mapping
+  const categoryTranslations: Record<string, string> = {
+    "Applications": "notice_cat_applications",
+    "IIC Activities": "notice_cat_iic_activities",
+    "Hackathon": "notice_cat_hackathon",
+    "IP & Patents": "notice_cat_ip_patents",
+    "Repository": "notice_cat_repository",
+  };
+
+  // Localize circulars dynamically based on current language
+  const localizedCirculars = CIRCULARS.map(c => {
+    const keyPrefix = `circular_${c.id.toLowerCase().replace(/[^a-z0-9]/g, "_")}`;
+    return {
+      ...c,
+      title: t(`${keyPrefix}_title`) || c.title,
+      description: t(`${keyPrefix}_desc`) || c.description,
+      date: t(`${keyPrefix}_date`) || c.date,
+    };
+  });
+
   const filteredCirculars = activeTab === "all"
-    ? CIRCULARS
-    : CIRCULARS.filter(c => c.category === activeTab);
+    ? localizedCirculars
+    : localizedCirculars.filter(c => c.category === activeTab);
 
   // Pad to at least 4 items per half so content always overflows the 320px container
   const scrollItems = (() => {
@@ -232,18 +260,18 @@ export default function Home() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center">
             <div>
-              <p className="text-xs font-bold text-[#C9A24B] uppercase tracking-wider">Active Enrollment Drive • 2026</p>
+              <p className="text-xs font-bold text-[#C9A24B] uppercase tracking-wider">{t("banner_active_drive")}</p>
               <h2 className="text-sm sm:text-base font-extrabold tracking-tight">
-                Internship Registrations Open: Innovational &amp; Technology Management &amp; AI Business &amp; Startup Innovation
+                {t("banner_title")}
               </h2>
               <p className="text-xs text-emerald-100/80 mt-0.5 font-sans">
-                Specialized course-integrated internships for the engineering and technology domain. One-time registration fee: <strong className="text-white font-bold">₹700</strong>.
+                {t("banner_desc")}<strong className="text-white font-bold">₹700</strong>.
               </p>
             </div>
           </div>
           <Link href="/join?role=internship" className="shrink-0 w-full md:w-auto">
             <button className="w-full md:w-auto bg-[#C9A24B] hover:bg-[#A68034] text-zinc-950 hover:text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 transition-all shadow-md inline-flex items-center justify-center gap-1.5 cursor-pointer">
-              <span>Register Now</span>
+              <span>{t("banner_register_now")}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </Link>
@@ -328,9 +356,9 @@ export default function Home() {
                 <div className="bg-zinc-100 px-5 py-3.5 border-b border-zinc-200 flex items-center justify-between">
                   <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-800 flex items-center gap-2">
                     <FileText className="w-4 h-4 text-primary" />
-                    <span>Notice Board / Circulars</span>
+                    <span>{t("notice_title")}</span>
                   </h2>
-                  <span className="bg-[#0D6B4F] text-white text-[9px] font-bold px-2 py-0.5 font-mono">NCIE DESK</span>
+                  <span className="bg-[#0D6B4F] text-white text-[9px] font-bold px-2 py-0.5 font-mono">{t("notice_desk")}</span>
                 </div>
 
                 {/* Filter Tabs */}
@@ -345,7 +373,7 @@ export default function Home() {
                           : "border-transparent text-zinc-500 hover:text-zinc-800"
                       }`}
                     >
-                      {tab === "all" ? "All Updates" : tab}
+                      {t(tabLabels[tab])}
                     </button>
                   ))}
                 </div>
@@ -361,7 +389,7 @@ export default function Home() {
                       <div className="flex items-center justify-between gap-2 mb-1.5">
                         <span className="text-[9px] font-mono text-zinc-400 font-bold">{doc.id}</span>
                         <span className="text-primary text-[9px] font-bold uppercase tracking-wider border border-primary/20 px-1.5 py-0.2 rounded font-sans">
-                          {doc.category}
+                          {t(categoryTranslations[doc.category] || doc.category)}
                         </span>
                       </div>
                       <Link href="/media" className="text-xs font-bold text-zinc-850 hover:text-primary transition-colors block hover:underline leading-snug">
@@ -371,7 +399,7 @@ export default function Home() {
                       <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-dashed border-zinc-200 text-[10px]">
                         <span className="text-zinc-400 font-medium">{doc.date}</span>
                         <Link href="/media" className="text-primary hover:text-accent-dark font-bold flex items-center gap-0.5">
-                          <span>View Circular</span>
+                          <span>{t("notice_view_circular")}</span>
                           <ArrowRight className="w-3 h-3" />
                         </Link>
                       </div>
@@ -383,7 +411,7 @@ export default function Home() {
                       <div className="flex items-center justify-between gap-2 mb-1.5">
                         <span className="text-[9px] font-mono text-zinc-400 font-bold">{doc.id}</span>
                         <span className="text-primary text-[9px] font-bold uppercase tracking-wider border border-primary/20 px-1.5 py-0.2 rounded font-sans">
-                          {doc.category}
+                          {t(categoryTranslations[doc.category] || doc.category)}
                         </span>
                       </div>
                       <Link href="/media" className="text-xs font-bold text-zinc-850 hover:text-primary transition-colors block hover:underline leading-snug">
@@ -393,7 +421,7 @@ export default function Home() {
                       <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-dashed border-zinc-200 text-[10px]">
                         <span className="text-zinc-400 font-medium">{doc.date}</span>
                         <Link href="/media" className="text-primary hover:text-accent-dark font-bold flex items-center gap-0.5">
-                          <span>View Circular</span>
+                          <span>{t("notice_view_circular")}</span>
                           <ArrowRight className="w-3 h-3" />
                         </Link>
                       </div>
@@ -406,7 +434,7 @@ export default function Home() {
                 {/* Notice Footer */}
                 <div className="bg-zinc-50 px-4 py-3 border-t border-zinc-200 text-center">
                   <Link href="/media" className="text-xs text-primary font-bold hover:underline inline-flex items-center gap-1">
-                    <span>Access Public Documents Archive</span>
+                    <span>{t("notice_access_archive")}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>

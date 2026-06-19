@@ -46,6 +46,40 @@ const translations: Record<Language, Record<string, string>> = {
     home_btn_apply: "Apply for Registration",
     home_btn_profile: "Read Organization Profile",
     home_footer_info: "NCIE India is the statutory apex body coordinating technical campus innovation networks.",
+
+    // Banner & Notice Board & Circulars
+    banner_active_drive: "Active Enrollment Drive • 2026",
+    banner_title: "Internship Registrations Open: Innovational & Technology Management & AI Business & Startup Innovation",
+    banner_desc: "Specialized course-integrated internships for the engineering and technology domain. One-time registration fee: ",
+    banner_register_now: "Register Now",
+    notice_title: "Notice Board / Circulars",
+    notice_desk: "NCIE DESK",
+    notice_tab_all: "All Updates",
+    notice_tab_applications: "Applications",
+    notice_tab_policy_docs: "Policy Docs",
+    notice_tab_fellowships: "Fellowships",
+    notice_view_circular: "View Circular",
+    notice_access_archive: "Access Public Documents Archive",
+    notice_cat_applications: "Applications",
+    notice_cat_iic_activities: "IIC Activities",
+    notice_cat_hackathon: "Hackathon",
+    notice_cat_ip_patents: "IP & Patents",
+    notice_cat_repository: "Repository",
+    circular_mic_int_2026_001_title: "Internship Registrations Open: Innovational & Technology Management and AI Business & Startup Innovation",
+    circular_mic_int_2026_001_desc: "Registrations are now open for course-integrated internships under the engineering and technology domain. One-time registration fee: ₹700 per course.",
+    circular_mic_int_2026_001_date: "June 18, 2026",
+    circular_mic_iic_2025_147_title: "IIC 6.0 Annual Activity Calendar 2025-26 Released",
+    circular_mic_iic_2025_147_desc: "MoE Innovation Cell has released the IIC 6.0 mandatory activity calendar for 2025-26. All registered IIC SPOCs must acknowledge and begin scheduling activities on the IIC portal.",
+    circular_mic_iic_2025_147_date: "June 10, 2025",
+    circular_mic_sih_2025_089_title: "Smart India Hackathon 2025 — Problem Statements Open",
+    circular_mic_sih_2025_089_desc: "Ministry departments, PSUs, and industry partners have submitted 250+ problem statements for SIH 2025. Student teams from IIC-registered institutions can apply via the SIH portal.",
+    circular_mic_sih_2025_089_date: "May 22, 2025",
+    circular_mic_kapila_2025_063_title: "KAPILA Patent Filing Awareness Drive Q2 2025",
+    circular_mic_kapila_2025_063_desc: "KAPILA Q2 workshops scheduled across 500+ IIC institutions. Faculty and students can register for IP literacy sessions and receive patent filing fee reimbursement support.",
+    circular_mic_kapila_2025_063_date: "April 15, 2025",
+    circular_mic_yukti_2025_041_title: "YUKTI 3.0 — National Innovation Repository Update",
+    circular_mic_yukti_2025_041_desc: "YUKTI 3.0 launches enhanced startup profiling, investor connect portal, and state-wise innovation leaderboard. IICs must migrate all registered innovations to the new dashboard.",
+    circular_mic_yukti_2025_041_date: "March 28, 2025",
     footer_logo_alt: "NCIE India Logo",
     footer_desc: "Fostering India's national student innovation and start-up ecosystem through institutional chapters, incubation alignment, and mentorship frameworks.",
     footer_ecosystem: "Ecosystem",
@@ -365,6 +399,40 @@ const translations: Record<Language, Record<string, string>> = {
     home_btn_apply: "पंजीकरण के लिए आवेदन करें",
     home_btn_profile: "संगठन प्रोफ़ाइल पढ़ें",
     home_footer_info: "NCIE भारत तकनीकी परिसर नवाचार नेटवर्क का समन्वय करने वाला वैधानिक शीर्ष निकाय है।",
+
+    // Banner & Notice Board & Circulars
+    banner_active_drive: "सक्रिय नामांकन अभियान • 2026",
+    banner_title: "इंटर्नशिप पंजीकरण प्रारंभ: नवाचार एवं प्रौद्योगिकी प्रबंधन और एआई बिजनेस व स्टार्टअप इनोवेशन",
+    banner_desc: "इंजीनियरिंग और प्रौद्योगिकी क्षेत्र के तहत विशिष्ट पाठ्यक्रम-एकीकृत इंटर्नशिप। एक बार का पंजीकरण शुल्क: ",
+    banner_register_now: "अभी पंजीकरण करें",
+    notice_title: "सूचना पट्ट / परिपत्र",
+    notice_desk: "एनसीआईई डेस्क",
+    notice_tab_all: "सभी अपडेट",
+    notice_tab_applications: "आवेदन",
+    notice_tab_policy_docs: "नीति दस्तावेज़",
+    notice_tab_fellowships: "फेलोशिप",
+    notice_view_circular: "परिपत्र देखें",
+    notice_access_archive: "सार्वजनिक दस्तावेज पुरालेख तक पहुंचें",
+    notice_cat_applications: "आवेदन",
+    notice_cat_iic_activities: "आईआईसी गतिविधियां",
+    notice_cat_hackathon: "हैकाथॉन",
+    notice_cat_ip_patents: "आईपी और पेटेंट",
+    notice_cat_repository: "भंडार",
+    circular_mic_int_2026_001_title: "इंटर्नशिप पंजीकरण प्रारंभ: नवाचार एवं प्रौद्योगिकी प्रबंधन और एआई बिजनेस व स्टार्टअप इनोवेशन",
+    circular_mic_int_2026_001_desc: "इंजीनियरिंग और प्रौद्योगिकी क्षेत्र के तहत पाठ्यक्रम-एकीकृत इंटर्नशिप के लिए पंजीकरण अब खुले हैं। एक बार का पंजीकरण शुल्क: ₹700 प्रति पाठ्यक्रम।",
+    circular_mic_int_2026_001_date: "18 जून, 2026",
+    circular_mic_iic_2025_147_title: "आईआईसी 6.0 वार्षिक गतिविधि कैलेंडर 2025-26 जारी",
+    circular_mic_iic_2025_147_desc: "शिक्षा मंत्रालय के इनोवेशन सेल ने 2025-26 के लिए आईआईसी 6.0 अनिवार्य गतिविधि कैलेंडर जारी कर दिया है। सभी पंजीकृत आईआईसी एसपीओसी को इसकी पुष्टि करनी होगी और आईआईसी पोर्टल पर गतिविधियों को निर्धारित करना शुरू करना होगा।",
+    circular_mic_iic_2025_147_date: "10 जून, 2025",
+    circular_mic_sih_2025_089_title: "स्मार्ट इंडिया हैकाथॉन 2025 — समस्या विवरण खुले हैं",
+    circular_mic_sih_2025_089_desc: "मंत्रालय विभागों, पीएसयू और उद्योग भागीदारों ने एसआईएच 2025 के लिए 250 से अधिक समस्या विवरण प्रस्तुत किए हैं। आईआईसी-पंजीकृत संस्थानों की छात्र टीमें एसआईएच पोर्टल के माध्यम से आवेदन कर सकती हैं।",
+    circular_mic_sih_2025_089_date: "22 मई, 2025",
+    circular_mic_kapila_2025_063_title: "कपिला पेटेंट फाइलिंग जागरूकता अभियान Q2 2025",
+    circular_mic_kapila_2025_063_desc: "कपिला Q2 कार्यशालाएं 500 से अधिक आईआईसी संस्थानों में निर्धारित हैं। संकाय और छात्र आईपी साक्षरता सत्रों के लिए पंजीकरण कर सकते हैं और पेटेंट फाइलिंग शुल्क प्रतिपूर्ति सहायता प्राप्त कर सकते हैं।",
+    circular_mic_kapila_2025_063_date: "15 अप्रैल, 2025",
+    circular_mic_yukti_2025_041_title: "युक्ति 3.0 — राष्ट्रीय नवाचार भंडार अद्यतन",
+    circular_mic_yukti_2025_041_desc: "युक्ति 3.0 ने उन्नत स्टार्टअप प्रोफाइलिंग, निवेशक कनेक्ट पोर्टल और राज्य-वार नवाचार लीडरबोर्ड लॉन्च किया है। आईआईसी को सभी पंजीकृत नवाचारों को नए डैशबोर्ड पर स्थानांतरित करना होगा।",
+    circular_mic_yukti_2025_041_date: "28 मार्च, 2025",
     footer_logo_alt: "NCIE भारत लोगो",
     footer_desc: "संस्थागत शाखाओं, इनक्यूबेशन संरेखण और मार्गदर्शन ढांचे के माध्यम से भारत के राष्ट्रीय छात्र नवाचार और स्टार्ट-अप पारिस्थितिकी तंत्र को बढ़ावा देना।",
     footer_ecosystem: "पारिस्थितिकी तंत्र",
@@ -659,6 +727,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   useEffect(() => {
     const savedLang = localStorage.getItem("ncie_lang") as Language;
     if (savedLang === "en" || savedLang === "hi") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLanguageState(savedLang);
       document.documentElement.lang = savedLang;
     }
@@ -666,8 +735,10 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem("ncie_lang", lang);
-    document.documentElement.lang = lang;
+    if (typeof window !== "undefined") {
+      localStorage.setItem("ncie_lang", lang);
+      document.documentElement.lang = lang;
+    }
   };
 
   const t = (key: string): string => {

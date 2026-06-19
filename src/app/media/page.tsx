@@ -171,41 +171,41 @@ export default function MediaPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         
         {/* Nodal Stats Counter Block */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white border border-zinc-200 p-4 rounded shadow-sm flex items-center gap-3">
-            <div className="w-10 h-10 bg-emerald-50 text-primary flex items-center justify-center rounded border border-emerald-100">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white border border-zinc-200 p-4 rounded shadow-sm flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 bg-emerald-50 text-primary flex items-center justify-center rounded border border-emerald-100 shrink-0">
               <FileText className="w-5 h-5" />
             </div>
-            <div>
-              <p className="text-[10px] uppercase font-bold text-zinc-400">Total Gazettes</p>
-              <p className="text-base font-extrabold text-zinc-800">124 Circulars</p>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase font-bold text-zinc-400 truncate">Total Gazettes</p>
+              <p className="text-base font-extrabold text-zinc-800 truncate">124 Circulars</p>
             </div>
           </div>
-          <div className="bg-white border border-zinc-200 p-4 rounded shadow-sm flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-50 text-blue-700 flex items-center justify-center rounded border border-blue-100">
+          <div className="bg-white border border-zinc-200 p-4 rounded shadow-sm flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 bg-blue-50 text-blue-700 flex items-center justify-center rounded border border-blue-100 shrink-0">
               <Calendar className="w-5 h-5" />
             </div>
-            <div>
-              <p className="text-[10px] uppercase font-bold text-zinc-400">Press Releases</p>
-              <p className="text-base font-extrabold text-zinc-800">38 Communiques</p>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase font-bold text-zinc-400 truncate">Press Releases</p>
+              <p className="text-base font-extrabold text-zinc-800 truncate">38 Communiques</p>
             </div>
           </div>
-          <div className="bg-white border border-zinc-200 p-4 rounded shadow-sm flex items-center gap-3">
-            <div className="w-10 h-10 bg-amber-50 text-[#A68034] flex items-center justify-center rounded border border-amber-100">
+          <div className="bg-white border border-zinc-200 p-4 rounded shadow-sm flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 bg-amber-50 text-[#A68034] flex items-center justify-center rounded border border-amber-100 shrink-0">
               <ShieldCheck className="w-5 h-5" />
             </div>
-            <div>
-              <p className="text-[10px] uppercase font-bold text-zinc-400">Liaison Desk</p>
-              <p className="text-base font-extrabold text-zinc-800">24/7 PRO Access</p>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase font-bold text-zinc-400 truncate">Liaison Desk</p>
+              <p className="text-base font-extrabold text-zinc-800 truncate">24/7 PRO Access</p>
             </div>
           </div>
-          <div className="bg-white border border-zinc-200 p-4 rounded shadow-sm flex items-center gap-3">
-            <div className="w-10 h-10 bg-purple-50 text-purple-700 flex items-center justify-center rounded border border-purple-100">
+          <div className="bg-white border border-zinc-200 p-4 rounded shadow-sm flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 bg-purple-50 text-purple-700 flex items-center justify-center rounded border border-purple-100 shrink-0">
               <Building className="w-5 h-5" />
             </div>
-            <div>
-              <p className="text-[10px] uppercase font-bold text-zinc-400">Accreditation</p>
-              <p className="text-base font-extrabold text-zinc-800">PIB Desk Registry</p>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase font-bold text-zinc-400 truncate">Accreditation</p>
+              <p className="text-base font-extrabold text-zinc-800 truncate">PIB Desk Registry</p>
             </div>
           </div>
         </div>
@@ -247,8 +247,8 @@ export default function MediaPage() {
             </div>
 
             {/* Structured Tab Header */}
-            <div className="border-b border-zinc-200 flex items-center justify-between">
-              <div className="flex gap-1">
+            <div className="border-b border-zinc-200 flex items-center justify-between gap-4 overflow-hidden">
+              <div className="flex gap-1 overflow-x-auto scrollbar-none whitespace-nowrap w-full">
                 <button
                   onClick={() => { setActiveTab("announcements"); setSearchQuery(""); }}
                   className={`px-4 py-3 text-xs font-extrabold uppercase tracking-wide border-b-2 transition-all cursor-pointer ${
