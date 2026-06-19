@@ -34,8 +34,6 @@ export default function ProgramsPage() {
   }, []);
 
   const mapIdToKey = (id: string) => {
-    if (id === "smart-india-hackathon") return "sih";
-    if (id === "iic-network") return "iic";
     return id.replace(/-/g, "_");
   };
 

@@ -21,169 +21,136 @@ export interface Program {
 
 export const PROGRAMS_DATA: Program[] = [
   {
-    id: "smart-india-hackathon",
-    title: "Smart India Hackathon (SIH)",
-    subtitle: "World's largest open innovation platform for students",
+    id: "student-internships",
+    title: "10-Core Paid Internship Ecosystem",
+    subtitle: "Structured national internship framework across undergraduate sectors",
     category: "student",
-    budget: "Prize pool ₹1,00,000+ per team",
-    duration: "36-hour hackathon format",
-    description: "SIH is a nationwide initiative to provide students a platform to solve pressing problems faced by government ministries, departments, PSUs, and industries. It fosters a culture of product innovation and problem-solving mindset.",
+    budget: "Paid stipends",
+    duration: "2–6 months per course",
+    description: "A structured national internship framework established across 10 core sectors, ensuring that every undergraduate student in India gains real-time industry exposure and skill-based learning opportunities.",
     benefits: [
-      "Cash prizes of ₹1 Lakh+ for winning teams at each nodal centre",
-      "Direct interface with problem statement owners from Central Ministries & PSUs",
-      "Winning solutions considered for pilot deployment by respective ministries",
-    ],
-    stages: [
-      { title: "Stage 1: Problem Statement Registration", desc: "Ministries, PSUs, and industries submit problem statements on the SIH portal. Teams from IIC-registered institutions apply." },
-      { title: "Stage 2: Idea Submission & Screening", desc: "Teams submit initial solutions. Shortlisted teams invited to participate in the 36-hour grand finale hackathon." },
-      { title: "Stage 3: Grand Finale", desc: "Teams build and present working solutions to a jury at nodal centres. Winners receive cash prizes and recognition." },
+      "Real-time industry exposure and hands-on skill development",
+      "Covers 10 core sectors (Engineering, Research, Finance, Agriculture, Healthcare, IT & AI, etc.)",
+      "Paid, structured, and practical learning experiences to make students industry-ready"
     ]
   },
   {
-    id: "iic-network",
-    title: "Institution's Innovation Council (IIC)",
-    subtitle: "Pan-India institutional innovation network — 16,000+ HEIs",
-    category: "institution",
-    budget: "Activity-based grants & incentives",
-    duration: "Annual cycle (IIC 6.0: 2024-25)",
-    description: "IICs are established within Higher Education Institutions in coordination with AICTE to systematically foster innovation and startup activities. 16,000+ IICs are active and rated annually on a 1–5 star system.",
-    benefits: [
-      "Annual star-rating (1–5 stars) with rewards for top-performing IICs",
-      "Access to MoE Innovation Cell resources, toolkits, and mentor networks",
-      "Preferential eligibility for SIH, KAPILA, YUKTI, and IDE Bootcamp programs",
-    ],
-    stages: [
-      { title: "Step 1: IIC Registration", desc: "Institution nominates a SPOC and registers on iic.mic.gov.in with complete institutional details." },
-      { title: "Step 2: Annual Activity Calendar", desc: "IIC conducts mandatory activities — idea competitions, workshops, bootcamps, hackathons — and earns activity points." },
-      { title: "Step 3: Annual Star Rating", desc: "MoE evaluates IIC performance and assigns 1–5 star rating. Top-rated IICs receive recognition and preferential grant access." },
-    ]
-  },
-  {
-    id: "kapila",
-    title: "KAPILA — Kalam Program for IP Literacy",
-    subtitle: "IP awareness & patent filing support for HEIs",
+    id: "student-fellowships",
+    title: "Innovation India Student Fellowships",
+    subtitle: "Advanced learning opportunities for selected research scholars",
     category: "student",
-    budget: "Patent filing fee reimbursement",
-    duration: "Year-round (quarterly drives)",
-    description: "KAPILA (Kalam Program for IP Literacy and Awareness) is a national initiative to spread awareness about Intellectual Property rights and support patent filing within Higher Education Institutions. Faculty and students are trained on IP basics and provided filing support.",
+    budget: "Stipends & Research allowances",
+    duration: "12-month cycle",
+    description: "Advanced learning opportunities for selected student research scholars to work closely with national experts, serial innovators, and mentors on social impact and technology development projects.",
     benefits: [
-      "IP literacy workshops and training sessions in IIC institutions",
-      "Patent filing fee reimbursement for faculty and student innovators",
-      "Access to national patent data and prior art search tools",
-    ],
-    stages: [
-      { title: "Step 1: IP Awareness Workshop", desc: "KAPILA-certified trainer conducts IP basics, patent search, and filing process workshop at the institution." },
-      { title: "Step 2: Innovation Disclosure", desc: "Faculty or student files a formal invention disclosure form; screened for patentability by IP expert panel." },
-      { title: "Step 3: Patent Filing Support", desc: "Selected innovations receive fee reimbursement and expert assistance through the patent filing process." },
+      "Mentorship and direct guidance from industry and research experts",
+      "Focus on solving critical social impact and technical problems",
+      "Exposure to advanced laboratory and rapid prototyping ecosystems"
     ]
   },
   {
-    id: "yukti",
-    title: "YUKTI National Innovation Repository",
-    subtitle: "National database of academic innovations & startups",
+    id: "student-scholarships",
+    title: "Student Annual Scholarships",
+    subtitle: "Merit-based and need-based annual financial support",
+    category: "student",
+    budget: "Annual stipends",
+    duration: "Annual allocation",
+    description: "Annual merit-based and need-based scholarships provided to talented students from diverse and marginalized backgrounds, ensuring equal access to innovation and quality education opportunities.",
+    benefits: [
+      "Ensures accessibility and equal opportunities for students of all backgrounds",
+      "Financial assistance to support educational and project expenses",
+      "Pre-qualification for national-level innovation bootcamps"
+    ]
+  },
+  {
+    id: "student-startup-grants",
+    title: "Student Startup Grants",
+    subtitle: "Direct financial support for early-stage conceptual ideas",
     category: "startup",
-    budget: "Platform access + mentoring support",
-    duration: "Continuous (YUKTI 3.0 live)",
-    description: "YUKTI (Young India Combating COVID with Knowledge, Technology and Innovation) is a national digital repository to scout, register, and commercially scale innovations and startups from HEIs. 1,00,000+ innovations registered; 10,050+ startups mentored.",
+    budget: "Prototype validation grants",
+    duration: "6–12 months milestone cycle",
+    description: "Selected student entrepreneurs receive direct financial support to develop and execute their startup ideas, helping them transition smoothly from concept to execution and validation.",
     benefits: [
-      "National visibility for registered innovations and student startups",
-      "Connect with investors, incubators, and industry partners via YUKTI portal",
-      "State-wise innovation leaderboard and IIC performance benchmarking",
-    ],
-  },
-  {
-    id: "ide-bootcamp",
-    title: "IDE Bootcamp — Innovation, Design & Entrepreneurship",
-    subtitle: "Residential bootcamps to nurture student innovators",
-    category: "student",
-    budget: "Fully funded (travel & accommodation covered)",
-    duration: "5–7 Day residential bootcamps",
-    description: "IDE Bootcamps are residential immersive programs designed to nurture early-stage student innovators. Bootcamps are held at IITs, IIMs, and partner institutions. Participants receive design thinking, lean startup, and business modelling mentoring.",
-    benefits: [
-      "Fully funded residential experience at IITs / IIMs (travel + stay)",
-      "Intensive mentoring by industry experts, VCs, and serial entrepreneurs",
-      "Top bootcamp teams gain direct seed funding access and incubation support",
-    ],
-    stages: [
-      { title: "Stage 1: Application & Screening", desc: "Students apply via IIC portal with a brief innovation pitch. Shortlisted candidates receive bootcamp invitation." },
-      { title: "Stage 2: Residential Bootcamp", desc: "5–7 day immersive program: design thinking, prototyping, business modelling, and investor pitch workshops." },
-      { title: "Stage 3: Demo Day", desc: "Teams present to a jury of investors and industry leaders. Top teams selected for incubation and seed support." },
+      "Equity-free financial support for raw material and tooling purchases",
+      "Mentoring support to validate early proofs of concept (POC)",
+      "Direct pathway to national pre-incubation cells and labs"
     ]
   },
   {
-    id: "udyamotsav",
-    title: "Udyamotsav & NISP Implementation",
-    subtitle: "National startup festival & HEI startup policy mandate",
-    category: "institution",
-    budget: "Institution grants under NISP framework",
-    duration: "Annual event + ongoing NISP mandate",
-    description: "Udyamotsav is an annual national event to celebrate, support, and promote startups from academic institutions. The National Innovation and Start-up Policy (NISP) mandates all HEIs to create structural startup support including pre-incubation cells, IP units, and seed fund access.",
-    benefits: [
-      "NISP compliance unlocks grant eligibility for IIC institutions",
-      "Annual Udyamotsav provides national showcase platform for student startups",
-      "Structural support mandate: pre-incubation cells, IP units, and seed fund access",
-    ],
-    stages: [
-      { title: "Step 1: NISP Adoption", desc: "Institution formally adopts and notifies the National Innovation & Start-up Policy (NISP) for its students and faculty." },
-      { title: "Step 2: Infrastructure Setup", desc: "HEI establishes pre-incubation facility, IP Cell, and Entrepreneurship Development Cell per NISP guidelines." },
-      { title: "Step 3: Udyamotsav Participation", desc: "Registered student startups participate in annual Udyamotsav showcase, gaining visibility and investor connections." },
-    ]
-  },
-  {
-    id: "nidhi-cis",
-    title: "NIDHI College Innovation (NIDHI-CIS)",
-    subtitle: "Prototype validation grants for student innovators",
-    category: "student",
-    budget: "Prototype validation grants up to ₹5 Lakh",
-    duration: "12–18 month milestone cycle",
-    description: "NIDHI College Innovation (NIDHI-CIS) is a national initiative to support undergraduate and postgraduate student teams in validating their proofs of concept. Selected teams receive prototype development funding, access to fabrication facilities, and commercialization mentoring.",
-    benefits: [
-      "Equity-free prototype development grants up to ₹5,00,000",
-      "Dedicated technical mentoring from NCIE academic and industry networks",
-      "Direct fast-track nomination to regional NCIE incubation centers",
-    ],
-    stages: [
-      { title: "Step 1: Application Screening", desc: "Submission of project proposal, POC documentation, and endorsement letter from HEI Chapter." },
-      { title: "Step 2: Prototyping Phase", desc: "Milestone-linked disbursement of funds to build and test the prototype." },
-      { title: "Step 3: Demo Day & Mentorship", desc: "Presentation of the working prototype to the evaluation panel and onboarding to a partner incubator." },
-    ]
-  },
-  {
-    id: "seed-pipeline",
-    title: "Seed Capital Pipeline",
-    subtitle: "Pre-seed and seed-stage funding for academic startups",
+    id: "startup-seed-funding",
+    title: "Startup Seed Funding",
+    subtitle: "Up to ₹5,00,000 equity-free grant per student startup",
     category: "startup",
-    budget: "Equity-free setup allowances up to ₹25 Lakh",
-    duration: "24-month startup incubator program",
-    description: "The Seed Capital Pipeline provides critical funding to early-stage student and faculty startups emerging from NCIE institutional chapters. It bridges the gap between proof of concept and market-ready MVP, ensuring startups have the runway to scale.",
+    budget: "₹5,00,000 per startup",
+    duration: "12–24 months milestone cycle",
+    description: "A structured seed funding program offering up to ₹5,00,000 per student startup without requiring student equity or ownership dilution. This ensures young innovators can focus on building their ventures without financial pressure.",
     benefits: [
-      "Seed funding up to ₹25,00,000 for infrastructure, hiring, and pilot trials",
-      "Free co-working space and legal assistance at NCIE-affiliated hubs",
-      "Quarterly investor pitch sessions with angel networks and venture funds",
+      "Equity-free seed funding of up to ₹5 Lakhs per startup",
+      "Released in five structured stages based on progress and performance",
+      "Dedicated entrepreneurship support including legal, business setup, and IP filing guidance"
     ],
     stages: [
-      { title: "Step 1: Pitch Deck Screening", desc: "Startups present business plans and MVP demonstration to the evaluation committee." },
-      { title: "Step 2: Incubation Agreement", desc: "Signing of formal incubation terms and milestone plans with the partner center." },
-      { title: "Step 3: Scale & Fundraising", desc: "Release of seed tranches linked to business growth, revenue, or product milestones." },
+      { title: "Stage 1: Concept Validation", desc: "Release of 10% fund upon successful screening and approval of prototype plans." },
+      { title: "Stage 2: MVP Development", desc: "Release of 25% fund for building the Minimum Viable Product and early testing." },
+      { title: "Stage 3: Pilot Run & Testing", desc: "Release of 25% fund for launching pilot trials and gathering feedback." },
+      { title: "Stage 4: Legal & IP Setup", desc: "Release of 20% fund to support legal incorporation and patent/IP filing." },
+      { title: "Stage 5: Scale & Market Launch", desc: "Release of final 20% fund upon meeting the pre-commercial scaling milestones." }
     ]
   },
   {
-    id: "makerspace-empowerment",
-    title: "Makerspace Fabrication Program",
-    subtitle: "STEM lab setup and fabrication grants for institutional chapters",
+    id: "institutional-incubation-support",
+    title: "Institutional Incubation & Development Support",
+    subtitle: "dedicated funding ranging from ₹20 Lakhs to ₹50 Lakhs",
     category: "institution",
-    budget: "STEM lab setup grants up to ₹50 Lakh",
-    duration: "Annual infrastructure development cycle",
-    description: "The Makerspace Fabrication Program provides capital grants to accredited Higher Education Institutions to build advanced prototyping, rapid manufacturing, and hardware verification laboratories on campus.",
+    budget: "₹20 Lakhs to ₹50 Lakhs",
+    duration: "12–18 months infrastructure cycle",
+    description: "Selected and recognized educational institutions are provided with dedicated funding support strictly allocated for building incubation centers, innovation labs, and entrepreneurship infrastructure.",
     benefits: [
-      "Infrastructure grants up to ₹50,00,000 for purchasing 3D printers, CNC machinery, and electronic benches",
-      "Standardized design blueprints and curriculum integration support",
-      "National certification and inter-makerspace collaborative portal access",
-    ],
-    stages: [
-      { title: "Step 1: Infrastructure Proposals", desc: "HEIs submit space specifications, equipment requirements, and operational plans." },
-      { title: "Step 2: Lab Setup & Audit", desc: "Disbursement of equipment procurement funds followed by NCIE technical site inspection." },
-      { title: "Step 3: Launch & Certification", desc: "Makerspace becomes operational, integrating with local student ideation and hackathon programs." },
+      "Financial grants up to ₹50 Lakhs for setup and tooling",
+      "Strict allocation for rapid prototyping labs, makerspaces, and incubation offices",
+      "Integrates campus innovators into a unified regional incubation network"
     ]
   },
+  {
+    id: "csr-rural-support",
+    title: "CSR Support for Rural & Semi-Urban Institutions",
+    subtitle: "Facilitating corporate CSR partnerships for regional development",
+    category: "institution",
+    budget: "CSR capital matching",
+    duration: "Annual alignment cycle",
+    description: "Innovation India facilitates CSR partnerships for reputed institutions and organizations to promote innovation ecosystems in rural and semi-urban areas, fostering local student startups and capacity building.",
+    benefits: [
+      "Direct connection with corporate social responsibility (CSR) funds",
+      "Empowerment of tier-2 and tier-3 colleges with funding and mentorship",
+      "Strengthening of localized grassroots ecosystems to solve regional challenges"
+    ]
+  },
+  {
+    id: "iic-recognition-program",
+    title: "Innovation India Recognition Program",
+    subtitle: "Formal benchmarking framework for high-performing institutions",
+    category: "institution",
+    budget: "Accreditation & Rewards",
+    duration: "Annual evaluation",
+    description: "Institutions and organizations contributing significantly to innovation, entrepreneurship, and student development are formally recognized under the Innovation India Recognition Framework to encourage excellence.",
+    benefits: [
+      "Formal national recognition and star accreditation under the framework",
+      "Benchmark metrics to improve student innovation output year-on-year",
+      "Preferential eligibility for special infrastructure grants and pilot allocations"
+    ]
+  },
+  {
+    id: "free-training-program",
+    title: "Free Entrepreneurship Training Programs",
+    subtitle: "Fully sponsored entrepreneurship education and workshops",
+    category: "student",
+    budget: "Fully sponsored",
+    duration: "Continuous availability",
+    description: "Institutions are supported in delivering free entrepreneurship education, skill development workshops, and startup training programs for students, ensuring accessibility to quality innovation learning for all.",
+    benefits: [
+      "Access to structured entrepreneurship courses at no cost to students",
+      "Practical workshops in design thinking, marketing, and business planning",
+      "Direct mentorship from seasoned founders and incubation experts"
+    ]
+  }
 ];

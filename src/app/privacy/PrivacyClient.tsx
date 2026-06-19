@@ -44,7 +44,7 @@ export default function PrivacyPage() {
           <p className="font-semibold text-zinc-850">Primary usage scopes include:</p>
           <ul className="list-disc pl-5 space-y-2">
             <li>Verification of institutional credentials and validation of local chapters.</li>
-            <li>Processing of prototyping grants, KAPILA IP support, and Smart India Hackathon participation rosters.</li>
+            <li>Processing of student scholarships, fellowships, and startup seed funding applications.</li>
             <li>Sending critical administrative announcements, gazette circulars, and system notification alerts.</li>
             <li>Conducting session audits and database logs validation to prevent security breaches.</li>
           </ul>
@@ -146,7 +146,7 @@ export default function PrivacyPage() {
           <p className="font-semibold text-zinc-850">प्राथमिक उपयोग के दायरे में शामिल हैं:</p>
           <ul className="list-disc pl-5 space-y-2">
             <li>संस्थागत साख का सत्यापन और स्थानीय अध्यायों की मान्यता।</li>
-            <li>प्रोटोटाइपिंग अनुदान प्रसंस्करण, कपिला (KAPILA) बौद्धिक संपदा सहायता और स्मार्ट इंडिया हैकथॉन भागीदारी।</li>
+            <li>छात्र छात्रवृत्ति, फेलोशिप और स्टार्टअप बीज वित्तपोषण आवेदनों का प्रसंस्करण।</li>
             <li>महत्वपूर्ण प्रशासनिक घोषणाएं, राजपत्र परिपत्र और सिस्टम अधिसूचना अलर्ट भेजना।</li>
             <li>सुरक्षा उल्लंघनों को रोकने के लिए सत्र ऑडिट और डेटाबेस लॉग सत्यापन का संचालन करना।</li>
           </ul>

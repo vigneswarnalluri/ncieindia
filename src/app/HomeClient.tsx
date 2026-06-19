@@ -21,133 +21,134 @@ import {
 } from "lucide-react";
 
 // Key Initiatives data — based on real MoE Innovation Cell programmes
+// Key Initiatives data — based on Innovation India Council
 const INITIATIVES = [
   {
-    title: "Smart India Hackathon (SIH)",
-    description: "One of the world's largest open innovation platforms. Students solve real problem statements from Central Ministries, State Governments, PSUs, and industries for cash prizes and pilot opportunities.",
-    focus: ["Government & industry problem statements", "24x7 hackathon format with ₹1 Lakh+ prizes", "Direct pilot pathway with ministries & PSUs"],
-    badge: "Flagship Programme",
+    title: "10-Core Paid Internship Ecosystem",
+    description: "A structured national internship framework established across 10 core sectors to provide every undergraduate student with practical, real-world industry exposure.",
+    focus: ["Covers 10 key undergraduate sectors", "Hands-on projects and professional exposure", "Structured mentoring and certification"],
+    badge: "Undergraduate Pillar",
   },
   {
-    title: "Institution's Innovation Council (IIC)",
-    description: "Pan-India network of institutional innovation bodies in HEIs, coordinated by MoE Innovation Cell and AICTE. IICs foster innovation culture through structured annual activity calendars.",
-    focus: ["16,000+ active IICs across India", "Annual star-rating (1–5 stars) performance system", "Hackathons, workshops & idea competitions"],
-    badge: "Core Network",
+    title: "Startup Seed Funding",
+    description: "A milestone-linked seed funding program offering up to ₹5,00,000 per student startup without requiring student equity or ownership dilution.",
+    focus: ["Up to ₹5 Lakhs per student-led venture", "Equity-free grants with zero dilution", "Released in five structured execution stages"],
+    badge: "Seed Funding",
   },
   {
-    title: "KAPILA (Kalam Program for IP Literacy)",
-    description: "A national initiative to spread Intellectual Property (IP) awareness and support patent filing in HEIs. Faculty and students are trained to file patents and protect innovations.",
-    focus: ["IP literacy workshops in IIC institutions", "Patent filing fee support for faculty & students", "National IP awareness calendar"],
-    badge: "IP & Patents",
+    title: "Student Startup Grants",
+    description: "Direct financial support for early-stage student entrepreneurs to develop and execute their startup ideas, helping them move from concept to execution.",
+    focus: ["Direct prototype validation funding", "Equity-free support for early ideation", "Mentorship to test proof-of-concept projects"],
+    badge: "Ideation Grants",
   },
   {
-    title: "YUKTI National Innovation Repository",
-    description: "A digital platform and national database to scout, register, and mentor promising innovations and startups emerging from academic institutions across India.",
-    focus: ["1,00,000+ innovations scouted & registered", "10,000+ student startups mentored", "Connects innovators with investors & incubators"],
-    badge: "Innovation Repository",
+    title: "Institutional Incubation Support",
+    description: "Dedicated funding support ranging from ₹20 Lakhs to ₹50 Lakhs provided to selected institutions strictly for building incubation centers and innovation labs.",
+    focus: ["Grants between ₹20 Lakhs and ₹50 Lakhs", "Allocated strictly for prototyping labs & office hubs", "Decentralized regional incubation networks"],
+    badge: "Infrastructure",
   },
   {
-    title: "IDE Bootcamp & Innovation Programs",
-    description: "Innovation, Design, and Entrepreneurship (IDE) bootcamps designed to nurture early-stage student innovators with design thinking, prototyping, and business modeling skills.",
-    focus: ["Residential bootcamps at IITs & IIMs", "Mentoring by industry experts & serial entrepreneurs", "Seed funding access for top bootcamp teams"],
+    title: "CSR Support for Remote Campus Development",
+    description: "Facilitating CSR partnerships to promote innovation ecosystems in rural and semi-urban areas, fostering local student startups and capacity building.",
+    focus: ["Liaison with corporate CSR innovation funds", "Capacity building programs in rural areas", "Local student startup micro-grant linkages"],
+    badge: "CSR Collaboration",
+  },
+  {
+    title: "Free Entrepreneurship Training",
+    description: "Sponsorship for educational institutions to deliver free entrepreneurship education, skill workshops, and startup training programs for all students.",
+    focus: ["Structured entrepreneurship courses at no cost", "Design thinking, marketing, and business planning", "Direct mentorship from serial startup founders"],
     badge: "Skill Development",
-  },
-  {
-    title: "Udyamotsav & NISP Implementation",
-    description: "Udyamotsav supports and promotes startups from academic institutions. The National Innovation and Start-up Policy (NISP) mandates every HEI to build structural startup support.",
-    focus: ["NISP mandated in all HEIs & IICs", "Startup support: pre-incubation to commercialisation", "Annual Udyamotsav startup showcase event"],
-    badge: "Policy & Startups",
   },
 ];
 
-// IIC Journey Steps — based on actual MoE Innovation Cell process
+// IIC Journey Steps — based on Innovation India Council process
 const JOURNEY_STEPS = [
   {
     phase: "01",
-    title: "Register IIC",
-    description: "Higher Education Institution nominates a SPOC (Single Point of Contact) and registers the Institution's Innovation Council on the IIC portal at iic.mic.gov.in.",
-    action: "Register on IIC Portal",
+    title: "Onboard Institution",
+    description: "Higher Education Institution registers its student chapter and files alignment with the Innovation India Council framework.",
+    action: "Apply for Chapter Affiliation",
   },
   {
     phase: "02",
-    title: "Annual Activity Calendar",
-    description: "IIC conducts mandatory annual activities: idea competitions, hackathons, workshops, guest lectures, and innovation exhibitions to earn activity points.",
-    action: "View Activity Calendar",
+    title: "Deliver Free Training",
+    description: "Chapter conducts free entrepreneurship training programs, prototyping workshops, and local idea competitions for students.",
+    action: "Explore Training Manuals",
   },
   {
     phase: "03",
-    title: "Star Rating Evaluation",
-    description: "MoE Innovation Cell evaluates IIC performance annually on a 1–5 star rating system based on activities, startups supported, IP filed, and innovations scouted.",
-    action: "Submit Annual Report",
+    title: "Apply for Seed Funding",
+    description: "Selected student startup teams pitch and register their ventures to unlock up to ₹5 Lakhs milestone-linked equity-free seed grants.",
+    action: "Apply for Seed Capital",
   },
   {
     phase: "04",
-    title: "YUKTI & SIH Participation",
-    description: "Top-performing IICs participate in Smart India Hackathon, register innovations on YUKTI, and access seed funding, mentoring, and national incubation linkages.",
-    action: "Apply for SIH & YUKTI",
+    title: "Build & Scale",
+    description: "Startups build MVPs, file patents via the council support desk, and leverage corporate CSR partnerships to scale operations.",
+    action: "Access Incubation Network",
   },
 ];
 
-// Vision 2047 Milestones — real MoE / Viksit Bharat roadmap
+// Vision 2047 Milestones — Innovation India Council roadmap
 const VISION_MILESTONES = [
   {
-    year: "2026",
-    title: "IIC 6.0 Full Rollout",
-    description: "Scale IIC network to 20,000+ institutions; complete IIC 6.0 annual activity calendar rollout; operationalise KAPILA IP awareness in all member HEIs.",
+    year: "2027",
+    title: "10-Core Paid Internships",
+    description: "Establish a structured national internship framework across 10 core undergraduate sectors for real-time industry exposure.",
   },
   {
-    year: "2030",
-    title: "1 Lakh Startups Goal",
-    description: "Convert 1,00,000+ YUKTI-registered innovations into funded prototypes; establish 10,000 operational incubation facilities across India.",
+    year: "2032",
+    title: "Mass Student Startup Funding",
+    description: "Allocate ₹1,000 Crore to support and validate over 20,000 student-led startups with ₹5 Lakh seed grants.",
   },
   {
     year: "2040",
-    title: "Deep-Tech Export Leadership",
-    description: "Achieve India's top-5 global innovation ranking; 50,000+ active student startups; significant international IP filings in AI, green energy, and civic-tech.",
+    title: "Student Innovation Support Fund",
+    description: "Deploy ₹1,000 Crore dedicated national fund to support student projects, research, prototyping, and incubation.",
   },
   {
     year: "2047",
-    title: "Viksit Bharat @2047",
-    description: "A fully self-reliant innovation economy with 1 Lakh student-led enterprises aligned with NEP 2020 — making India the global capital of student innovation.",
+    title: "Institutional Development Fund",
+    description: "Deploy parallel ₹1,000 Crore infrastructure fund to build rapid prototyping labs and incubation centers in member institutions.",
   },
 ];
 
-// Official Bulletins — real MIC/MoE circular reference format
+// Official Bulletins — Innovation India Council circular reference format
 const CIRCULARS = [
   {
-    id: "MIC-INT-2026-001",
+    id: "IIC-INT-2026-001",
     date: "June 18, 2026",
     title: "Internship Registrations Open: Innovational & Technology Management and AI Business & Startup Innovation",
     description: "Registrations are now open for course-integrated internships under the engineering and technology domain. One-time registration fee: ₹700 per course.",
     category: "Applications",
   },
   {
-    id: "MIC-IIC-2025-147",
+    id: "IIC-CAL-2025-147",
     date: "June 10, 2025",
-    title: "IIC 6.0 Annual Activity Calendar 2025-26 Released",
-    description: "MoE Innovation Cell has released the IIC 6.0 mandatory activity calendar for 2025-26. All registered IIC SPOCs must acknowledge and begin scheduling activities on the IIC portal.",
-    category: "IIC Activities",
+    title: "Innovation India Council Annual Calendar Released",
+    description: "The official calendar of entrepreneurship events, workshops, and regional star accreditation guidelines has been published for member institutions.",
+    category: "Applications",
   },
   {
-    id: "MIC-SIH-2025-089",
+    id: "IIC-SEED-2025-089",
     date: "May 22, 2025",
-    title: "Smart India Hackathon 2025 — Problem Statements Open",
-    description: "Ministry departments, PSUs, and industry partners have submitted 250+ problem statements for SIH 2025. Student teams from IIC-registered institutions can apply via the SIH portal.",
-    category: "Hackathon",
+    title: "Startup Seed Funding Stage 1 Applications Open",
+    description: "Student startups can apply for the first tranche of the ₹5,00,000 equity-free seed grant to support Concept Validation and MVP development.",
+    category: "Applications",
   },
   {
-    id: "MIC-KAPILA-2025-063",
+    id: "IIC-INCUB-2025-063",
     date: "April 15, 2025",
-    title: "KAPILA Patent Filing Awareness Drive Q2 2025",
-    description: "KAPILA Q2 workshops scheduled across 500+ IIC institutions. Faculty and students can register for IP literacy sessions and receive patent filing fee reimbursement support.",
-    category: "IP & Patents",
+    title: "Institutional Incubation Support Applications Open",
+    description: "Eligible institutions can apply for development grants ranging from ₹20 Lakhs to ₹50 Lakhs to build makerspaces, prototyping labs, and E-cells.",
+    category: "Applications",
   },
   {
-    id: "MIC-YUKTI-2025-041",
+    id: "IIC-FELLOW-2025-041",
     date: "March 28, 2025",
-    title: "YUKTI 3.0 — National Innovation Repository Update",
-    description: "YUKTI 3.0 launches enhanced startup profiling, investor connect portal, and state-wise innovation leaderboard. IICs must migrate all registered innovations to the new dashboard.",
-    category: "Repository",
+    title: "Innovation India Student Fellowship Nominations",
+    description: "Nominations are now open for the 12-month Student Fellowship cycle to work on national social impact and technical projects.",
+    category: "Fellowships",
   },
 ];
 
@@ -169,10 +170,7 @@ export default function Home() {
   // Category translation keys mapping
   const categoryTranslations: Record<string, string> = {
     "Applications": "notice_cat_applications",
-    "IIC Activities": "notice_cat_iic_activities",
-    "Hackathon": "notice_cat_hackathon",
-    "IP & Patents": "notice_cat_ip_patents",
-    "Repository": "notice_cat_repository",
+    "Fellowships": "notice_cat_fellowships",
   };
 
   // Localize circulars dynamically based on current language

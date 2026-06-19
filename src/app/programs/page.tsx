@@ -9,10 +9,10 @@ export const metadata: Metadata = {
   keywords: [
     "Innovation Schemes",
     "Incubation Grants",
-    "Smart India Hackathon guidelines",
-    "KAPILA patent support",
-    "YUKTI scheme",
-    "NISP implementation",
+    "Student Internships",
+    "Student Startup Grants",
+    "Seed Funding Program",
+    "Innovation India Council",
   ],
   alternates: {
     canonical: "https://ncieindia.org/programs",

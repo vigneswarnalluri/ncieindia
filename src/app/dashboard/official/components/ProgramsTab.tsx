@@ -272,7 +272,7 @@ export default function ProgramsTab({ onToast }: Props) {
                     type="text"
                     required
                     disabled={!!editingProgram}
-                    placeholder="e.g. kapila-program"
+                    placeholder="e.g. startup-seed-funding"
                     value={formId}
                     onChange={e => setFormId(e.target.value)}
                     className="w-full border border-zinc-300 px-3 py-1.5 text-xs focus:outline-none focus:border-[#0D6B4F] bg-white disabled:bg-zinc-100 disabled:text-zinc-500 font-mono"

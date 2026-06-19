@@ -5,17 +5,15 @@ import HomeClient from "./HomeClient";
 export const metadata: Metadata = {
   title: "NCIE India | National Council for Innovation and Entrepreneurship",
   description:
-    "Building India's largest student innovation and entrepreneurship ecosystem under the Ministry of Education (MoE). Explore collegiate chapters, KAPILA patent support, SIH hackathons, and incubation grants.",
+    "Building the world's largest student innovation and entrepreneurship ecosystem under the Innovation India Council. Explore collegiate chapters, student startup grants, seed funding programs, and institutional incubation support.",
   keywords: [
     "NCIE India",
+    "Innovation India Council",
     "National Council for Innovation and Entrepreneurship",
-    "Ministry of Education",
-    "Institution's Innovation Council",
-    "IIC network",
-    "Smart India Hackathon",
-    "SIH 2025",
-    "KAPILA patent support",
-    "YUKTI repository",
+    "Student Internships",
+    "Student Startup Grants",
+    "Seed Funding Program",
+    "Institutional Incubation",
     "startup India",
     "collegiate chapters",
     "Civic Tech India",
@@ -26,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "NCIE India | National Council for Innovation and Entrepreneurship",
     description:
-      "Building India's largest student innovation and entrepreneurship ecosystem under the Ministry of Education (MoE). Explore collegiate chapters, KAPILA patent support, SIH hackathons, and incubation grants.",
+      "Building the world's largest student innovation and entrepreneurship ecosystem under the Innovation India Council. Explore collegiate chapters, student startup grants, seed funding programs, and institutional incubation support.",
     url: "https://ncieindia.org",
     siteName: "NCIE India",
     locale: "en_IN",
@@ -44,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "NCIE India | National Council for Innovation and Entrepreneurship",
     description:
-      "Building India's largest student innovation and entrepreneurship ecosystem under the Ministry of Education (MoE). Explore collegiate chapters, KAPILA patent support, SIH hackathons, and incubation grants.",
+      "Building the world's largest student innovation and entrepreneurship ecosystem under the Innovation India Council. Explore collegiate chapters, student startup grants, seed funding programs, and institutional incubation support.",
     images: ["https://ncieindia.org/logo-new.svg"],
   },
 };

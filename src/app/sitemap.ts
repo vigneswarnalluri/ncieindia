@@ -28,12 +28,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Dynamic program paths
   let programIds = [
-    "smart-india-hackathon",
-    "iic-network",
-    "kapila-ip",
-    "yukti-repository",
-    "ide-bootcamps",
-    "nisp-policy",
+    "student-internships",
+    "student-fellowships",
+    "student-scholarships",
+    "student-startup-grants",
+    "startup-seed-funding",
+    "institutional-incubation-support",
+    "csr-rural-support",
+    "iic-recognition-program",
+    "free-training-program",
   ];
 
   try {
