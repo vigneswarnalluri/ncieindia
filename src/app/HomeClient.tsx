@@ -231,6 +231,42 @@ export default function Home() {
     };
   }, [activeTab]);
 
+  // Localize benchmarks dynamically
+  const localizedBenchmarks = [
+    { label: "Student Innovators", value: "Founding Cohort", desc: "First-round application verification currently active for student innovators cataloged in database.", state: "Verification Desk" },
+    { label: "College Chapters", value: "Expanding Network", desc: "Academic chapter affiliation verification and handbook alignment across STEM colleges.", state: "Chapter Roster" },
+    { label: "Innovation Schemes", value: "Launching Soon", desc: "Initial micro-grants disbursement approvals and incubator matching programs setup.", state: "Scheme Sandbox" },
+    { label: "Enterprise Pipelines", value: "Coming Soon", desc: "Direct avenues configuration to seed capital pools and startup accelerators.", state: "Capital Pool" },
+  ].map((item, idx) => ({
+    label: t(`home_benchmark_${idx}_label`) || item.label,
+    value: t(`home_benchmark_${idx}_value`) || item.value,
+    desc: t(`home_benchmark_${idx}_desc`) || item.desc,
+    state: t(`home_benchmark_${idx}_state`) || item.state,
+  }));
+
+  // Localize initiatives dynamically
+  const localizedInitiatives = INITIATIVES.map((item, idx) => ({
+    title: t(`home_initiative_${idx}_title`) || item.title,
+    description: t(`home_initiative_${idx}_desc`) || item.description,
+    focus: item.focus.map((point, pIdx) => t(`home_initiative_${idx}_focus_${pIdx}`) || point),
+    badge: t(`home_initiative_${idx}_badge`) || item.badge,
+  }));
+
+  // Localize journey steps dynamically
+  const localizedJourneySteps = JOURNEY_STEPS.map((step, idx) => ({
+    ...step,
+    title: t(`home_journey_${idx}_title`) || step.title,
+    description: t(`home_journey_${idx}_desc`) || step.description,
+    action: t(`home_journey_${idx}_action`) || step.action,
+  }));
+
+  // Localize vision milestones dynamically
+  const localizedVisionMilestones = VISION_MILESTONES.map((milestone, idx) => ({
+    ...milestone,
+    title: t(`home_vision_${idx}_title`) || milestone.title,
+    description: t(`home_vision_${idx}_desc`) || milestone.description,
+  }));
+
   return (
     <div className="flex-1 bg-[#F9FAFB] pb-16">
       
@@ -452,12 +488,12 @@ export default function Home() {
             
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-4 border-b border-zinc-200">
               <div className="border-l-4 border-primary pl-3">
-                <h2 className="text-base font-bold text-zinc-900 uppercase tracking-wider">National Ecosystem Benchmarks</h2>
-                <p className="text-[10px] text-zinc-500 font-medium uppercase mt-0.5 tracking-wider">Official Indicators set for academic registries</p>
+                <h2 className="text-base font-bold text-zinc-900 uppercase tracking-wider">{t("home_benchmarks_title")}</h2>
+                <p className="text-[10px] text-zinc-500 font-medium uppercase mt-0.5 tracking-wider">{t("home_benchmarks_subtitle")}</p>
               </div>
               <span className="inline-flex items-center gap-1 text-[#0D6B4F] font-bold text-[10px] uppercase tracking-wider">
                 <Globe className="w-3.5 h-3.5" />
-                <span>Cohort FY 2026-27 Active</span>
+                <span>{t("home_benchmarks_active")}</span>
               </span>
             </div>
 
@@ -466,19 +502,14 @@ export default function Home() {
               <table className="w-full text-left border-collapse border border-zinc-200">
                 <thead>
                   <tr className="bg-zinc-50 border-b border-zinc-200">
-                    <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-48">Metric Indicator</th>
-                    <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-40">Current Status</th>
-                    <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200">Scope Target / Update Details</th>
-                    <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 w-40">Responsible Desk</th>
+                    <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-48">{t("home_benchmarks_col_metric")}</th>
+                    <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-40">{t("home_benchmarks_col_status")}</th>
+                    <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200">{t("home_benchmarks_col_scope")}</th>
+                    <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 w-40">{t("home_benchmarks_col_desk")}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {[
-                    { label: "Student Innovators", value: "Founding Cohort", desc: "First-round application verification currently active for student innovators cataloged in database.", state: "Verification Desk" },
-                    { label: "College Chapters", value: "Expanding Network", desc: "Academic chapter affiliation verification and handbook alignment across STEM colleges.", state: "Chapter Roster" },
-                    { label: "Innovation Schemes", value: "Launching Soon", desc: "Initial micro-grants disbursement approvals and incubator matching programs setup.", state: "Scheme Sandbox" },
-                    { label: "Enterprise Pipelines", value: "Coming Soon", desc: "Direct avenues configuration to seed capital pools and startup accelerators.", state: "Capital Pool" },
-                  ].map((item, idx) => (
+                  {localizedBenchmarks.map((item, idx) => (
                     <tr key={idx} className="border-b border-zinc-200 last:border-b-0 hover:bg-zinc-50/50 odd:bg-white even:bg-zinc-50/20 text-xs">
                       <td className="px-4 py-3.5 text-zinc-900 font-bold border-r border-zinc-200">{item.label}</td>
                       <td className="px-4 py-3.5 font-mono text-[#0D6B4F] font-bold border-r border-zinc-200">{item.value}</td>
@@ -500,11 +531,11 @@ export default function Home() {
           
           <div className="text-center max-w-3xl mx-auto mb-10">
             <h2 className="text-2xl font-extrabold text-zinc-900 tracking-tight">
-              Ecosystem Programs & Schemes
+              {t("home_initiatives_title")}
             </h2>
             <div className="w-12 h-0.5 bg-accent mx-auto mt-3 mb-2" />
             <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed mt-2">
-              National programs designed to support student innovation, seed capital distribution, corporate fellowships, and institutional recognition.
+              {t("home_initiatives_subtitle")}
             </p>
           </div>
 
@@ -513,15 +544,15 @@ export default function Home() {
             <table className="w-full text-left border-collapse border border-zinc-200">
               <thead>
                 <tr className="bg-zinc-50 border-b border-zinc-200">
-                  <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-16 text-center">S.No.</th>
-                  <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-64">Initiative Name / Focus</th>
-                  <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200">Scheme Parameters / Details</th>
-                  <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 w-44">Accredited Track</th>
-                  <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 w-44 text-center">Action</th>
+                  <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-16 text-center">{t("home_initiatives_col_sno")}</th>
+                  <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-64">{t("home_initiatives_col_name")}</th>
+                  <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200">{t("home_initiatives_col_details")}</th>
+                  <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 w-44">{t("home_initiatives_col_track")}</th>
+                  <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 w-44 text-center">{t("home_initiatives_col_action")}</th>
                 </tr>
               </thead>
               <tbody>
-                {INITIATIVES.map((item, idx) => (
+                {localizedInitiatives.map((item, idx) => (
                   <tr key={idx} className="border-b border-zinc-200 last:border-b-0 hover:bg-zinc-50/50 odd:bg-white even:bg-zinc-50/20 text-xs">
                     <td className="px-4 py-4 text-center font-mono font-bold text-zinc-500 border-r border-zinc-200">0{idx + 1}</td>
                     <td className="px-4 py-4 border-r border-zinc-200">
@@ -538,7 +569,7 @@ export default function Home() {
                     <td className="px-4 py-4 border-r border-zinc-200 font-mono font-bold uppercase text-zinc-500">{item.badge}</td>
                     <td className="px-4 py-4 text-center">
                       <Link href="/programs" className="text-primary hover:underline font-bold inline-flex items-center gap-0.5">
-                        <span>Guidelines</span>
+                        <span>{t("home_initiatives_btn_guidelines")}</span>
                         <ArrowRight className="w-3 h-3" />
                       </Link>
                     </td>
@@ -557,11 +588,11 @@ export default function Home() {
           
           <div className="text-center max-w-3xl mx-auto mb-10">
             <h2 className="text-2xl font-extrabold text-zinc-900 tracking-tight">
-              Programmatic Stepper Lifecycle
+              {t("home_journey_title")}
             </h2>
             <div className="w-12 h-0.5 bg-primary mx-auto mt-3 mb-2" />
             <p className="text-xs sm:text-sm text-zinc-500 mt-2">
-              From academic laboratory discovery to market scale. A structured, compliance-aligned sequence.
+              {t("home_journey_subtitle")}
             </p>
           </div>
 
@@ -569,14 +600,14 @@ export default function Home() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-zinc-50 border-b border-zinc-200 text-xs">
-                  <th className="px-6 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-24 text-center">Step</th>
-                  <th className="px-6 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-52">Operational Phase</th>
-                  <th className="px-6 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200">Phase Objective & Description</th>
-                  <th className="px-6 py-3 font-bold uppercase tracking-wider text-zinc-700 w-52">Required Action</th>
+                  <th className="px-6 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-24 text-center">{t("home_journey_col_step")}</th>
+                  <th className="px-6 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-52">{t("home_journey_col_phase")}</th>
+                  <th className="px-6 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200">{t("home_journey_col_desc")}</th>
+                  <th className="px-6 py-3 font-bold uppercase tracking-wider text-zinc-700 w-52">{t("home_journey_col_action")}</th>
                 </tr>
               </thead>
               <tbody className="text-xs">
-                {JOURNEY_STEPS.map((step, index) => (
+                {localizedJourneySteps.map((step, index) => (
                   <tr key={index} className="border-b border-zinc-200 last:border-b-0 hover:bg-zinc-50/50 odd:bg-white even:bg-zinc-50/20">
                     <td className="px-6 py-4 font-mono font-bold text-center border-r border-zinc-200">
                       <span className="inline-block px-2 py-1 bg-zinc-100 border border-zinc-300 font-bold text-zinc-700 text-[10px]">
@@ -613,18 +644,18 @@ export default function Home() {
             <div className="lg:col-span-4 space-y-4">
               <span className="inline-flex items-center gap-1 text-[#A68034] font-bold text-[10px] uppercase tracking-wider">
                 <Award className="w-3 h-3" />
-                <span>National Centenary Roadmap</span>
+                <span>{t("home_vision_badge")}</span>
               </span>
               <h2 className="text-2xl md:text-3xl font-extrabold text-zinc-900 leading-tight">
-                Vision 2047:<br />Centenary Roadmap
+                {t("home_vision_title")}
               </h2>
               <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed">
-                Our operations align directly with the national objective of Viksit Bharat by 2047. We map a structural path to build a high-technology, entrepreneurial nation over four distinct execution phases.
+                {t("home_vision_desc")}
               </p>
               <div className="pt-2">
                 <Link href="/vision-2047">
                   <button className="border border-zinc-300 hover:bg-zinc-50 text-zinc-700 font-bold text-xs uppercase tracking-wider px-5 py-2.5 cursor-pointer">
-                    Explore Vision Roadmap
+                    {t("home_vision_btn")}
                   </button>
                 </Link>
               </div>
@@ -635,13 +666,13 @@ export default function Home() {
                 <table className="min-w-full divide-y divide-zinc-200">
                   <thead className="bg-zinc-50 text-xs">
                     <tr>
-                      <th scope="col" className="px-6 py-3.5 text-left font-bold uppercase tracking-wider w-24 border-r border-zinc-200 text-zinc-700">Phase</th>
-                      <th scope="col" className="px-6 py-3.5 text-left font-bold uppercase tracking-wider w-48 border-r border-zinc-200 text-zinc-700">Strategic Target</th>
-                      <th scope="col" className="px-6 py-3.5 text-left font-bold uppercase tracking-wider text-zinc-700">Description</th>
+                      <th scope="col" className="px-6 py-3.5 text-left font-bold uppercase tracking-wider w-24 border-r border-zinc-200 text-zinc-700">{t("home_vision_col_phase")}</th>
+                      <th scope="col" className="px-6 py-3.5 text-left font-bold uppercase tracking-wider w-48 border-r border-zinc-200 text-zinc-700">{t("home_vision_col_target")}</th>
+                      <th scope="col" className="px-6 py-3.5 text-left font-bold uppercase tracking-wider text-zinc-700">{t("home_vision_col_desc")}</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-zinc-200 text-xs">
-                    {VISION_MILESTONES.map((milestone) => (
+                    {localizedVisionMilestones.map((milestone) => (
                       <tr key={milestone.year} className="hover:bg-zinc-50/50 odd:bg-white even:bg-zinc-50/20">
                         <td className="px-6 py-4 font-mono font-bold text-accent-dark whitespace-nowrap bg-zinc-50/20 border-r border-zinc-200 text-center">
                           {milestone.year}
@@ -673,22 +704,22 @@ export default function Home() {
               <div className="md:col-span-2 space-y-2">
                 <div className="flex items-center gap-2 text-primary border-l-4 border-primary pl-3">
                   <HelpCircle className="w-5 h-5 text-accent-dark" />
-                  <h3 className="text-base font-bold uppercase tracking-wider text-zinc-900">Support Desk & Registration Queries</h3>
+                  <h3 className="text-base font-bold uppercase tracking-wider text-zinc-900">{t("home_support_title")}</h3>
                 </div>
                 <p className="text-xs text-zinc-500 leading-relaxed pl-4">
-                  Have questions about registering your college chapter, applying for micro-grants, or filing intellectual property? Review our contact directory or contact the helpdesk directly.
+                  {t("home_support_desc")}
                 </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 justify-end">
                 <Link href="/contact" className="w-full sm:w-auto">
                   <button className="w-full sm:w-auto border border-zinc-300 hover:bg-zinc-50 text-zinc-700 font-bold text-xs uppercase tracking-wider px-5 py-3 cursor-pointer text-center">
-                    Contact Support
+                    {t("home_support_btn_contact")}
                   </button>
                 </Link>
                 <Link href="/join" className="w-full sm:w-auto">
                   <button className="w-full sm:w-auto bg-[#0D6B4F] hover:bg-[#074733] text-white font-bold text-xs uppercase tracking-wider px-5 py-3 cursor-pointer text-center">
-                    Submit Query Form
+                    {t("home_support_btn_query")}
                   </button>
                 </Link>
               </div>
