@@ -8,8 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, MapPin, CheckCircle, ArrowRight, ShieldCheck } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function ContactPage() {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<string>("student");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
@@ -43,12 +45,12 @@ export default function ContactPage() {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <Badge variant="gold" className="mb-4">Get In Touch</Badge>
+          <Badge variant="gold" className="mb-4">{t("contact_badge")}</Badge>
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-zinc-900 font-sans mb-4">
-            Contact NCIE Desk
+            {t("contact_title")}
           </h1>
           <p className="text-base md:text-lg text-zinc-500 leading-relaxed">
-            Submit your specific inquiry. Our regional coordinators will route your request to the appropriate division desk.
+            {t("contact_desc")}
           </p>
         </div>
 
@@ -58,9 +60,9 @@ export default function ContactPage() {
           {/* Left: Contact Info */}
           <div className="lg:col-span-2 space-y-8">
             <div className="space-y-6">
-              <h2 className="text-xl font-bold text-zinc-900">Desk Operations</h2>
+              <h2 className="text-xl font-bold text-zinc-900">{t("contact_operations_title")}</h2>
               <p className="text-sm text-zinc-500 leading-relaxed">
-                The National Council for Innovation and Entrepreneurship maintains coordination desks across major zones. Select the correct category tab to ensure swift routing.
+                {t("contact_operations_desc")}
               </p>
             </div>
 
@@ -70,7 +72,7 @@ export default function ContactPage() {
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-zinc-900">NCIE Secretariat / Desk</h4>
+                  <h4 className="font-bold text-zinc-900">{t("contact_address_title")}</h4>
                   <p className="text-zinc-500 mt-0.5">NCIE Desk, Guntur, Andhra Pradesh, India</p>
                 </div>
               </div>
@@ -80,7 +82,7 @@ export default function ContactPage() {
                   <Mail className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-zinc-900">Official Support Email</h4>
+                  <h4 className="font-bold text-zinc-900">{t("contact_email_title")}</h4>
                   <p className="text-zinc-500 mt-0.5">office@ncieindia.org</p>
                 </div>
               </div>
@@ -90,8 +92,8 @@ export default function ContactPage() {
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-zinc-900">Toll-Free Helpdesk</h4>
-                  <p className="text-zinc-500 mt-0.5">0863 232 1417 (Mon–Sat, 9:00 AM – 5:30 PM IST)</p>
+                  <h4 className="font-bold text-zinc-900">{t("contact_phone_title")}</h4>
+                  <p className="text-zinc-500 mt-0.5">{t("contact_phone_val")}</p>
                 </div>
               </div>
             </div>
@@ -106,21 +108,29 @@ export default function ContactPage() {
                 </div>
                 
                 <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-zinc-900">Inquiry Logged</h3>
+                  <h3 className="text-xl font-bold text-zinc-900">{t("contact_submitted_title")}</h3>
                   <p className="text-sm text-zinc-500 leading-relaxed">
-                    Thank you, <span className="font-semibold text-primary">{formData.name}</span>. Your <span className="capitalize font-semibold text-accent">{activeTab} inquiry</span> has been successfully submitted to our regional coordinator.
+                    {t("contact_submitted_desc")
+                      .replace("{name}", formData.name)
+                      .replace("{tab}", t(`contact_tab_${activeTab}`))}
                   </p>
                 </div>
 
                 <div className="bg-zinc-50 border border-zinc-150 rounded-xl p-5 text-left flex gap-3 text-xs text-zinc-600 leading-relaxed">
                   <ShieldCheck className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                   <span>
-                    <strong>Next Steps:</strong> The desk lead will verify your institutional details. A response will be issued to <strong>{formData.email}</strong> within 3-4 working days.
+                    <strong>
+                      {t("contact_next_steps")
+                        .split(":")[0]}:
+                    </strong>
+                    {t("contact_next_steps")
+                      .substring(t("contact_next_steps").indexOf(":") + 1)
+                      .replace("{email}", formData.email)}
                   </span>
                 </div>
 
                 <Button variant="outline" onClick={resetForm} className="w-full">
-                  Submit Another Inquiry
+                  {t("contact_btn_another")}
                 </Button>
               </div>
             ) : (
@@ -128,25 +138,25 @@ export default function ContactPage() {
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                   <div className="px-6 pt-6 pb-2">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 block mb-3">
-                      Select Inquiry Desk
+                      {t("contact_select_desk")}
                     </label>
                     <TabsList className="w-full grid grid-cols-3">
-                      <TabsTrigger value="student" className="text-xs">Student</TabsTrigger>
-                      <TabsTrigger value="institution" className="text-xs">Institution</TabsTrigger>
-                      <TabsTrigger value="partnership" className="text-xs">Partnership</TabsTrigger>
+                      <TabsTrigger value="student" className="text-xs">{t("contact_tab_student")}</TabsTrigger>
+                      <TabsTrigger value="institution" className="text-xs">{t("contact_tab_institution")}</TabsTrigger>
+                      <TabsTrigger value="partnership" className="text-xs">{t("contact_tab_partnership")}</TabsTrigger>
                     </TabsList>
                   </div>
 
                   <CardHeader className="px-6 py-4 pb-2">
                     <CardTitle className="text-lg font-bold">
-                      {activeTab === "student" && "Student Inquiry Form"}
-                      {activeTab === "institution" && "Institution Inquiry Form"}
-                      {activeTab === "partnership" && "Partnership Inquiry Form"}
+                      {activeTab === "student" && t("contact_form_student_title")}
+                      {activeTab === "institution" && t("contact_form_institution_title")}
+                      {activeTab === "partnership" && t("contact_form_partnership_title")}
                     </CardTitle>
                     <CardDescription className="text-xs sm:text-sm">
-                      {activeTab === "student" && "Questions about student chapters, hackathons, and prototype grants."}
-                      {activeTab === "institution" && "Acquisition guidelines and makerspace funding queries for colleges."}
-                      {activeTab === "partnership" && "Corporate accelerators, angel networks, or CSR fund alliances."}
+                      {activeTab === "student" && t("contact_form_student_desc")}
+                      {activeTab === "institution" && t("contact_form_institution_desc")}
+                      {activeTab === "partnership" && t("contact_form_partnership_desc")}
                     </CardDescription>
                   </CardHeader>
 
@@ -154,37 +164,37 @@ export default function ContactPage() {
                     <form onSubmit={handleSubmit} className="space-y-4">
                       
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Full Name</label>
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("contact_label_name")}</label>
                         <Input
                           name="name"
                           value={formData.name}
                           onChange={handleInputChange}
-                          placeholder="e.g. Sneha Nair"
+                          placeholder={t("contact_placeholder_name")}
                           required
                         />
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Email Address</label>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("contact_label_email")}</label>
                           <Input
                             name="email"
                             type="email"
                             value={formData.email}
                             onChange={handleInputChange}
-                            placeholder="e.g. sneha@gmail.com"
+                            placeholder={t("contact_placeholder_email")}
                             required
                           />
                         </div>
 
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Phone Number</label>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("contact_label_phone")}</label>
                           <Input
                             name="phone"
                             type="tel"
                             value={formData.phone}
                             onChange={handleInputChange}
-                            placeholder="e.g. +91 9876543210"
+                            placeholder={t("contact_placeholder_phone")}
                             required
                           />
                         </div>
@@ -192,30 +202,30 @@ export default function ContactPage() {
 
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
-                          {activeTab === "student" ? "College/University" : "Organization Name"}
+                          {activeTab === "student" ? t("contact_label_org_student") : t("contact_label_org_other")}
                         </label>
                         <Input
                           name="org"
                           value={formData.org}
                           onChange={handleInputChange}
-                          placeholder="e.g. Indian Institute of Science"
+                          placeholder={t("contact_placeholder_org")}
                           required
                         />
                       </div>
 
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">Message Details</label>
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("contact_label_message")}</label>
                         <Textarea
                           name="message"
                           value={formData.message}
                           onChange={handleInputChange}
-                          placeholder="Please provide specific details regarding your inquiry..."
+                          placeholder={t("contact_placeholder_message")}
                           required
                         />
                       </div>
 
                       <Button variant="primary" type="submit" className="w-full justify-center text-xs sm:text-sm">
-                        Submit Inquiry
+                        {t("contact_btn_submit")}
                         <ArrowRight className="w-4 h-4 ml-1.5" />
                       </Button>
 

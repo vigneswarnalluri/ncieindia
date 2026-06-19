@@ -2,7 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { Target, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Milestone {
   year: string;
@@ -65,6 +66,35 @@ const MILESTONES_DATA: Milestone[] = [
 ];
 
 export default function Vision2047Page() {
+  const { t } = useLanguage();
+
+  const getMilestoneTitle = (m: Milestone) => {
+    const key = `vis_milestone_${m.year}_title`;
+    return t(key) || m.title;
+  };
+
+  const getMilestonePhase = (m: Milestone) => {
+    const key = `vis_milestone_${m.year}_phase`;
+    return t(key) || m.phase;
+  };
+
+  const getMilestoneDesc = (m: Milestone) => {
+    const key = `vis_milestone_${m.year}_desc`;
+    return t(key) || m.description;
+  };
+
+  const getMilestoneStrategy = (m: Milestone) => {
+    const key = `vis_milestone_${m.year}_strategy`;
+    return t(key) || m.strategy;
+  };
+
+  const getMilestoneTargets = (m: Milestone) => {
+    return m.targets.map((tgt, i) => {
+      const key = `vis_milestone_${m.year}_target_${i}`;
+      return t(key) || tgt;
+    });
+  };
+
   return (
     <div className="flex-1 bg-[#F9FAFB] pb-16">
       
@@ -72,15 +102,15 @@ export default function Vision2047Page() {
       <div className="relative bg-[#0A5D45] py-16 text-white border-b border-primary-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-xs md:text-sm text-emerald-100 font-semibold mb-2 flex items-center gap-1.5 uppercase tracking-wider">
-            <Link href="/" className="hover:underline hover:text-white transition-colors">Home</Link>
+            <Link href="/" className="hover:underline hover:text-white transition-colors">{t("vis_home")}</Link>
             <span>/</span>
-            <span className="text-white/60">Vision 2047 Centenary Roadmap</span>
+            <span className="text-white/60">{t("vis_slash")}</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-            NCIE India Vision 2047
+            {t("vis_title")}
           </h1>
           <p className="text-emerald-100/80 text-xs sm:text-sm max-w-3xl mt-3 leading-relaxed">
-            National roadmap aligning technical chapters and startup incubations with the centenary objectives of Viksit Bharat.
+            {t("vis_desc")}
           </p>
         </div>
       </div>
@@ -91,7 +121,7 @@ export default function Vision2047Page() {
           
           <div className="flex items-center gap-2 pb-4 border-b border-zinc-200 border-l-4 border-primary pl-3">
             <h2 className="text-base font-bold uppercase tracking-wider text-zinc-900">
-              Centenary Milestones &amp; strategic Targets
+              {t("vis_table_title")}
             </h2>
           </div>
 
@@ -99,10 +129,10 @@ export default function Vision2047Page() {
             <table className="w-full text-left border-collapse border border-zinc-200">
               <thead>
                 <tr className="bg-zinc-50 border-b border-zinc-200 text-xs">
-                  <th className="px-4 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-24 text-center">Centenary Year</th>
-                  <th className="px-4 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-52">Milestone / Scope</th>
-                  <th className="px-4 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-72">Strategic Focus &amp; Action Plan</th>
-                  <th className="px-4 py-3 font-bold uppercase tracking-wider text-zinc-700">Key Deliverables &amp; Targets</th>
+                  <th className="px-4 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-24 text-center">{t("vis_col_year")}</th>
+                  <th className="px-4 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-52">{t("vis_col_scope")}</th>
+                  <th className="px-4 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-72">{t("vis_col_focus")}</th>
+                  <th className="px-4 py-3 font-bold uppercase tracking-wider text-zinc-700">{t("vis_col_targets")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -112,17 +142,17 @@ export default function Vision2047Page() {
                       {milestone.year}
                     </td>
                     <td className="px-4 py-5 border-r border-zinc-200">
-                      <div className="font-bold text-zinc-900 leading-snug">{milestone.title}</div>
-                      <div className="text-[10px] text-zinc-450 mt-1 uppercase font-semibold font-mono">{milestone.phase}</div>
-                      <p className="text-[11px] text-zinc-500 mt-2 leading-relaxed text-justify pr-2">{milestone.description}</p>
+                      <div className="font-bold text-zinc-900 leading-snug">{getMilestoneTitle(milestone)}</div>
+                      <div className="text-[10px] text-zinc-450 mt-1 uppercase font-semibold font-mono">{getMilestonePhase(milestone)}</div>
+                      <p className="text-[11px] text-zinc-500 mt-2 leading-relaxed text-justify pr-2">{getMilestoneDesc(milestone)}</p>
                     </td>
                     <td className="px-4 py-5 border-r border-zinc-200 text-zinc-650 leading-relaxed text-justify pr-2">
-                      <div className="font-semibold text-zinc-750 mb-1">Methodology:</div>
-                      {milestone.strategy}
+                      <div className="font-semibold text-zinc-750 mb-1">{t("vis_methodology")}</div>
+                      {getMilestoneStrategy(milestone)}
                     </td>
                     <td className="px-4 py-5 text-zinc-700 font-medium">
                       <ul className="space-y-2">
-                        {milestone.targets.map((tgt, i) => (
+                        {getMilestoneTargets(milestone).map((tgt, i) => (
                           <li key={i} className="flex items-start gap-1.5 leading-relaxed">
                             <ShieldCheck className="w-4 h-4 text-[#0D6B4F] shrink-0 mt-0.5" />
                             <span>{tgt}</span>

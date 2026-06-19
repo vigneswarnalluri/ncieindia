@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Landmark, Building, Users, ArrowRight, ShieldCheck } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const COHORT_BENEFITS = [
   {
@@ -26,6 +27,8 @@ const COHORT_BENEFITS = [
 ];
 
 export default function PartnershipsPage() {
+  const { t } = useLanguage();
+
   return (
     <div className="flex-1 bg-[#F9FAFB] pb-16">
       
@@ -33,15 +36,15 @@ export default function PartnershipsPage() {
       <div className="relative bg-[#0A5D45] py-16 text-white border-b border-primary-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-xs md:text-sm text-emerald-100 font-semibold mb-2 flex items-center gap-1.5 uppercase tracking-wider">
-            <Link href="/" className="hover:underline hover:text-white transition-colors">Home</Link>
+            <Link href="/" className="hover:underline hover:text-white transition-colors">{t("part_home")}</Link>
             <span>/</span>
-            <span className="text-white/60">Partnerships &amp; Collaboration</span>
+            <span className="text-white/60">{t("part_slash")}</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-            Institutions &amp; Partnerships
+            {t("part_title")}
           </h1>
           <p className="text-emerald-100/80 text-xs sm:text-sm max-w-3xl mt-3 leading-relaxed">
-            Central liaison frameworks and collaborative pathways aligning academic institutions, corporate CSR stakeholders, and seed investor networks.
+            {t("part_desc")}
           </p>
         </div>
       </div>
@@ -52,7 +55,7 @@ export default function PartnershipsPage() {
           
           <div className="flex items-center gap-2 pb-4 border-b border-zinc-200 border-l-4 border-primary pl-3">
             <h2 className="text-base font-bold uppercase tracking-wider text-zinc-900">
-              Ecosystem Collaboration Tracks
+              {t("part_tracks_title")}
             </h2>
           </div>
 
@@ -65,21 +68,21 @@ export default function PartnershipsPage() {
                   <div className="space-y-3 max-w-xl">
                     <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
                       <Icon className="w-5 h-5 text-primary" />
-                      <span>{item.type}</span>
+                      <span>{t(`part_benefit_${idx}_type`) || item.type}</span>
                     </h3>
                     <p className="text-xs sm:text-sm text-zinc-650 leading-relaxed text-justify pr-4">
-                      {item.desc}
+                      {t(`part_benefit_${idx}_desc`) || item.desc}
                     </p>
                   </div>
                   
                   {/* Middle Column: Focus Parameters */}
                   <div className="space-y-2.5 w-full md:w-72 shrink-0">
-                    <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider block">Co-working Parameters:</span>
+                    <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider block">{t("part_col_param_title")}</span>
                     <div className="space-y-1.5 text-xs text-zinc-700">
                       {item.points.map((pt, i) => (
                         <div key={i} className="flex items-start gap-2">
                           <ShieldCheck className="w-4 h-4 text-accent-dark shrink-0 mt-0.5" />
-                          <span>{pt}</span>
+                          <span>{t(`part_benefit_${idx}_pt_${i}`) || pt}</span>
                         </div>
                       ))}
                     </div>
@@ -89,7 +92,7 @@ export default function PartnershipsPage() {
                   <div className="w-full md:w-44 shrink-0 pt-2 md:pt-4">
                     <Link href="/contact" className="w-full">
                       <button className="border border-zinc-350 hover:bg-zinc-50 text-zinc-700 font-bold text-xs uppercase tracking-wider px-4 py-2 cursor-pointer w-full text-center">
-                        Inquire Desk
+                        {t("part_btn_inquire")}
                       </button>
                     </Link>
                   </div>
@@ -103,14 +106,14 @@ export default function PartnershipsPage() {
         {/* Bottom Callout Panel */}
         <div className="mt-8 bg-[#083D2D] p-8 text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 border border-white/5">
           <div className="space-y-2 relative z-10 text-center md:text-left max-w-2xl">
-            <h3 className="text-lg font-bold uppercase tracking-tight">Start a Partnership Track</h3>
+            <h3 className="text-lg font-bold uppercase tracking-tight">{t("part_callout_title")}</h3>
             <p className="text-xs text-emerald-150/80 leading-relaxed">
-              Connect your CSR fund or angel syndicate with NCIE India&apos;s accredited academic pipeline. We facilitate compliant, high-yielding incubation programs.
+              {t("part_callout_desc")}
             </p>
           </div>
           <Link href="/contact" className="relative z-10 shrink-0">
             <button className="flex items-center gap-2 bg-[#C9A24B] hover:bg-[#A68034] active:scale-[0.98] text-white font-bold text-xs uppercase tracking-wider px-5 py-3 transition-colors cursor-pointer">
-              <span>Contact Liaison Office</span>
+              <span>{t("part_callout_btn")}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </Link>
