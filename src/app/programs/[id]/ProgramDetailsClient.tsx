@@ -11,8 +11,50 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/contexts/LanguageContext";
 
+const INTERNSHIP_SECTORS_EN = [
+  "Engineering & Technology",
+  "Science & Research",
+  "Commerce & Finance",
+  "Arts & Humanities",
+  "Agriculture & Rural Development",
+  "Healthcare & Life Sciences",
+  "Information Technology & AI",
+  "Social Innovation & Governance",
+  "Environment & Sustainability",
+  "Entrepreneurship & Startup Development"
+];
+
+const INTERNSHIP_SECTORS_HI = [
+  "इंजीनियरिंग और प्रौद्योगिकी",
+  "विज्ञान और अनुसंधान",
+  "वाणिज्य और वित्त",
+  "कला और मानविकी",
+  "कृषि और ग्रामीण विकास",
+  "स्वास्थ्य सेवा और जीवन विज्ञान",
+  "सूचना प्रौद्योगिकी और एआई",
+  "सामाजिक नवाचार और शासन",
+  "पर्यावरण और स्थिरता",
+  "उद्यमिता और स्टार्टअप विकास"
+];
+
+const SEED_FUNDING_STAGES_EN = [
+  { title: "Stage 1: Concept Validation (10% Release)", desc: "Release of 10% fund upon successful screening and approval of prototype plans." },
+  { title: "Stage 2: MVP Development (25% Release)", desc: "Release of 25% fund for building the Minimum Viable Product and early testing." },
+  { title: "Stage 3: Pilot Run & Testing (25% Release)", desc: "Release of 25% fund for launching pilot trials and gathering feedback." },
+  { title: "Stage 4: Legal & IP Setup (20% Release)", desc: "Release of 20% fund to support legal incorporation and patent/IP filing." },
+  { title: "Stage 5: Scale & Market Launch (20% Release)", desc: "Release of final 20% fund upon meeting the pre-commercial scaling milestones." }
+];
+
+const SEED_FUNDING_STAGES_HI = [
+  { title: "चरण 1: संकल्प सत्यापन (10% संवितरण)", desc: "प्रोटोटाइप योजनाओं की सफल स्क्रीनिंग और अनुमोदन पर 10% निधि जारी करना।" },
+  { title: "चरण 2: एमवीपी विकास (25% संवितरण)", desc: "न्यूनतम व्यवहार्य उत्पाद (MVP) के निर्माण और प्रारंभिक परीक्षण के लिए 25% निधि जारी करना।" },
+  { title: "चरण 3: पायलट रन और परीक्षण (25% संवितरण)", desc: "पायलट परीक्षण शुरू करने और प्रतिक्रिया एकत्र करने के लिए 25% निधि जारी करना।" },
+  { title: "चरण 4: कानूनी और आईपी सेटअप (20% संवितरण)", desc: "कानूनी निगमन और पेटेंट/आईपी फाइलिंग का समर्थन करने के लिए 20% निधि जारी करना।" },
+  { title: "चरण 5: स्केल और बाजार लॉन्च (20% संवितरण)", desc: "पूर्व-व्यावसायिक स्केलिंग मील के पत्थर को पूरा करने पर अंतिम 20% निधि जारी करना।" }
+];
+
 export default function ProgramDetailPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const params = useParams();
   const id = params.id as string;
   const [program, setProgram] = useState<Program | null>(null);
@@ -157,6 +199,28 @@ export default function ProgramDetailPage() {
               </p>
             </div>
 
+            {/* 10 Core Sectors Grid for Student Internships */}
+            {program.id === "student-internships" && (
+              <div className="space-y-4 bg-zinc-50/20 border border-zinc-150 rounded-2xl p-6">
+                <h3 className="text-sm font-bold text-zinc-900 uppercase tracking-wider text-zinc-400">
+                  {language === "hi" ? "10 कोर इंटर्नशिप क्षेत्र" : "10 Core Internship Sectors"}
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  {(language === "hi" ? INTERNSHIP_SECTORS_HI : INTERNSHIP_SECTORS_EN).map((sector, idx) => (
+                    <div 
+                      key={idx} 
+                      className="flex items-center gap-3 p-3 border border-zinc-150 bg-white rounded-xl hover:border-primary/20 hover:bg-zinc-50/40 hover:shadow-sm transition-all duration-200"
+                    >
+                      <div className="w-5.5 h-5.5 rounded-full bg-[#0D6B4F]/10 text-primary flex items-center justify-center font-mono text-[10px] font-bold shrink-0">
+                        {idx + 1}
+                      </div>
+                      <span className="text-xs sm:text-sm font-bold text-zinc-750">{sector}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Benefits Block */}
             <div className="space-y-4 bg-zinc-50/50 border border-zinc-100 rounded-2xl p-6">
               <h3 className="text-base font-bold text-zinc-900 uppercase tracking-wider text-zinc-400">{t("prog_details_benefits")}</h3>
@@ -224,19 +288,26 @@ export default function ProgramDetailPage() {
               </div>
             )}
 
-            {/* Process Steps */}
+            {/* Process Steps / Milestones Release */}
             <div className="space-y-4">
-              <h2 className="text-xl font-bold text-zinc-900">{t("prog_details_evaluation")}</h2>
-              <div className="space-y-4 relative pl-4 border-l-2 border-primary/20">
-                {(program.stages || [
-                  { title: t("prog_details_stage_1_title"), desc: t("prog_details_stage_1_desc") },
-                  { title: t("prog_details_stage_2_title"), desc: t("prog_details_stage_2_desc") },
-                  { title: t("prog_details_stage_3_title"), desc: t("prog_details_stage_3_desc") },
-                ]).map((step, idx) => (
+              <h2 className="text-xl font-bold text-zinc-900 font-sans">
+                {program.id === "startup-seed-funding"
+                  ? (language === "hi" ? "5-चरण निधि जारी करने का मॉडल" : "5-Stage Funding Release Model")
+                  : t("prog_details_evaluation")}
+              </h2>
+              <div className="space-y-4 relative pl-4 border-l-2 border-[#0D6B4F]/20">
+                {(program.id === "startup-seed-funding"
+                  ? (language === "hi" ? SEED_FUNDING_STAGES_HI : SEED_FUNDING_STAGES_EN)
+                  : (program.stages || [
+                      { title: t("prog_details_stage_1_title"), desc: t("prog_details_stage_1_desc") },
+                      { title: t("prog_details_stage_2_title"), desc: t("prog_details_stage_2_desc") },
+                      { title: t("prog_details_stage_3_title"), desc: t("prog_details_stage_3_desc") },
+                    ])
+                ).map((step, idx) => (
                   <div key={idx} className="relative group">
-                    <div className="absolute -left-[25px] top-1 w-3 h-3 rounded-full bg-primary border-2 border-white shadow-sm" />
-                    <h4 className="text-sm font-bold text-zinc-900">{step.title}</h4>
-                    <p className="text-xs text-zinc-500 mt-1">{step.desc}</p>
+                    <div className="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#0D6B4F] border-2 border-white shadow-sm" />
+                    <h4 className="text-sm font-bold text-zinc-900 leading-snug">{step.title}</h4>
+                    <p className="text-xs text-zinc-500 mt-1.5 leading-relaxed">{step.desc}</p>
                   </div>
                 ))}
               </div>
