@@ -115,7 +115,7 @@ export const PROGRAMS_DATA: Program[] = [
     id: "csr-rural-support",
     title: "CSR Support for Rural & Semi-Urban Institutions",
     subtitle: "Facilitating corporate CSR partnerships for regional development",
-    category: "institution",
+    category: "corporate",
     budget: "CSR capital matching",
     duration: "Annual alignment cycle",
     description: "Innovation India facilitates CSR partnerships for reputed institutions and organizations to promote innovation ecosystems in rural and semi-urban areas, fostering local student startups and capacity building.",
