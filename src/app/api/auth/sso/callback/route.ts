@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { ALLOWED_EMAILS } from "@/lib/allowedEmails";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.nextUrl);
@@ -79,6 +80,14 @@ export async function GET(request: NextRequest) {
 
     if (!email) {
       return NextResponse.redirect(new URL("/login?error=sso_profile_failed", request.url));
+    }
+
+    const isAllowed = ALLOWED_EMAILS.some(
+      (allowed) => allowed.toLowerCase() === email.toLowerCase()
+    );
+
+    if (!isAllowed) {
+      return NextResponse.redirect(new URL("/login?error=sso_unauthorized", request.url));
     }
 
     // Route mapping based on email domain

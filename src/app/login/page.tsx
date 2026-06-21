@@ -20,6 +20,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { ALLOWED_EMAILS } from "@/lib/allowedEmails";
 
 type Role = "institution" | "official";
 
@@ -184,8 +185,27 @@ export default function LoginPage() {
           setAuthError("Failed to authenticate via SSO. Please try again.");
         }
       }
+
+      const errorParam = searchParams.get("error");
+      if (errorParam) {
+        if (errorParam === "sso_unauthorized") {
+          setAuthError(t("login_unauthorized_desc"));
+        } else if (errorParam === "sso_missing_code") {
+          setAuthError("MeriPehchaan login code is missing. Please try again.");
+        } else if (errorParam === "sso_configuration_error") {
+          setAuthError("MeriPehchaan SSO configuration error on server.");
+        } else if (errorParam === "sso_token_exchange_failed") {
+          setAuthError("Token exchange failed with MeriPehchaan server.");
+        } else if (errorParam === "sso_profile_failed") {
+          setAuthError("Could not retrieve profile information from MeriPehchaan.");
+        } else if (errorParam === "sso_callback_error") {
+          setAuthError("SSO login failed. Please try again.");
+        } else {
+          setAuthError(errorParam);
+        }
+      }
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     generateCaptcha();
@@ -218,10 +238,19 @@ export default function LoginPage() {
       return;
     }
 
+    const email = id.trim().toLowerCase();
+    const isAllowed = ALLOWED_EMAILS.some(
+      (allowed) => allowed.toLowerCase() === email
+    );
+
+    if (!isAllowed) {
+      setAuthError(t("login_unauthorized_desc"));
+      generateCaptcha();
+      return;
+    }
+
     setLoading(true);
     try {
-      // id field contains email for both roles
-      const email = id.trim();
       emailRef.current = email;
       setOtpEmail(email); // Also store in state for reliability
 
