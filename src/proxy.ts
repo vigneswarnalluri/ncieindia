@@ -19,12 +19,13 @@ export function proxy(request: NextRequest) {
 
   const allCookies = request.cookies.getAll();
 
-  // Check for real Supabase auth cookie
+  // Check for real Supabase auth cookie or local demo session cookie
   const hasSupabaseCookie = allCookies.some(
     (c) => c.name.startsWith("sb-") && c.name.endsWith("-auth-token")
   );
+  const hasDemoCookie = request.cookies.has("ncie_demo_session");
 
-  if (!hasSupabaseCookie) {
+  if (!hasSupabaseCookie && !hasDemoCookie) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirected", "1");
     return NextResponse.redirect(loginUrl);

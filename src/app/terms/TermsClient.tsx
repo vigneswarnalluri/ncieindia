@@ -76,7 +76,7 @@ export default function TermsPage() {
             <li>Submit fraudulent, inaccurate, or fabricated institutional data, student enrollments, or patent applications.</li>
             <li>Use automated crawlers, scrapers, or scripts to extract portal databases, user directories, or grant disbursements list.</li>
             <li>Introduce malicious code, trojan horses, worms, or conduct denial-of-service (DoS) attacks against the NCIE network.</li>
-            <li>Impersonate any government official, nodal coordinator, or university SPOC.</li>
+            <li>Impersonate any portal official, nodal coordinator, or university SPOC.</li>
           </ul>
         </div>
       ),
@@ -172,7 +172,7 @@ export default function TermsPage() {
             <li>धोखाधड़ी, गलत या मनगढ़ंत संस्थागत डेटा, छात्र नामांकन, या पेटेंट आवेदन जमा करना।</li>
             <li>पोर्टल डेटाबेस, उपयोगकर्ता निर्देशिकाओं या अनुदान संवितरण सूची को निकालने के लिए स्वचालित क्रॉलर्स या स्क्रिप्ट का उपयोग करना।</li>
             <li>NCIE नेटवर्क के खिलाफ दुर्भावनापूर्ण कोड, वायरस डालना या डिनायल-ऑफ-सर्विस (DoS) हमलों का संचालन करना।</li>
-            <li>किसी भी सरकारी अधिकारी, नोडल समन्वयक, या विश्वविद्यालय एसपीओसी का रूप धारण करना।</li>
+            <li>किसी भी पोर्टल अधिकारी, नोडल समन्वयक, या विश्वविद्यालय एसपीओसी का रूप धारण करना।</li>
           </ul>
         </div>
       ),

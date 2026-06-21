@@ -358,9 +358,9 @@ export default function AboutPage() {
   return (
     <div className="flex-1 bg-[#F9FAFB] pb-16">
       
-      {/* ── Page Hero Banner (Gov/Institutional style) ── */}
+      {/* ── Page Hero Banner (Institutional style) ── */}
       <div className="relative bg-[#0A5D45] overflow-hidden py-16 text-white border-b border-primary-dark">
-        {/* Simple geometric lines for clean governmental styling */}
+        {/* Simple geometric lines for clean institutional styling */}
         <div className="absolute inset-0 opacity-10 pointer-events-none">
           <svg width="100%" height="100%">
             <line x1="0" y1="20%" x2="100%" y2="80%" stroke="#ffffff" strokeWidth="2" />

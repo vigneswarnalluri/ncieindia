@@ -26,7 +26,7 @@ export default function PrivacyPage() {
           </p>
           <p className="font-semibold text-zinc-850">We collect the following details:</p>
           <ul className="list-disc pl-5 space-y-2">
-            <li><span className="font-bold">Administrative Details:</span> Full name, official email address, mobile number, and designation of designated Institution SPOCs and Government Nodal Officers.</li>
+            <li><span className="font-bold">Administrative Details:</span> Full name, official email address, mobile number, and designation of designated Institution SPOCs and Nodal Officers.</li>
             <li><span className="font-bold">Institutional Data:</span> AISHE codes, college affiliation status, innovation capacity surveys, and physical/mailing addresses.</li>
             <li><span className="font-bold">Portal Logs:</span> Internet Protocol (IP) addresses, authentication timestamps, browser user-agent tokens, database transaction logs, and OTP verification records.</li>
           </ul>
@@ -57,7 +57,7 @@ export default function PrivacyPage() {
       content: (
         <div className="space-y-4">
           <p>
-            User and institutional records are shared only with the Ministry of Education (MoE), statutory technical education bodies (such as AICTE/UGC), and implementing government councils to verify academic eligibility.
+            User and institutional records are shared only with the Ministry of Education (MoE), statutory technical education bodies (such as AICTE/UGC), and implementing councils to verify academic eligibility.
           </p>
           <p>
             Information may be disclosed under legal request to law enforcement authorities under standard judicial subpoenas or provisions of the Indian IT Act, 2000, for cyber safety and audit compliance.
@@ -128,7 +128,7 @@ export default function PrivacyPage() {
           </p>
           <p className="font-semibold text-zinc-850">हम निम्नलिखित विवरण एकत्र करते हैं:</p>
           <ul className="list-disc pl-5 space-y-2">
-            <li><span className="font-bold">प्रशासनिक विवरण:</span> नामित संस्था एसपीओसी और सरकारी नोडल अधिकारियों का पूरा नाम, आधिकारिक ईमेल पता, मोबाइल नंबर और पदनाम।</li>
+            <li><span className="font-bold">प्रशासनिक विवरण:</span> नामित संस्था एसपीओसी और नोडल अधिकारियों का पूरा नाम, आधिकारिक ईमेल पता, मोबाइल नंबर और पदनाम।</li>
             <li><span className="font-bold">संस्थागत डेटा:</span> AISHE कोड, कॉलेज संबद्धता की स्थिति, नवाचार क्षमता सर्वेक्षण और भौतिक/पत्राचार पते।</li>
             <li><span className="font-bold">पोर्टल लॉग:</span> इंटरनेट प्रोटोकॉल (आईपी) पते, प्रमाणीकरण टाइमस्टैम्प, ब्राउज़र एजेंट टोकन, डेटाबेस लेनदेन लॉग और ओटीपी सत्यापन रिकॉर्ड।</li>
           </ul>
@@ -159,7 +159,7 @@ export default function PrivacyPage() {
       content: (
         <div className="space-y-4">
           <p>
-            उपयोगकर्ता और संस्थागत रिकॉर्ड केवल शिक्षा मंत्रालय (MoE), वैधानिक तकनीकी शिक्षा निकायों (जैसे एआईसीटीई/यूजीसी) और शैक्षणिक पात्रता की पुष्टि के लिए कार्यान्वयन सरकारी परिषदों के साथ साझा किए जाते हैं।
+            उपयोगकर्ता और संस्थागत रिकॉर्ड केवल शिक्षा मंत्रालय (MoE), वैधानिक तकनीकी शिक्षा निकायों (जैसे एआईसीटीई/यूजीसी) और शैक्षणिक पात्रता की पुष्टि के लिए कार्यान्वयन परिषदों के साथ साझा किए जाते हैं।
           </p>
           <p>
             साइबर सुरक्षा और ऑडिट अनुपालन के लिए भारतीय आईटी अधिनियम, 2000 के प्रावधानों के तहत कानून प्रवर्तन अधिकारियों को कानूनी अनुरोध या न्यायिक आदेश के तहत जानकारी का खुलासा किया जा सकता है।

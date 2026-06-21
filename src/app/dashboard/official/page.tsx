@@ -315,7 +315,7 @@ export default function OfficialDashboard() {
 
       {/* Ministry Top Bar */}
       <div className="bg-[#0D6B4F] text-white text-[10px] px-4 py-1.5 flex flex-col sm:flex-row justify-between items-center gap-1 sm:gap-0">
-        <span className="tracking-wider font-medium uppercase text-center sm:text-left">Government of India &nbsp;|&nbsp; Ministry of Education &nbsp;|&nbsp; National Council for Innovation &amp; Entrepreneurship — Central Command</span>
+        <span className="tracking-wider font-medium uppercase text-center sm:text-left">National Council for Innovation &amp; Entrepreneurship — Central Command</span>
         <div className="flex items-center gap-4 text-emerald-200">
           <span className="font-mono">Email: {userEmail}</span>
           <span className="hidden xs:inline">|</span>
@@ -337,7 +337,7 @@ export default function OfficialDashboard() {
           <div className="w-px h-10 bg-zinc-200 hidden sm:block" />
           <div className="hidden sm:block">
             <p className="text-[11px] font-bold text-[#0D6B4F] uppercase tracking-widest">Central Administrative Command</p>
-            <p className="text-[13px] font-bold text-zinc-900">Ministry of Education — Nodal Desk</p>
+            <p className="text-[13px] font-bold text-zinc-900">Nodal Command Desk</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -437,8 +437,8 @@ export default function OfficialDashboard() {
           </div>
 
           <div className="border-t border-zinc-200 bg-white px-6 py-3 flex flex-col md:flex-row justify-between items-center gap-1.5 md:gap-0 text-[10px] text-zinc-400 text-center md:text-left">
-            <span>© 2026 National Council for Innovation &amp; Entrepreneurship | Ministry of Education, Government of India</span>
-            <span className="font-mono">NIC Admin Portal v2.4.1 | TLS 1.3 | CERT-IN Compliant</span>
+            <span>© 2026 National Council for Innovation &amp; Entrepreneurship</span>
+            <span className="font-mono">NCIE Admin Portal v2.4.1 | TLS 1.3 | CERT-IN Compliant</span>
           </div>
         </main>
       </div>

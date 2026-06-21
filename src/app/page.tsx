@@ -54,7 +54,7 @@ export const metadata: Metadata = {
 export default function Page() {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "GovernmentOrganization",
+    "@type": "EducationalOrganization",
     "name": "National Council for Innovation and Entrepreneurship (NCIE) India",
     "alternateName": "NCIE India",
     "url": "https://ncieindia.org",

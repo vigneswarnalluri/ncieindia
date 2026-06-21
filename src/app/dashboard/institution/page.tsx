@@ -327,7 +327,7 @@ export default function InstitutionDashboard() {
 
       {/* Ministry Top Bar */}
       <div className="bg-[#1a1a1a] text-white text-[10px] px-4 py-1.5 flex flex-col sm:flex-row justify-between items-center gap-1 sm:gap-0">
-        <span className="tracking-wider uppercase font-medium text-center sm:text-left">Government of India &nbsp;|&nbsp; Ministry of Education &nbsp;|&nbsp; National Council for Innovation &amp; Entrepreneurship</span>
+        <span className="tracking-wider uppercase font-medium text-center sm:text-left">National Council for Innovation &amp; Entrepreneurship</span>
         <div className="flex items-center gap-4">
           <span className="text-zinc-400">Session: {userName}</span>
           <span className="hidden xs:inline">|</span>
@@ -412,7 +412,7 @@ export default function InstitutionDashboard() {
             <div className="border-t border-zinc-200 mt-3 pt-3">
               <p className="px-4 text-[9px] font-bold text-zinc-400 uppercase tracking-widest mb-1">Support</p>
               <button className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs text-zinc-600 hover:bg-zinc-50 cursor-pointer">
-                <HelpCircle className="w-4 h-4 text-zinc-400" /> NIC Helpdesk
+                <HelpCircle className="w-4 h-4 text-zinc-400" /> NCIE Helpdesk
               </button>
             </div>
           </nav>
@@ -461,8 +461,8 @@ export default function InstitutionDashboard() {
           </div>
 
           <div className="border-t border-zinc-200 bg-white px-6 py-3 flex flex-col md:flex-row justify-between items-center gap-1.5 md:gap-0 text-[10px] text-zinc-400 text-center md:text-left">
-            <span>© 2026 National Council for Innovation &amp; Entrepreneurship (NCIE) | Ministry of Education, Govt. of India</span>
-            <span className="font-mono">NIC Portal v2.4.1 | TLS 1.3 Secured</span>
+            <span>© 2026 National Council for Innovation &amp; Entrepreneurship (NCIE)</span>
+            <span className="font-mono">NCIE Portal v2.4.1 | TLS 1.3 Secured</span>
           </div>
         </main>
       </div>

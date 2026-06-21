@@ -106,7 +106,8 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 10) {
+      const threshold = window.innerWidth >= 768 ? 64 : 10;
+      if (window.scrollY > threshold) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
@@ -133,14 +134,9 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full flex flex-col">
+      <header className="sticky top-0 md:top-[-64px] z-50 w-full flex flex-col">
       {/* Top Black Bar (Gov/Institutional style) */}
-      <div
-        className={cn(
-          "bg-[#1A1A1A] text-white border-b border-white/5 text-xs font-sans relative z-40 hidden md:block transition-all duration-300 overflow-hidden",
-          isScrolled ? "h-0 py-0 border-b-0" : "h-16 py-3"
-        )}
-      >
+      <div className="bg-[#1A1A1A] text-white border-b border-white/5 text-xs font-sans relative z-40 hidden md:block h-16 py-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-full">
           {/* Left: Socials */}
           <div className="flex items-center space-x-6">

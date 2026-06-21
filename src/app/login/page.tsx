@@ -64,6 +64,7 @@ export default function LoginPage() {
   const [pass, setPass] = useState("");
   const [loading, setLoading] = useState(false);
   const [ssoLoading, setSsoLoading] = useState(false);
+  const [ssoModalOpen, setSsoModalOpen] = useState(false);
   const [success, setSuccess] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const emailRef = useRef<string>("");
@@ -167,6 +168,26 @@ export default function LoginPage() {
   };
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const searchParams = new URLSearchParams(window.location.search);
+      const ssoSession = searchParams.get("sso_session");
+      if (ssoSession) {
+        try {
+          const sessionData = JSON.parse(decodeURIComponent(ssoSession));
+          localStorage.setItem("ncie_demo_session", JSON.stringify(sessionData));
+          document.cookie = `ncie_demo_session=${encodeURIComponent(JSON.stringify(sessionData))}; path=/; SameSite=Lax; max-age=${60 * 60 * 24 * 7}`;
+          
+          const targetUrl = sessionData.role === "official" ? "/dashboard/official" : "/dashboard/institution";
+          window.location.href = targetUrl;
+        } catch (e) {
+          console.error("Failed to parse SSO session:", e);
+          setAuthError("Failed to authenticate via SSO. Please try again.");
+        }
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     generateCaptcha();
   }, []);
 
@@ -226,10 +247,29 @@ export default function LoginPage() {
 
   const handleSsoLogin = () => {
     setSsoLoading(true);
-    setTimeout(() => {
+    const clientId = process.env.NEXT_PUBLIC_MERIPEHCHAAN_CLIENT_ID;
+    const authUrl = process.env.NEXT_PUBLIC_MERIPEHCHAAN_AUTH_URL;
+    const redirectUri = process.env.NEXT_PUBLIC_MERIPEHCHAAN_REDIRECT_URI;
+    const state = "ncie-sso-state-secure";
+    const scope = "openid profile email";
+
+    if (!clientId || !authUrl || !redirectUri) {
+      setAuthError(
+        "MeriPehchaan SSO is not configured on this server. Missing required environment variables."
+      );
       setSsoLoading(false);
-      alert("Redirecting securely to National Single Sign-On (MeriPehchaan)...");
-    }, 1000);
+      return;
+    }
+
+    const params = new URLSearchParams({
+      response_type: "code",
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      scope: scope,
+      state: state,
+    });
+
+    window.location.href = `${authUrl}?${params.toString()}`;
   };
 
   return (
@@ -260,23 +300,8 @@ export default function LoginPage() {
         {/* Elegant Top Decorative Border */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary" />
 
-        {/* National Emblem & Department Branding */}
+        {/* Department Branding */}
         <div className="flex flex-col items-center text-center space-y-3 mb-3">
-          <div className="flex items-center justify-center gap-2">
-            <Image
-              src="/gov-emblem.png"
-              alt="Government of India Emblem"
-              width={75}
-              height={22}
-              className="h-6 w-auto object-contain opacity-80"
-              unoptimized
-            />
-            <div className="w-px h-4 bg-zinc-300" />
-            <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest leading-none">
-              Govt. of India
-            </span>
-          </div>
-          
           <Image
             src="/logo-new.svg"
             alt="NCIE India Logo"

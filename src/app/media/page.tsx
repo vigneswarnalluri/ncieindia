@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Calendar, 
   FileText, 
@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/lib/supabase";
 
 const MEDIA_ANNOUNCEMENTS = [
   {
@@ -84,28 +85,32 @@ const GALLERY_PHOTOS = [
     location: "IISc, Bengaluru",
     date: "April 2026",
     ratio: "aspect-video",
-    gradient: "from-[#0D6B4F]/15 to-[#C9A24B]/15"
+    gradient: "from-[#0D6B4F]/15 to-[#C9A24B]/15",
+    image: "/images/media/regional_summit.png"
   },
   {
     title: "NCIE Founders Roundtable Meeting",
     location: "Vigyan Bhawan, New Delhi",
     date: "May 2026",
     ratio: "aspect-video",
-    gradient: "from-[#074733]/25 to-[#C9A24B]/10"
+    gradient: "from-[#074733]/25 to-[#C9A24B]/10",
+    image: "/images/media/founders_roundtable.png"
   },
   {
     title: "Makerspace Prototype Showcase",
     location: "IIT Bombay Chapter",
     date: "March 2026",
     ratio: "aspect-video",
-    gradient: "from-[#0D6B4F]/10 to-[#A68034]/20"
+    gradient: "from-[#0D6B4F]/10 to-[#A68034]/20",
+    image: "/images/media/prototype_showcase.png"
   },
   {
     title: "IP Strategy and Patent Filing Workshop",
     location: "JNTU, Hyderabad",
     date: "June 2026",
     ratio: "aspect-video",
-    gradient: "from-[#042B1F]/30 to-[#E6C57A]/15"
+    gradient: "from-[#042B1F]/30 to-[#E6C57A]/15",
+    image: "/images/media/patent_workshop.png"
   }
 ];
 
@@ -114,6 +119,43 @@ export default function MediaPage() {
   const [activeTab, setActiveTab] = useState<"announcements" | "press" | "gallery">("announcements");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const [announcements, setAnnouncements] = useState(MEDIA_ANNOUNCEMENTS);
+  const [pressReleases, setPressReleases] = useState(PRESS_RELEASES);
+  const [galleryPhotos, setGalleryPhotos] = useState(GALLERY_PHOTOS);
+
+  useEffect(() => {
+    async function loadMedia() {
+      try {
+        const { data: annData, error: annError } = await supabase
+          .from("media_announcements")
+          .select("*")
+          .order("date", { ascending: false });
+        if (!annError && annData && annData.length > 0) {
+          setAnnouncements(annData);
+        }
+
+        const { data: prData, error: prError } = await supabase
+          .from("press_releases")
+          .select("*")
+          .order("date", { ascending: false });
+        if (!prError && prData && prData.length > 0) {
+          setPressReleases(prData);
+        }
+
+        const { data: galData, error: galError } = await supabase
+          .from("gallery_photos")
+          .select("*")
+          .order("date", { ascending: false });
+        if (!galError && galData && galData.length > 0) {
+          setGalleryPhotos(galData);
+        }
+      } catch (err) {
+        console.warn("Supabase fetch failed for media resources. Falling back to local data.", err);
+      }
+    }
+    loadMedia();
+  }, []);
 
   // Helper functions for dynamic key mappings
   const getAnnouncementTitle = (item: typeof MEDIA_ANNOUNCEMENTS[0]) => {
@@ -173,7 +215,7 @@ export default function MediaPage() {
 
   const getCategoryDisplayName = (cat: string) => {
     if (cat === "All") return language === "hi" ? "सभी" : "All";
-    const matched = MEDIA_ANNOUNCEMENTS.find(item => item.category === cat);
+    const matched = announcements.find(item => item.category === cat);
     if (matched) {
       return getAnnouncementCategory(matched);
     }
@@ -181,7 +223,7 @@ export default function MediaPage() {
   };
 
   // Filter Logic
-  const filteredAnnouncements = MEDIA_ANNOUNCEMENTS.filter((item) => {
+  const filteredAnnouncements = announcements.filter((item) => {
     const title = getAnnouncementTitle(item);
     const desc = getAnnouncementDesc(item);
     const matchesSearch = title.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -191,7 +233,7 @@ export default function MediaPage() {
     return matchesSearch && matchesCat;
   });
 
-  const filteredPress = PRESS_RELEASES.filter((item) => {
+  const filteredPress = pressReleases.filter((item) => {
     const title = getPressTitle(item);
     const desc = getPressDesc(item);
     return title.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -199,19 +241,19 @@ export default function MediaPage() {
            desc.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
-  const filteredGallery = GALLERY_PHOTOS.filter((photo) => {
+  const filteredGallery = galleryPhotos.filter((photo) => {
     const title = getPhotoTitle(photo);
     const loc = getPhotoLocation(photo);
     return title.toLowerCase().includes(searchQuery.toLowerCase()) || 
            loc.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
-  const categories = ["All", ...Array.from(new Set(MEDIA_ANNOUNCEMENTS.map(item => item.category)))];
+  const categories = ["All", ...Array.from(new Set(announcements.map(item => item.category)))];
 
   return (
     <div className="flex-1 bg-[#F8FAFC] pb-20 border-t border-zinc-200">
       
-      {/* Official Government Bilingual Banner Header */}
+      {/* Official Bilingual Banner Header */}
       <div className="relative bg-gradient-to-r from-[#074733] via-[#0D6B4F] to-[#053d2e] text-white border-b-4 border-[#C9A24B] py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Background Grid Pattern & Orbs */}
         <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:30px_30px]" />
@@ -251,7 +293,9 @@ export default function MediaPage() {
             </div>
             <div className="min-w-0">
               <p className="text-[10px] uppercase font-bold text-zinc-400 truncate">{t("media_stat_gazettes_title")}</p>
-              <p className="text-base font-extrabold text-zinc-800 truncate">{t("media_stat_gazettes_val")}</p>
+              <p className="text-base font-extrabold text-zinc-800 truncate">
+                {t("media_stat_gazettes_val").replace("{count}", announcements.length.toString())}
+              </p>
             </div>
           </div>
           <div className="bg-white border border-zinc-200 p-4 rounded shadow-sm flex items-center gap-3 min-w-0">
@@ -260,7 +304,9 @@ export default function MediaPage() {
             </div>
             <div className="min-w-0">
               <p className="text-[10px] uppercase font-bold text-zinc-400 truncate">{t("media_stat_press_title")}</p>
-              <p className="text-base font-extrabold text-zinc-800 truncate">{t("media_stat_press_val")}</p>
+              <p className="text-base font-extrabold text-zinc-800 truncate">
+                {t("media_stat_press_val").replace("{count}", pressReleases.length.toString())}
+              </p>
             </div>
           </div>
           <div className="bg-white border border-zinc-200 p-4 rounded shadow-sm flex items-center gap-3 min-w-0">
@@ -492,16 +538,26 @@ export default function MediaPage() {
                         key={photo.title}
                         className="bg-white rounded border border-zinc-200 overflow-hidden shadow-sm group hover:border-[#0D6B4F]/35 transition-all duration-300 flex flex-col justify-between"
                       >
-                        {/* Premium Digital Grid Pattern Representing Gallery Visual Placeholder */}
-                        <div className={`relative w-full ${photo.ratio} bg-gradient-to-br ${photo.gradient} flex items-center justify-center shrink-0`}>
-                          {/* Saffron & Green diagonal accent light sweeps */}
-                          <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:20px_20px]" />
-                          <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/60 text-white text-[9px] uppercase font-bold tracking-wider backdrop-blur-sm">
-                            {getFormattedDate(photo.date)}
-                          </div>
+                        {/* Event Image or Premium Digital Grid Pattern Representing Gallery Visual Placeholder */}
+                        <div className={`relative w-full ${photo.ratio} overflow-hidden shrink-0 flex items-center justify-center`}>
+                          {photo.image ? (
+                            <img
+                              src={photo.image}
+                              alt={getPhotoTitle(photo)}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                          ) : (
+                            <div className={`w-full h-full bg-gradient-to-br ${photo.gradient} flex items-center justify-center shrink-0`}>
+                              <div className="w-12 h-12 bg-white/90 shadow rounded-full flex items-center justify-center text-primary group-hover:scale-110 group-hover:bg-[#0D6B4F] group-hover:text-white transition-all duration-300">
+                                <ImageIcon className="w-5 h-5 transition-transform duration-300" />
+                              </div>
+                            </div>
+                          )}
                           
-                          <div className="w-12 h-12 bg-white/90 shadow rounded-full flex items-center justify-center text-primary group-hover:scale-110 group-hover:bg-[#0D6B4F] group-hover:text-white transition-all duration-300">
-                            <ImageIcon className="w-5 h-5 transition-transform duration-300" />
+                          {/* Saffron & Green diagonal accent light sweeps */}
+                          <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
+                          <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/60 text-white text-[9px] uppercase font-bold tracking-wider backdrop-blur-sm pointer-events-none">
+                            {getFormattedDate(photo.date)}
                           </div>
                         </div>
                         
@@ -525,7 +581,7 @@ export default function MediaPage() {
 
           </div>
 
-          {/* Right Column: Government PR Liaison Desk Details */}
+          {/* Right Column: PR Liaison Desk Details */}
           <div className="lg:col-span-4 space-y-6">
             
             {/* Press Liaison Office Details */}

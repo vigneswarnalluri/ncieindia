@@ -94,7 +94,7 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
               <div className="mx-6 mt-5 flex items-start gap-2.5 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
                 <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                 <p className="text-xs text-amber-800 leading-relaxed">
-                  Access is <strong>strictly limited</strong> to registered institutions and designated government officials. Unauthorized login attempts are logged and may be reported.
+                  Access is <strong>strictly limited</strong> to registered institutions and designated officials. Unauthorized login attempts are logged and may be reported.
                 </p>
               </div>
 
@@ -122,7 +122,7 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
                   }`}
                 >
                   <ShieldCheck className="w-4 h-4" />
-                  Govt. Official
+                  Official
                 </button>
               </div>
 
@@ -188,7 +188,7 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
                   className="w-full mui-button-primary cursor-pointer flex items-center justify-center gap-2"
                 >
                   <Lock className="w-3.5 h-3.5" />
-                  {role === "institution" ? "Login as Institution" : "Login as Govt. Official"}
+                  {role === "institution" ? "Login as Institution" : "Login as Official"}
                 </button>
 
                 {/* Footer note */}

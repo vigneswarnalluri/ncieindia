@@ -17,7 +17,22 @@ export function useAuthGuard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check real Supabase session
+    // 1. Check local demo session first
+    if (typeof window !== "undefined") {
+      const localDemo = localStorage.getItem("ncie_demo_session");
+      if (localDemo) {
+        try {
+          const parsed = JSON.parse(localDemo);
+          setDemoSession(parsed);
+          setLoading(false);
+          return;
+        } catch (e) {
+          console.warn("Invalid demo session in localStorage", e);
+        }
+      }
+    }
+
+    // 2. Check real Supabase session
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
         router.replace("/login");
@@ -37,6 +52,9 @@ export function useAuthGuard() {
 
     // Subscribe to auth state changes (logout / token refresh)
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (typeof window !== "undefined" && localStorage.getItem("ncie_demo_session")) {
+        return;
+      }
       if (!session) {
         router.replace("/login");
       } else {

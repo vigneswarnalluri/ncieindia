@@ -811,7 +811,7 @@ export default function JoinPage() {
     <div className="flex-1 bg-[#F8FAFC] py-12 md:py-16 border-t border-zinc-200">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Top Progress Stepper (Government Portal Style) */}
+        {/* Top Progress Stepper (Official Portal Style) */}
         <div className="bg-white border border-zinc-200 rounded shadow-sm p-4 mb-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-semibold">
             
@@ -940,7 +940,7 @@ export default function JoinPage() {
         {/* Step 1: Select Role */}
         {step === "select" && !existingSubmission && (
           <div className="space-y-8 animate-slide-down">
-            {/* Government Seal & Official Header */}
+            {/* Official Seal & Header */}
             <div className="text-center max-w-3xl mx-auto space-y-3">
               <div className="flex justify-center items-center gap-1.5 text-xs font-bold tracking-widest text-[#0D6B4F] uppercase">
                 <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
