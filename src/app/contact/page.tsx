@@ -6,14 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin, CheckCircle, ArrowRight, ShieldCheck } from "lucide-react";
+import { Mail, Phone, MapPin, CheckCircle, ArrowRight, ShieldCheck, Copy, Check } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function ContactPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [activeTab, setActiveTab] = useState<string>("student");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -36,6 +37,37 @@ export default function ContactPage() {
     setFormData({ name: "", email: "", org: "", phone: "", message: "" });
     setIsSubmitted(false);
   };
+
+  const copyToClipboard = (email: string) => {
+    if (typeof window !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(email);
+      setCopiedEmail(email);
+      setTimeout(() => setCopiedEmail(null), 2000);
+    }
+  };
+
+  const DESKS = [
+    {
+      label: language === "hi" ? "मुख्य कार्यकारी अधिकारी (CEO) डेस्क" : "Chief Executive Officer (CEO) Desk",
+      email: "ceo@ncieindia.org",
+    },
+    {
+      label: language === "hi" ? "कार्यकारी निदेशक (ED) डेस्क" : "Executive Director (ED) Desk",
+      email: "ed@ncieindia.org",
+    },
+    {
+      label: language === "hi" ? "सीएसआर, साझेदारी और गठबंधन" : "CSR, Partnerships & Funding",
+      email: "csr@ncieindia.org",
+    },
+    {
+      label: language === "hi" ? "केंद्रीय सचिवालय कार्यालय" : "Central Secretariat Office",
+      email: "office@ncieindia.org",
+    },
+    {
+      label: language === "hi" ? "सामान्य प्रश्न और हेल्पडेस्क" : "General Inquiries & Helpdesk",
+      email: "info@ncieindia.org",
+    },
+  ];
 
   return (
     <div className="flex-1 bg-[#F9FAFB] pb-20">
@@ -65,13 +97,13 @@ export default function ContactPage() {
       </div>
 
       {/* ── Main Layout Body ── */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* ── LEFT COLUMN: Central Secretariat HQ Card (5/12 width) ── */}
+          {/* ── LEFT COLUMN: Central Secretariat & Desks Directory (5/12 width) ── */}
           <div className="lg:col-span-5 space-y-6">
             
-            {/* Central Secretariat HQ Card */}
+            {/* 1. Central Secretariat HQ Card */}
             <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6">
               <div className="border-l-4 border-primary pl-4 py-0.5">
                 <h2 className="text-lg font-bold uppercase tracking-wider text-zinc-900">
@@ -104,17 +136,42 @@ export default function ContactPage() {
                     <p className="text-[10px] text-zinc-400 mt-0.5">Mon–Sat, 9:00 AM – 5:30 PM IST</p>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                <div className="flex gap-3.5 pt-4 border-t border-zinc-100">
-                  <Mail className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="font-bold text-zinc-800 uppercase tracking-wide">{t("contact_email_title")}</h4>
-                    <a href="mailto:office@ncieindia.org" className="text-primary font-mono hover:underline block mt-1 font-semibold">
-                      office@ncieindia.org
-                    </a>
-                    <p className="text-[10px] text-zinc-400 mt-0.5">All generic, administrative, and statutory filings</p>
+            {/* 2. Official Communication Desks */}
+            <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6">
+              <div className="border-l-4 border-primary pl-4 py-0.5">
+                <h3 className="text-base font-bold uppercase tracking-wider text-zinc-900">
+                  {language === "hi" ? "आधिकारिक संचार डेस्क" : "Official Communication Desks"}
+                </h3>
+                <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-0.5">
+                  Direct Department Directories
+                </p>
+              </div>
+
+              <div className="divide-y divide-zinc-150 text-xs sm:text-sm">
+                {DESKS.map((desk, idx) => (
+                  <div key={idx} className="py-3.5 flex items-center justify-between gap-4 first:pt-0 last:pb-0">
+                    <div className="space-y-0.5">
+                      <h4 className="font-bold text-zinc-850 uppercase tracking-wide text-[11px]">{desk.label}</h4>
+                      <a href={`mailto:${desk.email}`} className="text-primary font-mono hover:underline font-bold block text-xs sm:text-sm">
+                        {desk.email}
+                      </a>
+                    </div>
+                    <button
+                      onClick={() => copyToClipboard(desk.email)}
+                      className="p-2 border border-zinc-200 hover:bg-zinc-50 hover:border-zinc-350 active:bg-zinc-100 transition-all rounded cursor-pointer relative shrink-0"
+                      title="Copy Email Address"
+                    >
+                      {copiedEmail === desk.email ? (
+                        <Check className="w-3.5 h-3.5 text-emerald-600 animate-pulse" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5 text-zinc-400 hover:text-zinc-700" />
+                      )}
+                    </button>
                   </div>
-                </div>
+                ))}
               </div>
             </div>
 
