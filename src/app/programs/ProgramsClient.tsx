@@ -131,12 +131,12 @@ export default function ProgramsPage() {
         </div>
       </div>
 
-      {/* Programs Index Card Grid */}
+      {/* Programs Index Table Directory */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-        <div className="space-y-6">
+        <div className="bg-white border border-zinc-200 p-6 sm:p-8">
           
           {dbOffline && (
-            <div className="bg-amber-50 border border-amber-250 p-4 text-xs rounded text-amber-800 flex items-center justify-between gap-3 shadow-sm">
+            <div className="bg-amber-50 border border-amber-250 p-4 text-xs rounded text-amber-800 flex items-center justify-between gap-3 shadow-sm mb-6">
               <div className="flex items-center gap-2">
                 <DatabaseBackup className="w-4 h-4 text-amber-600 shrink-0" />
                 <div>
@@ -146,7 +146,7 @@ export default function ProgramsPage() {
             </div>
           )}
 
-          <div className="flex items-center justify-between border-b border-zinc-200 pb-4">
+          <div className="flex items-center justify-between border-b border-zinc-200 pb-4 mb-6">
             <h2 className="text-base font-bold uppercase tracking-wider text-zinc-900 border-l-4 border-[#0D6B4F] pl-3">
               {t("prog_directory_title")}
             </h2>
@@ -155,78 +155,72 @@ export default function ProgramsPage() {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredPrograms.map((program) => (
-              <div 
-                key={program.id} 
-                className="bg-white border border-zinc-200 hover:border-primary/20 hover:shadow-md transition-all duration-300 flex flex-col justify-between"
-              >
-                {/* Top Section */}
-                <div className="p-6 space-y-4">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="bg-[#0D6B4F]/10 text-primary border border-primary/10 text-[10px] font-extrabold uppercase px-2.5 py-0.5 tracking-wider font-mono rounded">
-                      {getCategoryLabel(program.category)}
-                    </span>
-                    <span className="text-[10px] text-zinc-450 font-bold font-mono bg-zinc-50 border border-zinc-200/50 px-2 py-0.5 rounded">
-                      {getProgramDuration(program)}
-                    </span>
-                  </div>
-
-                  <div className="space-y-1">
-                    <h3 className="text-sm sm:text-base font-bold text-zinc-900 leading-snug">
-                      {getProgramTitle(program)}
-                    </h3>
-                    <p className="text-[10px] text-primary font-bold tracking-wider font-mono uppercase">
-                      {getProgramSubtitle(program)}
-                    </p>
-                  </div>
-
-                  <p className="text-xs text-zinc-500 leading-relaxed text-justify line-clamp-3">
-                    {getProgramDesc(program)}
-                  </p>
-
-                  <div className="h-px bg-zinc-150" />
-
-                  {/* Highlights / Budget */}
-                  <div className="bg-zinc-50 border border-zinc-150 p-3 rounded-lg flex items-center justify-between gap-2">
-                    <span className="text-[9px] font-bold text-zinc-450 uppercase tracking-widest">{t("prog_col_budget")}</span>
-                    <span className="text-xs font-extrabold text-primary font-sans">{getProgramBudget(program)}</span>
-                  </div>
-
-                  {/* Benefits */}
-                  <div className="space-y-2">
-                    <h4 className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">{t("prog_col_benefits")}</h4>
-                    <ul className="space-y-1.5">
-                      {getProgramBenefits(program).map((benefit, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs text-zinc-650 leading-relaxed">
-                          <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                          <span>{benefit}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Footer Buttons */}
-                <div className="border-t border-zinc-150 p-4 bg-zinc-50/50 grid grid-cols-2 gap-3 shrink-0">
-                  <Link href={`/programs/${program.id}`} className="block">
-                    <button className="w-full border border-zinc-200 hover:bg-zinc-50 text-zinc-700 font-bold text-[10px] uppercase py-2 transition-colors cursor-pointer text-center">
-                      {t("prog_btn_details")}
-                    </button>
-                  </Link>
-                  <Link href="/join" className="block">
-                    <button className="w-full bg-[#0D6B4F] hover:bg-[#074733] text-white font-bold text-[10px] uppercase py-2 transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5">
-                      <span>{t("prog_btn_apply")}</span>
-                      <ArrowRight className="w-3 h-3" />
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            ))}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse border border-zinc-200">
+              <thead>
+                <tr className="bg-zinc-50 border-b border-zinc-200 text-xs">
+                  <th className="px-4 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-16 text-center">{t("prog_col_sno")}</th>
+                  <th className="px-4 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-64">{t("prog_col_title")}</th>
+                  <th className="px-4 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-32">{t("prog_col_cat")}</th>
+                  <th className="px-4 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-44">{t("prog_col_budget")}</th>
+                  <th className="px-4 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-40">{t("prog_col_duration")}</th>
+                  <th className="px-4 py-3 font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-72">{t("prog_col_benefits")}</th>
+                  <th className="px-4 py-3 font-bold uppercase tracking-wider text-zinc-700 text-center w-44">{t("prog_col_action")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredPrograms.map((program, idx) => (
+                  <tr key={program.id} className="border-b border-zinc-200 last:border-b-0 hover:bg-zinc-50/50 odd:bg-white even:bg-zinc-50/20 text-xs">
+                    <td className="px-4 py-4 text-center font-mono font-bold text-zinc-550 border-r border-zinc-200">0{idx + 1}</td>
+                    <td className="px-4 py-4 border-r border-zinc-200">
+                      <div className="space-y-1">
+                        <h3 className="font-bold text-zinc-900 leading-snug">
+                          {getProgramTitle(program)}
+                        </h3>
+                        <p className="text-[10px] text-primary font-bold tracking-wider font-mono uppercase">
+                          {getProgramSubtitle(program)}
+                        </p>
+                      </div>
+                      <p className="text-[11px] text-zinc-500 mt-2 leading-relaxed text-justify pr-2">{getProgramDesc(program)}</p>
+                    </td>
+                    <td className="px-4 py-4 border-r border-zinc-200">
+                      <span className="bg-[#0D6B4F]/10 text-primary border border-primary/10 text-[10px] font-extrabold uppercase px-2.5 py-0.5 tracking-wider font-mono rounded inline-block">
+                        {getCategoryLabel(program.category)}
+                      </span>
+                    </td>
+                    <td className="px-4 py-4 border-r border-zinc-200 font-bold text-zinc-800">{getProgramBudget(program)}</td>
+                    <td className="px-4 py-4 border-r border-zinc-200 text-zinc-550 font-bold font-mono">{getProgramDuration(program)}</td>
+                    <td className="px-4 py-4 border-r border-zinc-200">
+                      <ul className="space-y-1.5">
+                        {getProgramBenefits(program).map((benefit, i) => (
+                          <li key={i} className="flex items-start gap-2 text-[11px] text-zinc-650 leading-relaxed">
+                            <CheckCircle className="w-3.5 h-3.5 text-accent mt-0.5 flex-shrink-0" />
+                            <span>{benefit}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </td>
+                    <td className="px-4 py-4 text-center space-y-2">
+                      <Link href={`/programs/${program.id}`} className="block">
+                        <button className="w-full border border-zinc-200 hover:bg-zinc-50 text-zinc-700 font-bold text-[10px] uppercase py-2 transition-colors cursor-pointer text-center">
+                          {t("prog_btn_details")}
+                        </button>
+                      </Link>
+                      <Link href="/join" className="block">
+                        <button className="w-full bg-[#0D6B4F] hover:bg-[#074733] text-white font-bold text-[10px] uppercase py-2 transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5 shadow-sm">
+                          <span>{t("prog_btn_apply")}</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </button>
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
           {filteredPrograms.length === 0 && (
-            <div className="text-center py-16 bg-white border border-zinc-200">
+            <div className="text-center py-16 bg-white border border-zinc-200 mt-6">
               <p className="text-sm text-zinc-400 font-bold uppercase tracking-wider">No schemes available in this category</p>
               <p className="text-xs text-zinc-400 mt-1">Please select another program category tab above.</p>
             </div>
