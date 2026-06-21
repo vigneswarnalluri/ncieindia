@@ -205,7 +205,8 @@ export default function LoginPage() {
         }
       }
     }
-  }, [t]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     generateCaptcha();
