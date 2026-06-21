@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin, CheckCircle, ArrowRight, ShieldCheck, Building2 } from "lucide-react";
+import { Mail, Phone, MapPin, CheckCircle, ArrowRight, ShieldCheck } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function ContactPage() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<string>("student");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
@@ -36,33 +36,6 @@ export default function ContactPage() {
     setFormData({ name: "", email: "", org: "", phone: "", message: "" });
     setIsSubmitted(false);
   };
-
-  const ZONES = [
-    {
-      name: language === "hi" ? "उत्तरी क्षेत्र डेस्क (आईआईटी दिल्ली)" : "North Zone Desk (IIT Delhi)",
-      location: "IIT Delhi Campus, Hauz Khas, New Delhi - 110016",
-      email: "liaison.north@ncie.gov.in",
-      role: "NCR, Punjab, Haryana, Himachal Pradesh, Jammu & Kashmir, Rajasthan",
-    },
-    {
-      name: language === "hi" ? "पश्चिमी क्षेत्र डेस्क (आईआईटी बॉम्बे)" : "West Zone Desk (IIT Bombay)",
-      location: "IIT Bombay Campus, Powai, Mumbai - 400076",
-      email: "liaison.west@ncie.gov.in",
-      role: "Maharashtra, Gujarat, Goa, Madhya Pradesh, Chhattisgarh",
-    },
-    {
-      name: language === "hi" ? "दक्षिणी क्षेत्र डेस्क (आईआईटी मद्रास)" : "South Zone Desk (IIT Madras)",
-      location: "IIT Madras Campus, Adyar, Chennai - 600036",
-      email: "liaison.south@ncie.gov.in",
-      role: "Tamil Nadu, Kerala, Karnataka, Andhra Pradesh, Telangana",
-    },
-    {
-      name: language === "hi" ? "पूर्वी क्षेत्र डेस्क (आईआईटी खड़गपुर)" : "East Zone Desk (IIT Kharagpur)",
-      location: "IIT Kharagpur Campus, Kharagpur - 721302",
-      email: "liaison.east@ncie.gov.in",
-      role: "West Bengal, Bihar, Jharkhand, Odisha, North-East States",
-    },
-  ];
 
   return (
     <div className="flex-1 bg-[#F9FAFB] pb-20">
@@ -92,13 +65,13 @@ export default function ContactPage() {
       </div>
 
       {/* ── Main Layout Body ── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* ── LEFT COLUMN: Zonal Directory & Secretariat (60% width) ── */}
-          <div className="lg:col-span-7 space-y-8">
+          {/* ── LEFT COLUMN: Central Secretariat HQ Card (5/12 width) ── */}
+          <div className="lg:col-span-5 space-y-6">
             
-            {/* 1. Central Secretariat HQ Card */}
+            {/* Central Secretariat HQ Card */}
             <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6">
               <div className="border-l-4 border-primary pl-4 py-0.5">
                 <h2 className="text-lg font-bold uppercase tracking-wider text-zinc-900">
@@ -109,8 +82,8 @@ export default function ContactPage() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm">
-                <div className="flex gap-3">
+              <div className="space-y-6 text-xs sm:text-sm">
+                <div className="flex gap-3.5">
                   <MapPin className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-bold text-zinc-800 uppercase tracking-wide">Physical Address</h4>
@@ -121,7 +94,7 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex gap-3.5 pt-4 border-t border-zinc-100">
                   <Phone className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-bold text-zinc-800 uppercase tracking-wide">{t("contact_phone_title")}</h4>
@@ -132,7 +105,7 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                <div className="flex gap-3 md:col-span-2 pt-2 border-t border-zinc-100">
+                <div className="flex gap-3.5 pt-4 border-t border-zinc-100">
                   <Mail className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-bold text-zinc-800 uppercase tracking-wide">{t("contact_email_title")}</h4>
@@ -145,45 +118,10 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* 2. Zonal Offices Directory */}
-            <div className="space-y-4">
-              <div className="border-l-4 border-primary pl-4 py-0.5">
-                <h3 className="text-base font-bold uppercase tracking-wider text-zinc-900">
-                  {language === "hi" ? "क्षेत्रीय समन्वय डेस्क" : "Regional Coordination Desks"}
-                </h3>
-                <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-0.5">
-                  Decentralized Liaison &amp; Chapter Support
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {ZONES.map((zone, idx) => (
-                  <div key={idx} className="bg-white border border-zinc-200 p-5 space-y-3 shadow-none hover:shadow-xs transition-shadow">
-                    <div className="flex items-center gap-2">
-                      <Building2 className="w-4 h-4 text-emerald-600" />
-                      <h4 className="font-bold text-zinc-800 text-xs sm:text-sm uppercase tracking-wide">
-                        {zone.name}
-                      </h4>
-                    </div>
-                    <p className="text-xs text-zinc-500 leading-relaxed font-sans">
-                      <strong>Liaison:</strong> {zone.role}<br />
-                      <strong>Campus:</strong> {zone.location}
-                    </p>
-                    <div className="pt-2 border-t border-zinc-100 flex items-center justify-between text-xs">
-                      <span className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">Email Contact</span>
-                      <a href={`mailto:${zone.email}`} className="text-primary font-mono hover:underline font-semibold">
-                        {zone.email}
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
           </div>
 
-          {/* ── RIGHT COLUMN: Official Inquiries Form Card (40% width) ── */}
-          <div className="lg:col-span-5">
+          {/* ── RIGHT COLUMN: Official Inquiries Form Card (7/12 width) ── */}
+          <div className="lg:col-span-7">
             {isSubmitted ? (
               <div className="bg-white border border-zinc-200 rounded-none p-8 text-center space-y-6 shadow-sm">
                 <div className="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border border-emerald-100 shadow-none">
