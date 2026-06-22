@@ -357,7 +357,7 @@ export default function ProgramDetailPage() {
                     <thead>
                       <tr className="bg-zinc-50 border-b border-zinc-300 text-zinc-700 font-bold uppercase tracking-wider font-mono text-[10px]">
                         <th className="p-3 border-r border-zinc-200">{t("prog_details_col_tranche")}</th>
-                        <th className="p-3 border-r border-zinc-200">{t("prog_details_col_stage")}</th>
+                        <th className="p-3 border-r border-zinc-200 whitespace-nowrap">{t("prog_details_col_stage")}</th>
                         <th className="p-3 border-r border-zinc-200">{t("prog_details_col_trigger")}</th>
                         <th className="p-3">{t("prog_details_col_amount")}</th>
                       </tr>
@@ -374,7 +374,7 @@ export default function ProgramDetailPage() {
                             <td className="p-3 font-mono font-bold text-zinc-600 border-r border-zinc-200 shrink-0 whitespace-nowrap">
                               {trancheName}
                             </td>
-                            <td className="p-3 font-semibold text-zinc-800 border-r border-zinc-200">
+                            <td className="p-3 font-semibold text-zinc-800 border-r border-zinc-200 whitespace-nowrap">
                               {trancheStage}
                             </td>
                             <td className="p-3 text-zinc-500 border-r border-zinc-200 leading-relaxed font-medium">
