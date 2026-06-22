@@ -125,27 +125,32 @@ export default function ProgramDetailPage() {
 
   const getTrancheName = (p: Program, tranche: any, idx: number) => {
     const key = `prog_${mapIdToKey(p.id)}_tranche_${idx}_name`;
-    return t(key) || tranche.name;
+    const val = t(key);
+    return val !== key ? val : tranche.name;
   };
 
   const getTrancheStage = (p: Program, tranche: any, idx: number) => {
     const key = `prog_${mapIdToKey(p.id)}_tranche_${idx}_stage`;
-    return t(key) || tranche.stage;
+    const val = t(key);
+    return val !== key ? val : tranche.stage;
   };
 
   const getTrancheTrigger = (p: Program, tranche: any, idx: number) => {
     const key = `prog_${mapIdToKey(p.id)}_tranche_${idx}_trigger`;
-    return t(key) || tranche.trigger;
+    const val = t(key);
+    return val !== key ? val : tranche.trigger;
   };
 
   const getTrancheAmount = (p: Program, tranche: any, idx: number) => {
     const key = `prog_${mapIdToKey(p.id)}_tranche_${idx}_amount`;
-    return t(key) || tranche.amount;
+    const val = t(key);
+    return val !== key ? val : tranche.amount;
   };
 
   const getTrancheNote = (p: Program, tranche: any, idx: number) => {
     const key = `prog_${mapIdToKey(p.id)}_tranche_${idx}_note`;
-    return t(key) || tranche.note;
+    const val = t(key);
+    return val !== key ? val : tranche.note;
   };
 
   const getCategoryLabel = (category: string) => {
