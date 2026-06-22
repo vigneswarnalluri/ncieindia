@@ -358,24 +358,24 @@ export default function Header() {
                   {/* Column 1: For Innovators */}
                   <div className="space-y-4">
                     <h4 className="text-[11px] font-bold tracking-wider text-zinc-400 uppercase font-sans">
-                      Student Schemes
+                      {language === "hi" ? "छात्र योजनाएं" : "Student Schemes"}
                     </h4>
                     <div className="flex flex-col gap-4.5">
-                      <Link href="/programs/nidhi-cis" className="group/item flex flex-col gap-1">
+                      <Link href="/programs/student-startup-grants" className="group/item flex flex-col gap-1">
                         <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
-                          NIDHI College Innovation (NIDHI-CIS)
+                          {t("prog_student_startup_grants_title")}
                         </span>
                         <span className="text-xs text-zinc-500 font-sans leading-normal">
-                          Prototype validation grants up to ₹5 Lakh
+                          {t("prog_student_startup_grants_subtitle")}
                         </span>
                       </Link>
                       
-                      <Link href="/programs/seed-pipeline" className="group/item flex flex-col gap-1">
+                      <Link href="/programs/startup-seed-funding" className="group/item flex flex-col gap-1">
                         <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
-                          Seed Capital Pipeline
+                          {t("prog_startup_seed_funding_title")}
                         </span>
                         <span className="text-xs text-zinc-500 font-sans leading-normal">
-                          Equity-free setup allowances up to ₹25 Lakh
+                          {t("prog_startup_seed_funding_subtitle")}
                         </span>
                       </Link>
                     </div>
@@ -384,24 +384,24 @@ export default function Header() {
                   {/* Column 2: Institutional Grants */}
                   <div className="space-y-4">
                     <h4 className="text-[11px] font-bold tracking-wider text-zinc-400 uppercase font-sans">
-                      Institutional &amp; Industry Support
+                      {language === "hi" ? "संस्थागत और उद्योग सहायता" : "Institutional & Industry Support"}
                     </h4>
                     <div className="flex flex-col gap-4.5">
-                      <Link href="/programs/makerspace-empowerment" className="group/item flex flex-col gap-1">
+                      <Link href="/programs/institutional-incubation-support" className="group/item flex flex-col gap-1">
                         <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
-                          Makerspace Fabrication
+                          {t("prog_institutional_incubation_support_title")}
                         </span>
                         <span className="text-xs text-zinc-500 font-sans leading-normal">
-                          STEM lab setup grants up to ₹50 Lakh
+                          {t("prog_institutional_incubation_support_subtitle")}
                         </span>
                       </Link>
 
-                      <Link href="/programs" className="group/item flex flex-col gap-1">
+                      <Link href="/programs/csr-rural-support" className="group/item flex flex-col gap-1">
                         <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
-                          CSR Corporate Bridges
+                          {t("prog_csr_rural_support_title")}
                         </span>
                         <span className="text-xs text-zinc-500 font-sans leading-normal">
-                          Industry-sponsored student POC alignment
+                          {t("prog_csr_rural_support_subtitle")}
                         </span>
                       </Link>
                     </div>
@@ -645,22 +645,28 @@ export default function Header() {
                                       {language === "en" ? "• All Programs Overview" : "• सभी कार्यक्रम अवलोकन"}
                                     </Link>
                                     <Link
-                                      href="/programs/nidhi-cis"
+                                      href="/programs/student-startup-grants"
                                       className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
                                     >
-                                      NIDHI College Innovation
+                                      {t("prog_student_startup_grants_title")}
                                     </Link>
                                     <Link
-                                      href="/programs/seed-pipeline"
+                                      href="/programs/startup-seed-funding"
                                       className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
                                     >
-                                      Seed Capital Pipeline
+                                      {t("prog_startup_seed_funding_title")}
                                     </Link>
                                     <Link
-                                      href="/programs/makerspace-empowerment"
+                                      href="/programs/institutional-incubation-support"
                                       className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
                                     >
-                                      Makerspace Fabrication
+                                      {t("prog_institutional_incubation_support_title")}
+                                    </Link>
+                                    <Link
+                                      href="/programs/csr-rural-support"
+                                      className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
+                                    >
+                                      {t("prog_csr_rural_support_title")}
                                     </Link>
                                   </>
                                 ) : (
