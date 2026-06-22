@@ -678,7 +678,7 @@ export default function JoinPage() {
       return;
     }
     if (role === "internship" && !formData.selectedCourse) {
-      setValidationError("Validation Error: Please select an internship course.");
+      setValidationError("Validation Error: Please select an NCIE Viksit Bharat 2047 Innovation Leadership Programs course.");
       return;
     }
 

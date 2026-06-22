@@ -24,8 +24,8 @@ import {
 // Key Initiatives data — based on Innovation India Council
 const INITIATIVES = [
   {
-    title: "10-Core Paid Internship Ecosystem",
-    description: "A structured national internship framework established across 10 core sectors to provide every undergraduate student with practical, real-world industry exposure.",
+    title: "NCIE Viksit Bharat 2047 Innovation Leadership Programs",
+    description: "A structured national leadership framework established across 10 core sectors to provide every undergraduate student with practical, real-world industry exposure.",
     focus: ["Covers 10 key undergraduate sectors", "Hands-on projects and professional exposure", "Structured mentoring and certification"],
     badge: "Undergraduate Pillar",
   },
@@ -93,8 +93,8 @@ const JOURNEY_STEPS = [
 const VISION_MILESTONES = [
   {
     year: "2027",
-    title: "10-Core Paid Internships",
-    description: "Establish a structured national internship framework across 10 core undergraduate sectors for real-time industry exposure.",
+    title: "NCIE Viksit Bharat 2047 Innovation Leadership Programs",
+    description: "Establish a structured national leadership framework across 10 core undergraduate sectors for real-time industry exposure.",
   },
   {
     year: "2032",

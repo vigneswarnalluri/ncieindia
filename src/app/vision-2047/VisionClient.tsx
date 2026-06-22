@@ -17,10 +17,10 @@ interface Milestone {
 const MILESTONES_DATA: Milestone[] = [
   {
     year: "2027",
-    title: "10-Core Paid Internship Ecosystem",
+    title: "NCIE Viksit Bharat 2047 Innovation Leadership Programs",
     phase: "Pillar 1: Undergraduate Sector Training",
-    description: "A structured national internship framework established across 10 core sectors, ensuring that every undergraduate student in India gains real-time industry exposure and skill-based learning.",
-    strategy: "Implement structured internship templates and placement credits integration across Engineering, Science, Finance, Agriculture, Healthcare, IT & AI, etc.",
+    description: "A structured national leadership framework established across 10 core sectors, ensuring that every undergraduate student in India gains real-time industry exposure and skill-based learning.",
+    strategy: "Implement structured leadership program templates and placement credits integration across Engineering, Science, Finance, Agriculture, Healthcare, IT & AI, etc.",
     targets: [
       "Real-time industry exposure for all UG branches",
       "Establishment of regional training coordination boards",

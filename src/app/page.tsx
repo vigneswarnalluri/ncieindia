@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     "NCIE India",
     "Innovation India Council",
     "National Council for Innovation and Entrepreneurship",
-    "Student Internships",
+    "NCIE Viksit Bharat 2047 Innovation Leadership Programs",
     "Student Startup Grants",
     "Seed Funding Program",
     "Institutional Incubation",

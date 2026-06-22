@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   keywords: [
     "Innovation Schemes",
     "Incubation Grants",
-    "Student Internships",
+    "NCIE Viksit Bharat 2047 Innovation Leadership Programs",
     "Student Startup Grants",
     "Seed Funding Program",
     "Innovation India Council",

@@ -61,7 +61,7 @@ const OPPORTUNITIES_DATA: Opportunity[] = [
     duration: "8 Weeks",
     compensation: "Registration Fee: ₹700",
     deadline: "July 31, 2026",
-    description: "Specialized internship course in the engineering & technology domain. Focused on innovation management, technology lifecycle development, and academic-to-market translation.",
+    description: "Specialized NCIE Viksit Bharat 2047 Innovation Leadership Programs course in the engineering & technology domain. Focused on innovation management, technology lifecycle development, and academic-to-market translation.",
   },
   {
     id: "ai-business-startup-innovation-internship",
@@ -72,7 +72,7 @@ const OPPORTUNITIES_DATA: Opportunity[] = [
     duration: "8 Weeks",
     compensation: "Registration Fee: ₹700",
     deadline: "July 31, 2026",
-    description: "Action-oriented internship course focused on AI-powered business models, generative AI architectures, and deep-tech startup creation.",
+    description: "Action-oriented NCIE Viksit Bharat 2047 Innovation Leadership Programs course focused on AI-powered business models, generative AI architectures, and deep-tech startup creation.",
   },
   {
     id: "climate-fellowship",
