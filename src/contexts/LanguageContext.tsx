@@ -780,7 +780,7 @@ const translations: Record<Language, Record<string, string>> = {
     prog_startup_seed_funding_tranche_2_trigger: "Released after ideation review and prototype approval",
     prog_startup_seed_funding_tranche_3_name: "Tranche 4",
     prog_startup_seed_funding_tranche_3_stage: "Stage 4: Prototype → Commercialization",
-    prog_startup_seed_funding_tranche_3_amount: "₹1,50,050 × top-performing startups",
+    prog_startup_seed_funding_tranche_3_amount: "₹1,50,000 × top-performing startups",
     prog_startup_seed_funding_tranche_3_trigger: "Released after prototype validation and market readiness",
     prog_startup_seed_funding_tranche_4_name: "Tranche 5",
     prog_startup_seed_funding_tranche_4_stage: "Stage 5: Commercialization → Establishment",
