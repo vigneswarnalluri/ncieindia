@@ -95,6 +95,38 @@ export const PROGRAMS_DATA: Program[] = [
       { title: "Stage 3: Pilot Run & Testing", desc: "Release of 25% fund for launching pilot trials and gathering feedback." },
       { title: "Stage 4: Legal & IP Setup", desc: "Release of 20% fund to support legal incorporation and patent/IP filing." },
       { title: "Stage 5: Scale & Market Launch", desc: "Release of final 20% fund upon meeting the pre-commercial scaling milestones." }
+    ],
+    tranches: [
+      {
+        name: "Tranche 1",
+        stage: "Stage 1: Explore → Idea",
+        amount: "₹10,000 = ₹10,00,000 (Eligible)",
+        trigger: "Released after idea screening and selection"
+      },
+      {
+        name: "Tranche 2",
+        stage: "Stage 2: Idea → Ideation",
+        amount: "₹25,000 × shortlisted startups (based on performance)",
+        trigger: "Released after concept validation and feasibility approval"
+      },
+      {
+        name: "Tranche 3",
+        stage: "Stage 3: Ideation → Prototype",
+        amount: "₹75,000 × selected startups",
+        trigger: "Released after ideation review and prototype approval"
+      },
+      {
+        name: "Tranche 4",
+        stage: "Stage 4: Prototype → Commercialization",
+        amount: "₹1,50,000 × top-performing startups",
+        trigger: "Released after prototype validation and market readiness"
+      },
+      {
+        name: "Tranche 5",
+        stage: "Stage 5: Commercialization → Establishment",
+        amount: "₹2,40,000 × final selected startups",
+        trigger: "Released after final establishment milestone approval"
+      }
     ]
   },
   {

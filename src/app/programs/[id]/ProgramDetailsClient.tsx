@@ -123,6 +123,31 @@ export default function ProgramDetailPage() {
     });
   };
 
+  const getTrancheName = (p: Program, tranche: any, idx: number) => {
+    const key = `prog_${mapIdToKey(p.id)}_tranche_${idx}_name`;
+    return t(key) || tranche.name;
+  };
+
+  const getTrancheStage = (p: Program, tranche: any, idx: number) => {
+    const key = `prog_${mapIdToKey(p.id)}_tranche_${idx}_stage`;
+    return t(key) || tranche.stage;
+  };
+
+  const getTrancheTrigger = (p: Program, tranche: any, idx: number) => {
+    const key = `prog_${mapIdToKey(p.id)}_tranche_${idx}_trigger`;
+    return t(key) || tranche.trigger;
+  };
+
+  const getTrancheAmount = (p: Program, tranche: any, idx: number) => {
+    const key = `prog_${mapIdToKey(p.id)}_tranche_${idx}_amount`;
+    return t(key) || tranche.amount;
+  };
+
+  const getTrancheNote = (p: Program, tranche: any, idx: number) => {
+    const key = `prog_${mapIdToKey(p.id)}_tranche_${idx}_note`;
+    return t(key) || tranche.note;
+  };
+
   const getCategoryLabel = (category: string) => {
     const key = `prog_cat_${category}`;
     return t(key) || category;
@@ -245,45 +270,52 @@ export default function ProgramDetailPage() {
                   </span>
                 </h2>
                 <div className="grid grid-cols-1 gap-4">
-                  {program.tranches.map((tranche, idx) => (
-                    <div 
-                      key={idx} 
-                      className="group relative border border-zinc-150 rounded-xl p-5 hover:border-primary/30 hover:bg-zinc-50/40 transition-all duration-300 shadow-sm hover:shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
-                    >
-                      {/* Left: Stage Title & Release Trigger */}
-                      <div className="space-y-1.5 flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold tracking-wider text-zinc-400 uppercase font-mono">
-                            {tranche.name}
-                          </span>
-                          <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 group-hover:bg-primary transition-colors" />
-                          <span className="text-xs font-bold text-zinc-850 uppercase tracking-wide">
-                            {tranche.stage}
-                          </span>
+                  {program.tranches.map((tranche, idx) => {
+                    const trancheName = getTrancheName(program, tranche, idx);
+                    const trancheStage = getTrancheStage(program, tranche, idx);
+                    const trancheTrigger = getTrancheTrigger(program, tranche, idx);
+                    const trancheAmount = getTrancheAmount(program, tranche, idx);
+                    const trancheNote = getTrancheNote(program, tranche, idx);
+                    return (
+                      <div 
+                        key={idx} 
+                        className="group relative border border-zinc-150 rounded-xl p-5 hover:border-primary/30 hover:bg-zinc-50/40 transition-all duration-300 shadow-sm hover:shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+                      >
+                        {/* Left: Stage Title & Release Trigger */}
+                        <div className="space-y-1.5 flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-bold tracking-wider text-zinc-400 uppercase font-mono">
+                              {trancheName}
+                            </span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 group-hover:bg-primary transition-colors" />
+                            <span className="text-xs font-bold text-zinc-850 uppercase tracking-wide">
+                              {trancheStage}
+                            </span>
+                          </div>
+                          <p className="text-xs text-zinc-500 font-medium leading-relaxed">
+                            {trancheTrigger}
+                          </p>
                         </div>
-                        <p className="text-xs text-zinc-500 font-medium leading-relaxed">
-                          {tranche.trigger}
-                        </p>
-                      </div>
 
-                      {/* Right: Amount Badge */}
-                      <div className="flex flex-col items-start sm:items-end justify-center bg-zinc-50 group-hover:bg-[#0D6B4F]/5 border border-zinc-200/50 group-hover:border-primary/20 rounded-xl px-4.5 py-3 transition-colors shrink-0 min-w-[150px]">
-                        <span className="text-sm font-extrabold text-primary font-sans leading-none">
-                          {tranche.amount.split(" × ")[0]}
-                        </span>
-                        {tranche.amount.includes(" × ") && (
-                          <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wide mt-1">
-                            × {tranche.amount.split(" × ")[1]}
+                        {/* Right: Amount Badge */}
+                        <div className="flex flex-col items-start sm:items-end justify-center bg-zinc-50 group-hover:bg-[#0D6B4F]/5 border border-zinc-200/50 group-hover:border-primary/20 rounded-xl px-4.5 py-3 transition-colors shrink-0 min-w-[150px]">
+                          <span className="text-sm font-extrabold text-primary font-sans leading-none">
+                            {trancheAmount.split(" × ")[0]}
                           </span>
-                        )}
-                        {tranche.note && (
-                          <span className="text-[9px] font-medium text-zinc-450 italic mt-0.5">
-                            {tranche.note}
-                          </span>
-                        )}
+                          {trancheAmount.includes(" × ") && (
+                            <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wide mt-1">
+                              × {trancheAmount.split(" × ")[1]}
+                            </span>
+                          )}
+                          {trancheNote && (
+                            <span className="text-[9px] font-medium text-zinc-450 italic mt-0.5">
+                              {trancheNote}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
