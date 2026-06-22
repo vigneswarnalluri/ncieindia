@@ -32,7 +32,7 @@ const OPPORTUNITIES_DATA: Opportunity[] = [
   },
   {
     id: "deeptech-internship-01",
-    title: "Ecosystem Management Intern",
+    title: "Ecosystem Management Innovation Leadership Program Participant",
     type: "internship",
     company: "NCIE Startup Hubs",
     location: "Remote",
