@@ -118,8 +118,8 @@ const CIRCULARS = [
   {
     id: "IIC-INT-2026-001",
     date: "June 18, 2026",
-    title: "Internship Registrations Open: Innovational & Technology Management and AI Business & Startup Innovation",
-    description: "Registrations are now open for course-integrated internships under the engineering and technology domain. One-time registration fee: ₹700 per course.",
+    title: "NCIE Viksit Bharat 2047 Innovation Leadership Programs Registrations Open: Innovational & Technology Management and AI Business & Startup Innovation",
+    description: "Registrations are now open for course-integrated programs under the engineering and technology domain. One-time registration fee: ₹700 per course.",
     category: "Applications",
   },
   {
