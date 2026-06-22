@@ -467,7 +467,7 @@ export default function ProgramDetailPage() {
                     {language === "hi" ? "सचिवालय समन्वय डेस्क" : "Secretariat Coordination Desk"}
                   </p>
                   <p className="text-[9px] text-zinc-400">
-                    {language === "hi" ? "राष्ट्रीय परिषद (NCIE) मुख्यालय" : "NCIE Head Office, New Delhi"}
+                    {language === "hi" ? "राष्ट्रीय परिषद (NCIE) मुख्यालय, गुंटूर" : "NCIE Head Office, Guntur"}
                   </p>
                 </div>
               </div>
