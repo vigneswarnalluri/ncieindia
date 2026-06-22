@@ -3,9 +3,9 @@ import { Metadata } from "next";
 import AboutClient from "./AboutClient";
 
 export const metadata: Metadata = {
-  title: "About NCIE India | National Council for Innovation and Entrepreneurship",
+  title: "About NCIE India | Council for Innovation & Entrepreneurship",
   description:
-    "Learn about the National Council for Innovation and Entrepreneurship (NCIE) India. Discover our institutional objectives, advisory council, performance metrics, and regional directory.",
+    "Learn about NCIE India's institutional objectives, advisory council, performance metrics, and regional chapters driving collegiate innovation.",
   keywords: [
     "About NCIE India",
     "Advisory Council",
@@ -18,9 +18,9 @@ export const metadata: Metadata = {
     canonical: "https://ncieindia.org/about",
   },
   openGraph: {
-    title: "About NCIE India | National Council for Innovation and Entrepreneurship",
+    title: "About NCIE India | Council for Innovation & Entrepreneurship",
     description:
-      "Learn about the National Council for Innovation and Entrepreneurship (NCIE) India. Discover our institutional objectives, advisory council, performance metrics, and regional directory.",
+      "Learn about NCIE India's institutional objectives, advisory council, performance metrics, and regional chapters driving collegiate innovation.",
     url: "https://ncieindia.org/about",
     siteName: "NCIE India",
     type: "website",

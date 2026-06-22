@@ -5,7 +5,7 @@ import VisionClient from "./VisionClient";
 export const metadata: Metadata = {
   title: "Vision 2047 Centenary Roadmap | NCIE India",
   description:
-    "Explore NCIE India's strategic four-phase roadmap (Foundations, Deep-Tech, Global Leadership, sovereign self-reliance) aligning Higher Education chapters with the Viksit Bharat centenary goals.",
+    "Explore NCIE India's four-phase roadmap aligning collegiate innovation chapters with the Viksit Bharat 2047 centenary goals.",
   keywords: [
     "Viksit Bharat 2047",
     "Centenary Roadmap",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Vision 2047 Centenary Roadmap | NCIE India",
     description:
-      "Explore NCIE India's strategic four-phase roadmap (Foundations, Deep-Tech, Global Leadership, sovereign self-reliance) aligning Higher Education chapters with the Viksit Bharat centenary goals.",
+      "Explore NCIE India's four-phase roadmap aligning collegiate innovation chapters with the Viksit Bharat 2047 centenary goals.",
     url: "https://ncieindia.org/vision-2047",
     siteName: "NCIE India",
     type: "website",

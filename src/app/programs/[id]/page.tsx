@@ -45,10 +45,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  const cleanTitle = `${program.title} | Schemes Catalog | NCIE India`;
+  const cleanTitle = `${program.title} | NCIE India`;
   const cleanDesc = program.subtitle
-    ? `${program.subtitle}. ${program.description.slice(0, 140)}...`
-    : program.description.slice(0, 160);
+    ? `${program.subtitle}. ${program.description.slice(0, 115)}...`
+    : program.description.slice(0, 150);
 
   return {
     title: cleanTitle,

@@ -3,9 +3,9 @@ import { Metadata } from "next";
 import HomeClient from "./HomeClient";
 
 export const metadata: Metadata = {
-  title: "NCIE India | National Council for Innovation and Entrepreneurship",
+  title: "NCIE India | Council for Innovation & Entrepreneurship",
   description:
-    "Building the world's largest student innovation and entrepreneurship ecosystem under the Innovation India Council. Explore collegiate chapters, student startup grants, seed funding programs, and institutional incubation support.",
+    "National Council for Innovation and Entrepreneurship (NCIE) India builds the nation's largest student startup, incubation, and collegiate chapter ecosystem.",
   keywords: [
     "NCIE India",
     "Innovation India Council",
@@ -26,9 +26,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "NCIE India | National Council for Innovation and Entrepreneurship",
+    title: "NCIE India | Council for Innovation & Entrepreneurship",
     description:
-      "Building the world's largest student innovation and entrepreneurship ecosystem under the Innovation India Council. Explore collegiate chapters, student startup grants, seed funding programs, and institutional incubation support.",
+      "National Council for Innovation and Entrepreneurship (NCIE) India builds the nation's largest student startup, incubation, and collegiate chapter ecosystem.",
     url: "https://ncieindia.org",
     siteName: "NCIE India",
     locale: "en_IN",
@@ -44,9 +44,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "NCIE India | National Council for Innovation and Entrepreneurship",
+    title: "NCIE India | Council for Innovation & Entrepreneurship",
     description:
-      "Building the world's largest student innovation and entrepreneurship ecosystem under the Innovation India Council. Explore collegiate chapters, student startup grants, seed funding programs, and institutional incubation support.",
+      "National Council for Innovation and Entrepreneurship (NCIE) India builds the nation's largest student startup, incubation, and collegiate chapter ecosystem.",
     images: ["https://ncieindia.org/logo-new.svg"],
   },
 };

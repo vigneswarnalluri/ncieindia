@@ -16,7 +16,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "NCIE India | National Council for Innovation and Entrepreneurship",
+  title: "NCIE India | Council for Innovation & Entrepreneurship",
   description:
     "Building India's largest student innovation and entrepreneurship ecosystem. Fostering institutional collaboration, startup incubation, and regional chapters.",
   keywords: [
