@@ -22,12 +22,12 @@ export interface Program {
 export const PROGRAMS_DATA: Program[] = [
   {
     id: "student-internships",
-    title: "10-Core Paid Internship Ecosystem",
-    subtitle: "Structured national internship framework across undergraduate sectors",
+    title: "NCIE Viksit Bharat 2047 Innovation Leadership Programs",
+    subtitle: "Structured national leadership framework across undergraduate sectors",
     category: "student",
     budget: "Paid stipends",
     duration: "2–6 months per course",
-    description: "A structured national internship framework established across 10 core sectors, ensuring that every undergraduate student in India gains real-time industry exposure and skill-based learning opportunities.",
+    description: "A structured national leadership framework established across 10 core sectors, ensuring that every undergraduate student in India gains real-time industry exposure and skill-based learning opportunities.",
     benefits: [
       "Real-time industry exposure and hands-on skill development",
       "Covers 10 core sectors (Engineering, Research, Finance, Agriculture, Healthcare, IT & AI, etc.)",

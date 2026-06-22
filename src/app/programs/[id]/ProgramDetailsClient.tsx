@@ -203,7 +203,7 @@ export default function ProgramDetailPage() {
             {program.id === "student-internships" && (
               <div className="space-y-4 bg-zinc-50/20 border border-zinc-150 rounded-2xl p-6">
                 <h3 className="text-sm font-bold text-zinc-900 uppercase tracking-wider text-zinc-400">
-                  {language === "hi" ? "10 कोर इंटर्नशिप क्षेत्र" : "10 Core Internship Sectors"}
+                  {language === "hi" ? "10 कोर नेतृत्व कार्यक्रम क्षेत्र" : "10 Core Leadership Program Sectors"}
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   {(language === "hi" ? INTERNSHIP_SECTORS_HI : INTERNSHIP_SECTORS_EN).map((sector, idx) => (
