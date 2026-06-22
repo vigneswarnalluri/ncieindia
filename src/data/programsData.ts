@@ -100,7 +100,7 @@ export const PROGRAMS_DATA: Program[] = [
       {
         name: "Tranche 1",
         stage: "Stage 1: Explore → Idea",
-        amount: "₹10,000 = ₹10,00,000 (Eligible)",
+        amount: "₹10,000",
         trigger: "Released after idea screening and selection"
       },
       {
