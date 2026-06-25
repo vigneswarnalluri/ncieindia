@@ -52,6 +52,14 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "National Council for Innovation and Entrepreneurship",
+    "alternateName": ["NCIE", "NCIE India"],
+    "url": "https://ncieindia.org",
+  };
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
@@ -78,6 +86,10 @@ export default function Page() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
