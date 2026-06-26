@@ -1,7 +1,32 @@
-"use client";
-import { Building2, TrendingUp, Landmark, FileText, MapPin } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Building2, TrendingUp, Landmark, FileText, MapPin, Eye } from "lucide-react";
 
 export default function EcoTab() {
+  const [visitorCount, setVisitorCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const res = await fetch("/api/visitor-count");
+        if (res.ok) {
+          const data = await res.json();
+          setVisitorCount(data.count);
+        }
+      } catch (err) {
+        console.error("Failed to load visitor count:", err);
+      }
+    };
+    fetchCount();
+  }, []);
+
+  const stats = [
+    { label: "Registered Chapters", value: "1,245",    sub: "+8% this quarter", color: "border-t-[#0D6B4F]", icon: <Building2 className="w-5 h-5 text-[#0D6B4F]" /> },
+    { label: "Student Innovators",  value: "14,205",   sub: "Active registry",  color: "border-t-blue-600",  icon: <TrendingUp className="w-5 h-5 text-blue-600" /> },
+    { label: "Grants Disbursed",    value: "₹5.42 Cr", sub: "FY 2025–26",      color: "border-t-purple-600",icon: <Landmark className="w-5 h-5 text-purple-600" /> },
+    { label: "Patents Filed",       value: "189",       sub: "via NCIE IP Cell", color: "border-t-amber-500", icon: <FileText className="w-5 h-5 text-amber-500" /> },
+    { label: "Total Site Visitors",  value: visitorCount !== null ? visitorCount.toLocaleString() : "...", sub: "Live portal count", color: "border-t-[#C9A24B]", icon: <Eye className="w-5 h-5 text-[#C9A24B]" /> },
+  ];
+
   return (
     <div className="space-y-5">
       <div className="flex flex-col sm:flex-row justify-between items-start gap-2 sm:gap-0">
@@ -12,13 +37,8 @@ export default function EcoTab() {
         <span className="text-[10px] bg-[#e8f5f0] border border-[#c2dfd4] text-[#0D6B4F] font-bold px-3 py-1 uppercase tracking-wider whitespace-nowrap self-start sm:self-auto">Admin Dashboard — L2 Access</span>
       </div>
 
-      <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: "Registered Chapters", value: "1,245",    sub: "+8% this quarter", color: "border-t-[#0D6B4F]", icon: <Building2 className="w-5 h-5 text-[#0D6B4F]" /> },
-          { label: "Student Innovators",  value: "14,205",   sub: "Active registry",  color: "border-t-blue-600",  icon: <TrendingUp className="w-5 h-5 text-blue-600" /> },
-          { label: "Grants Disbursed",    value: "₹5.42 Cr", sub: "FY 2025–26",      color: "border-t-purple-600",icon: <Landmark className="w-5 h-5 text-purple-600" /> },
-          { label: "Patents Filed",       value: "189",       sub: "via NCIE IP Cell", color: "border-t-amber-500", icon: <FileText className="w-5 h-5 text-amber-500" /> },
-        ].map(c => (
+      <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-5 gap-4">
+        {stats.map(c => (
           <div key={c.label} className={`bg-white border border-zinc-200 border-t-4 ${c.color} p-4`}>
             <div className="flex justify-between items-start">
               <div>

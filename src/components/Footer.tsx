@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -16,6 +16,33 @@ import { useLanguage } from "@/contexts/LanguageContext";
 export default function Footer() {
   const pathname = usePathname();
   const { t } = useLanguage();
+  const [visitorCount, setVisitorCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (pathname?.startsWith("/dashboard")) return;
+    const fetchCount = async () => {
+      try {
+        const hasVisited = sessionStorage.getItem("ncie_session_visited");
+        let method = "GET";
+        if (!hasVisited) {
+          method = "POST";
+        }
+
+        const res = await fetch("/api/visitor-count", { method });
+        if (res.ok) {
+          const data = await res.json();
+          setVisitorCount(data.count);
+          if (!hasVisited) {
+            sessionStorage.setItem("ncie_session_visited", "true");
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load visitor count:", err);
+      }
+    };
+    fetchCount();
+  }, [pathname]);
+
   if (pathname?.startsWith("/dashboard")) return null;
 
   const currentYear = new Date().getFullYear();
@@ -127,10 +154,32 @@ export default function Footer() {
               {t("footer_disclaimer")}
             </p>
           </div>
-          <div className="flex items-center gap-4">
-            <Link href="/terms" className="hover:underline hover:text-white text-zinc-300 transition-colors">{t("footer_terms")}</Link>
-            <span className="w-1 h-1 rounded-full bg-white/20" />
-            <Link href="/privacy" className="hover:underline hover:text-white text-zinc-300 transition-colors">{t("footer_privacy")}</Link>
+          <div className="flex flex-col sm:flex-row items-center gap-6">
+            {visitorCount !== null && (
+              <div className="flex items-center gap-2.5 bg-[#04281E] border border-emerald-800/80 rounded px-3 py-1.5 shadow-[inset_0_1px_3px_rgba(0,0,0,0.5)] select-none">
+                <span className="text-[10px] uppercase font-bold text-zinc-300 tracking-wider font-sans">
+                  {t("visitor_count_title")}
+                </span>
+                <div className="flex gap-0.5">
+                  {String(visitorCount)
+                    .padStart(7, "0")
+                    .split("")
+                    .map((digit, idx) => (
+                      <span
+                        key={idx}
+                        className="inline-flex items-center justify-center w-4.5 h-6 bg-zinc-950 text-accent border border-zinc-800 text-[13px] font-mono font-black rounded-sm shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)]"
+                      >
+                        {digit}
+                      </span>
+                    ))}
+                </div>
+              </div>
+            )}
+            <div className="flex items-center gap-4">
+              <Link href="/terms" className="hover:underline hover:text-white text-zinc-300 transition-colors">{t("footer_terms")}</Link>
+              <span className="w-1 h-1 rounded-full bg-white/20" />
+              <Link href="/privacy" className="hover:underline hover:text-white text-zinc-300 transition-colors">{t("footer_privacy")}</Link>
+            </div>
           </div>
         </div>
 

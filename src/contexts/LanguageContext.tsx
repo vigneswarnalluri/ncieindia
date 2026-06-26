@@ -14,6 +14,7 @@ const LanguageContext = createContext<LanguageContextProps | undefined>(undefine
 
 const translations: Record<Language, Record<string, string>> = {
   en: {
+    visitor_count_title: "Visitor No.",
     nav_home: "Home",
     nav_about: "About",
     nav_programs: "Programs",
@@ -865,6 +866,7 @@ const translations: Record<Language, Record<string, string>> = {
     prog_details_col_amount: "Sanctioned Amount",
   },
   hi: {
+    visitor_count_title: "आगंतुक संख्या",
     nav_home: "मुख्य पृष्ठ",
     nav_about: "हमारे बारे में",
     nav_programs: "कार्यक्रम",
