@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import type { Session } from "@supabase/supabase-js";
+import { ALLOWED_OFFICIAL_EMAILS, ALLOWED_INSTITUTION_EMAILS } from "@/lib/allowedEmails";
 
 /**
  * useAuthGuard — call this at the top of any protected page component.
@@ -17,15 +18,44 @@ export function useAuthGuard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const handleRoleVerification = (email: string) => {
+      const isOfficial = ALLOWED_OFFICIAL_EMAILS.some(e => e.toLowerCase() === email.toLowerCase());
+      const isInstitution = ALLOWED_INSTITUTION_EMAILS.some(e => e.toLowerCase() === email.toLowerCase());
+      const pathname = window.location.pathname;
+
+      if (!isOfficial && !isInstitution) {
+        supabase.auth.signOut().then(() => {
+          localStorage.removeItem("ncie_demo_session");
+          document.cookie = "ncie_demo_session=; path=/; max-age=0";
+          router.replace("/login");
+        });
+        return false;
+      }
+
+      if (isOfficial && pathname.startsWith("/dashboard/institution")) {
+        router.replace("/dashboard/official");
+        return false;
+      } else if (isInstitution && pathname.startsWith("/dashboard/official")) {
+        router.replace("/dashboard/institution");
+        return false;
+      }
+      return true;
+    };
+
     // 1. Check local demo session first
     if (typeof window !== "undefined") {
       const localDemo = localStorage.getItem("ncie_demo_session");
       if (localDemo) {
         try {
           const parsed = JSON.parse(localDemo);
-          setDemoSession(parsed);
-          setLoading(false);
-          return;
+          const email = parsed.email || "";
+          if (handleRoleVerification(email)) {
+            setDemoSession(parsed);
+            setLoading(false);
+            return;
+          } else {
+            return;
+          }
         } catch (e) {
           console.warn("Invalid demo session in localStorage", e);
         }
@@ -39,13 +69,7 @@ export function useAuthGuard() {
       } else {
         setSession(session);
         const email = session.user.email || "";
-        const isOfficial = email.endsWith(".gov.in");
-        const pathname = window.location.pathname;
-        if (isOfficial && pathname.startsWith("/dashboard/institution")) {
-          router.replace("/dashboard/official");
-        } else if (!isOfficial && pathname.startsWith("/dashboard/official")) {
-          router.replace("/dashboard/institution");
-        }
+        handleRoleVerification(email);
       }
       setLoading(false);
     });
@@ -60,13 +84,7 @@ export function useAuthGuard() {
       } else {
         setSession(session);
         const email = session.user.email || "";
-        const isOfficial = email.endsWith(".gov.in");
-        const pathname = window.location.pathname;
-        if (isOfficial && pathname.startsWith("/dashboard/institution")) {
-          router.replace("/dashboard/official");
-        } else if (!isOfficial && pathname.startsWith("/dashboard/official")) {
-          router.replace("/dashboard/institution");
-        }
+        handleRoleVerification(email);
       }
     });
 

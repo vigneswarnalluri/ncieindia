@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ALLOWED_EMAILS } from "@/lib/allowedEmails";
+import { ALLOWED_OFFICIAL_EMAILS, ALLOWED_INSTITUTION_EMAILS } from "@/lib/allowedEmails";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.nextUrl);
@@ -82,16 +82,17 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL("/login?error=sso_profile_failed", request.url));
     }
 
-    const isAllowed = ALLOWED_EMAILS.some(
+    const isOfficial = ALLOWED_OFFICIAL_EMAILS.some(
+      (allowed) => allowed.toLowerCase() === email.toLowerCase()
+    );
+    const isInstitution = ALLOWED_INSTITUTION_EMAILS.some(
       (allowed) => allowed.toLowerCase() === email.toLowerCase()
     );
 
-    if (!isAllowed) {
+    if (!isOfficial && !isInstitution) {
       return NextResponse.redirect(new URL("/login?error=sso_unauthorized", request.url));
     }
 
-    // Route mapping based on email domain
-    const isOfficial = email.endsWith(".gov.in");
     const sessionData = {
       role: isOfficial ? "official" : "institution",
       email,

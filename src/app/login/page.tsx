@@ -20,7 +20,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { ALLOWED_EMAILS } from "@/lib/allowedEmails";
+import { ALLOWED_OFFICIAL_EMAILS, ALLOWED_INSTITUTION_EMAILS } from "@/lib/allowedEmails";
 
 type Role = "institution" | "official";
 
@@ -137,7 +137,9 @@ export default function LoginPage() {
       } else {
         // Use full page navigation (not router.push) so the middleware
         // can read the newly-set Supabase session cookie on the next request.
-        const isOfficial = emailToVerify.endsWith(".gov.in") || role === "official";
+        const isOfficial = ALLOWED_OFFICIAL_EMAILS.some(
+          (allowed) => allowed.toLowerCase() === emailToVerify.toLowerCase()
+        );
         const targetRole = isOfficial ? "official" : "institution";
         window.location.href = `/dashboard/${targetRole}`;
       }
@@ -240,14 +242,25 @@ export default function LoginPage() {
     }
 
     const email = id.trim().toLowerCase();
-    const isAllowed = ALLOWED_EMAILS.some(
-      (allowed) => allowed.toLowerCase() === email
-    );
-
-    if (!isAllowed) {
-      setAuthError(t("login_unauthorized_desc"));
-      generateCaptcha();
-      return;
+    let isAllowed = false;
+    if (role === "official") {
+      isAllowed = ALLOWED_OFFICIAL_EMAILS.some(
+        (allowed) => allowed.toLowerCase() === email
+      );
+      if (!isAllowed) {
+        setAuthError("This email is not registered for Nodal Officer/Official access.");
+        generateCaptcha();
+        return;
+      }
+    } else {
+      isAllowed = ALLOWED_INSTITUTION_EMAILS.some(
+        (allowed) => allowed.toLowerCase() === email
+      );
+      if (!isAllowed) {
+        setAuthError("This email is not registered for Collegiate Chapter/SPOC access.");
+        generateCaptcha();
+        return;
+      }
     }
 
     setLoading(true);
