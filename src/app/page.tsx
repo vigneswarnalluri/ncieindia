@@ -55,8 +55,8 @@ export default function Page() {
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "National Council for Innovation and Entrepreneurship",
-    "alternateName": ["NCIE", "NCIE India"],
+    "name": "NCIE India",
+    "alternateName": ["NCIE", "National Council for Innovation and Entrepreneurship"],
     "url": "https://ncieindia.org",
   };
 
