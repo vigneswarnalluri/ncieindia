@@ -1,0 +1,32 @@
+export interface Vacancy {
+  id: number;
+  titleEn: string;
+  titleHi: string;
+  count: number;
+  qualEn: string;
+  qualHi: string;
+}
+
+export const VACANCIES_DATA: Vacancy[] = [
+  { id: 1, titleEn: "National Project Manager", titleHi: "राष्ट्रीय परियोजना प्रबंधक", count: 1, qualEn: "Postgraduate Degree in Management, Public Administration, Social Work, Commerce, Engineering, Technology, or equivalent.", qualHi: "प्रबंधन, लोक प्रशासन, समाज कार्य, वाणिज्य, इंजीनियरिंग, प्रौद्योगिकी या समकक्ष में स्नातकोत्तर डिग्री।" },
+  { id: 2, titleEn: "National Project Coordinator", titleHi: "राष्ट्रीय परियोजना समन्वयक", count: 5, qualEn: "Bachelor's Degree with MBA, MSW, PG Diploma in Management, or equivalent.", qualHi: "एमबीए, एमएसडब्ल्यू, प्रबंधन में पीजी डिप्लोमा या समकक्ष के साथ स्नातक डिग्री।" },
+  { id: 3, titleEn: "State Project Coordinator", titleHi: "राज्य परियोजना समन्वयक", count: 6, qualEn: "Bachelor's Degree in any discipline from a recognized University.", qualHi: "किसी भी विषय में स्नातक डिग्री।" },
+  { id: 4, titleEn: "District Project Coordinator", titleHi: "जिला परियोजना समन्वयक", count: 26, qualEn: "B.E./B.Tech. in any Engineering discipline from a recognized University.", qualHi: "किसी भी इंजीनियरिंग विषय में बी.ई./बी.टेक।" },
+  { id: 5, titleEn: "Innovation Officer", titleHi: "नवाचार अधिकारी", count: 26, qualEn: "B.E./B.Tech. in Computer Science, IT, AI, ECE, Electrical, Mechanical, Civil, Biotech, Data Science, or relevant Engineering.", qualHi: "सीएस, आईटी, एआई, ईसीई, इलेक्ट्रिकल, मैकेनिकल, सिविल, बायोटेक, डेटा साइंस या प्रासंगिक इंजीनियरिंग में बी.ई./बी.टेक।" },
+  { id: 6, titleEn: "Entrepreneurship Development Officer", titleHi: "उद्यमिता विकास अधिकारी", count: 26, qualEn: "B.E./B.Tech. in any Engineering discipline with specialization/interest in Entrepreneurship, Innovation, Business Dev, or Management.", qualHi: "उद्यमिता, नवाचार, व्यावसायिक विकास या प्रबंधन में विशेषज्ञता/रुचि के साथ किसी भी इंजीनियरिंग विषय में बी.ई./बी.टेक।" },
+  { id: 7, titleEn: "Training & Skill Development Officer", titleHi: "प्रशिक्षण और कौशल विकास अधिकारी", count: 120, qualEn: "B.E./B.Tech. in any Engineering discipline. Additional skill certifications preferred.", qualHi: "किसी भी इंजीनियरिंग विषय में बी.ई./बी.टेक। अतिरिक्त कौशल प्रमाणन को प्राथमिकता।" },
+  { id: 8, titleEn: "CSR & Partnership Officer", titleHi: "सीएसआर और साझेदारी अधिकारी", count: 17, qualEn: "B.E./B.Tech. with MBA/MSW/PGDM or equivalent from a recognized University.", qualHi: "एमबीए/एमएसडब्ल्यू/पीजीडीएम या समकक्ष के साथ बी.ई./बी.टेक।" },
+  { id: 9, titleEn: "Human Resources (HR) Executive", titleHi: "मानव संसाधन (एचआर) कार्यकारी", count: 16, qualEn: "B.E./B.Tech. with MBA (HR) / PGDM (HR) or equivalent from a recognized University.", qualHi: "एमबीए (एचआर) / पीजीडीएम (एचआर) या समकक्ष के साथ बी.ई./बी.टेक।" },
+  { id: 10, titleEn: "Finance & Accounts Executive", titleHi: "वित्त और लेखा कार्यकारी", count: 26, qualEn: "B.E./B.Tech. with MBA (Finance), M.Com., CA (Inter), CMA (Inter), or equivalent.", qualHi: "एमबीए (वित्त), एम.कॉम, सीए (इंटर), सीएमए (इंटर) या समकक्ष के साथ बी.ई./बी.टेक।" },
+  { id: 11, titleEn: "IT & Digital Support Executive", titleHi: "आईटी और डिजिटल सहायता कार्यकारी", count: 26, qualEn: "B.E./B.Tech. in Computer Science, IT, AI, Cyber Security, Software Engineering, Data Science, ECE, or equivalent.", qualHi: "सीएस, आईटी, एआई, साइबर सुरक्षा, सॉफ्टवेयर इंजीनियरिंग, डेटा साइंस, ईसीई या समकक्ष में बी.ई./बी.टेक।" },
+  { id: 12, titleEn: "Data Entry Operator", titleHi: "डेटा एंट्री ऑपरेटर", count: 26, qualEn: "Intermediate (10+2), Diploma, or Bachelor's Degree with knowledge of Computer Applications, MS Office, and Data Entry.", qualHi: "कंप्यूटर अनुप्रयोगों, एमएस ऑफिस और डेटा एंट्री का ज्ञान के साथ इंटरमीडिएट (10+2), डिप्लोमा या स्नातक डिग्री।" },
+  { id: 13, titleEn: "Office Assistant", titleHi: "कार्यालय सहायक", count: 18, qualEn: "Intermediate (10+2) or Bachelor's Degree from a recognized Board/University.", qualHi: "इंटरमीडिएट (10+2) या स्नातक डिग्री।" },
+  { id: 14, titleEn: "Field Executive", titleHi: "फील्ड कार्यकारी", count: 100, qualEn: "Intermediate (10+2) or Bachelor's Degree from a recognized Board/University.", qualHi: "इंटरमीडिएट (10+2) या स्नातक डिग्री।" },
+  { id: 15, titleEn: "Public Relations & Communications Officer", titleHi: "जनसंपर्क और संचार अधिकारी", count: 40, qualEn: "Graduate or Postgraduate Degree in Journalism, Mass Communication, Public Relations, English, Media Studies, or equivalent.", qualHi: "पत्रकारिता, जनसंचार, जनसंपर्क, अंग्रेजी, मीडिया अध्ययन या समकक्ष में स्नातक या स्नातकोत्तर डिग्री।" },
+  { id: 16, titleEn: "Social Media & Digital Marketing Executive", titleHi: "सोशल मीडिया और डिजिटल मार्केटिंग कार्यकारी", count: 26, qualEn: "Bachelor's Degree with Diploma/Certification in Digital Marketing, Social Media, Graphic Design, Multimedia, or related.", qualHi: "डिजिटल मार्केटिंग, सोशल मीडिया, ग्राफिक डिजाइन, मल्टीमीडिया या संबंधित में डिप्लोमा/प्रमाणन के साथ स्नातक डिग्री।" },
+  { id: 17, titleEn: "Student Relations & Outreach Officer", titleHi: "छात्र संबंध और आउटरीच अधिकारी", count: 26, qualEn: "Bachelor's Degree in any discipline from a recognized University.", qualHi: "किसी भी विषय में स्नातक डिग्री।" },
+  { id: 18, titleEn: "Administrative Executive", titleHi: "प्रशासनिक कार्यकारी", count: 26, qualEn: "Graduate or Postgraduate Degree in Business Administration, Public Administration, Management, Commerce, or equivalent.", qualHi: "व्यवसाय प्रशासन, लोक प्रशासन, प्रबंधन, वाणिज्य या समकक्ष में स्नातक या स्नातकोत्तर डिग्री।" },
+  { id: 19, titleEn: "Legal & Compliance Officer", titleHi: "कानूनी और अनुपालन अधिकारी", count: 6, qualEn: "Bachelor's Degree in Law (LL.B.) from a university recognized by the Bar Council of India.", qualHi: "बार काउंसिल ऑफ इंडिया द्वारा मान्यता प्राप्त विश्वविद्यालय से कानून में स्नातक (एलएल.बी.)।" },
+  { id: 20, titleEn: "Research & Documentation Officer", titleHi: "अनुसंधान और दस्तावेज़ीकरण अधिकारी", count: 30, qualEn: "Postgraduate Degree in Social Sciences, Economics, Statistics, Management, Public Policy, Commerce, Engineering, or related.", qualHi: "सामाजिक विज्ञान, अर्थशास्त्र, सांख्यिकी, प्रबंधन, सार्वजनिक नीति, वाणिज्य, इंजीनियरिंग या संबंधित में स्नातकोत्तर डिग्री।" },
+  { id: 21, titleEn: "Project Associate", titleHi: "परियोजना सहयोगी", count: 180, qualEn: "Bachelor's Degree in any discipline from a recognized University.", qualHi: "किसी भी विषय में स्नातक डिग्री।" }
+];
