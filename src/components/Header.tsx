@@ -35,6 +35,7 @@ const NAV_LINKS = [
   { key: "nav_home", href: "/" },
   { key: "nav_about", href: "/about" },
   { key: "nav_programs", href: "/programs", hasMega: "programs" as const },
+  { key: "nav_schemes", href: "/schemes" },
   { key: "nav_ecosystem", href: "/chapters", hasMega: "ecosystem" as const },
   { key: "nav_media", href: "/media" },
   { key: "nav_join", href: "/join" },

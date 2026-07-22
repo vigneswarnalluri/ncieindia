@@ -18,6 +18,7 @@ const translations: Record<Language, Record<string, string>> = {
     nav_home: "Home",
     nav_about: "About",
     nav_programs: "Programs",
+    nav_schemes: "Govt Schemes",
     nav_ecosystem: "Ecosystem",
     nav_media: "Media",
     nav_join: "Join",

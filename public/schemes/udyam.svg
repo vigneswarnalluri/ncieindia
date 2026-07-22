@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" width="100%" height="100%">
+  <rect width="400" height="120" rx="16" fill="#ffffff" />
+  <g transform="translate(20, 20)">
+    <rect width="64" height="64" rx="16" fill="#1d4ed8" opacity="0.1" />
+    <rect x="18" y="24" width="28" height="20" rx="3" stroke="#1d4ed8" stroke-width="3" fill="none" />
+    <path d="M 24 44 L 24 50 M 40 44 L 40 50 M 16 50 L 48 50" stroke="#1d4ed8" stroke-width="3" stroke-linecap="round" />
+  </g>
+  <text x="100" y="52" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="26" fill="#1e3a8a">MSME Udyam</text>
+  <text x="100" y="75" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="11" letter-spacing="2" fill="#1d4ed8">ENTERPRISE REGISTRATION &amp; BENEFITS</text>
+  <line x1="100" y1="85" x2="360" y2="85" stroke="#1d4ed8" stroke-width="2" />
+</svg>
