@@ -1,0 +1,1991 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { User, Landmark, Building, CheckCircle, ArrowLeft, ShieldCheck, Info, FileText, Check, BookOpen, Briefcase } from "lucide-react";
+import Link from "next/link";
+import { supabase } from "@/lib/supabase";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { VACANCIES_DATA } from "@/data/vacanciesData";
+
+const uploadFile = async (file: File, path: string) => {
+  const { data, error } = await supabase.storage
+    .from("ncie-documents")
+    .upload(path, file, {
+      cacheControl: "3600",
+      upsert: true
+    });
+  if (error) throw error;
+  
+  const { data: { publicUrl } } = supabase.storage
+    .from("ncie-documents")
+    .getPublicUrl(path);
+    
+  return publicUrl;
+};
+
+
+const DEPARTMENTS = [
+  "Computer Science & Engineering",
+  "Information Technology",
+  "Electronics & Communication Engineering",
+  "Electrical & Electronics Engineering",
+  "Mechanical Engineering",
+  "Civil Engineering",
+  "Chemical Engineering",
+  "Biotechnology",
+  "Science & Humanities",
+  "Business Administration",
+  "Other"
+];
+
+const STREAMS = [
+  "B.Tech / B.E.",
+  "M.Tech / M.E.",
+  "BCA",
+  "MCA",
+  "B.Sc",
+  "M.Sc",
+  "B.Com",
+  "M.Com",
+  "BBA",
+  "MBA",
+  "Ph.D.",
+  "Other"
+];
+
+const YEARS_OF_STUDY = [
+  "1st Year",
+  "2nd Year",
+  "3rd Year",
+  "4th Year",
+  "5th Year",
+  "Postgraduate"
+];
+
+const COLLEGES = [
+  "Indian Institute of Technology (IIT), Delhi",
+  "Indian Institute of Technology (IIT), Bombay",
+  "Indian Institute of Technology (IIT), Madras",
+  "Indian Institute of Technology (IIT), Kharagpur",
+  "Indian Institute of Technology (IIT), Kanpur",
+  "Indian Institute of Technology (IIT), Roorkee",
+  "Indian Institute of Technology (IIT), Guwahati",
+  "Indian Institute of Technology (IIT), Hyderabad",
+  "Indian Institute of Science (IISc), Bangalore",
+  "Birla Institute of Technology and Science (BITS), Pilani",
+  "Birla Institute of Technology and Science (BITS), Hyderabad",
+  "Birla Institute of Technology and Science (BITS), Goa",
+  "National Institute of Technology (NIT), Trichy",
+  "National Institute of Technology (NIT), Surathkal",
+  "National Institute of Technology (NIT), Warangal",
+  "National Institute of Technology (NIT), Calicut",
+  "National Institute of Technology (NIT), Rourkela",
+  "Delhi Technological University (DTU), Delhi",
+  "Netaji Subhas University of Technology (NSUT), Delhi",
+  "Indian Institute of Information Technology (IIIT), Allahabad",
+  "Indian Institute of Information Technology (IIIT), Gwalior",
+  "International Institute of Information Technology (IIIT), Hyderabad",
+  "International Institute of Information Technology (IIIT), Bangalore",
+  "Anna University, Chennai",
+  "College of Engineering, Guindy (CEG), Chennai",
+  "PSG College of Technology, Coimbatore",
+  "Vellore Institute of Technology (VIT), Vellore",
+  "Vellore Institute of Technology (VIT), Chennai",
+  "SRM Institute of Science and Technology, Chennai",
+  "Amity University, Noida",
+  "Manipal Academy of Higher Education, Manipal",
+  "Jadavpur University, Kolkata",
+  "Banaras Hindu University (BHU), Varanasi",
+  "Aligarh Muslim University (AMU), Aligarh",
+  "Jamia Millia Islamia, New Delhi",
+  "University of Delhi (DU), Delhi",
+  "Jawaharlal Nehru University (JNU), New Delhi",
+  "Savitribai Phule Pune University, Pune",
+  "College of Engineering, Pune (COEP), Pune",
+  "Veermata Jijabai Technological Institute (VJTI), Mumbai",
+  "University of Mumbai, Mumbai",
+  "Thapar Institute of Engineering and Technology, Patiala",
+  "Pec University of Technology, Chandigarh",
+  "Panjab University, Chandigarh",
+  "Harcourt Butler Technical University (HBTU), Kanpur",
+  "Madan Mohan Malaviya University of Technology (MMMUT), Gorakhpur",
+  "Motilal Nehru National Institute of Technology (MNNIT), Allahabad",
+  "Indian Institute of Engineering Science and Technology (IIEST), Shibpur",
+  "Heritage Institute of Technology, Kolkata",
+  "KIIT University, Bhubaneswar",
+  "Siksha 'O' Anusandhan (SOA) University, Bhubaneswar",
+  "Amrita Vishwa Vidyapeetham, Coimbatore",
+  "Cochin University of Science and Technology (CUSAT), Kochi",
+  "Visvesvaraya Technological University (VTU), Belagavi",
+  "R.V. College of Engineering (RVCE), Bengaluru",
+  "M.S. Ramaiah Institute of Technology (MSRIT), Bengaluru",
+  "BMS College of Engineering (BMSCE), Bengaluru",
+  "University Visvesvaraya College of Engineering (UVCE), Bengaluru",
+  "Osmania University, Hyderabad",
+  "Jawaharlal Nehru Technological University (JNTU), Hyderabad",
+  "Chaitanya Bharathi Institute of Technology (CBIT), Hyderabad",
+  "Andhra University, Visakhapatnam",
+  "Lovely Professional University (LPU), Phagwara",
+  "SRM University, Sonepat",
+  "Nirma University, Ahmedabad",
+  "Dhirubhai Ambani Institute of Information and Communication Technology (DA-IICT), Gandhinagar",
+  "Pandit Deendayal Energy University (PDEU), Gandhinagar",
+  "Symbiosis International University, Pune",
+  "Vellore Institute of Technology (VIT), Andhra Pradesh",
+  "KKR & KSR Institute of Technology & Sciences (KITS), Guntur",
+  "Vasireddy Venkatadri Institute of Technology (VVIT), Guntur",
+  "RVR & JC College of Engineering, Guntur",
+  "Gokaraju Rangaraju Institute of Engineering and Technology (GRIET), Hyderabad",
+  "VNR Vignana Jyothi Institute of Engineering and Technology (VNR VJIET), Hyderabad",
+  "Maturi Venkata Subba Rao (MVSR) Engineering College, Hyderabad",
+  "Vasavi College of Engineering (VCE), Hyderabad",
+  "PES University, Bengaluru",
+  "Nitte Meenakshi Institute of Technology (NMIT), Bengaluru",
+  "Sri Sivasubramaniya Nadar (SSN) College of Engineering, Chennai",
+  "Sathyabama Institute of Science and Technology, Chennai",
+  "PSG College of Technology, Coimbatore",
+  "COEP Technological University, Pune",
+  "Veermata Jijabai Technological Institute (VJTI), Mumbai",
+  "K. J. Somaiya College of Engineering, Mumbai",
+  "Thadomal Shahani Engineering College, Mumbai",
+  "L.D. College of Engineering, Ahmedabad",
+  "Dharmsinh Desai University, Nadiad",
+  "Other"
+];
+
+const CITIES_BY_STATE: Record<string, string[]> = {
+  "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Tirupati", "Kurnool", "Rajahmundry", "Kakinada", "Kadapa", "Anantapur", "Other"],
+  "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Tawang", "Pasighat", "Ziro", "Other"],
+  "Assam": ["Guwahati", "Dibrugarh", "Silchar", "Tezpur", "Jorhat", "Nagaon", "Tinsukia", "Other"],
+  "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia", "Darbhanga", "Bihar Sharif", "Arrah", "Other"],
+  "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba", "Rajnandgaon", "Jagdalpur", "Other"],
+  "Goa": ["Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda", "Other"],
+  "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Gandhinagar", "Bhavnagar", "Jamnagar", "Junagadh", "Anand", "Other"],
+  "Haryana": ["Gurugram", "Faridabad", "Panipat", "Ambala", "Karnal", "Rohtak", "Hisar", "Sonipat", "Panchkula", "Other"],
+  "Himachal Pradesh": ["Shimla", "Dharamshala", "Solan", "Mandi", "Baddi", "Other"],
+  "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Deoghar", "Hazaribagh", "Other"],
+  "Karnataka": ["Bengaluru", "Mysuru", "Hubballi-Dharwad", "Mangaluru", "Belagavi", "Davangere", "Ballari", "Tumakuru", "Shivamogga", "Other"],
+  "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Thrissur", "Kollam", "Alappuzha", "Kannur", "Palakkad", "Kottayam", "Other"],
+  "Madhya Pradesh": ["Indore", "Bhopal", "Jabalpur", "Gwalior", "Ujjain", "Sagar", "Dewas", "Satna", "Ratlam", "Other"],
+  "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane", "Nashik", "Aurangabad", "Navi Mumbai", "Solapur", "Kolhapur", "Amravati", "Other"],
+  "Manipur": ["Imphal", "Thoubal", "Kakching", "Other"],
+  "Meghalaya": ["Shillong", "Tura", "Jowai", "Other"],
+  "Mizoram": ["Aizawl", "Lunglei", "Champhai", "Other"],
+  "Nagaland": ["Kohima", "Dimapur", "Mokokchung", "Other"],
+  "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Sambalpur", "Puri", "Balasore", "Other"],
+  "Punjab": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala", "Bathinda", "Mohali", "Pathankot", "Other"],
+  "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Kota", "Bikaner", "Ajmer", "Bhilwara", "Alwar", "Sikar", "Other"],
+  "Sikkim": ["Gangtok", "Namchi", "Geyzing", "Other"],
+  "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Trichy", "Salem", "Tirunelveli", "Erode", "Vellore", "Thoothukudi", "Other"],
+  "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Khammam", "Ramagundam", "Other"],
+  "Tripura": ["Agartala", "Dharmanagar", "Udaipur", "Other"],
+  "Uttar Pradesh": ["Lucknow", "Kanpur", "Noida", "Ghaziabad", "Agra", "Varanasi", "Meerut", "Prayagraj", "Bareilly", "Aligarh", "Moradabad", "Jhansi", "Gorakhpur", "Other"],
+  "Uttarakhand": ["Dehradun", "Haridwar", "Haldwani", "Roorkee", "Rudrapur", "Other"],
+  "West Bengal": ["Kolkata", "Howrah", "Darjeeling", "Siliguri", "Asansol", "Durgapur", "Kharagpur", "Haldia", "Other"],
+  "Andaman and Nicobar Islands": ["Port Blair", "Other"],
+  "Chandigarh": ["Chandigarh", "Other"],
+  "Dadra and Nagar Haveli and Daman and Diu": ["Daman", "Diu", "Silvassa", "Other"],
+  "Delhi": ["New Delhi", "North Delhi", "South Delhi", "West Delhi", "East Delhi", "Other"],
+  "Jammu and Kashmir": ["Srinagar", "Jammu", "Anantnag", "Baramulla", "Other"],
+  "Ladakh": ["Leh", "Kargil", "Other"],
+  "Lakshadweep": ["Kavaratti", "Other"],
+  "Puducherry": ["Puducherry", "Karaikal", "Mahe", "Yanam", "Other"]
+};
+
+const STATES = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+  "Andaman and Nicobar Islands",
+  "Chandigarh",
+  "Dadra and Nagar Haveli and Daman and Diu",
+  "Delhi",
+  "Jammu and Kashmir",
+  "Ladakh",
+  "Lakshadweep",
+  "Puducherry"
+];
+
+const SPECIALIZATIONS: Record<string, string[]> = {
+  "Computer Science & Engineering": [
+    "Artificial Intelligence",
+    "Machine Learning",
+    "Data Science",
+    "Cyber Security",
+    "Software Engineering",
+    "Cloud Computing",
+    "Internet of Things (IoT)",
+    "Blockchain",
+    "Other"
+  ],
+  "Information Technology": [
+    "Artificial Intelligence",
+    "Machine Learning",
+    "Data Science",
+    "Cyber Security",
+    "Software Engineering",
+    "Cloud Computing",
+    "Internet of Things (IoT)",
+    "Blockchain",
+    "Other"
+  ],
+  "Electronics & Communication Engineering": [
+    "VLSI Design",
+    "Embedded Systems",
+    "Robotics & Automation",
+    "Signal Processing",
+    "Communication Systems",
+    "Other"
+  ],
+  "Electrical & Electronics Engineering": [
+    "Power Electronics",
+    "Robotics & Automation",
+    "Smart Grid Technologies",
+    "Renewable Energy Systems",
+    "Control Systems",
+    "Other"
+  ],
+  "Mechanical Engineering": [
+    "Robotics & Automation",
+    "CAD/CAM & Design",
+    "Thermal Engineering",
+    "Manufacturing Technologies",
+    "Mechatronics",
+    "Automotive Engineering",
+    "Other"
+  ],
+  "Civil Engineering": [
+    "Structural Engineering",
+    "Geotechnical Engineering",
+    "Transportation Engineering",
+    "Environmental Engineering",
+    "Construction Management",
+    "Other"
+  ],
+  "Chemical Engineering": [
+    "Nanotechnology",
+    "Process Control & Safety",
+    "Environmental Chemical Engineering",
+    "Biochemical Engineering",
+    "Other"
+  ],
+  "Biotechnology": [
+    "Bioinformatics",
+    "Genetic Engineering",
+    "Bioprocess Technology",
+    "Nanotechnology",
+    "Other"
+  ],
+  "Science & Humanities": [
+    "Physics / Materials Science",
+    "Applied Mathematics",
+    "Computational Chemistry",
+    "Technical Writing / Communication",
+    "Other"
+  ],
+  "Business Administration": [
+    "Finance & Investment",
+    "Marketing & Analytics",
+    "Human Resource Management",
+    "Operations & Supply Chain",
+    "Entrepreneurship & Innovation",
+    "Other"
+  ],
+  "Other": [
+    "General Innovation",
+    "Core Engineering",
+    "Pure Sciences",
+    "Social Entrepreneurship",
+    "Other"
+  ]
+};
+
+interface SearchableSelectProps {
+  name: string;
+  value: string;
+  placeholder: string;
+  options: string[];
+  onChange: (name: string, value: string) => void;
+  disabled?: boolean;
+}
+
+const SearchableSelect: React.FC<SearchableSelectProps> = ({
+  name,
+  value,
+  placeholder,
+  options,
+  onChange,
+  disabled = false,
+}) => {
+  const { t } = useLanguage();
+  const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState(value);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setSearch(value);
+  }, [value]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+        setSearch(value);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [value]);
+
+  const filteredOptions = options.filter((opt) => {
+    const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+    return normalize(opt).includes(normalize(search));
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSearch(val);
+    onChange(name, val);
+    setIsOpen(true);
+  };
+
+  const handleOptionSelect = (opt: string) => {
+    setSearch(opt);
+    onChange(name, opt);
+    setIsOpen(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setIsOpen(false);
+    }
+  };
+
+  const isSearchLongEnough = search.trim().length >= 3;
+
+  return (
+    <div className="relative w-full" ref={containerRef}>
+      <div className="relative">
+        <input
+          type="text"
+          value={search}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          onFocus={() => {
+            if (!disabled) setIsOpen(true);
+          }}
+          disabled={disabled}
+          className={`w-full px-3 py-2 pr-8 text-base sm:text-xs border border-zinc-355 rounded focus:outline-none focus:border-primary bg-zinc-50/50 disabled:opacity-50 disabled:cursor-not-allowed ${
+            value ? "text-primary font-bold" : "text-zinc-800"
+          }`}
+          placeholder={placeholder}
+          required
+        />
+        <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-zinc-400">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+
+      {isOpen && !disabled && (
+        <div className="absolute z-55 left-0 right-0 mt-1 max-h-48 overflow-y-auto bg-white border border-zinc-200 rounded shadow-md text-xs">
+          {!isSearchLongEnough ? (
+            <div className="px-3 py-2 text-zinc-400 italic select-none">
+              {t("search_min_chars")}
+            </div>
+          ) : (
+            <>
+              {filteredOptions.map((opt) => (
+                <div
+                  key={opt}
+                  onClick={() => handleOptionSelect(opt)}
+                  className="px-3 py-2 cursor-pointer hover:bg-primary hover:text-white transition-colors"
+                >
+                  {opt}
+                </div>
+              ))}
+              <div
+                onClick={() => handleOptionSelect(search)}
+                className="px-3 py-2 border-t border-zinc-150 cursor-pointer hover:bg-[#0D6B4F] hover:text-white transition-colors text-primary font-bold"
+              >
+                {t("search_custom_use").replace("{search}", search)}
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default function JoinClient() {
+  const { language, t } = useLanguage();
+  const isHi = language === "hi";
+  const [step, setStep] = useState<"select" | "form" | "success">("select");
+  const [role, setRole] = useState<"student" | "chapter" | "partner" | "internship" | "recruitment">("student");
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    orgName: "",
+    state: "",
+    city: "",
+    proposal: "",
+    designation: "",
+    mobile: "",
+    department: "",
+    specialization: "",
+    stream: "",
+    yearOfStudy: "",
+    instType: "",
+    accreditationCode: "",
+    partnerCategory: "",
+    regNumber: "",
+    websiteUrl: "",
+    selectedCourse: "",
+    txnRef: "",
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
+  
+  const [existingSubmission, setExistingSubmission] = useState<{
+    email: string;
+    orgName: string;
+    regId: string;
+  } | null>(null);
+  const [regId, setRegId] = useState<string>("");
+
+  const [files, setFiles] = useState<{
+    consentForm: File | null;
+    idCard: File | null;
+    proposalRoster: File | null;
+  }>({
+    consentForm: null,
+    idCard: null,
+    proposalRoster: null,
+  });
+
+  const [collegesCache, setCollegesCache] = useState<Record<string, string[]>>({});
+  const loadingLetters = React.useRef<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (!formData.orgName) return;
+    const firstChar = formData.orgName.trim().charAt(0).toLowerCase();
+    const letter = (firstChar >= "a" && firstChar <= "z") ? firstChar : "other";
+
+    if (collegesCache[letter] || loadingLetters.current[letter]) return;
+
+    loadingLetters.current[letter] = true;
+    fetch(`/colleges/${letter}.json`)
+      .then((res) => {
+        if (!res.ok) throw new Error("File not found");
+        return res.json();
+      })
+      .then((data: string[]) => {
+        if (Array.isArray(data)) {
+          setCollegesCache((prev) => ({ ...prev, [letter]: data }));
+        }
+      })
+      .catch((err) => {
+        console.error(`Failed to load colleges for letter ${letter}:`, err);
+      })
+      .finally(() => {
+        loadingLetters.current[letter] = false;
+      });
+  }, [formData.orgName, collegesCache]);
+
+  const collegeSearchLetter = formData.orgName ? formData.orgName.trim().charAt(0).toLowerCase() : "";
+  const currentLetterColleges = (collegeSearchLetter >= "a" && collegeSearchLetter <= "z")
+    ? collegesCache[collegeSearchLetter] || []
+    : (collegeSearchLetter ? collegesCache["other"] || [] : []);
+
+  const displayedColleges = Array.from(new Set([...COLLEGES, ...currentLetterColleges])).sort();
+
+  useEffect(() => {
+    const savedSubmission = localStorage.getItem("ncie_submission_details");
+    if (savedSubmission) {
+      try {
+        setExistingSubmission(JSON.parse(savedSubmission));
+      } catch (err) {
+        localStorage.removeItem("ncie_submission_details");
+      }
+    }
+  }, []);
+
+  const handleRoleSelect = (selectedRole: "student" | "chapter" | "partner" | "internship" | "recruitment") => {
+    setRole(selectedRole);
+    setStep("form");
+    setValidationError(null);
+    setFiles({ consentForm: null, idCard: null, proposalRoster: null });
+    setFormData({
+      fullName: "",
+      email: "",
+      orgName: "",
+      state: "",
+      city: "",
+      proposal: "",
+      designation: "",
+      mobile: "",
+      department: "",
+      specialization: "",
+      stream: "",
+      yearOfStudy: "",
+      instType: "",
+      accreditationCode: "",
+      partnerCategory: "",
+      regNumber: "",
+      websiteUrl: "",
+      selectedCourse: "",
+      txnRef: "",
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const roleParam = params.get("role");
+      if (roleParam === "internship") {
+        handleRoleSelect("internship");
+      } else if (roleParam === "recruitment") {
+        handleRoleSelect("recruitment");
+      }
+    }
+  }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    
+    // Security: basic sanitization to strip script tags
+    let sanitizedValue = value.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+    
+    if (name === "mobile") {
+      // Strip all non-digits
+      sanitizedValue = sanitizedValue.replace(/\D/g, "");
+      // Limit to 10 characters max
+      sanitizedValue = sanitizedValue.slice(0, 10);
+    }
+
+    if (name === "department") {
+      setFormData((prev) => ({ ...prev, department: sanitizedValue, specialization: "" }));
+    } else if (name === "state") {
+      setFormData((prev) => ({ ...prev, state: sanitizedValue, city: "" }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
+    }
+  };
+
+  const handleDropdownChange = (name: string, value: string) => {
+    let sanitizedValue = value.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+    setFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
+  };
+
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fileKey: "consentForm" | "idCard" | "proposalRoster",
+    allowedTypes: string[],
+    maxSizeMB: number
+  ) => {
+    setValidationError(null);
+    const file = e.target.files?.[0];
+    if (!file) {
+      setFiles((prev) => ({ ...prev, [fileKey]: null }));
+      return;
+    }
+
+    // 1. Enforce file size limits
+    const maxSizeBytes = maxSizeMB * 1024 * 1024;
+    if (file.size > maxSizeBytes) {
+      setValidationError(`Security Limit: File "${file.name}" exceeds the maximum allowance of ${maxSizeMB}MB.`);
+      e.target.value = ""; // Reset file input
+      setFiles((prev) => ({ ...prev, [fileKey]: null }));
+      return;
+    }
+
+    // 2. Strict client-side extension check
+    const extension = "." + file.name.split(".").pop()?.toLowerCase();
+    const isAllowedExtension = allowedTypes.includes(extension);
+    
+    if (!isAllowedExtension) {
+      setValidationError(`Security Alert: File type not permitted. Allowed formats: ${allowedTypes.join(", ")}`);
+      e.target.value = ""; // Reset file input
+      setFiles((prev) => ({ ...prev, [fileKey]: null }));
+      return;
+    }
+
+    setFiles((prev) => ({ ...prev, [fileKey]: file }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Safety check: ensure files are selected
+    if (role === "internship" || role === "recruitment") {
+      if (!files.proposalRoster) {
+        setValidationError("Security Verification: Please upload your Resume / CV.");
+        return;
+      }
+    } else {
+      if (!files.consentForm || !files.idCard || !files.proposalRoster) {
+        setValidationError("Security Verification: All required files must be uploaded before submitting.");
+        return;
+      }
+    }
+
+    // Security: mobile validation double-check
+    const mobilePattern = /^[0-9]{10}$/;
+    if (!mobilePattern.test(formData.mobile)) {
+      setValidationError("Validation Error: Please enter a valid 10-digit mobile number.");
+      return;
+    }
+
+    // Validate that city and orgName are not empty
+    if (!formData.city.trim()) {
+      setValidationError("Validation Error: Please specify your city.");
+      return;
+    }
+    if ((role === "student" || role === "internship" || role === "chapter" || role === "recruitment") && !formData.orgName.trim()) {
+      setValidationError("Validation Error: Please specify your college or university name.");
+      return;
+    }
+    if ((role === "student" || role === "internship") && !formData.regNumber.trim()) {
+      setValidationError("Validation Error: Please specify your Roll Number / Student ID.");
+      return;
+    }
+    if (role === "internship" && !formData.selectedCourse) {
+      setValidationError("Validation Error: Please select an NCIE Viksit Bharat 2047 Innovation Leadership Programs course.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setValidationError(null);
+
+    try {
+      const generatedId = `REG-2026-${Math.floor(Math.random() * 9000) + 1000}`;
+
+      // Upload binary files to Supabase Storage
+      let consentFormUrl = "";
+      let idCardUrl = "";
+      let proposalRosterUrl = "";
+
+      if (files.consentForm) {
+        const ext = files.consentForm.name.split(".").pop();
+        consentFormUrl = await uploadFile(files.consentForm, `${role}/${generatedId}/consentForm.${ext}`);
+      }
+      if (files.idCard) {
+        const ext = files.idCard.name.split(".").pop();
+        idCardUrl = await uploadFile(files.idCard, `${role}/${generatedId}/idCard.${ext}`);
+      }
+      if (files.proposalRoster) {
+        const ext = files.proposalRoster.name.split(".").pop();
+        proposalRosterUrl = await uploadFile(files.proposalRoster, `${role}/${generatedId}/proposalRoster.${ext}`);
+      }
+
+      const fileUrlsObj = {
+        consentForm: consentFormUrl || null,
+        idCard: idCardUrl || null,
+        proposalRoster: proposalRosterUrl || null,
+      };
+      const filesJson = JSON.stringify(fileUrlsObj);
+
+      let finalProposal = formData.proposal;
+      if (role === "internship") {
+        finalProposal = `Course: ${formData.selectedCourse} | SOP: ${formData.proposal}`;
+      } else if (role === "recruitment") {
+        finalProposal = `Position Applied For: ${formData.designation} | SOP: ${formData.proposal}`;
+      } else if (role === "partner") {
+        // Prepend custom corporate website url to proposal
+        finalProposal = `Website: ${formData.websiteUrl} | Proposal: ${formData.proposal}`;
+      }
+
+      // Insert registration record into Supabase
+      const { error } = await supabase
+        .from("registrations")
+        .insert([{
+          reg_id: generatedId,
+          role,
+          full_name: formData.fullName,
+          email: formData.email,
+          org_name: formData.orgName,
+          state: formData.state,
+          city: formData.city,
+          proposal: finalProposal,
+          designation: formData.designation,
+          mobile: formData.mobile,
+          department: formData.department,
+          specialization: formData.specialization,
+          stream: formData.stream,
+          year_of_study: formData.yearOfStudy,
+          inst_type: formData.instType,
+          accreditation_code: formData.accreditationCode,
+          partner_category: formData.partnerCategory,
+          reg_number: formData.regNumber,
+          website_url: filesJson,
+          status: "pending",
+          submitted_at: new Date().toISOString(),
+        }]);
+
+      if (error) {
+        // Handle duplicate email gracefully
+        if (error.code === "23505") {
+          setValidationError("A registration with this email already exists. Please check your inbox for the confirmation email.");
+        } else {
+          setValidationError(`Submission failed: ${error.message}`);
+        }
+        setIsSubmitting(false);
+        return;
+      }
+
+      setRegId(generatedId);
+
+      // Real-time sync to Google Sheets Webhook in background
+      const webhookUrl = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_WEBHOOK_URL;
+      if (webhookUrl) {
+        fetch(webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            reg_id: generatedId,
+            submitted_at: new Date().toISOString(),
+            role,
+            full_name: formData.fullName,
+            email: formData.email,
+            mobile: formData.mobile,
+            org_name: formData.orgName,
+            reg_number: formData.regNumber,
+            state: formData.state,
+            city: formData.city,
+            department: formData.department,
+            specialization: formData.specialization,
+            stream: formData.stream,
+            year_of_study: formData.yearOfStudy,
+            proposal: finalProposal,
+            website_url: filesJson,
+            status: "pending",
+          }),
+          mode: "no-cors",
+        }).catch((err) => console.error("Google Sheets sync failed:", err));
+      }
+
+      const submissionDetails = {
+        email: formData.email,
+        orgName: formData.orgName,
+        regId: generatedId,
+      };
+      localStorage.setItem("ncie_submission_details", JSON.stringify(submissionDetails));
+      setExistingSubmission(submissionDetails);
+      setStep("success");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err: any) {
+      setValidationError(err.message || "An unexpected error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+
+  return (
+    <div className="flex-1 bg-[#F8FAFC] py-12 md:py-16 border-t border-zinc-200">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Top Progress Stepper (Official Portal Style) */}
+        <div className="bg-white border border-zinc-200 rounded shadow-sm p-4 mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-semibold">
+            
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
+                step === "select" 
+                  ? "bg-primary text-white" 
+                  : "bg-emerald-50 text-primary border border-primary/20"
+              }`}>
+                {step !== "select" ? <Check className="w-3.5 h-3.5" /> : "1"}
+              </span>
+              <div>
+                <p className="text-[10px] uppercase font-bold tracking-wider text-zinc-400">{t("join_step_label_1")}</p>
+                <p className={`text-xs ${step === "select" ? "text-primary font-bold" : "text-zinc-650"}`}>{t("join_step_1")}</p>
+              </div>
+            </div>
+
+            <div className="hidden sm:block flex-1 h-px bg-zinc-200" />
+
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
+                step === "form" 
+                  ? "bg-primary text-white" 
+                  : step === "success" 
+                    ? "bg-emerald-50 text-primary border border-primary/20" 
+                    : "bg-zinc-100 text-zinc-400 border border-zinc-200"
+              }`}>
+                {step === "success" ? <Check className="w-3.5 h-3.5" /> : "2"}
+              </span>
+              <div>
+                <p className="text-[10px] uppercase font-bold tracking-wider text-zinc-400">{t("join_step_label_2")}</p>
+                <p className={`text-xs ${step === "form" ? "text-primary font-bold" : "text-zinc-650"}`}>{t("join_step_2")}</p>
+              </div>
+            </div>
+
+            <div className="hidden sm:block flex-1 h-px bg-zinc-200" />
+
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
+                step === "success" 
+                  ? "bg-primary text-white" 
+                  : "bg-zinc-100 text-zinc-400 border border-zinc-200"
+              }`}>
+                3
+              </span>
+              <div>
+                <p className="text-[10px] uppercase font-bold tracking-wider text-zinc-400">{t("join_step_label_3")}</p>
+                <p className={`text-xs ${step === "success" ? "text-primary font-bold" : "text-zinc-650"}`}>{t("join_step_3")}</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* Client-side Duplicate Block (Active Registration Warning) */}
+        {existingSubmission && step !== "success" && (
+          <div className="max-w-xl mx-auto text-center space-y-6 py-12 bg-white border border-zinc-200 rounded p-8 shadow-sm relative overflow-hidden animate-slide-down mb-8">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-[#C9A24B]" />
+            
+            <div className="w-12 h-12 rounded-full bg-amber-50 text-[#A68034] flex items-center justify-center mx-auto border border-accent/20 shadow-sm mb-2">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            
+            <div className="space-y-2">
+              <h2 className="text-lg font-bold text-zinc-800 uppercase tracking-wider">{t("join_active_reg_found")}</h2>
+              <p className="text-xs text-zinc-500 leading-relaxed max-w-md mx-auto">
+                {t("join_active_reg_desc").split("{orgName}")[0]}
+                <span className="font-semibold text-zinc-800">{existingSubmission.orgName}</span>
+                {t("join_active_reg_desc").split("{orgName}")[1]}
+              </p>
+              <div className="pt-2">
+                <span className="font-mono font-bold text-accent-dark bg-amber-50 px-4 py-1.5 rounded text-xs border border-accent/20 select-all shadow-sm">
+                  {existingSubmission.regId}
+                </span>
+              </div>
+            </div>
+
+            <div className="bg-zinc-50 border border-zinc-200 rounded p-4 text-left flex gap-3 text-xs text-zinc-650 leading-relaxed">
+              <Info className="w-5 h-5 text-accent-dark shrink-0 mt-0.5" />
+              <span>
+                <strong>{t("join_sub_lock")}</strong> {t("join_sub_lock_desc")} <strong className="text-primary">{existingSubmission.email}</strong>.
+              </span>
+            </div>
+
+            <div className="pt-4 flex justify-center gap-4">
+              <button
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-zinc-300 hover:bg-zinc-50 rounded font-bold uppercase tracking-wider text-xs transition-colors cursor-pointer shadow-sm text-zinc-700"
+                onClick={() => {
+                  if (window.confirm(t("confirm_reset"))) {
+                    localStorage.removeItem("ncie_submission_details");
+                    setExistingSubmission(null);
+                    setRegId("");
+                    setFormData({
+                      fullName: "",
+                      email: "",
+                      orgName: "",
+                      state: "",
+                      city: "",
+                      proposal: "",
+                      designation: "",
+                      mobile: "",
+                      department: "",
+                      specialization: "",
+                      stream: "",
+                      yearOfStudy: "",
+                      instType: "",
+                      accreditationCode: "",
+                      partnerCategory: "",
+                      regNumber: "",
+                      websiteUrl: "",
+                      selectedCourse: "",
+                      txnRef: "",
+                    });
+                    setFiles({ consentForm: null, idCard: null, proposalRoster: null });
+                    setStep("select");
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                }}
+              >
+                {t("join_btn_reset")}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 1: Select Role */}
+        {step === "select" && !existingSubmission && (
+          <div className="space-y-8 animate-slide-down">
+            {/* Official Seal & Header */}
+            <div className="text-center max-w-3xl mx-auto space-y-3">
+              <div className="flex justify-center items-center gap-1.5 text-xs font-bold tracking-widest text-[#0D6B4F] uppercase">
+                <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
+                <span>{t("join_registry")}</span>
+              </div>
+              
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 uppercase tracking-tight">
+                {t("join_portal_title")}
+              </h1>
+              
+              <div className="h-0.5 w-24 bg-accent mx-auto" />
+              
+              <p className="text-xs sm:text-sm text-zinc-500 max-w-2xl mx-auto leading-relaxed">
+                {t("join_portal_desc")}
+              </p>
+            </div>
+
+            {/* Grouped Onboarding Pathway Panels */}
+            <div className="space-y-10">
+              
+              {/* Section 1: For Individuals */}
+              <div className="space-y-4">
+                <div className="border-l-4 border-primary pl-3">
+                  <h2 className="text-sm font-extrabold uppercase tracking-wider text-zinc-900">
+                    {isHi ? "व्यक्तिगत पंजीकरण मार्ग" : "Individual Onboarding Pathways"}
+                  </h2>
+                  <p className="text-[11px] text-zinc-400 font-medium leading-none mt-1">
+                    {isHi ? "छात्रों, नवप्रवर्तकों और नौकरी चाहने वालों के लिए" : "For students, innovators, and career applicants"}
+                  </p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Student Innovator */}
+                  <div className="bg-white border border-zinc-200 border-t-4 border-t-primary rounded shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full">
+                    <div className="p-6 space-y-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 bg-emerald-50 text-primary flex items-center justify-center rounded border border-primary/10 shrink-0">
+                          <User className="w-4.5 h-4.5" />
+                        </div>
+                        <h3 className="text-sm font-extrabold text-zinc-800 uppercase tracking-wider">
+                          {t("join_role_student")}
+                        </h3>
+                      </div>
+                      
+                      <p className="text-xs text-zinc-500 leading-relaxed min-h-[40px]">
+                        {t("join_role_student_desc")}
+                      </p>
+                      
+                      <div className="pt-2 space-y-2.5">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{t("join_features")}</p>
+                        <ul className="space-y-1.5 text-xs text-zinc-650">
+                          <li className="flex items-start gap-2">
+                            <Check className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
+                            <span>{t("join_feat_student_1")}</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <Check className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
+                            <span>{t("join_feat_student_2")}</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <Check className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
+                            <span>{t("join_feat_student_3")}</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    <div className="p-6 bg-zinc-50 border-t border-zinc-100">
+                      <button
+                        onClick={() => handleRoleSelect("student")}
+                        className="w-full bg-primary hover:bg-[#08533d] text-white font-bold text-xs uppercase py-2.5 rounded shadow-sm transition-colors text-center cursor-pointer"
+                      >
+                        {t("join_btn_student")}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Course Internship */}
+                  <div className="bg-white border border-zinc-200 border-t-4 border-t-[#C9A24B] rounded shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full animate-pulse-once">
+                    <div className="p-6 space-y-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 bg-amber-50 text-accent-dark flex items-center justify-center rounded border border-[#C9A24B]/20 shrink-0">
+                          <BookOpen className="w-4.5 h-4.5" />
+                        </div>
+                        <h3 className="text-sm font-extrabold text-zinc-800 uppercase tracking-wider">
+                          {t("join_role_intern")}
+                        </h3>
+                      </div>
+                      
+                      <p className="text-xs text-zinc-500 leading-relaxed min-h-[40px]">
+                        {t("join_role_intern_desc")}
+                      </p>
+                      
+                      <div className="pt-2 space-y-2.5">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{t("join_features_intern")}</p>
+                        <ul className="space-y-1.5 text-xs text-zinc-650">
+                          <li className="flex items-start gap-2">
+                            <Check className="w-3.5 h-3.5 text-accent-dark shrink-0 mt-0.5" />
+                            <span>{t("join_feat_intern_1")}</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <Check className="w-3.5 h-3.5 text-accent-dark shrink-0 mt-0.5" />
+                            <span>{t("join_feat_intern_2")}</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <Check className="w-3.5 h-3.5 text-accent-dark shrink-0 mt-0.5" />
+                            <span>{t("join_feat_intern_3")}</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    <div className="p-6 bg-zinc-50 border-t border-zinc-100">
+                      <button
+                        onClick={() => handleRoleSelect("internship")}
+                        className="w-full bg-[#0D6B4F] hover:bg-[#074733] text-white font-bold text-xs uppercase py-2.5 rounded shadow-sm transition-colors text-center cursor-pointer"
+                      >
+                        {t("join_btn_intern")}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Recruitment / Careers */}
+                  <div className="bg-white border border-zinc-200 border-t-4 border-t-accent rounded shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full">
+                    <div className="p-6 space-y-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 bg-amber-50 text-accent-dark flex items-center justify-center rounded border border-accent/20 shrink-0">
+                          <Briefcase className="w-4.5 h-4.5" />
+                        </div>
+                        <h3 className="text-sm font-extrabold text-zinc-800 uppercase tracking-wider">
+                          {t("join_role_recruitment")}
+                        </h3>
+                      </div>
+                      
+                      <p className="text-xs text-zinc-500 leading-relaxed min-h-[40px]">
+                        {t("join_role_recruitment_desc")}
+                      </p>
+                      
+                      <div className="pt-2 space-y-2.5">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{t("join_features_recruitment")}</p>
+                        <ul className="space-y-1.5 text-xs text-zinc-655">
+                          <li className="flex items-start gap-2">
+                            <Check className="w-3.5 h-3.5 text-accent-dark shrink-0 mt-0.5" />
+                            <span>{t("join_feat_recruitment_1")}</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <Check className="w-3.5 h-3.5 text-accent-dark shrink-0 mt-0.5" />
+                            <span>{t("join_feat_recruitment_2")}</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <Check className="w-3.5 h-3.5 text-accent-dark shrink-0 mt-0.5" />
+                            <span>{t("join_feat_recruitment_3")}</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    <div className="p-6 bg-zinc-50 border-t border-zinc-100">
+                      <button
+                        onClick={() => handleRoleSelect("recruitment")}
+                        className="w-full bg-[#0D6B4F] hover:bg-[#074733] text-white font-bold text-xs uppercase py-2.5 rounded shadow-sm transition-colors text-center cursor-pointer"
+                      >
+                        {t("join_btn_recruitment")}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Section 2: For Organizations */}
+              <div className="space-y-4 pt-4 border-t border-zinc-150">
+                <div className="border-l-4 border-accent pl-3">
+                  <h2 className="text-sm font-extrabold uppercase tracking-wider text-zinc-900">
+                    {isHi ? "संस्थागत और संगठनात्मक मार्ग" : "Institutional & Organizational Pathways"}
+                  </h2>
+                  <p className="text-[11px] text-zinc-400 font-medium leading-none mt-1">
+                    {isHi ? "विश्वविद्यालयों, कॉलेजों और कॉर्पोरेट भागीदारों के लिए" : "For universities, colleges, and corporate partners"}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                  {/* College Chapter */}
+                  <div className="bg-white border border-zinc-200 border-t-4 border-t-accent rounded shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full">
+                    <div className="p-6 space-y-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 bg-amber-50 text-accent-dark flex items-center justify-center rounded border border-accent/20 shrink-0">
+                          <Landmark className="w-4.5 h-4.5" />
+                        </div>
+                        <h3 className="text-sm font-extrabold text-zinc-800 uppercase tracking-wider">
+                          {t("join_role_chapter")}
+                        </h3>
+                      </div>
+                      
+                      <p className="text-xs text-zinc-500 leading-relaxed min-h-[40px]">
+                        {t("join_role_chapter_desc")}
+                      </p>
+                      
+                      <div className="pt-2 space-y-2.5">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{t("join_features_chapter")}</p>
+                        <ul className="space-y-1.5 text-xs text-zinc-650">
+                          <li className="flex items-start gap-2">
+                            <Check className="w-3.5 h-3.5 text-accent-dark shrink-0 mt-0.5" />
+                            <span>{t("join_feat_chapter_1")}</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <Check className="w-3.5 h-3.5 text-accent-dark shrink-0 mt-0.5" />
+                            <span>{t("join_feat_chapter_2")}</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <Check className="w-3.5 h-3.5 text-accent-dark shrink-0 mt-0.5" />
+                            <span>{t("join_feat_chapter_3")}</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    <div className="p-6 bg-zinc-50 border-t border-zinc-100">
+                      <button
+                        onClick={() => handleRoleSelect("chapter")}
+                        className="w-full bg-[#111827] hover:bg-black text-white font-bold text-xs uppercase py-2.5 rounded shadow-sm transition-colors text-center cursor-pointer"
+                      >
+                        {t("join_btn_chapter")}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Ecosystem Partner */}
+                  <div className="bg-white border border-zinc-200 border-t-4 border-t-purple-750 rounded shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full">
+                    <div className="p-6 space-y-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 bg-purple-50 text-purple-700 flex items-center justify-center rounded border border-purple-100 shrink-0">
+                          <Building className="w-4.5 h-4.5" />
+                        </div>
+                        <h3 className="text-sm font-extrabold text-zinc-800 uppercase tracking-wider">
+                          {t("join_role_partner")}
+                        </h3>
+                      </div>
+                      
+                      <p className="text-xs text-zinc-500 leading-relaxed min-h-[40px]">
+                        {t("join_role_partner_desc")}
+                      </p>
+                      
+                      <div className="pt-2 space-y-2.5">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{t("join_features_partner")}</p>
+                        <ul className="space-y-1.5 text-xs text-zinc-655">
+                          <li className="flex items-start gap-2">
+                            <Check className="w-3.5 h-3.5 text-purple-700 shrink-0 mt-0.5" />
+                            <span>{t("join_feat_partner_1")}</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <Check className="w-3.5 h-3.5 text-purple-700 shrink-0 mt-0.5" />
+                            <span>{t("join_feat_partner_2")}</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <Check className="w-3.5 h-3.5 text-purple-700 shrink-0 mt-0.5" />
+                            <span>{t("join_feat_partner_3")}</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    <div className="p-6 bg-zinc-50 border-t border-zinc-100">
+                      <button
+                        onClick={() => handleRoleSelect("partner")}
+                        className="w-full bg-[#111827] hover:bg-black text-white font-bold text-xs uppercase py-2.5 rounded shadow-sm transition-colors text-center cursor-pointer"
+                      >
+                        {t("join_btn_partner")}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Form */}
+        {step === "form" && (
+          <div className="space-y-6 animate-slide-down">
+            <button
+              onClick={() => {
+                setStep("select");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-zinc-600 hover:text-primary transition-colors cursor-pointer bg-white border border-zinc-200 rounded"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>{t("btn_back")}</span>
+            </button>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              
+              {/* Left Column: Form Details */}
+              <div className="lg:col-span-8">
+                <div className="bg-white border border-zinc-200 rounded shadow-sm overflow-hidden">
+                  
+                  {/* Form Header */}
+                  <div className="bg-zinc-50 px-6 py-4 border-b border-zinc-200">
+                    <span className="text-[10px] font-bold text-accent-dark tracking-wider uppercase bg-white border border-zinc-200 px-2 py-0.5 rounded shadow-sm">
+                      {role === "student" ? t("role_appl_student") : role === "internship" ? t("role_appl_internship") : role === "chapter" ? t("role_appl_chapter") : role === "recruitment" ? t("role_appl_recruitment") : t("role_appl_partner")}
+                    </span>
+                    <h2 className="text-base font-extrabold text-zinc-800 mt-2 uppercase tracking-wide">{t("form_title")}</h2>
+                  </div>
+
+                  {validationError && (
+                    <div className="bg-red-50 border-l-4 border-red-500 p-4 text-xs text-red-700 font-semibold mx-6 mt-4 rounded flex items-center gap-2">
+                      <span className="font-bold">Error:</span>
+                      <span>{validationError}</span>
+                    </div>
+                  )}
+
+                  <form onSubmit={handleSubmit} className="p-6 space-y-4">
+                    
+                    {/* Row 1: Representative Name & Designation */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
+                          {role === "student" || role === "internship" || role === "recruitment" ? t("label_fullname_student") : role === "chapter" ? t("label_fullname_chapter") : t("label_fullname_partner")}
+                        </label>
+                        <input
+                          name="fullName"
+                          type="text"
+                          maxLength={100}
+                          value={formData.fullName}
+                          onChange={handleInputChange}
+                          className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                          placeholder={role === "student" || role === "internship" || role === "recruitment" ? t("placeholder_fullname_student") : role === "chapter" ? t("placeholder_fullname_chapter") : t("placeholder_fullname_partner")}
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
+                          {role === "recruitment" ? (isHi ? "आवेदन का पद" : "Position Applied For") : t("label_designation")}
+                        </label>
+                        {role === "recruitment" ? (
+                          <select
+                            name="designation"
+                            value={formData.designation}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-white text-primary font-bold cursor-pointer"
+                            required
+                          >
+                            <option value="" className="text-zinc-500">-- {isHi ? "पद का चयन करें" : "Select Position"} --</option>
+                            {VACANCIES_DATA.map((v) => (
+                              <option key={v.id} value={v.titleEn} className="text-zinc-800">
+                                {isHi ? v.titleHi : v.titleEn}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <input
+                            name="designation"
+                            type="text"
+                            maxLength={100}
+                            value={formData.designation}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                            placeholder={role === "student" ? t("placeholder_designation_student") : role === "internship" ? t("placeholder_designation_internship") : role === "chapter" ? t("placeholder_designation_chapter") : t("placeholder_designation_partner")}
+                            required
+                          />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Row 2: Contact Details (Email & Phone) */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
+                          {role === "student" || role === "internship" || role === "recruitment" ? t("label_email_student") : role === "chapter" ? t("label_email_chapter") : t("label_email_partner")}
+                        </label>
+                        <input
+                          name="email"
+                          type="email"
+                          maxLength={100}
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                          placeholder={role === "student" || role === "internship" || role === "recruitment" ? t("placeholder_email_student") : role === "chapter" ? t("placeholder_email_chapter") : t("placeholder_email_partner")}
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_mobile")}</label>
+                        <input
+                          name="mobile"
+                          type="tel"
+                          pattern="[0-9]{10}"
+                          maxLength={10}
+                          value={formData.mobile}
+                          onChange={handleInputChange}
+                          className="w-full px-3 py-2 text-xs border border-zinc-355 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                          placeholder={t("placeholder_mobile")}
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    {/* Row 3: Organization / Entity Details */}
+                    {role === "student" || role === "internship" ? (
+                      <div className="space-y-4">
+                        {role === "internship" && (
+                          <div className="space-y-1.5 bg-amber-50/45 border border-[#C9A24B]/20 p-4 mb-4 rounded animate-slide-down">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-[#A68034] block font-sans">
+                              {t("label_select_internship_course")} <span className="text-red-500">*</span>
+                            </label>
+                            <select
+                              name="selectedCourse"
+                              value={formData.selectedCourse}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-white text-primary font-bold cursor-pointer"
+                              required
+                            >
+                              <option value="" className="text-zinc-500 font-sans">{t("placeholder_select_course")}</option>
+                              <option value="Innovational & Technology Management" className="text-zinc-800 font-sans">
+                                {t("course_itm_option")}
+                              </option>
+                              <option value="AI Business & Startup Innovation" className="text-zinc-800 font-sans">
+                                {t("course_absi_option")}
+                              </option>
+                            </select>
+                            <p className="text-[10px] text-zinc-450 leading-normal mt-1 font-sans">
+                              {t("internship_course_help")}
+                            </p>
+                          </div>
+                        )}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                          <div className="space-y-1.5 sm:col-span-2">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
+                              {t("label_collegename")}
+                            </label>
+                            <SearchableSelect
+                              name="orgName"
+                              value={formData.orgName}
+                              placeholder={t("placeholder_search_college")}
+                              options={displayedColleges}
+                              onChange={handleDropdownChange}
+                            />
+                          </div>
+                          <div className="space-y-1.5 sm:col-span-1">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
+                              {t("label_rollno")}
+                            </label>
+                            <input
+                              name="regNumber"
+                              type="text"
+                              maxLength={50}
+                              value={formData.regNumber}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                              placeholder={t("placeholder_rollno")}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_stream")}</label>
+                            <select
+                              name="stream"
+                              value={formData.stream}
+                              onChange={handleInputChange}
+                              className={`w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 cursor-pointer ${
+                                formData.stream ? "text-primary font-bold" : "text-zinc-500"
+                              }`}
+                              required
+                            >
+                              <option value="" className="text-zinc-500">{t("placeholder_select_stream")}</option>
+                              {STREAMS.map((str) => (
+                                <option key={str} value={str} className="text-zinc-800">{str}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_year")}</label>
+                            <select
+                              name="yearOfStudy"
+                              value={formData.yearOfStudy}
+                              onChange={handleInputChange}
+                              className={`w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 cursor-pointer ${
+                                formData.yearOfStudy ? "text-primary font-bold" : "text-zinc-500"
+                              }`}
+                              required
+                            >
+                              <option value="" className="text-zinc-500">{t("placeholder_select_year")}</option>
+                              {YEARS_OF_STUDY.map((year) => (
+                                <option key={year} value={year} className="text-zinc-800">{year}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_department")}</label>
+                            <select
+                              name="department"
+                              value={formData.department}
+                              onChange={handleInputChange}
+                              className={`w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 cursor-pointer ${
+                                formData.department ? "text-primary font-bold" : "text-zinc-500"
+                              }`}
+                              required
+                            >
+                              <option value="" className="text-zinc-500">{t("placeholder_select_dept")}</option>
+                              {DEPARTMENTS.map((dept) => (
+                                <option key={dept} value={dept} className="text-zinc-800">{dept}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_specialization")}</label>
+                            <select
+                              name="specialization"
+                              value={formData.specialization}
+                              onChange={handleInputChange}
+                              className={`w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 cursor-pointer ${
+                                formData.specialization ? "text-primary font-bold" : "text-zinc-500"
+                              }`}
+                              required
+                            >
+                              <option value="" className="text-zinc-500">{t("placeholder_select_spec")}</option>
+                              {formData.department && SPECIALIZATIONS[formData.department] ? (
+                                SPECIALIZATIONS[formData.department].map((spec) => (
+                                  <option key={spec} value={spec} className="text-zinc-800">{spec}</option>
+                                ))
+                              ) : (
+                                <option value="" disabled className="text-zinc-400">{t("placeholder_select_dept_first")}</option>
+                              )}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
+                            {role === "chapter" || role === "recruitment" ? t("label_college_uni_name") : t("label_corp_entity_name")}
+                          </label>
+                          {role === "chapter" || role === "recruitment" ? (
+                            <SearchableSelect
+                              name="orgName"
+                              value={formData.orgName}
+                              placeholder={t("placeholder_search_college")}
+                              options={displayedColleges}
+                              onChange={handleDropdownChange}
+                            />
+                          ) : (
+                            <input
+                              name="orgName"
+                              type="text"
+                              maxLength={200}
+                              value={formData.orgName}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                              placeholder={t("placeholder_org_partner")}
+                              required
+                            />
+                          )}
+                        </div>
+                        <div className="space-y-1.5">
+                          {role === "chapter" && (
+                            <>
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_inst_type")}</label>
+                              <input
+                                name="instType"
+                                type="text"
+                                maxLength={100}
+                                value={formData.instType}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                                placeholder={t("placeholder_inst_type")}
+                                required
+                              />
+                            </>
+                          )}
+                          {role === "partner" && (
+                            <>
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_partner_category")}</label>
+                              <input
+                                name="partnerCategory"
+                                type="text"
+                                maxLength={100}
+                                value={formData.partnerCategory}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                                placeholder={t("placeholder_partner_category")}
+                                required
+                              />
+                            </>
+                          )}
+                          {role === "recruitment" && (
+                            <>
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{isHi ? "उच्चतम योग्यता" : "Highest Qualification"}</label>
+                              <input
+                                name="instType"
+                                type="text"
+                                maxLength={100}
+                                value={formData.instType}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                                placeholder={isHi ? "जैसे: बी.टेक, एमबीए, एम.कॉम" : "e.g. B.Tech, MBA, M.Com"}
+                                required
+                              />
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Row 4: Custom specific ID / Info */}
+                    {(role === "chapter" || role === "partner") && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {role === "chapter" && (
+                          <div className="space-y-1.5 col-span-2 sm:col-span-1">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_accreditation_code")}</label>
+                            <input
+                              name="accreditationCode"
+                              type="text"
+                              maxLength={100}
+                              value={formData.accreditationCode}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                              placeholder={t("placeholder_accreditation_code")}
+                              required
+                            />
+                          </div>
+                        )}
+                        {role === "partner" && (
+                          <>
+                            <div className="space-y-1.5">
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_corporate_reg")}</label>
+                              <input
+                                name="regNumber"
+                                type="text"
+                                maxLength={100}
+                                value={formData.regNumber}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                                placeholder={t("placeholder_corporate_reg")}
+                                required
+                              />
+                            </div>
+                            <div className="space-y-1.5">
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_corporate_website")}</label>
+                              <input
+                                name="websiteUrl"
+                                type="url"
+                                maxLength={150}
+                                value={formData.websiteUrl}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50"
+                                placeholder={t("placeholder_corporate_website")}
+                                required
+                              />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )}
+
+                    {/* State & City */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_state")}</label>
+                        <select
+                          name="state"
+                          value={formData.state}
+                          onChange={handleInputChange}
+                          className={`w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 cursor-pointer ${
+                            formData.state ? "text-primary font-bold" : "text-zinc-500"
+                          }`}
+                          required
+                        >
+                          <option value="" className="text-zinc-500">{t("placeholder_select_state")}</option>
+                          {STATES.map((st) => (
+                            <option key={st} value={st} className="text-zinc-800">{st}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">{t("label_city")}</label>
+                        <SearchableSelect
+                          name="city"
+                          value={formData.city}
+                          placeholder={formData.state ? t("placeholder_search_city") : t("placeholder_select_state_first")}
+                          options={formData.state ? CITIES_BY_STATE[formData.state] || [] : []}
+                          onChange={handleDropdownChange}
+                          disabled={!formData.state}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Proposal / Textarea */}
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
+                        {role === "student" 
+                          ? t("label_proposal_student") 
+                          : role === "internship"
+                            ? t("label_proposal_intern")
+                            : role === "chapter" 
+                              ? t("label_proposal_chapter") 
+                              : role === "recruitment"
+                                ? (isHi ? "कार्य अनुभव विवरण और संक्षिप्त विवरण" : "Work Experience & Brief SOP")
+                                : t("label_proposal_partner")}
+                      </label>
+                      <textarea
+                        name="proposal"
+                        rows={4}
+                        maxLength={2000}
+                        value={formData.proposal}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 text-xs border border-zinc-300 rounded focus:outline-none focus:border-primary bg-zinc-50/50 resize-y"
+                        placeholder={
+                          role === "student"
+                            ? t("placeholder_proposal_student")
+                            : role === "internship"
+                              ? t("placeholder_proposal_intern")
+                              : role === "chapter"
+                                ? t("placeholder_proposal_chapter")
+                                : role === "recruitment"
+                                  ? (isHi ? "अपने पिछले प्रासंगिक कार्य अनुभव और संक्षिप्त परिचय का विवरण प्रदान करें..." : "Describe your past relevant experience, certifications, and why you are suitable for this position...")
+                                  : t("placeholder_proposal_partner")
+                        }
+                        required
+                      />
+                      <div className="flex justify-end text-[10px] text-zinc-400 font-bold select-none font-mono">
+                        <span>{formData.proposal.length} / 2,000 {t("char_count_label")}</span>
+                      </div>
+                    </div>
+
+                    {/* Verification Documents Upload */}
+                    <div className="border-t border-zinc-200 pt-5 mt-5 space-y-4">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{t("form_required_docs")}</p>
+                      
+                      <div className={`grid grid-cols-1 ${role === "internship" || role === "recruitment" ? "sm:grid-cols-1" : "sm:grid-cols-3"} gap-4`}>
+                        
+                        {/* File 1: Consent Form */}
+                        {role !== "internship" && role !== "recruitment" && (
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block min-h-[30px]">
+                              {role === "student"
+                                ? t("label_file_consent_student") 
+                                : role === "chapter" 
+                                  ? t("label_file_consent_chapter") 
+                                  : t("label_file_consent_partner")}{"\u00A0"}
+                              <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="file"
+                              accept=".pdf"
+                              required
+                              onChange={(e) => handleFileChange(e, "consentForm", [".pdf"], 2)}
+                              className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
+                            />
+                            <span className="text-[9px] text-zinc-400 block font-medium">
+                              {role === "student"
+                                ? t("help_file_consent_student") 
+                                : role === "chapter" 
+                                  ? t("help_file_consent_chapter") 
+                                  : t("help_file_consent_partner")}
+                            </span>
+                          </div>
+                        )}
+
+                        {/* File 2: ID Card */}
+                        {role !== "internship" && role !== "recruitment" && (
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block min-h-[30px]">
+                              {role === "student"
+                                ? t("label_file_id_student") 
+                                : role === "chapter" 
+                                  ? t("label_file_id_chapter") 
+                                  : t("label_file_id_partner")}{"\u00A0"}
+                              <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="file"
+                              accept=".pdf,.jpg,.jpeg,.png"
+                              required
+                              onChange={(e) => handleFileChange(
+                                e, 
+                                "idCard", 
+                                [".jpg", ".jpeg", ".png", ".pdf"], 
+                                2
+                              )}
+                              className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
+                            />
+                            <span className="text-[9px] text-zinc-400 block font-medium">
+                              {role === "student"
+                                ? t("help_file_id_student") 
+                                : role === "chapter" 
+                                  ? t("help_file_id_chapter") 
+                                  : t("help_file_id_partner")}
+                            </span>
+                          </div>
+                        )}
+
+                        {/* File 3: Proposal Roster */}
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block min-h-[30px]">
+                            {role === "student" 
+                              ? t("label_file_roster_student") 
+                              : role === "internship" || role === "recruitment"
+                                ? t("label_file_roster_internship")
+                                : role === "chapter" 
+                                  ? t("label_file_roster_chapter") 
+                                  : t("label_file_roster_partner")}{"\u00A0"}
+                            <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="file"
+                            accept={role === "partner" ? ".pdf" : ".pdf,.docx,.doc"}
+                            required
+                            onChange={(e) => handleFileChange(
+                              e, 
+                              "proposalRoster", 
+                              role === "partner" ? [".pdf"] : [".pdf", ".docx", ".doc"], 
+                              2
+                            )}
+                            className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
+                          />
+                          <span className="text-[9px] text-zinc-400 block font-medium">
+                            {role === "student" 
+                              ? t("help_file_roster_student") 
+                              : role === "internship" || role === "recruitment"
+                                ? t("help_file_roster_internship")
+                                : role === "chapter" 
+                                  ? t("help_file_roster_chapter") 
+                                  : t("help_file_roster_partner")}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Official Declaration Tick box */}
+                    <div className="p-3 bg-zinc-50 border border-zinc-200 rounded flex gap-2.5 items-start text-[11px] text-zinc-650">
+                      <input type="checkbox" required className="mt-0.5 focus:ring-primary h-4 w-4 border-zinc-300 rounded shrink-0 cursor-pointer accent-primary" />
+                      <span>
+                        <strong>{t("form_decl_title")}:</strong> {t("form_decl_body")}
+                      </span>
+                    </div>
+
+                    <button 
+                      type="submit" 
+                      disabled={isSubmitting}
+                      className={`w-full bg-[#0D6B4F] hover:bg-[#08533d] text-white font-bold text-xs uppercase py-3 rounded shadow transition-colors cursor-pointer flex items-center justify-center gap-2 ${
+                        isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin shrink-0" />
+                          <span>{t("btn_submitting")}</span>
+                        </>
+                      ) : (
+                        <span>{t("btn_submit")}</span>
+                      )}
+                    </button>
+
+                  </form>
+                </div>
+              </div>
+
+              {/* Right Column: Required Documents Checklist */}
+              <div className="lg:col-span-4 space-y-6">
+                
+                {/* Official Note */}
+                <div className="bg-white border border-zinc-200 rounded p-5 shadow-sm space-y-3 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-primary" />
+                  <div className="flex items-center gap-1.5 text-primary">
+                    <Info className="w-4 h-4 shrink-0" />
+                    <h3 className="text-xs font-bold uppercase tracking-wider">{t("form_process_title")}</h3>
+                  </div>
+                  <p className="text-xs text-zinc-500 leading-relaxed">
+                    {t("form_process_note")}
+                  </p>
+                </div>
+
+                {/* Required Documents */}
+                <div className="bg-white border border-zinc-200 rounded p-5 shadow-sm space-y-4">
+                  <div className="flex items-center gap-1.5 text-zinc-800 pb-2 border-b border-zinc-150">
+                    <FileText className="w-4 h-4 text-accent-dark" />
+                    <h3 className="text-xs font-bold uppercase tracking-wider">{t("label_required_docs_sidebar")}</h3>
+                  </div>
+                  <div className="space-y-3">
+                    {role !== "internship" && role !== "recruitment" && (
+                      <>
+                        <div className="flex items-start gap-3 p-3 bg-zinc-50/50 border border-zinc-200/60 rounded">
+                          <div className="w-7 h-7 bg-emerald-50 text-primary flex items-center justify-center shrink-0 mt-0.5 rounded border border-primary/10">
+                            <FileText className="w-3.5 h-3.5" />
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-zinc-800">
+                              {role === "student" 
+                                ? t("label_file_consent_student") 
+                                : role === "chapter" 
+                                  ? t("label_file_consent_chapter") 
+                                  : t("label_file_consent_partner")}
+                            </p>
+                            <span className="text-[10px] text-zinc-400 font-medium">{t("help_signed_pdf")}</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-start gap-3 p-3 bg-zinc-50/50 border border-zinc-200/60 rounded">
+                          <div className="w-7 h-7 bg-amber-50 text-accent-dark flex items-center justify-center shrink-0 mt-0.5 rounded border border-accent/20">
+                            <FileText className="w-3.5 h-3.5" />
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-zinc-800">
+                              {role === "student" 
+                                ? t("label_file_id_student") 
+                                : role === "chapter" 
+                                  ? t("label_file_id_chapter") 
+                                  : t("label_file_id_partner")}
+                            </p>
+                            <span className="text-[10px] text-zinc-400 font-medium">
+                              {role === "student" ? t("help_id_type_student") : t("help_id_type_other")}
+                            </span>
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    <div className="flex items-start gap-3 p-3 bg-zinc-50/50 border border-zinc-200/60 rounded">
+                      <div className="w-7 h-7 bg-purple-50 text-purple-700 flex items-center justify-center shrink-0 mt-0.5 rounded border border-purple-100">
+                        <FileText className="w-3.5 h-3.5" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-zinc-800">
+                          {role === "student" 
+                            ? t("label_file_roster_student") 
+                            : role === "internship" || role === "recruitment"
+                              ? t("label_file_roster_internship")
+                              : role === "chapter" 
+                                ? t("label_file_roster_chapter") 
+                                : t("label_file_roster_partner")}
+                        </p>
+                        <span className="text-[10px] text-zinc-400 font-medium">
+                          {role === "partner" ? t("help_roster_type_partner") : t("help_roster_type_other")}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Success Confirmation */}
+        {step === "success" && (
+          <div className="max-w-xl mx-auto text-center space-y-6 py-12 bg-white border border-zinc-200 rounded p-8 shadow-sm relative overflow-hidden animate-slide-down">
+            {/* Decorative Top Accent Line */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent" />
+            
+            <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border border-emerald-500/20 shadow-sm mb-2">
+              <CheckCircle className="w-6 h-6" />
+            </div>
+            
+            <div className="space-y-2">
+              <h2 className="text-lg font-bold text-zinc-800 uppercase tracking-wider">{t("success_title")}</h2>
+              <p className="text-xs text-zinc-500 leading-relaxed max-w-md mx-auto">
+                {role === "recruitment" ? (
+                  <>
+                    {t("success_msg_recruitment").split("{fullName}")[0]}
+                    <span className="font-bold text-primary">{formData.fullName}</span>
+                    {t("success_msg_recruitment").split("{fullName}")[1]?.split("{position}")[0]}
+                    <span className="font-semibold text-zinc-800">{formData.designation}</span>
+                    {t("success_msg_recruitment").split("{fullName}")[1]?.split("{position}")[1]}
+                  </>
+                ) : (
+                  <>
+                    {t("success_msg").split("{fullName}")[0]}
+                    <span className="font-bold text-primary">{formData.fullName}</span>
+                    {t("success_msg").split("{fullName}")[1]?.split("{orgName}")[0]}
+                    <span className="font-semibold text-zinc-800">{formData.orgName}</span>
+                    {t("success_msg").split("{fullName}")[1]?.split("{orgName}")[1]}
+                  </>
+                )}
+              </p>
+              <div className="pt-2">
+                <span className="font-mono font-bold text-accent-dark bg-amber-50 px-4 py-1.5 rounded text-xs border border-accent/20 select-all shadow-sm">
+                  {regId || (existingSubmission ? existingSubmission.regId : "")}
+                </span>
+              </div>
+            </div>
+
+            <div className="bg-zinc-50 border border-zinc-200 rounded p-4 text-left flex gap-3 text-xs text-zinc-650 leading-relaxed">
+              <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <span>
+                <strong>{t("success_next_step")}</strong> {t("success_next_step_desc").split("{email}")[0]}<strong className="text-primary">{formData.email}</strong>{t("success_next_step_desc").split("{email}")[1]}
+              </span>
+            </div>
+
+            <div className="pt-4">
+              <button
+                className="inline-flex items-center gap-2 px-5 py-2.5 border border-primary text-primary hover:bg-emerald-50 rounded font-bold uppercase tracking-wider text-xs transition-colors cursor-pointer shadow-sm"
+                onClick={() => {
+                  if (window.confirm(t("confirm_reset"))) {
+                    localStorage.removeItem("ncie_submission_details");
+                    setExistingSubmission(null);
+                    setRegId("");
+                    setFormData({
+                      fullName: "",
+                      email: "",
+                      orgName: "",
+                      state: "",
+                      city: "",
+                      proposal: "",
+                      designation: "",
+                      mobile: "",
+                      department: "",
+                      specialization: "",
+                      stream: "",
+                      yearOfStudy: "",
+                      instType: "",
+                      accreditationCode: "",
+                      partnerCategory: "",
+                      regNumber: "",
+                      websiteUrl: "",
+                      selectedCourse: "",
+                      txnRef: "",
+                    });
+                    setFiles({ consentForm: null, idCard: null, proposalRoster: null });
+                    setStep("select");
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                }}
+              >
+                {t("btn_start_new")}
+              </button>
+            </div>
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
+}

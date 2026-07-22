@@ -17,20 +17,66 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "NCIE India | Council for Innovation & Entrepreneurship",
+  metadataBase: new URL("https://ncieindia.org"),
+  title: {
+    default: "NCIE India | National Council for Innovation & Entrepreneurship",
+    template: "%s | NCIE India",
+  },
   description:
-    "Building India's largest student innovation and entrepreneurship ecosystem. Fostering institutional collaboration, startup incubation, and regional chapters.",
+    "National Council for Innovation and Entrepreneurship (NCIE) India builds the nation's largest student startup, incubation, and collegiate chapter ecosystem aligned with Viksit Bharat 2047.",
   keywords: [
     "NCIE India",
-    "Innovation",
-    "Entrepreneurship",
-    "Student Network",
-    "Civic Tech India",
-    "Startup India",
-    "Institutions",
-    "Hackathons",
-    "Vision 2047",
+    "National Council for Innovation and Entrepreneurship",
+    "Innovation India Council",
+    "NCIE Viksit Bharat 2047 Innovation Leadership Programs",
+    "Student Startup Seed Funding",
+    "Incubation Ecosystem India",
+    "Collegiate Chapters Network",
+    "Government Alignment Viksit Bharat",
+    "Entrepreneurship Leadership Programs",
+    "Youth Startup Incubation",
   ],
+  authors: [{ name: "NCIE Secretariat", url: "https://ncieindia.org" }],
+  creator: "National Council for Innovation and Entrepreneurship",
+  publisher: "NCIE India",
+  alternates: {
+    canonical: "https://ncieindia.org",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: "https://ncieindia.org",
+    title: "NCIE India | National Council for Innovation & Entrepreneurship",
+    description:
+      "National Council for Innovation and Entrepreneurship (NCIE) India builds the nation's largest student startup, incubation, and collegiate chapter ecosystem.",
+    siteName: "NCIE India",
+    images: [
+      {
+        url: "https://ncieindia.org/logo-new.png",
+        width: 800,
+        height: 600,
+        alt: "NCIE India Official Crest & Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "NCIE India | National Council for Innovation & Entrepreneurship",
+    description:
+      "Building India's largest student innovation and entrepreneurship ecosystem under Viksit Bharat 2047 initiatives.",
+    images: ["https://ncieindia.org/logo-new.png"],
+  },
 };
 
 export default function RootLayout({
