@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { ShieldCheck } from "lucide-react";
+import { ShieldCheck, Download } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Milestone {
@@ -100,18 +100,30 @@ export default function Vision2047Page() {
       
       {/* Page Header (Gov/Institutional style) */}
       <div className="relative bg-[#0A5D45] py-16 text-white border-b border-primary-dark">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-xs md:text-sm text-emerald-100 font-semibold mb-2 flex items-center gap-1.5 uppercase tracking-wider">
-            <Link href="/" className="hover:underline hover:text-white transition-colors">{t("vis_home")}</Link>
-            <span>/</span>
-            <span className="text-white/60">{t("vis_slash")}</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div>
+            <div className="text-xs md:text-sm text-emerald-100 font-semibold mb-2 flex items-center gap-1.5 uppercase tracking-wider">
+              <Link href="/" className="hover:underline hover:text-white transition-colors">{t("vis_home")}</Link>
+              <span>/</span>
+              <span className="text-white/60">{t("vis_slash")}</span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+              {t("vis_title")}
+            </h1>
+            <p className="text-emerald-100/80 text-xs sm:text-sm max-w-3xl mt-3 leading-relaxed">
+              {t("vis_desc")}
+            </p>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-            {t("vis_title")}
-          </h1>
-          <p className="text-emerald-100/80 text-xs sm:text-sm max-w-3xl mt-3 leading-relaxed">
-            {t("vis_desc")}
-          </p>
+
+          <a
+            href="/NCIE_Viksit_Bharat_2047_Innovation_Leadership_Programmes.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-[#C9A24B] hover:bg-[#b08d3d] text-[#063b2c] font-bold text-xs uppercase px-4 py-3 rounded shadow-md transition-all shrink-0 cursor-pointer"
+          >
+            <Download className="w-4 h-4" />
+            <span>Download Official Charter PDF</span>
+          </a>
         </div>
       </div>
 

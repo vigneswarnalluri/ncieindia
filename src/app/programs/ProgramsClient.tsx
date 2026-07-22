@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Filter, DatabaseBackup, CheckCircle } from "lucide-react";
+import { ArrowRight, Filter, DatabaseBackup, CheckCircle, Download } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { PROGRAMS_DATA, Program } from "@/data/programsData";
@@ -206,6 +206,14 @@ export default function ProgramsPage() {
                           {t("prog_btn_details")}
                         </button>
                       </Link>
+                      {program.pdfUrl && (
+                        <a href={program.pdfUrl} target="_blank" rel="noopener noreferrer" className="block">
+                          <button className="w-full border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100/70 text-[#0D6B4F] font-bold text-[10px] uppercase py-1.5 transition-colors cursor-pointer text-center flex items-center justify-center gap-1">
+                            <Download className="w-3 h-3" />
+                            <span>PDF Guidelines</span>
+                          </button>
+                        </a>
+                      )}
                       <Link href="/join" className="block">
                         <button className="w-full bg-[#0D6B4F] hover:bg-[#074733] text-white font-bold text-[10px] uppercase py-2 transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5 shadow-sm">
                           <span>{t("prog_btn_apply")}</span>

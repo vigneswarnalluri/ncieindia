@@ -18,6 +18,8 @@ export interface Program {
   courseCode?: string;
   tranches?: Tranche[];
   stages?: { title: string; desc: string }[];
+  pdfUrl?: string;
+  pdfName?: string;
 }
 
 export const PROGRAMS_DATA: Program[] = [
@@ -80,6 +82,8 @@ export const PROGRAMS_DATA: Program[] = [
     budget: "Paid stipends",
     duration: "2–6 months per course",
     description: "A structured national leadership framework established across 10 core sectors, ensuring that every undergraduate student in India gains real-time industry exposure and skill-based learning opportunities.",
+    pdfUrl: "/NCIE_Viksit_Bharat_2047_Innovation_Leadership_Programmes.pdf",
+    pdfName: "NCIE – Viksit Bharat 2047 Innovation Leadership Programmes.pdf",
     benefits: [
       "Real-time industry exposure and hands-on skill development",
       "Covers 10 core sectors (Engineering, Research, Finance, Agriculture, Healthcare, IT & AI, etc.)",
@@ -122,6 +126,8 @@ export const PROGRAMS_DATA: Program[] = [
     budget: "Prototype validation grants",
     duration: "6–12 months milestone cycle",
     description: "Selected student entrepreneurs receive direct financial support to develop and execute their startup ideas, helping them transition smoothly from concept to execution and validation.",
+    pdfUrl: "/NCIE_Student_Startup_Grants_Guidelines.pdf",
+    pdfName: "Rules, Regulations & Guidelines - NCIE Student Startup Grants Program.pdf",
     benefits: [
       "Equity-free financial support for raw material and tooling purchases",
       "Mentoring support to validate early proofs of concept (POC)",
@@ -136,6 +142,8 @@ export const PROGRAMS_DATA: Program[] = [
     budget: "₹5,00,000 per startup",
     duration: "12–24 months milestone cycle",
     description: "A structured seed funding program offering up to ₹5,00,000 per student startup without requiring student equity or ownership dilution. This ensures young innovators can focus on building their ventures without financial pressure.",
+    pdfUrl: "/Kalam_Startup_Seed_Funding_Scheme.pdf",
+    pdfName: "Dr. A.P.J. Abdul Kalam Startup Validation & Seed Funding Scheme.pdf",
     benefits: [
       "Equity-free seed funding of up to ₹5 Lakhs per startup",
       "Released in five structured stages based on progress and performance",
@@ -189,6 +197,8 @@ export const PROGRAMS_DATA: Program[] = [
     budget: "₹20 Lakhs to ₹50 Lakhs",
     duration: "12–18 months infrastructure cycle",
     description: "Selected and recognized educational institutions are provided with dedicated funding support strictly allocated for building incubation centers, innovation labs, and entrepreneurship infrastructure.",
+    pdfUrl: "/Institutional_Incubation_Development_Support_Scheme.pdf",
+    pdfName: "Institutional Incubation & Development Support Scheme (IIDSS).pdf",
     benefits: [
       "Financial grants up to ₹50 Lakhs for setup and tooling",
       "Strict allocation for rapid prototyping labs, makerspaces, and incubation offices",

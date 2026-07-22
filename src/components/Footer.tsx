@@ -154,15 +154,37 @@ export default function Footer() {
         </div>
 
         {/* Campaign / Initiative Logos Row */}
-        <div className="mt-12 w-full grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-6 items-center justify-items-center py-6 px-4 sm:px-8 bg-white border border-zinc-200 rounded-sm shadow-sm select-none">
-          <img src="/niti-aayog.png" alt="NITI Aayog" className="h-12 sm:h-16 md:h-18 max-w-full w-auto object-contain" />
-          <img src="/digital-india.png" alt="Digital India" className="h-10 sm:h-14 md:h-16 max-w-full w-auto object-contain" />
-          <img src="/nsdc.png" alt="National Skill Development Corporation" className="h-10 sm:h-14 md:h-16 max-w-full w-auto object-contain" />
-          <img src="/invest-india.png" alt="Invest India" className="h-12 sm:h-16 md:h-18 max-w-full w-auto object-contain" />
-          <img src="/viksit-bharat.png" alt="Viksit Bharat Abhiyan" className="h-12 sm:h-16 md:h-20 max-w-full w-auto object-contain" />
-          <img src="/swachh-bharat.png" alt="Swachh Bharat" className="h-10 sm:h-14 md:h-16 max-w-full w-auto object-contain" />
-          <img src="/make-in-india.png" alt="Make in India" className="h-9 sm:h-12 md:h-14 max-w-full w-auto object-contain" />
-          <img src="/atmanirbhar-bharat.png?v=2" alt="Atmanirbhar Bharat" className="h-14 sm:h-18 md:h-22 max-w-full w-auto object-contain" />
+        <div className="mt-12 w-full grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-3 sm:gap-4 items-center justify-items-center py-6 px-4 sm:px-6 bg-white border border-zinc-200 rounded-sm shadow-sm select-none">
+          <div className="w-full h-12 sm:h-14 md:h-16 flex items-center justify-center p-1">
+            <img src="/niti-aayog.png" alt="NITI Aayog" className="max-h-full max-w-full h-auto w-auto object-contain" />
+          </div>
+          <div className="w-full h-12 sm:h-14 md:h-16 flex items-center justify-center p-1">
+            <img src="/digital-india.png" alt="Digital India" className="max-h-full max-w-full h-auto w-auto object-contain" />
+          </div>
+          <div className="w-full h-12 sm:h-14 md:h-16 flex items-center justify-center p-1">
+            <img src="/g20-india.png" alt="G20 India" className="max-h-full max-w-full h-auto w-auto object-contain" />
+          </div>
+          <div className="w-full h-12 sm:h-14 md:h-16 flex items-center justify-center p-1">
+            <img src="/azadi-ka-amrit-mahotsav.png" alt="Azadi Ka Amrit Mahotsav" className="max-h-full max-w-full h-auto w-auto object-contain" />
+          </div>
+          <div className="w-full h-12 sm:h-14 md:h-16 flex items-center justify-center p-1">
+            <img src="/nsdc.png" alt="National Skill Development Corporation" className="max-h-full max-w-full h-auto w-auto object-contain" />
+          </div>
+          <div className="w-full h-12 sm:h-14 md:h-16 flex items-center justify-center p-1">
+            <img src="/invest-india.png" alt="Invest India" className="max-h-full max-w-full h-auto w-auto object-contain" />
+          </div>
+          <div className="w-full h-12 sm:h-14 md:h-16 flex items-center justify-center p-1">
+            <img src="/viksit-bharat.png" alt="Viksit Bharat Abhiyan" className="max-h-full max-w-full h-auto w-auto object-contain" />
+          </div>
+          <div className="w-full h-12 sm:h-14 md:h-16 flex items-center justify-center p-1">
+            <img src="/swachh-bharat.png" alt="Swachh Bharat" className="max-h-full max-w-full h-auto w-auto object-contain" />
+          </div>
+          <div className="w-full h-12 sm:h-14 md:h-16 flex items-center justify-center p-1">
+            <img src="/make-in-india.png" alt="Make in India" className="max-h-full max-w-full h-auto w-auto object-contain" />
+          </div>
+          <div className="w-full h-12 sm:h-14 md:h-16 flex items-center justify-center p-1">
+            <img src="/atmanirbhar-bharat.png?v=2" alt="Atmanirbhar Bharat" className="max-h-full max-w-full h-auto w-auto object-contain" />
+          </div>
         </div>
 
         {/* Separator */}
