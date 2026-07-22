@@ -527,3 +527,13 @@ html .acc-exclude button.text-zinc-400:hover {
   }
 }
 
+/* Hide scrollbar for Chrome, Safari, Opera, Firefox and IE/Edge */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+

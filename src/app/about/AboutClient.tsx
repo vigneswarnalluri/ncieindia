@@ -546,14 +546,14 @@ export default function AboutPage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-2 text-xs md:text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                  className={`flex items-center gap-2 px-4 py-2 text-xs md:text-sm font-semibold transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
                     isActive 
                       ? "bg-[#0A5D45] text-white font-bold border-b-2 border-accent" 
                       : "text-emerald-100/70 hover:text-white"
                   }`}
                 >
                   {isActive && <DotGridIcon />}
-                  <span>{tab.label}</span>
+                  <span className="whitespace-nowrap">{tab.label}</span>
                 </button>
               );
             })}

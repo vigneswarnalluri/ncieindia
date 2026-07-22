@@ -370,7 +370,7 @@ export default function MediaClient() {
               <div className="flex gap-1 overflow-x-auto scrollbar-none whitespace-nowrap w-full">
                 <button
                   onClick={() => { setActiveTab("announcements"); setSearchQuery(""); }}
-                  className={`px-4 py-3 text-xs font-extrabold uppercase tracking-wide border-b-2 transition-all cursor-pointer ${
+                  className={`px-4 py-3 text-xs font-extrabold uppercase tracking-wide border-b-2 transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                     activeTab === "announcements"
                       ? "border-primary text-primary"
                       : "border-transparent text-zinc-500 hover:text-zinc-800"
@@ -380,7 +380,7 @@ export default function MediaClient() {
                 </button>
                 <button
                   onClick={() => { setActiveTab("press"); setSearchQuery(""); }}
-                  className={`px-4 py-3 text-xs font-extrabold uppercase tracking-wide border-b-2 transition-all cursor-pointer ${
+                  className={`px-4 py-3 text-xs font-extrabold uppercase tracking-wide border-b-2 transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                     activeTab === "press"
                       ? "border-primary text-primary"
                       : "border-transparent text-zinc-500 hover:text-zinc-800"
@@ -390,7 +390,7 @@ export default function MediaClient() {
                 </button>
                 <button
                   onClick={() => { setActiveTab("gallery"); setSearchQuery(""); }}
-                  className={`px-4 py-3 text-xs font-extrabold uppercase tracking-wide border-b-2 transition-all cursor-pointer ${
+                  className={`px-4 py-3 text-xs font-extrabold uppercase tracking-wide border-b-2 transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                     activeTab === "gallery"
                       ? "border-primary text-primary"
                       : "border-transparent text-zinc-500 hover:text-zinc-800"
