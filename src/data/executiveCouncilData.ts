@@ -20,22 +20,21 @@ export interface CouncilMember {
 }
 
 export const EXECUTIVE_COUNCIL_MEMBERS: CouncilMember[] = [
-  // --- EXECUTIVE COUNCIL BODY (8 Members) ---
+  // --- EXECUTIVE COUNCIL BODY ---
   {
-    id: "dr-elia-thagaram",
-    nameEn: "Dr. Elia Thagaram",
-    nameHi: "डॉ. एलिया थागारम",
+    id: "akkala-vamsi-reddy",
+    nameEn: "Akkala Vamsi Reddy",
+    nameHi: "अक्कला वामसी रेड्डी",
     category: "executive_council",
-    roleEn: "Executive Director, NCIE New Delhi",
-    roleHi: "कार्यकारी निदेशक, एनसीआईई नई दिल्ली",
-    institutionEn: "National Council for Innovation & Entrepreneurship (NCIE), New Delhi & Dean, K.S.R.M. College of Engineering",
-    institutionHi: "राष्ट्रीय नवाचार एवं उद्यमिता परिषद (एनसीआईई), नई दिल्ली एवं डीन, के.एस.आर.एम. इंजीनियरिंग कॉलेज",
-    qualificationsEn: "MBA, M.Phil, Ph.D.",
-    qualificationsHi: "एमबीए, एम.फिल, पीएचडी",
-    bioEn: "Dr. Elia Thagaram is Executive Director of the National Council for Innovation & Entrepreneurship (NCIE), New Delhi. He has served as Chief Executive Officer (CEO) of multiple incubation centres, nurturing startups, strengthening industry-academia collaboration, technology transfer, and leading national capacity building programs across India. He holds an impressive research portfolio with publications in SCI, Scopus-indexed, and UGC Care journals.",
-    bioHi: "डॉ. एलिया थागारम राष्ट्रीय नवाचार और उद्यमिता परिषद (एनसीआईई), नई दिल्ली के कार्यकारी निदेशक हैं। उन्होंने कई ऊष्मायन केंद्रों के मुख्य कार्यकारी अधिकारी (सीईओ) के रूप में कार्य किया है, जिन्होंने स्टार्टअप्स को पोषण देने, उद्योग-अकादमिक सहयोग, प्रौद्योगिकी हस्तांतरण को मजबूत करने और भारत भर में राष्ट्रीय क्षमता निर्माण कार्यक्रमों का नेतृत्व किया है।",
-    email: "dr.eliathagaram66@gmail.com",
-    image: "/images/executive-council/dr_elia_thagaram.jpg"
+    roleEn: "Nodal Agency Director, NCIE India & Managing Director, BCLLF",
+    roleHi: "नोडल एजेंसी निदेशक, एनसीआईई इंडिया एवं प्रबंध निदेशक, बीसीएलएलएफ",
+    institutionEn: "National Council for Innovation & Entrepreneurship (NCIE), New Delhi & Bharath Cares Life Line Foundation (BCLLF)",
+    institutionHi: "राष्ट्रीय नवाचार एवं उद्यमिता परिषद (एनसीआईई), नई दिल्ली एवं भारत केयर्स लाइफ लाइन फाउंडेशन (बीसीएलएलएफ)",
+    qualificationsEn: "Innovation & Social Impact Leader",
+    qualificationsHi: "नवाचार एवं सामाजिक प्रभाव नेता",
+    bioEn: "Akkala Vamsi Reddy is an innovation and social impact leader serving as the Nodal Agency Director of NCIE India (National Council for Innovation & Entrepreneurship) and the Managing Director of Bharath Cares Life Line Foundation (BCLLF). Through these leadership roles, he has been actively involved in designing and implementing initiatives that promote innovation, entrepreneurship, skill development, education, and community empowerment. He has led projects and collaborative initiatives with government departments, educational institutions, industry partners, APSSDC, P4 initiatives, Viksit Bharat 2047, and NITI Aayog aligned programs.",
+    bioHi: "अक्कला वामसी रेड्डी एक नवाचार और सामाजिक प्रभाव नेता हैं जो एनसीआईई इंडिया (राष्ट्रीय नवाचार और उद्यमिता परिषद) के नोडल एजेंसी निदेशक और भारत केयर्स लाइफ लाइन फाउंडेशन (बीसीएलएलएफ) के प्रबंध निदेशक के रूप में कार्यरत हैं। वे आंध्र प्रदेश सरकार, एपीएसएसडीसी, पी4 पहलों, विकसित भारत 2047 और नीति आयोग के दृष्टिकोण के अनुरूप कार्यक्रमों के साथ सक्रिय रूप से जुड़े हुए हैं।",
+    image: "/images/executive-council/akkala_vamsi_reddy.jpg"
   },
   {
     id: "prof-bk-ravi",
