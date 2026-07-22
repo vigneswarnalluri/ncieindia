@@ -361,8 +361,8 @@ export default function Header() {
                   </div>
                   
                   <div className="pt-6 border-t border-zinc-200/80 space-y-3">
-                    <Link href="/join" className="group/btn flex items-center justify-between text-xs font-bold text-primary hover:text-primary-dark transition-colors uppercase tracking-wider font-sans">
-                      <span>Apply for Incubation</span>
+                    <Link href="/programs" className="group/btn flex items-center justify-between text-xs font-bold text-primary hover:text-primary-dark transition-colors uppercase tracking-wider font-sans">
+                      <span>View All Programs</span>
                       <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
                     </Link>
                   </div>
@@ -592,7 +592,7 @@ export default function Header() {
                   
                   <div className="pt-6 border-t border-zinc-200/80 space-y-3">
                     <Link href="/chapters" className="group/btn flex items-center justify-between text-xs font-bold text-primary hover:text-primary-dark transition-colors uppercase tracking-wider font-sans">
-                      <span>View Chapters Registry</span>
+                      <span>View All Chapters</span>
                       <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
                     </Link>
                   </div>
