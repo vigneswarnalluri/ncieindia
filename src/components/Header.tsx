@@ -92,11 +92,11 @@ export default function Header() {
     setActiveMenu(menu);
   };
 
-  const handleMouseLeave = () => {
+  const handleHeaderMouseLeave = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
       setActiveMenu(null);
-    }, 400);
+    }, 250);
   };
 
   useEffect(() => {
@@ -135,7 +135,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 md:top-[-64px] z-50 w-full flex flex-col">
+      <header className="sticky top-0 md:top-[-64px] z-50 w-full flex flex-col" onMouseLeave={handleHeaderMouseLeave}>
       {/* Top Black Bar (Gov/Institutional style) */}
       <div className="bg-[#1A1A1A] text-white border-b border-white/5 text-xs font-sans relative z-40 hidden md:block h-16 py-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-full">
@@ -192,7 +192,12 @@ export default function Header() {
           <div className="flex justify-between items-center h-20 gap-2">
 
             {/* Logo Area */}
-            <Link href="/" className="focus:outline-none shrink-0 acc-logo-container" aria-label="NCIE India Home">
+            <Link 
+              href="/" 
+              className="focus:outline-none shrink-0 acc-logo-container" 
+              aria-label="NCIE India Home"
+              onMouseEnter={() => setActiveMenu(null)}
+            >
               <Image
                 src="/logo-new.svg"
                 alt="NCIE India Logo"
@@ -211,40 +216,44 @@ export default function Header() {
                 const hasMega = link.hasMega;
                 const isMenuOpen = activeMenu === hasMega;
                 return (
-                  <Link
+                  <div
                     key={link.key}
-                    href={link.href}
+                    className="flex items-stretch h-full"
                     onMouseEnter={() => hasMega ? handleMouseEnter(hasMega) : setActiveMenu(null)}
-                    onMouseLeave={handleMouseLeave}
-                    onClick={() => {
-                      if (hasMega) {
-                        setActiveMenu((prev) => (prev === hasMega ? null : hasMega));
-                      }
-                    }}
-                    className={cn(
-                      "px-2.5 lg:px-3 xl:px-4 h-full flex items-center gap-1 text-[11px] lg:text-[12px] xl:text-[13px] font-bold uppercase tracking-wider transition-all duration-200 relative focus:outline-none select-none hover:bg-zinc-50/70 whitespace-nowrap",
-                      (isActive || isMenuOpen)
-                        ? "text-primary font-extrabold"
-                        : "text-zinc-600 hover:text-primary"
-                    )}
                   >
-                    <span>{t(link.key)}</span>
-                    {hasMega && (
-                      <ChevronDown
+                    <Link
+                      href={link.href}
+                      onClick={(e) => {
+                        if (hasMega) {
+                          e.preventDefault();
+                          setActiveMenu(activeMenu === hasMega ? null : hasMega);
+                        }
+                      }}
+                      className={cn(
+                        "px-2.5 lg:px-3 xl:px-4 h-full flex items-center gap-1 text-[11px] lg:text-[12px] xl:text-[13px] font-bold uppercase tracking-wider transition-all duration-200 relative focus:outline-none select-none hover:bg-zinc-50/70 whitespace-nowrap cursor-pointer",
+                        (isActive || isMenuOpen)
+                          ? "text-primary font-extrabold"
+                          : "text-zinc-600 hover:text-primary"
+                      )}
+                    >
+                      <span>{t(link.key)}</span>
+                      {hasMega && (
+                        <ChevronDown
+                          className={cn(
+                            "w-3 h-3 transition-transform duration-250 opacity-70",
+                            isMenuOpen && "rotate-180 text-primary opacity-100"
+                          )}
+                        />
+                      )}
+                      {/* Material Tab Bottom Active Indicator */}
+                      <span
                         className={cn(
-                          "w-3 h-3 transition-transform duration-250 opacity-70",
-                          isMenuOpen && "rotate-180 text-primary opacity-100"
+                          "absolute bottom-0 left-0 right-0 h-[3px] bg-primary transition-all duration-300 origin-bottom scale-y-0",
+                          (isActive || isMenuOpen) && "scale-y-100"
                         )}
                       />
-                    )}
-                    {/* Material Tab Bottom Active Indicator */}
-                    <span
-                      className={cn(
-                        "absolute bottom-0 left-0 right-0 h-[3px] bg-primary transition-all duration-300 origin-bottom scale-y-0",
-                        (isActive || isMenuOpen) && "scale-y-100"
-                      )}
-                    />
-                  </Link>
+                    </Link>
+                  </div>
                 );
               })}
             </nav>
@@ -335,9 +344,9 @@ export default function Header() {
               exit={{ opacity: 0, y: 2 }}
               transition={{ duration: 0.1, ease: "easeOut" }}
               onMouseEnter={() => handleMouseEnter("programs")}
-              onMouseLeave={handleMouseLeave}
+              onMouseLeave={handleHeaderMouseLeave}
               style={{ willChange: "transform, opacity" }}
-              className="absolute left-1/2 -translate-x-1/2 top-full w-full max-w-7xl px-4 sm:px-6 lg:px-8 z-50 pt-2 -mt-1"
+              className="absolute left-1/2 -translate-x-1/2 top-full w-full max-w-7xl px-4 sm:px-6 lg:px-8 z-[9999] pt-2"
             >
               <div className="bg-white border border-zinc-200 rounded-xl shadow-[0_12px_24px_rgba(0,0,0,0.06)] overflow-hidden grid grid-cols-12">
                 {/* Left Side: Spotlight Sidebar */}
@@ -450,9 +459,9 @@ export default function Header() {
               exit={{ opacity: 0, y: 2 }}
               transition={{ duration: 0.1, ease: "easeOut" }}
               onMouseEnter={() => handleMouseEnter("schemes")}
-              onMouseLeave={handleMouseLeave}
+              onMouseLeave={handleHeaderMouseLeave}
               style={{ willChange: "transform, opacity" }}
-              className="absolute left-1/2 -translate-x-1/2 top-full w-full max-w-7xl px-4 sm:px-6 lg:px-8 z-50 pt-2 -mt-1"
+              className="absolute left-1/2 -translate-x-1/2 top-full w-full max-w-7xl px-4 sm:px-6 lg:px-8 z-[9999] pt-2"
             >
               <div className="bg-white border border-zinc-200 rounded-xl shadow-[0_12px_24px_rgba(0,0,0,0.06)] overflow-hidden grid grid-cols-12">
                 {/* Left Side: Spotlight Sidebar */}
@@ -565,9 +574,9 @@ export default function Header() {
               exit={{ opacity: 0, y: 2 }}
               transition={{ duration: 0.1, ease: "easeOut" }}
               onMouseEnter={() => handleMouseEnter("ecosystem")}
-              onMouseLeave={handleMouseLeave}
+              onMouseLeave={handleHeaderMouseLeave}
               style={{ willChange: "transform, opacity" }}
-              className="absolute left-1/2 -translate-x-1/2 top-full w-full max-w-7xl px-4 sm:px-6 lg:px-8 z-50 pt-2 -mt-1"
+              className="absolute left-1/2 -translate-x-1/2 top-full w-full max-w-7xl px-4 sm:px-6 lg:px-8 z-[9999] pt-2"
             >
               <div className="bg-white border border-zinc-200 rounded-xl shadow-[0_12px_24px_rgba(0,0,0,0.06)] overflow-hidden grid grid-cols-12">
                 {/* Left Side: Spotlight Sidebar */}
