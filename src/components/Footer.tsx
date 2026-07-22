@@ -154,11 +154,15 @@ export default function Footer() {
         </div>
 
         {/* Campaign / Initiative Logos Row */}
-        <div className="mt-12 w-full grid grid-cols-2 sm:grid-cols-4 gap-6 items-center justify-items-center py-6 px-4 sm:px-8 bg-white border border-zinc-200 rounded-sm shadow-sm select-none">
-          <img src="/viksit-bharat.png" alt="Viksit Bharat Abhiyan" className="h-14 sm:h-20 md:h-24 max-w-full w-auto object-contain" />
-          <img src="/swachh-bharat.png" alt="Swachh Bharat" className="h-12 sm:h-16 md:h-20 max-w-full w-auto object-contain" />
-          <img src="/make-in-india.png" alt="Make in India" className="h-10 sm:h-14 md:h-18 max-w-full w-auto object-contain" />
-          <img src="/atmanirbhar-bharat.png?v=2" alt="Atmanirbhar Bharat" className="h-16 sm:h-22 md:h-28 max-w-full w-auto object-contain" />
+        <div className="mt-12 w-full grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-6 items-center justify-items-center py-6 px-4 sm:px-8 bg-white border border-zinc-200 rounded-sm shadow-sm select-none">
+          <img src="/niti-aayog.png" alt="NITI Aayog" className="h-12 sm:h-16 md:h-18 max-w-full w-auto object-contain" />
+          <img src="/digital-india.png" alt="Digital India" className="h-10 sm:h-14 md:h-16 max-w-full w-auto object-contain" />
+          <img src="/nsdc.png" alt="National Skill Development Corporation" className="h-10 sm:h-14 md:h-16 max-w-full w-auto object-contain" />
+          <img src="/invest-india.png" alt="Invest India" className="h-12 sm:h-16 md:h-18 max-w-full w-auto object-contain" />
+          <img src="/viksit-bharat.png" alt="Viksit Bharat Abhiyan" className="h-12 sm:h-16 md:h-20 max-w-full w-auto object-contain" />
+          <img src="/swachh-bharat.png" alt="Swachh Bharat" className="h-10 sm:h-14 md:h-16 max-w-full w-auto object-contain" />
+          <img src="/make-in-india.png" alt="Make in India" className="h-9 sm:h-12 md:h-14 max-w-full w-auto object-contain" />
+          <img src="/atmanirbhar-bharat.png?v=2" alt="Atmanirbhar Bharat" className="h-14 sm:h-18 md:h-22 max-w-full w-auto object-contain" />
         </div>
 
         {/* Separator */}
