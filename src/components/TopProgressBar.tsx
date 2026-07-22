@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function TopProgressBar() {
   const pathname = usePathname();
@@ -12,33 +13,62 @@ export default function TopProgressBar() {
   // Trigger progress animation whenever URL route changes
   useEffect(() => {
     setNavigating(true);
-    setProgress(30);
+    setProgress(25);
 
-    const timer1 = setTimeout(() => setProgress(70), 100);
-    const timer2 = setTimeout(() => setProgress(100), 250);
-    const timer3 = setTimeout(() => {
+    const timer1 = setTimeout(() => setProgress(65), 120);
+    const timer2 = setTimeout(() => setProgress(90), 280);
+    const timer3 = setTimeout(() => setProgress(100), 420);
+    const timer4 = setTimeout(() => {
       setNavigating(false);
       setProgress(0);
-    }, 400);
+    }, 650);
 
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
       clearTimeout(timer3);
+      clearTimeout(timer4);
     };
   }, [pathname, searchParams]);
 
   if (!navigating && progress === 0) return null;
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[999999] pointer-events-none h-[2.5px] bg-transparent">
-      <div
-        className="h-full bg-gradient-to-r from-[#0A5D45] via-[#0D6B4F] to-[#C9A24B] shadow-[0_0_8px_rgba(13,107,79,0.7)] transition-all duration-300 ease-out"
-        style={{
-          width: `${progress}%`,
-          opacity: progress === 100 ? 0 : 1,
-        }}
-      />
-    </div>
+    <AnimatePresence>
+      <div className="fixed top-0 left-0 right-0 z-[999999] pointer-events-none">
+        {/* Soft Ambient Header Glow Aura */}
+        <div className="h-8 bg-gradient-to-b from-emerald-500/20 via-emerald-400/10 to-transparent blur-md transition-opacity duration-300" />
+
+        {/* 3px Multi-Stop Gradient Bar */}
+        <div className="absolute top-0 left-0 right-0 h-[3px] bg-emerald-950/40">
+          <motion.div
+            initial={{ width: "0%" }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="relative h-full bg-gradient-to-r from-[#074733] via-[#10B981] via-[#34D399] to-[#F59E0B] shadow-[0_0_14px_rgba(16,185,129,0.95),0_0_24px_rgba(245,158,11,0.6)]"
+            style={{
+              opacity: progress === 100 ? 0 : 1,
+            }}
+          >
+            {/* Glowing Leading Head Dot */}
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-3 h-3 rounded-full bg-amber-300 border border-white/60 shadow-[0_0_10px_#f59e0b,0_0_18px_#34d399] animate-ping" />
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-2 h-2 rounded-full bg-amber-200 border border-white shadow-[0_0_8px_#ffffff]" />
+          </motion.div>
+        </div>
+
+        {/* Floating Top-Right Mini Badge Spinner */}
+        {navigating && progress < 100 && (
+          <motion.div
+            initial={{ opacity: 0, y: -5, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -5, scale: 0.9 }}
+            className="fixed top-2.5 right-4 z-[999999] hidden sm:flex items-center gap-2 px-2.5 py-1 bg-zinc-900/90 text-white border border-emerald-500/40 rounded-full shadow-lg backdrop-blur-md text-[10px] font-mono"
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <span className="text-emerald-300 font-bold tracking-wider uppercase text-[9px]">NCIE Loading...</span>
+          </motion.div>
+        )}
+      </div>
+    </AnimatePresence>
   );
 }
