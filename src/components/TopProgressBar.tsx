@@ -31,9 +31,9 @@ export default function TopProgressBar() {
   if (!navigating && progress === 0) return null;
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[999999] pointer-events-none h-1 bg-transparent">
+    <div className="fixed top-0 left-0 right-0 z-[999999] pointer-events-none h-[2.5px] bg-transparent">
       <div
-        className="h-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-amber-400 shadow-[0_0_12px_rgba(16,185,129,0.9)] transition-all duration-300 ease-out"
+        className="h-full bg-gradient-to-r from-[#0A5D45] via-[#0D6B4F] to-[#C9A24B] shadow-[0_0_8px_rgba(13,107,79,0.7)] transition-all duration-300 ease-out"
         style={{
           width: `${progress}%`,
           opacity: progress === 100 ? 0 : 1,
