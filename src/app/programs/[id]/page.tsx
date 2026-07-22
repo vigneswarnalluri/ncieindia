@@ -22,17 +22,6 @@ async function getProgramData(id: string) {
   return PROGRAMS_DATA.find((p) => p.id === id) || null;
 }
 
-export async function generateStaticParams() {
-  try {
-    const { data } = await supabase.from("programs").select("id");
-    if (data && data.length > 0) {
-      return data.map((p) => ({ id: p.id }));
-    }
-  } catch (err) {
-    console.warn("generateStaticParams query failed, using static fallbacks:", err);
-  }
-  return PROGRAMS_DATA.map((p) => ({ id: p.id }));
-}
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
