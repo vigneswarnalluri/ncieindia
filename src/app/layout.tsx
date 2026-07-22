@@ -79,6 +79,9 @@ export const metadata: Metadata = {
   },
 };
 
+import InitialSplashLoader from "@/components/InitialSplashLoader";
+import TopProgressBar from "@/components/TopProgressBar";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -94,6 +97,8 @@ export default function RootLayout({
         className="min-h-full flex flex-col bg-white text-charcoal selection:bg-primary/10 selection:text-primary"
         suppressHydrationWarning
       >
+        <InitialSplashLoader />
+        <TopProgressBar />
         <LanguageProvider>
           <Header />
           <main className="flex-1 flex flex-col">{children}</main>
