@@ -211,35 +211,39 @@ export default function Header() {
                 const hasMega = link.hasMega;
                 const isMenuOpen = activeMenu === hasMega;
                 return (
-                  <Link
+                  <div
                     key={link.key}
-                    href={link.href}
+                    className="group/nav relative flex items-stretch h-full"
                     onMouseEnter={() => hasMega ? handleMouseEnter(hasMega) : setActiveMenu(null)}
                     onMouseLeave={handleMouseLeave}
-                    className={cn(
-                      "px-2.5 lg:px-3 xl:px-4 h-full flex items-center gap-1 text-[11px] lg:text-[12px] xl:text-[13px] font-bold uppercase tracking-wider transition-all duration-200 relative focus:outline-none select-none hover:bg-zinc-50/70 whitespace-nowrap",
-                      (isActive || isMenuOpen)
-                        ? "text-primary font-extrabold"
-                        : "text-zinc-600 hover:text-primary"
-                    )}
                   >
-                    <span>{t(link.key)}</span>
-                    {hasMega && (
-                      <ChevronDown
+                    <Link
+                      href={link.href}
+                      className={cn(
+                        "px-2.5 lg:px-3 xl:px-4 h-full flex items-center gap-1 text-[11px] lg:text-[12px] xl:text-[13px] font-bold uppercase tracking-wider transition-all duration-200 relative focus:outline-none select-none hover:bg-zinc-50/70 whitespace-nowrap",
+                        (isActive || isMenuOpen)
+                          ? "text-primary font-extrabold"
+                          : "text-zinc-600 hover:text-primary"
+                      )}
+                    >
+                      <span>{t(link.key)}</span>
+                      {hasMega && (
+                        <ChevronDown
+                          className={cn(
+                            "w-3 h-3 transition-transform duration-250 opacity-70 group-hover/nav:rotate-180 group-hover/nav:opacity-100",
+                            isMenuOpen && "rotate-180 text-primary opacity-100"
+                          )}
+                        />
+                      )}
+                      {/* Material Tab Bottom Active Indicator */}
+                      <span
                         className={cn(
-                          "w-3 h-3 transition-transform duration-250 opacity-70",
-                          isMenuOpen && "rotate-180 text-primary opacity-100"
+                          "absolute bottom-0 left-0 right-0 h-[3px] bg-primary transition-all duration-300 origin-bottom scale-y-0 group-hover/nav:scale-y-100",
+                          (isActive || isMenuOpen) && "scale-y-100"
                         )}
                       />
-                    )}
-                    {/* Material Tab Bottom Active Indicator */}
-                    <span
-                      className={cn(
-                        "absolute bottom-0 left-0 right-0 h-[3px] bg-primary transition-all duration-300 origin-bottom scale-y-0",
-                        (isActive || isMenuOpen) && "scale-y-100"
-                      )}
-                    />
-                  </Link>
+                    </Link>
+                  </div>
                 );
               })}
             </nav>
