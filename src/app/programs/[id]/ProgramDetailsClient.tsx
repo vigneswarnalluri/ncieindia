@@ -552,12 +552,12 @@ export default function ProgramDetailPage() {
                     </Button>
                   </Link>
 
-                  <Link href={program.pdfUrl || "/Circular_Guidelines_2026.pdf"} target="_blank" rel="noopener noreferrer" className="block">
+                  <a href={program.pdfUrl || "/Circular_Guidelines_2026.pdf"} target="_blank" rel="noopener noreferrer" className="block">
                     <Button variant="outline" className="w-full justify-center text-xs font-bold py-2.5 gap-2 border-zinc-300 hover:bg-zinc-50 hover:text-primary transition-all text-zinc-700 rounded-sm">
                       <Download className="w-3.5 h-3.5 text-zinc-500" />
                       {t("prog_details_download_guidelines")}
                     </Button>
-                  </Link>
+                  </a>
                 </div>
 
                 <div className="h-px bg-zinc-150" />

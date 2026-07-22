@@ -33,6 +33,8 @@ export const PROGRAMS_DATA: Program[] = [
     budget: "60% Blended (Offline + Online + Practical)",
     duration: "45 Days (90 Hours) | 3 Credits",
     description: "National 45-day certificate course enabling engineering & science students to apply Design Thinking, empathy mapping, MVP prototyping, Lean Startup frameworks, and pitch decks for DPIIT recognition.",
+    pdfUrl: "/NCIE_Student_Startup_Grants_Guidelines.pdf",
+    pdfName: "NCIE-IEDP-101 Guidelines & Curriculum.pdf",
     benefits: [
       "3 Academic Credits (Recommended by NCIE Framework)",
       "Covers 5 Core Modules: Innovation Ecosystem, Design Thinking Sprints, Prototype Development, Lean Startup BMC, and Startup Launch",
@@ -49,6 +51,8 @@ export const PROGRAMS_DATA: Program[] = [
     budget: "60% Blended (Offline + Online + Practical)",
     duration: "45 Days (90 Hours) | 3 Credits",
     description: "Advanced 45-day course focusing on commercializing AI/ML, IoT, Robotics, Cyber Security, Digital Twins, and branch-specific smart applications for CSE, ECE, Mechanical, EEE, Civil, and H&S streams.",
+    pdfUrl: "/NCIE_Student_Startup_Grants_Guidelines.pdf",
+    pdfName: "NCIE-IEDP-102 Guidelines & Curriculum.pdf",
     benefits: [
       "Branch-Specific Smart Tech Modules (AI, Embedded Systems, Smart Manufacturing, Smart Grids, Digital Infrastructure)",
       "Hands-on CAD modeling, simulation tools, AI tools, and product ideation workshops",
@@ -65,6 +69,8 @@ export const PROGRAMS_DATA: Program[] = [
     budget: "60% Blended (Offline + Online + Practical)",
     duration: "45 Days (90 Hours) | 3 Credits",
     description: "Specialized 45-day curriculum guiding student innovators from lab research to market commercialization through Technology Readiness Levels (TRL), IPR protection, and venture capital fundraising.",
+    pdfUrl: "/NCIE_Student_Startup_Grants_Guidelines.pdf",
+    pdfName: "NCIE-IEDP-103 Guidelines & Curriculum.pdf",
     benefits: [
       "Comprehensive IPR Coverage: Patents, Copyrights, Trademarks, Industrial Design, and Tech Transfer Licensing",
       "Business Model Innovation: Lean Canvas, Platform Business Models, and Subscription Revenue Architectures",
@@ -98,6 +104,8 @@ export const PROGRAMS_DATA: Program[] = [
     budget: "Stipends & Research allowances",
     duration: "12-month cycle",
     description: "Advanced learning opportunities for selected student research scholars to work closely with national experts, serial innovators, and mentors on social impact and technology development projects.",
+    pdfUrl: "/NCIE_Viksit_Bharat_2047_Innovation_Leadership_Programmes.pdf",
+    pdfName: "Innovation India Student Fellowships Guidelines.pdf",
     benefits: [
       "Mentorship and direct guidance from industry and research experts",
       "Focus on solving critical social impact and technical problems",
@@ -112,6 +120,8 @@ export const PROGRAMS_DATA: Program[] = [
     budget: "Annual stipends",
     duration: "Annual allocation",
     description: "Annual merit-based and need-based scholarships provided to talented students from diverse and marginalized backgrounds, ensuring equal access to innovation and quality education opportunities.",
+    pdfUrl: "/NCIE_Viksit_Bharat_2047_Innovation_Leadership_Programmes.pdf",
+    pdfName: "Student Annual Scholarships Framework.pdf",
     benefits: [
       "Ensures accessibility and equal opportunities for students of all backgrounds",
       "Financial assistance to support educational and project expenses",
@@ -213,6 +223,8 @@ export const PROGRAMS_DATA: Program[] = [
     budget: "CSR capital matching",
     duration: "Annual alignment cycle",
     description: "Innovation India facilitates CSR partnerships for reputed institutions and organizations to promote innovation ecosystems in rural and semi-urban areas, fostering local student startups and capacity building.",
+    pdfUrl: "/Institutional_Incubation_Development_Support_Scheme.pdf",
+    pdfName: "CSR Support Guidelines for Rural Institutions.pdf",
     benefits: [
       "Direct connection with corporate social responsibility (CSR) funds",
       "Empowerment of tier-2 and tier-3 colleges with funding and mentorship",
@@ -227,6 +239,8 @@ export const PROGRAMS_DATA: Program[] = [
     budget: "Accreditation & Rewards",
     duration: "Annual evaluation",
     description: "Institutions and organizations contributing significantly to innovation, entrepreneurship, and student development are formally recognized under the Innovation India Recognition Framework to encourage excellence.",
+    pdfUrl: "/Institutional_Incubation_Development_Support_Scheme.pdf",
+    pdfName: "Innovation India Recognition Framework.pdf",
     benefits: [
       "Formal national recognition and star accreditation under the framework",
       "Benchmark metrics to improve student innovation output year-on-year",
@@ -241,6 +255,8 @@ export const PROGRAMS_DATA: Program[] = [
     budget: "Fully sponsored",
     duration: "Continuous availability",
     description: "Institutions are supported in delivering free entrepreneurship education, skill development workshops, and startup training programs for students, ensuring accessibility to quality innovation learning for all.",
+    pdfUrl: "/NCIE_Student_Startup_Grants_Guidelines.pdf",
+    pdfName: "Free Entrepreneurship Training Program Guidelines.pdf",
     benefits: [
       "Access to structured entrepreneurship courses at no cost to students",
       "Practical workshops in design thinking, marketing, and business planning",
