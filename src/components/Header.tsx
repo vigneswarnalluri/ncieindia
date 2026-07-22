@@ -188,8 +188,8 @@ export default function Header() {
             : "border-zinc-150/40"
         )}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
+        <div className="max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20 gap-2">
 
             {/* Logo Area */}
             <Link href="/" className="focus:outline-none shrink-0 acc-logo-container" aria-label="NCIE India Home">
@@ -198,7 +198,7 @@ export default function Header() {
                 alt="NCIE India Logo"
                 width={280}
                 height={80}
-                className="h-10 sm:h-12 lg:h-16 w-auto object-contain max-w-[190px] sm:max-w-[240px] lg:max-w-none"
+                className="h-10 sm:h-12 lg:h-14 xl:h-16 w-auto object-contain max-w-[170px] sm:max-w-[220px] lg:max-w-none"
                 priority
                 unoptimized
               />
@@ -217,7 +217,7 @@ export default function Header() {
                     onMouseEnter={() => hasMega ? handleMouseEnter(hasMega) : setActiveMenu(null)}
                     onMouseLeave={handleMouseLeave}
                     className={cn(
-                      "px-3.5 xl:px-4.5 h-full flex items-center gap-1.5 text-xs xl:text-[13px] font-bold uppercase tracking-wider transition-all duration-200 relative focus:outline-none select-none hover:bg-zinc-50/70",
+                      "px-2.5 lg:px-3 xl:px-4 h-full flex items-center gap-1 text-[11px] lg:text-[12px] xl:text-[13px] font-bold uppercase tracking-wider transition-all duration-200 relative focus:outline-none select-none hover:bg-zinc-50/70 whitespace-nowrap",
                       (isActive || isMenuOpen)
                         ? "text-primary font-extrabold"
                         : "text-zinc-600 hover:text-primary"
@@ -245,7 +245,7 @@ export default function Header() {
             </nav>
 
             {/* Actions & Lang */}
-            <div className="hidden lg:flex items-center gap-3 h-full acc-actions-container" onMouseEnter={() => setActiveMenu(null)}>
+            <div className="hidden lg:flex items-center gap-2 xl:gap-3 h-full shrink-0 acc-actions-container" onMouseEnter={() => setActiveMenu(null)}>
               {/* Login — institutions & officials only */}
               <Link
                 href="/login"
