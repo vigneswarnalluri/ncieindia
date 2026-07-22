@@ -22,21 +22,6 @@ export interface CouncilMember {
 export const EXECUTIVE_COUNCIL_MEMBERS: CouncilMember[] = [
   // --- EXECUTIVE COUNCIL BODY ---
   {
-    id: "akkala-vamsi-reddy",
-    nameEn: "Akkala Vamsi Reddy",
-    nameHi: "अक्कला वामसी रेड्डी",
-    category: "executive_council",
-    roleEn: "Nodal Agency Director, NCIE India & Managing Director, BCLLF",
-    roleHi: "नोडल एजेंसी निदेशक, एनसीआईई इंडिया एवं प्रबंध निदेशक, बीसीएलएलएफ",
-    institutionEn: "National Council for Innovation & Entrepreneurship (NCIE), New Delhi & Bharath Cares Life Line Foundation (BCLLF)",
-    institutionHi: "राष्ट्रीय नवाचार एवं उद्यमिता परिषद (एनसीआईई), नई दिल्ली एवं भारत केयर्स लाइफ लाइन फाउंडेशन (बीसीएलएलएफ)",
-    qualificationsEn: "Innovation & Social Impact Leader",
-    qualificationsHi: "नवाचार एवं सामाजिक प्रभाव नेता",
-    bioEn: "Akkala Vamsi Reddy is an innovation and social impact leader serving as the Nodal Agency Director of NCIE India (National Council for Innovation & Entrepreneurship) and the Managing Director of Bharath Cares Life Line Foundation (BCLLF). Through these leadership roles, he has been actively involved in designing and implementing initiatives that promote innovation, entrepreneurship, skill development, education, and community empowerment. He has led projects and collaborative initiatives with government departments, educational institutions, industry partners, APSSDC, P4 initiatives, Viksit Bharat 2047, and NITI Aayog aligned programs.",
-    bioHi: "अक्कला वामसी रेड्डी एक नवाचार और सामाजिक प्रभाव नेता हैं जो एनसीआईई इंडिया (राष्ट्रीय नवाचार और उद्यमिता परिषद) के नोडल एजेंसी निदेशक और भारत केयर्स लाइफ लाइन फाउंडेशन (बीसीएलएलएफ) के प्रबंध निदेशक के रूप में कार्यरत हैं। वे आंध्र प्रदेश सरकार, एपीएसएसडीसी, पी4 पहलों, विकसित भारत 2047 और नीति आयोग के दृष्टिकोण के अनुरूप कार्यक्रमों के साथ सक्रिय रूप से जुड़े हुए हैं।",
-    image: "/images/executive-council/akkala_vamsi_reddy.jpg"
-  },
-  {
     id: "prof-bk-ravi",
     nameEn: "Prof. B. K. Ravi (Bheemaiah Krishnan Ravi)",
     nameHi: "प्रो. बी. के. रवि (भीमैया कृष्णन रवि)",
@@ -173,6 +158,21 @@ export const EXECUTIVE_COUNCIL_MEMBERS: CouncilMember[] = [
     bioHi: "डॉ. बोम्मिडी श्रीकांत वर्मा ग्रामीण विकास, उद्यमिता विकास, कौशल विकास, आजीविका संवर्धन और सीएसआर पहलों में 15 से अधिक वर्षों के अनुभव के साथ एक पेशेवर सामाजिक कार्यकर्ता हैं। वे एपीएसडीपीएस में युवा पेशेवर और पी4 समन्वयक, नेशनल एकेडमी ऑफ आरयूडीएसईटीआई के साथ ईडीपी मूल्यांकनकर्ता और भारत सरकार के ग्रामीण विकास मंत्रालय द्वारा मान्यता प्राप्त प्रमाणित उद्यमिता प्रशिक्षक हैं।",
     email: "Drbommidi@gmail.com",
     image: "/images/executive-council/dr_srikanth_varma.jpg"
+  },
+  {
+    id: "akkala-vamsi-reddy",
+    nameEn: "Akkala Vamsi Reddy",
+    nameHi: "अक्कला वामसी रेड्डी",
+    category: "executive_council",
+    roleEn: "Nodal Agency Director, NCIE India & Managing Director, BCLLF",
+    roleHi: "नोडल एजेंसी निदेशक, एनसीआईई इंडिया एवं प्रबंध निदेशक, बीसीएलएलएफ",
+    institutionEn: "National Council for Innovation & Entrepreneurship (NCIE), New Delhi & Bharath Cares Life Line Foundation (BCLLF)",
+    institutionHi: "राष्ट्रीय नवाचार एवं उद्यमिता परिषद (एनसीआईई), नई दिल्ली एवं भारत केयर्स लाइफ लाइन फाउंडेशन (बीसीएलएलएफ)",
+    qualificationsEn: "Innovation & Social Impact Leader",
+    qualificationsHi: "नवाचार एवं सामाजिक प्रभाव नेता",
+    bioEn: "Akkala Vamsi Reddy is an innovation and social impact leader serving as the Nodal Agency Director of NCIE India (National Council for Innovation & Entrepreneurship) and the Managing Director of Bharath Cares Life Line Foundation (BCLLF). Through these leadership roles, he has been actively involved in designing and implementing initiatives that promote innovation, entrepreneurship, skill development, education, and community empowerment. He has led projects and collaborative initiatives with government departments, educational institutions, industry partners, APSSDC, P4 initiatives, Viksit Bharat 2047, and NITI Aayog aligned programs.",
+    bioHi: "अक्कला वामसी रेड्डी एक नवाचार और सामाजिक प्रभाव नेता हैं जो एनसीआईई इंडिया (राष्ट्रीय नवाचार और उद्यमिता परिषद) के नोडल एजेंसी निदेशक और भारत केयर्स लाइफ लाइन Foundation (बीसीएलएलएफ) के प्रबंध निदेशक के रूप में कार्यरत हैं। वे आंध्र प्रदेश सरकार, एपीएसएसडीसी, पी4 पहलों, विकसित भारत 2047 और नीति आयोग के दृष्टिकोण के अनुरूप कार्यक्रमों के साथ सक्रिय रूप से जुड़े हुए हैं।",
+    image: "/images/executive-council/akkala_vamsi_reddy.jpg"
   },
 
   // --- ADVISORY BOARD-NICE (8 Members) ---
