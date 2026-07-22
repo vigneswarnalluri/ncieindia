@@ -191,16 +191,22 @@ export default function Header() {
           <div className="flex justify-between items-center h-20">
 
             {/* Logo Area */}
-            <Link href="/" className="focus:outline-none shrink-0 acc-logo-container" aria-label="NCIE India Home">
-              <Image
-                src="/logo-new.svg"
-                alt="NCIE India Logo"
-                width={280}
-                height={80}
-                className="h-10 sm:h-12 lg:h-16 w-auto object-contain max-w-[190px] sm:max-w-[240px] lg:max-w-none"
-                priority
-                unoptimized
-              />
+            <Link href="/" className="focus:outline-none shrink-0 acc-logo-container group" aria-label="NCIE India Home">
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="relative flex items-center"
+              >
+                <Image
+                  src="/logo-new.svg"
+                  alt="NCIE India Logo"
+                  width={280}
+                  height={80}
+                  className="h-10 sm:h-12 lg:h-16 w-auto object-contain max-w-[190px] sm:max-w-[240px] lg:max-w-none transition-all duration-300 group-hover:drop-shadow-[0_4px_12px_rgba(13,107,79,0.25)]"
+                  priority
+                  unoptimized
+                />
+              </motion.div>
             </Link>
 
             {/* Desktop Navigation */}

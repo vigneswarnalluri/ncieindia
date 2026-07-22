@@ -56,16 +56,22 @@ export default function TopProgressBar() {
           </motion.div>
         </div>
 
-        {/* Floating Top-Right Mini Badge Spinner */}
+        {/* Floating Top-Right Mini Badge with Animated Logo Spinner */}
         {navigating && progress < 100 && (
           <motion.div
-            initial={{ opacity: 0, y: -5, scale: 0.9 }}
+            initial={{ opacity: 0, y: -8, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -5, scale: 0.9 }}
-            className="fixed top-2.5 right-4 z-[999999] hidden sm:flex items-center gap-2 px-2.5 py-1 bg-zinc-900/90 text-white border border-emerald-500/40 rounded-full shadow-lg backdrop-blur-md text-[10px] font-mono"
+            exit={{ opacity: 0, y: -8, scale: 0.85 }}
+            className="fixed top-3 right-4 z-[999999] flex items-center gap-2.5 px-3 py-1.5 bg-[#032017]/95 text-white border border-emerald-500/50 rounded-full shadow-2xl backdrop-blur-md"
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span className="text-emerald-300 font-bold tracking-wider uppercase text-[9px]">NCIE Loading...</span>
+            <div className="relative w-5 h-5 flex items-center justify-center shrink-0">
+              <div className="absolute inset-0 rounded-full border-2 border-emerald-400/30 border-t-amber-400 animate-spin" />
+              <div className="w-3 h-3 rounded-full bg-emerald-500/30 animate-pulse" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold text-emerald-300 tracking-wider uppercase font-sans leading-none">NCIE India</span>
+              <span className="text-[8px] text-emerald-200/70 font-mono leading-none mt-0.5">Loading page...</span>
+            </div>
           </motion.div>
         )}
       </div>
