@@ -107,27 +107,30 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="flex flex-col space-y-3">
-            <h4 className="text-sm font-semibold tracking-wider uppercase text-accent">{t("footer_ecosystem")}</h4>
-            <ul className="space-y-2 text-sm text-zinc-300">
-              <li><Link href="/about" className="hover:text-accent transition-colors">{t("footer_about")}</Link></li>
-              <li><Link href="/programs" className="hover:text-accent transition-colors">{t("footer_initiatives")}</Link></li>
-              <li><Link href="/opportunities" className="hover:text-accent transition-colors">{t("footer_opportunities")}</Link></li>
-              <li><Link href="/careers" className="hover:text-accent transition-colors">{t("footer_careers")}</Link></li>
-              <li><Link href="/chapters" className="hover:text-accent transition-colors">{t("footer_chapters")}</Link></li>
-            </ul>
-          </div>
+          {/* Ecosystem & Engage Links (Side-by-side on mobile) */}
+          <div className="grid grid-cols-2 gap-6 md:contents">
+            {/* Quick Links */}
+            <div className="flex flex-col space-y-3">
+              <h4 className="text-sm font-semibold tracking-wider uppercase text-accent">{t("footer_ecosystem")}</h4>
+              <ul className="space-y-2 text-sm text-zinc-300">
+                <li><Link href="/about" className="hover:text-accent transition-colors">{t("footer_about")}</Link></li>
+                <li><Link href="/programs" className="hover:text-accent transition-colors">{t("footer_initiatives")}</Link></li>
+                <li><Link href="/opportunities" className="hover:text-accent transition-colors">{t("footer_opportunities")}</Link></li>
+                <li><Link href="/careers" className="hover:text-accent transition-colors">{t("footer_careers")}</Link></li>
+                <li><Link href="/chapters" className="hover:text-accent transition-colors">{t("footer_chapters")}</Link></li>
+              </ul>
+            </div>
 
-          {/* Resources Links */}
-          <div className="flex flex-col space-y-3">
-            <h4 className="text-sm font-semibold tracking-wider uppercase text-accent">{t("footer_engage")}</h4>
-            <ul className="space-y-2 text-sm text-zinc-300">
-              <li><Link href="/join" className="hover:text-accent transition-colors">{t("footer_join")}</Link></li>
-              <li><Link href="/media" className="hover:text-accent transition-colors">{t("footer_media")}</Link></li>
-              <li><Link href="/vision-2047" className="hover:text-accent transition-colors">{t("footer_vision")}</Link></li>
-              <li><Link href="/contact" className="hover:text-accent transition-colors">{t("footer_contact_inquiries")}</Link></li>
-            </ul>
+            {/* Resources Links */}
+            <div className="flex flex-col space-y-3">
+              <h4 className="text-sm font-semibold tracking-wider uppercase text-accent">{t("footer_engage")}</h4>
+              <ul className="space-y-2 text-sm text-zinc-300">
+                <li><Link href="/join" className="hover:text-accent transition-colors">{t("footer_join")}</Link></li>
+                <li><Link href="/media" className="hover:text-accent transition-colors">{t("footer_media")}</Link></li>
+                <li><Link href="/vision-2047" className="hover:text-accent transition-colors">{t("footer_vision")}</Link></li>
+                <li><Link href="/contact" className="hover:text-accent transition-colors">{t("footer_contact_inquiries")}</Link></li>
+              </ul>
+            </div>
           </div>
 
           {/* Legal / Contact Summary */}
