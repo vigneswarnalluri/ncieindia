@@ -1,12 +1,17 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Preloader() {
   const [isVisible, setIsVisible] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const dismissPreloader = useCallback(() => {
+    setIsVisible(false);
+    document.body.style.overflow = "";
+  }, []);
 
   useEffect(() => {
     setIsMounted(true);
@@ -36,12 +41,7 @@ export default function Preloader() {
       clearTimeout(maxTimer);
       document.body.style.overflow = "";
     };
-  }, []);
-
-  const dismissPreloader = () => {
-    setIsVisible(false);
-    document.body.style.overflow = "";
-  };
+  }, [dismissPreloader]);
 
   if (!isMounted || !isVisible) return null;
 
