@@ -39,33 +39,39 @@ export default function ProgramsPage() {
 
   const getProgramTitle = (program: Program) => {
     const key = `prog_${mapIdToKey(program.id)}_title`;
-    return t(key) || program.title;
+    const val = t(key);
+    return val !== key ? val : program.title;
   };
 
   const getProgramSubtitle = (program: Program) => {
     const key = `prog_${mapIdToKey(program.id)}_subtitle`;
-    return t(key) || program.subtitle;
+    const val = t(key);
+    return val !== key ? val : program.subtitle;
   };
 
   const getProgramDesc = (program: Program) => {
     const key = `prog_${mapIdToKey(program.id)}_desc`;
-    return t(key) || program.description;
+    const val = t(key);
+    return val !== key ? val : program.description;
   };
 
   const getProgramBudget = (program: Program) => {
     const key = `prog_${mapIdToKey(program.id)}_budget`;
-    return t(key) || program.budget;
+    const val = t(key);
+    return val !== key ? val : program.budget;
   };
 
   const getProgramDuration = (program: Program) => {
     const key = `prog_${mapIdToKey(program.id)}_duration`;
-    return t(key) || program.duration;
+    const val = t(key);
+    return val !== key ? val : program.duration;
   };
 
   const getProgramBenefits = (program: Program) => {
     return program.benefits.map((benefit, i) => {
       const key = `prog_${mapIdToKey(program.id)}_benefit_${i}`;
-      return t(key) || benefit;
+      const val = t(key);
+      return val !== key ? val : benefit;
     });
   };
 
