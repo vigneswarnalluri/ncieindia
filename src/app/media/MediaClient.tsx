@@ -526,7 +526,7 @@ export default function MediaClient() {
                             <Info className="w-3.5 h-3.5 text-zinc-400" />
                             {t("media_status")} <span className="text-emerald-700 font-bold">{t("media_status_val")}</span>
                           </span>
-                          <a href={item.fileUrl || "/Circular_Guidelines_2026.pdf"} target="_blank" rel="noopener noreferrer">
+                          <a href={item.fileUrl || "/Circular_Guidelines_2026.pdf"} download={item.fileUrl ? item.fileUrl.split("/").pop() : "Circular_Guidelines_2026.pdf"}>
                             <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0D6B4F] hover:bg-[#074733] text-white text-[10px] font-bold uppercase tracking-wider rounded transition-colors shadow-sm cursor-pointer">
                               <Download className="w-3 h-3" />
                               <span>{item.fileSize}</span>
