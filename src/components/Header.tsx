@@ -35,7 +35,7 @@ const NAV_LINKS = [
   { key: "nav_home", href: "/" },
   { key: "nav_about", href: "/about" },
   { key: "nav_programs", href: "/programs", hasMega: "programs" as const },
-  { key: "nav_schemes", href: "/schemes" },
+  { key: "nav_schemes", href: "/schemes", hasMega: "schemes" as const },
   { key: "nav_ecosystem", href: "/chapters", hasMega: "ecosystem" as const },
   { key: "nav_media", href: "/media" },
   { key: "nav_join", href: "/join" },
@@ -59,24 +59,23 @@ const AccessibilityIcon = ({ className }: { className?: string }) => (
     className={className} 
     fill="none" 
     stroke="currentColor" 
-    strokeWidth="2.2" 
+    strokeWidth="2" 
     strokeLinecap="round" 
     strokeLinejoin="round"
   >
-    <circle cx="12" cy="5.5" r="2" />
-    <path d="M 5 11.5 h 14" />
-    <path d="M 12 11.5 v 3" />
-    <path d="M 9 20.5 l 3 -6 3 6" />
+    <circle cx="12" cy="4" r="2" />
+    <path d="M12 6v6m0 0l-3 6m3-6l3 6M6 9h12" />
   </svg>
 );
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [accessibilityOpen, setAccessibilityOpen] = useState(false);
-  const [mobileExpanded, setMobileExpanded] = useState<Record<string, boolean>>({});
   const pathname = usePathname();
-  const { language, setLanguage, t } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [accessibilityOpen, setAccessibilityOpen] = useState(false);
+
+  const [mobileExpanded, setMobileExpanded] = useState<Record<string, boolean>>({});
 
   const toggleMobileExpanded = (key: string) => {
     setMobileExpanded((prev) => ({
@@ -85,18 +84,19 @@ export default function Header() {
     }));
   };
 
-  const [activeMenu, setActiveMenu] = useState<"programs" | "ecosystem" | null>(null);
+  const [activeMenu, setActiveMenu] = useState<"programs" | "schemes" | "ecosystem" | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleMouseEnter = (menu: "programs" | "ecosystem") => {
+  const handleMouseEnter = (menu: "programs" | "schemes" | "ecosystem") => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setActiveMenu(menu);
   };
 
   const handleMouseLeave = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
       setActiveMenu(null);
-    }, 120);
+    }, 300);
   };
 
   useEffect(() => {
@@ -332,7 +332,7 @@ export default function Header() {
               onMouseEnter={() => handleMouseEnter("programs")}
               onMouseLeave={handleMouseLeave}
               style={{ willChange: "transform, opacity" }}
-              className="absolute left-1/2 -translate-x-1/2 top-full w-full max-w-7xl px-4 sm:px-6 lg:px-8 z-50 mt-1"
+              className="absolute left-1/2 -translate-x-1/2 top-full w-full max-w-7xl px-4 sm:px-6 lg:px-8 z-50 pt-2 -mt-1"
             >
               <div className="bg-white border border-zinc-200 rounded-xl shadow-[0_12px_24px_rgba(0,0,0,0.06)] overflow-hidden grid grid-cols-12">
                 {/* Left Side: Spotlight Sidebar */}
@@ -438,6 +438,121 @@ export default function Header() {
             </motion.div>
           )}
 
+          {activeMenu === "schemes" && (
+            <motion.div
+              initial={{ opacity: 0, y: 2 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 2 }}
+              transition={{ duration: 0.1, ease: "easeOut" }}
+              onMouseEnter={() => handleMouseEnter("schemes")}
+              onMouseLeave={handleMouseLeave}
+              style={{ willChange: "transform, opacity" }}
+              className="absolute left-1/2 -translate-x-1/2 top-full w-full max-w-7xl px-4 sm:px-6 lg:px-8 z-50 pt-2 -mt-1"
+            >
+              <div className="bg-white border border-zinc-200 rounded-xl shadow-[0_12px_24px_rgba(0,0,0,0.06)] overflow-hidden grid grid-cols-12">
+                {/* Left Side: Spotlight Sidebar */}
+                <div className="col-span-3 bg-zinc-50 border-r border-zinc-200 p-6 flex flex-col justify-between min-h-[300px]">
+                  <div className="space-y-4">
+                    <h3 className="text-base font-extrabold text-zinc-950 leading-snug font-sans">
+                      Government Schemes
+                    </h3>
+                    <p className="text-xs text-zinc-500 leading-relaxed font-sans">
+                      Official awareness and facilitation portal connecting students, founders, and institutions with Central &amp; State Government schemes.
+                    </p>
+                  </div>
+                  
+                  <div className="pt-6 border-t border-zinc-200/80 space-y-3">
+                    <Link href="/schemes" className="group/btn flex items-center justify-between text-xs font-bold text-primary hover:text-primary-dark transition-colors uppercase tracking-wider font-sans">
+                      <span>Explore All Schemes</span>
+                      <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Right Side: 3-Column Directory Link Grid */}
+                <div className="col-span-9 p-8 grid grid-cols-3 gap-8 bg-white">
+                  {/* Column 1: Government Initiatives */}
+                  <div className="space-y-4">
+                    <h4 className="text-[11px] font-bold tracking-wider text-zinc-400 uppercase font-sans">
+                      Government Initiatives
+                    </h4>
+                    <div className="flex flex-col gap-4.5">
+                      <Link href="/schemes" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
+                          Startup India Scheme
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          DPIIT recognition, seed funding &amp; tax exemptions
+                        </span>
+                      </Link>
+
+                      <Link href="/schemes" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
+                          PM Mudra &amp; Stand-Up India
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          Collateral-free micro loans &amp; SC/ST/Women support
+                        </span>
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Column 2: Education & Scholarships */}
+                  <div className="space-y-4">
+                    <h4 className="text-[11px] font-bold tracking-wider text-zinc-400 uppercase font-sans">
+                      Loans &amp; Scholarships
+                    </h4>
+                    <div className="flex flex-col gap-4.5">
+                      <Link href="/schemes" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
+                          Vidya Lakshmi Loan Portal
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          Single-window education loan application &amp; subsidies
+                        </span>
+                      </Link>
+
+                      <Link href="/schemes" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
+                          National Scholarship Portal (NSP)
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          Central sector, AICTE &amp; merit scholarships
+                        </span>
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Column 3: Women & Innovation */}
+                  <div className="space-y-4">
+                    <h4 className="text-[11px] font-bold tracking-wider text-zinc-400 uppercase font-sans">
+                      Innovation &amp; Women
+                    </h4>
+                    <div className="flex flex-col gap-4.5">
+                      <Link href="/schemes" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
+                          Atal Innovation Mission (AIM)
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          Atal incubation centers &amp; tinkering lab grants
+                        </span>
+                      </Link>
+
+                      <Link href="/schemes" className="group/item flex flex-col gap-1">
+                        <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
+                          Women Entrepreneurship (WEP)
+                        </span>
+                        <span className="text-xs text-zinc-500 font-sans leading-normal">
+                          NITI Aayog platform for women founders
+                        </span>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           {activeMenu === "ecosystem" && (
             <motion.div
               initial={{ opacity: 0, y: 2 }}
@@ -447,7 +562,7 @@ export default function Header() {
               onMouseEnter={() => handleMouseEnter("ecosystem")}
               onMouseLeave={handleMouseLeave}
               style={{ willChange: "transform, opacity" }}
-              className="absolute left-1/2 -translate-x-1/2 top-full w-full max-w-7xl px-4 sm:px-6 lg:px-8 z-50 mt-1"
+              className="absolute left-1/2 -translate-x-1/2 top-full w-full max-w-7xl px-4 sm:px-6 lg:px-8 z-50 pt-2 -mt-1"
             >
               <div className="bg-white border border-zinc-200 rounded-xl shadow-[0_12px_24px_rgba(0,0,0,0.06)] overflow-hidden grid grid-cols-12">
                 {/* Left Side: Spotlight Sidebar */}
