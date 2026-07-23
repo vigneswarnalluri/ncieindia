@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import storageUrls from "@/data/storageUrls.json";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder-url.supabase.co";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "placeholder-key";
@@ -45,4 +46,33 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
     detectSessionInUrl: true,
   },
 });
+
+// Utility to resolve local assets to Supabase Storage public URLs
+export function getStorageUrl(pathOrUrl: string | undefined | null): string {
+  if (!pathOrUrl) return "/Circular_Guidelines_2026.pdf";
+  if (pathOrUrl.startsWith("http://") || pathOrUrl.startsWith("https://")) {
+    return pathOrUrl;
+  }
+  
+  // Extract filename
+  const filename = pathOrUrl.split("/").pop() || "";
+  
+  // Try loading storageUrls mapping
+  try {
+    const mappedUrl = (storageUrls as Record<string, string>)[filename];
+    if (mappedUrl) {
+      return mappedUrl;
+    }
+    const cleanFilename = filename.replace(/\s+/g, '_');
+    const cleanMappedUrl = (storageUrls as Record<string, string>)[cleanFilename];
+    if (cleanMappedUrl) {
+      return cleanMappedUrl;
+    }
+  } catch (e) {
+    console.warn("Failed to load storage mapping", e);
+  }
+  
+  return pathOrUrl;
+}
+
 

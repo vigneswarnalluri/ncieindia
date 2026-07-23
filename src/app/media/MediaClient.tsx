@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { supabase } from "@/lib/supabase";
+import { supabase, getStorageUrl } from "@/lib/supabase";
 
 const MEDIA_ANNOUNCEMENTS = [
   {
@@ -30,7 +30,7 @@ const MEDIA_ANNOUNCEMENTS = [
     division: "Secretariat Academic Desk",
     desc: "Official academic memorandum detailing standardized implementation rules, credit splits, and practical lab schedules for all affiliated technical colleges across India.",
     fileSize: "PDF (840 KB)",
-    fileUrl: "/Dt_06.07.2026_Memo_Academics_001_2026_07.pdf"
+    fileUrl: "/Memo_Academics_001_2026_07.pdf"
   },
   {
     refNo: "NCIE/VB2047/2026/002",
@@ -40,7 +40,7 @@ const MEDIA_ANNOUNCEMENTS = [
     division: "National Leadership Wing",
     desc: "Structured national leadership charter outlining 10 core undergraduate sectors, paid stipends, industry mentorship pipelines, and institutional placement credit framework.",
     fileSize: "PDF (868 KB)",
-    fileUrl: "/NCIE – Viksit Bharat 2047 Innovation Leadership Programmes.pdf"
+    fileUrl: "/NCIE_Viksit_Bharat_2047_Innovation_Leadership_Programmes.pdf"
   },
   {
     refNo: "NCIE/STATE/2026/003",
@@ -50,7 +50,7 @@ const MEDIA_ANNOUNCEMENTS = [
     division: "Regional Governance Desk",
     desc: "Official state liaison policy framework specifying operational guidelines, local campus makerspace approvals, and state nodal officer coordination protocols.",
     fileSize: "PDF (820 KB)",
-    fileUrl: "/AP_2026_1002XXX .pdf"
+    fileUrl: "/AP_State_Liaison_Policy_Framework_2026.pdf"
   },
   {
     refNo: "NCIE/SSG/2026/001",
@@ -60,7 +60,7 @@ const MEDIA_ANNOUNCEMENTS = [
     division: "Incubation & Startup Wing",
     desc: "Official framework outlining eligibility criteria, proposal formats, screening criteria, and disbursement terms for the NCIE Student Startup Grants Program.",
     fileSize: "PDF (925 KB)",
-    fileUrl: "/Rules, Regulations & Guidelines_NCIE Student Startup Grants Program.pdf"
+    fileUrl: "/NCIE_Student_Startup_Grants_Guidelines.pdf"
   },
   {
     refNo: "NCIE/SFS/2026/002",
@@ -70,7 +70,7 @@ const MEDIA_ANNOUNCEMENTS = [
     division: "Seed Capital Desk",
     desc: "Detailed scheme guidelines for equity-free seed funding of up to ₹5,00,000 per student startup, structured across 5 milestone release tranches.",
     fileSize: "PDF (941 KB)",
-    fileUrl: "/Dr. A.P.J. Abdul Kalam Startup Validation & Seed Funding Scheme.pdf"
+    fileUrl: "/Kalam_Startup_Seed_Funding_Scheme.pdf"
   },
   {
     refNo: "NCIE/IIDSS/2026/003",
@@ -80,7 +80,7 @@ const MEDIA_ANNOUNCEMENTS = [
     division: "Academic Affiliation Wing",
     desc: "Comprehensive guidelines for academic institutions seeking grants between ₹20 Lakhs to ₹50 Lakhs for building campus incubation centers and makerspaces.",
     fileSize: "PDF (950 KB)",
-    fileUrl: "/Institutional Incubation & Development Support Scheme (IIDSS) (1).pdf"
+    fileUrl: "/Institutional_Incubation_Development_Support_Scheme.pdf"
   },
   {
     refNo: "NCIE/DIR/2026/084",
@@ -90,7 +90,7 @@ const MEDIA_ANNOUNCEMENTS = [
     division: "Incubation & Mentorship Division",
     desc: "Applications are officially open for collegiate tech start-ups and university-nominated research groups. Selected cohorts will receive seed-stage prototype validation grants, dedicated lab facilities, and industrial mentor matching.",
     fileSize: "PDF (1.2 MB)",
-    fileUrl: "/Rules, Regulations & Guidelines_NCIE Student Startup Grants Program.pdf"
+    fileUrl: "/NCIE_Student_Startup_Grants_Guidelines.pdf"
   },
   {
     refNo: "NCIE/POL/2026/042",
@@ -100,7 +100,7 @@ const MEDIA_ANNOUNCEMENTS = [
     division: "Academic Affiliation Wing",
     desc: "Official framework outlining standard operating protocols, IP licensing agreements, patent split models, and laboratory access schemas for accredited technical institutions across India.",
     fileSize: "PDF (2.4 MB)",
-    fileUrl: "/Institutional Incubation & Development Support Scheme (IIDSS) (1).pdf"
+    fileUrl: "/Institutional_Incubation_Development_Support_Scheme.pdf"
   },
   {
     refNo: "NCIE/FEL/2026/019",
@@ -526,7 +526,7 @@ export default function MediaClient() {
                             <Info className="w-3.5 h-3.5 text-zinc-400" />
                             {t("media_status")} <span className="text-emerald-700 font-bold">{t("media_status_val")}</span>
                           </span>
-                          <a href={item.fileUrl || "/Circular_Guidelines_2026.pdf"} download={item.fileUrl ? item.fileUrl.split("/").pop() : "Circular_Guidelines_2026.pdf"}>
+                          <a href={getStorageUrl(item.fileUrl)} target="_blank" rel="noopener noreferrer">
                             <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0D6B4F] hover:bg-[#074733] text-white text-[10px] font-bold uppercase tracking-wider rounded transition-colors shadow-sm cursor-pointer">
                               <Download className="w-3 h-3" />
                               <span>{item.fileSize}</span>

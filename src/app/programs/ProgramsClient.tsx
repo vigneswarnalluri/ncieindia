@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, Filter, DatabaseBackup, CheckCircle, Download } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { supabase, getStorageUrl } from "@/lib/supabase";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { PROGRAMS_DATA, Program } from "@/data/programsData";
 
@@ -212,7 +212,7 @@ export default function ProgramsPage() {
                           {t("prog_btn_details")}
                         </button>
                       </Link>
-                      <a href={program.pdfUrl || "/Circular_Guidelines_2026.pdf"} download={program.pdfName || "Circular_Guidelines_2026.pdf"} className="block">
+                      <a href={getStorageUrl(program.pdfUrl)} target="_blank" rel="noopener noreferrer" className="block">
                         <button className="w-full border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100/70 text-[#0D6B4F] font-bold text-[10px] uppercase py-1.5 transition-colors cursor-pointer text-center flex items-center justify-center gap-1">
                           <Download className="w-3 h-3" />
                           <span>PDF Guidelines</span>

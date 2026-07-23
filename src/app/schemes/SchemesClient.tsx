@@ -4,6 +4,8 @@ import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { Download } from "lucide-react";
+import { getStorageUrl } from "@/lib/supabase";
 import {
   SCHEMES_DATA,
   GOVERNMENT_PORTALS,
@@ -521,27 +523,38 @@ export default function SchemesClient() {
                 <span className="text-xs text-slate-500">
                   Official Portal: <strong className="text-slate-700">{selectedScheme.portalUrl}</strong>
                 </span>
-                <a
-                  href={selectedScheme.portalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full sm:w-auto px-6 py-3 bg-[#063B2C] hover:bg-emerald-700 text-white rounded-xl text-xs font-bold tracking-wide transition-all shadow-md flex items-center justify-center gap-2"
-                >
-                  <span>PROCEED TO OFFICIAL GOVT PORTAL</span>
-                  <svg
-                    className="w-4 h-4 text-emerald-300"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                   <a
+                    href={getStorageUrl("/NCIA-EMPOWERING.pdf")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-5 py-3 border border-slate-350 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold tracking-wide transition-all flex items-center justify-center gap-2 cursor-pointer"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
-                  </svg>
-                </a>
+                    <Download className="w-4 h-4 text-slate-550 shrink-0" />
+                    <span>DOWNLOAD GUIDELINES</span>
+                  </a>
+                  <a
+                    href={selectedScheme.portalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 bg-[#063B2C] hover:bg-emerald-700 text-white rounded-xl text-xs font-bold tracking-wide transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
+                  >
+                    <span>PROCEED TO OFFICIAL GOVT PORTAL</span>
+                    <svg
+                      className="w-4 h-4 text-emerald-300 shrink-0"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      />
+                    </svg>
+                  </a>
+                </div>
               </div>
             </motion.div>
           </div>

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft, CheckCircle, Calendar, ShieldCheck, Mail, Users, ArrowRight, Coins, Download, Scroll, FileText, Award } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { supabase, getStorageUrl } from "@/lib/supabase";
 import { PROGRAMS_DATA, Program } from "@/data/programsData";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -552,7 +552,7 @@ export default function ProgramDetailPage() {
                     </Button>
                   </Link>
 
-                  <a href={program.pdfUrl || "/Circular_Guidelines_2026.pdf"} download={program.pdfName || "Circular_Guidelines_2026.pdf"} className="block">
+                  <a href={getStorageUrl(program.pdfUrl)} target="_blank" rel="noopener noreferrer" className="block">
                     <Button variant="outline" className="w-full justify-center text-xs font-bold py-2.5 gap-2 border-zinc-300 hover:bg-zinc-50 hover:text-primary transition-all text-zinc-700 rounded-sm">
                       <Download className="w-3.5 h-3.5 text-zinc-500" />
                       {t("prog_details_download_guidelines")}

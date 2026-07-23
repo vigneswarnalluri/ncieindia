@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getStorageUrl } from "@/lib/supabase";
 import ExecutiveCouncil from "@/components/ExecutiveCouncil";
 
 // Custom 3x3 Dot Grid Icon prefix for active tab matching the MSDE portal
@@ -60,9 +61,9 @@ export default function AboutPage() {
   ];
 
   const DOWNLOADS = [
-    { title: t("about_manual_1"), size: "2.8 MB", type: "PDF Manual" },
-    { title: t("about_manual_2"), size: "1.4 MB", type: "Circular Document" },
-    { title: t("about_manual_3"), size: "1.9 MB", type: "Policy Brief" }
+    { title: t("about_manual_1"), size: "2.8 MB", type: "PDF Manual", url: "/NCIE_Viksit_Bharat_2047_Innovation_Leadership_Programmes.pdf" },
+    { title: t("about_manual_2"), size: "1.4 MB", type: "Circular Document", url: "/Kalam_Startup_Seed_Funding_Scheme.pdf" },
+    { title: t("about_manual_3"), size: "1.9 MB", type: "Policy Brief", url: "/Institutional_Incubation_Development_Support_Scheme.pdf" }
   ];
 
   // Tab Content Renderers
@@ -623,7 +624,9 @@ export default function AboutPage() {
                 {DOWNLOADS.map((doc, idx) => (
                   <a 
                     key={idx}
-                    href="#"
+                    href={getStorageUrl(doc.url)}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center justify-between p-3.5 hover:bg-zinc-50 transition-colors group cursor-pointer"
                   >
                     <div className="flex items-center gap-3 min-w-0">
