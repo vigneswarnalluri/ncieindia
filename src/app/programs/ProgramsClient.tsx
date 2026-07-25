@@ -23,7 +23,16 @@ export default function ProgramsPage() {
         
         if (error) throw error;
         if (data && data.length > 0) {
-          setPrograms(data as Program[]);
+          const merged = data.map((dbProg) => {
+            const fallback = PROGRAMS_DATA.find((p) => p.id === dbProg.id);
+            return {
+              ...fallback,
+              ...dbProg,
+              pdfUrl: dbProg.pdfUrl || dbProg.pdf_url || fallback?.pdfUrl || "/NCIE_Student_Startup_Grants_Guidelines.pdf",
+              pdfName: dbProg.pdfName || dbProg.pdf_name || fallback?.pdfName,
+            };
+          });
+          setPrograms(merged as Program[]);
         }
       } catch (err) {
         console.warn("Supabase fetch failed. Falling back to code-level PROGRAMS_DATA.", err);

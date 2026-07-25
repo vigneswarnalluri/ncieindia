@@ -110,7 +110,7 @@ const MEDIA_ANNOUNCEMENTS = [
     division: "Research & Development Wing",
     desc: "Official listing of the initial 50 postgraduate research scholars selected to receive stipends, procurement allowances, and advanced equipment grants for deep-tech research translation.",
     fileSize: "PDF (940 KB)",
-    fileUrl: "/Circular_Guidelines_2026.pdf"
+    fileUrl: "/NCIE_Viksit_Bharat_2047_Innovation_Leadership_Programmes.pdf"
   },
   {
     refNo: "NCIE/CIR/2026/011",
@@ -120,7 +120,7 @@ const MEDIA_ANNOUNCEMENTS = [
     division: "Administration Wing",
     desc: "Directory of designated regional state nodal officers responsible for coordinating local campus makerspace grants, audit approvals, and campus registration help desks.",
     fileSize: "PDF (810 KB)",
-    fileUrl: "/Circular_Guidelines_2026.pdf"
+    fileUrl: "/AP_State_Liaison_Policy_Framework_2026.pdf"
   }
 ];
 

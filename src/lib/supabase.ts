@@ -47,32 +47,16 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
   },
 });
 
-// Utility to resolve local assets to Supabase Storage public URLs
+// Utility to resolve local assets / storage URLs for reliable PDF downloads across local and production environments
 export function getStorageUrl(pathOrUrl: string | undefined | null): string {
-  if (!pathOrUrl) return "/Circular_Guidelines_2026.pdf";
+  if (!pathOrUrl) return "/NCIE_Student_Startup_Grants_Guidelines.pdf";
   if (pathOrUrl.startsWith("http://") || pathOrUrl.startsWith("https://")) {
     return pathOrUrl;
   }
   
-  // Extract filename
-  const filename = pathOrUrl.split("/").pop() || "";
-  
-  // Try loading storageUrls mapping
-  try {
-    const mappedUrl = (storageUrls as Record<string, string>)[filename];
-    if (mappedUrl) {
-      return mappedUrl;
-    }
-    const cleanFilename = filename.replace(/\s+/g, '_');
-    const cleanMappedUrl = (storageUrls as Record<string, string>)[cleanFilename];
-    if (cleanMappedUrl) {
-      return cleanMappedUrl;
-    }
-  } catch (e) {
-    console.warn("Failed to load storage mapping", e);
-  }
-  
-  return pathOrUrl;
+  // Ensure relative path starts with / for root-relative serving on deployed environments
+  const cleanPath = pathOrUrl.startsWith("/") ? pathOrUrl : `/${pathOrUrl}`;
+  return cleanPath;
 }
 
 

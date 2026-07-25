@@ -69,11 +69,15 @@ export default function ProgramDetailPage() {
           .eq("id", id)
           .single();
         
-        if (error) throw error;
+        const fallback = PROGRAMS_DATA.find((p) => p.id === id);
         if (data) {
-          setProgram(data);
+          setProgram({
+            ...fallback,
+            ...data,
+            pdfUrl: data.pdfUrl || data.pdf_url || fallback?.pdfUrl || "/NCIE_Student_Startup_Grants_Guidelines.pdf",
+            pdfName: data.pdfName || data.pdf_name || fallback?.pdfName,
+          } as Program);
         } else {
-          const fallback = PROGRAMS_DATA.find((p) => p.id === id);
           setProgram(fallback || null);
         }
       } catch (err) {

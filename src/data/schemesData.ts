@@ -11,6 +11,7 @@ export interface SchemeItem {
   eligibility: string[];
   benefits: string[];
   applicationSteps: string[];
+  pdfUrl?: string;
 }
 
 export interface GovernmentPortal {
