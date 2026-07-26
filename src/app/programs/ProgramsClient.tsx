@@ -132,7 +132,7 @@ export default function ProgramsPage() {
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`flex items-center gap-1.5 px-4.5 py-2 text-xs md:text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                  className={`shrink-0 flex items-center gap-1.5 px-4.5 py-2 text-xs md:text-sm font-semibold transition-all duration-200 cursor-pointer ${
                     isActive 
                       ? "bg-[#0A5D45] text-white font-bold border-b-2 border-accent" 
                       : "text-emerald-100/70 hover:text-white"

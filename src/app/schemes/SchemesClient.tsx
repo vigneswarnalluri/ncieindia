@@ -173,20 +173,20 @@ export default function SchemesClient() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
         {/* Category Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-4 scrollbar-none border-b border-slate-200 mb-10">
+        <div className="flex items-center gap-2 overflow-x-auto pb-4 scrollbar-none border-b border-slate-200 mb-10 min-w-0">
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-2.5 rounded-lg text-xs sm:text-sm font-semibold tracking-wide transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer ${
+              className={`shrink-0 px-4 py-2.5 rounded-lg text-xs sm:text-sm font-semibold tracking-wide transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer ${
                 activeCategory === cat.id
                   ? "bg-[#063B2C] text-white shadow-md shadow-emerald-950/20"
                   : "bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200"
               }`}
             >
-              <span>{cat.label}</span>
+              <span className="whitespace-nowrap">{cat.label}</span>
               <span
-                className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold ${
                   activeCategory === cat.id
                     ? "bg-emerald-400 text-emerald-950"
                     : "bg-slate-100 text-slate-500"

@@ -799,6 +799,51 @@ export default function Header() {
                                       {t("prog_csr_rural_support_title")}
                                     </Link>
                                   </>
+                                ) : hasMega === "schemes" ? (
+                                  <>
+                                    <Link
+                                      href="/schemes"
+                                      className="text-xs font-bold text-primary hover:underline py-1.5 px-2 uppercase tracking-wide"
+                                    >
+                                      {language === "en" ? "• All Schemes Overview" : "• सभी योजनाएं अवलोकन"}
+                                    </Link>
+                                    <Link
+                                      href="/schemes"
+                                      className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
+                                    >
+                                      Startup India Scheme
+                                    </Link>
+                                    <Link
+                                      href="/schemes"
+                                      className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
+                                    >
+                                      PM Mudra &amp; Stand-Up India
+                                    </Link>
+                                    <Link
+                                      href="/schemes"
+                                      className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
+                                    >
+                                      Vidya Lakshmi Loan Portal
+                                    </Link>
+                                    <Link
+                                      href="/schemes"
+                                      className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
+                                    >
+                                      National Scholarship Portal (NSP)
+                                    </Link>
+                                    <Link
+                                      href="/schemes"
+                                      className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
+                                    >
+                                      Atal Innovation Mission (AIM)
+                                    </Link>
+                                    <Link
+                                      href="/schemes"
+                                      className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
+                                    >
+                                      Women Entrepreneurship (WEP)
+                                    </Link>
+                                  </>
                                 ) : (
                                   <>
                                     <Link
@@ -829,7 +874,7 @@ export default function Header() {
                                       href="/media"
                                       className="text-xs font-medium text-zinc-650 hover:text-primary hover:underline py-1 px-2"
                                     >
-                                      Documents & Circulars
+                                      Documents &amp; Circulars
                                     </Link>
                                   </>
                                 )}
