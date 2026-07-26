@@ -72,22 +72,6 @@ export default function Preloader() {
               className="w-full h-full object-contain md:object-cover object-center scale-[1.01]"
             />
           </div>
-
-          {/* Minimal Glassmorphism Skip Button */}
-          <motion.button
-            initial={{ opacity: 0, scale: 0.9, y: -10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            onClick={dismissPreloader}
-            className="absolute top-6 right-6 z-30 px-4 py-2 bg-slate-950/70 hover:bg-slate-950 text-white font-mono text-[11px] font-bold tracking-widest rounded-full border border-emerald-500/30 shadow-lg backdrop-blur-md transition-all hover:border-emerald-400 hover:scale-105 active:scale-95 flex items-center gap-2 group cursor-pointer"
-          >
-            <span className="text-emerald-400 group-hover:text-emerald-300 transition-colors">SKIP INTRO</span>
-            <div className="w-4 h-4 rounded-full bg-emerald-500/20 group-hover:bg-emerald-500/40 flex items-center justify-center transition-colors">
-              <svg className="w-2.5 h-2.5 text-emerald-300 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-              </svg>
-            </div>
-          </motion.button>
         </motion.div>
       )}
     </AnimatePresence>
