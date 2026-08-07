@@ -6,6 +6,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { VACANCIES_DATA } from "@/data/vacanciesData";
+import { PROGRAMS_DATA } from "@/data/programsData";
 
 const uploadFile = async (file: File, path: string) => {
   const { data, error } = await supabase.storage
@@ -21,6 +22,21 @@ const uploadFile = async (file: File, path: string) => {
     .getPublicUrl(path);
     
   return publicUrl;
+};
+
+const loadRazorpayScript = (): Promise<boolean> => {
+  return new Promise((resolve) => {
+    if (typeof window !== "undefined" && (window as any).Razorpay) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
 };
 
 
@@ -41,6 +57,7 @@ const DEPARTMENTS = [
 const STREAMS = [
   "B.Tech / B.E.",
   "M.Tech / M.E.",
+  "Diploma (Polytechnic)",
   "BCA",
   "MCA",
   "B.Sc",
@@ -578,6 +595,18 @@ export default function JoinClient() {
         handleRoleSelect("internship");
       } else if (roleParam === "recruitment") {
         handleRoleSelect("recruitment");
+      } else if (roleParam === "student") {
+        handleRoleSelect("student");
+      }
+
+      const courseParam = params.get("course");
+      if (courseParam) {
+        const found = PROGRAMS_DATA.find(
+          p => p.courseCode?.toLowerCase() === courseParam.toLowerCase() || p.id.toLowerCase() === courseParam.toLowerCase()
+        );
+        if (found) {
+          setFormData(prev => ({ ...prev, selectedCourse: `${found.courseCode} - ${found.title}` }));
+        }
       }
     }
   }, []);
@@ -645,50 +674,7 @@ export default function JoinClient() {
     setFiles((prev) => ({ ...prev, [fileKey]: file }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Safety check: ensure files are selected
-    if (role === "internship" || role === "recruitment") {
-      if (!files.proposalRoster) {
-        setValidationError("Security Verification: Please upload your Resume / CV.");
-        return;
-      }
-    } else {
-      if (!files.consentForm || !files.idCard || !files.proposalRoster) {
-        setValidationError("Security Verification: All required files must be uploaded before submitting.");
-        return;
-      }
-    }
-
-    // Security: mobile validation double-check
-    const mobilePattern = /^[0-9]{10}$/;
-    if (!mobilePattern.test(formData.mobile)) {
-      setValidationError("Validation Error: Please enter a valid 10-digit mobile number.");
-      return;
-    }
-
-    // Validate that city and orgName are not empty
-    if (!formData.city.trim()) {
-      setValidationError("Validation Error: Please specify your city.");
-      return;
-    }
-    if ((role === "student" || role === "internship" || role === "chapter" || role === "recruitment") && !formData.orgName.trim()) {
-      setValidationError("Validation Error: Please specify your college or university name.");
-      return;
-    }
-    if ((role === "student" || role === "internship") && !formData.regNumber.trim()) {
-      setValidationError("Validation Error: Please specify your Roll Number / Student ID.");
-      return;
-    }
-    if (role === "internship" && !formData.selectedCourse) {
-      setValidationError("Validation Error: Please select an NCIE Viksit Bharat 2047 Innovation Leadership Programs course.");
-      return;
-    }
-
-    setIsSubmitting(true);
-    setValidationError(null);
-
+  const saveRegistrationRecord = async (paymentId: string) => {
     try {
       const generatedId = `REG-2026-${Math.floor(Math.random() * 9000) + 1000}`;
 
@@ -719,11 +705,10 @@ export default function JoinClient() {
 
       let finalProposal = formData.proposal;
       if (role === "internship") {
-        finalProposal = `Course: ${formData.selectedCourse} | SOP: ${formData.proposal}`;
+        finalProposal = `Payment ID: ${paymentId || "N/A"} | Course: ${formData.selectedCourse} | SOP: ${formData.proposal}`;
       } else if (role === "recruitment") {
         finalProposal = `Position Applied For: ${formData.designation} | SOP: ${formData.proposal}`;
       } else if (role === "partner") {
-        // Prepend custom corporate website url to proposal
         finalProposal = `Website: ${formData.websiteUrl} | Proposal: ${formData.proposal}`;
       }
 
@@ -755,7 +740,6 @@ export default function JoinClient() {
         }]);
 
       if (error) {
-        // Handle duplicate email gracefully
         if (error.code === "23505") {
           setValidationError("A registration with this email already exists. Please check your inbox for the confirmation email.");
         } else {
@@ -809,6 +793,101 @@ export default function JoinClient() {
       setValidationError(err.message || "An unexpected error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Safety check: ensure files are selected
+    if (role === "internship" || role === "recruitment") {
+      if (!files.proposalRoster) {
+        setValidationError("Security Verification: Please upload your Resume / CV.");
+        return;
+      }
+    } else {
+      if (!files.consentForm || !files.idCard || !files.proposalRoster) {
+        setValidationError("Security Verification: All required files must be uploaded before submitting.");
+        return;
+      }
+    }
+
+    // Security: mobile validation double-check
+    const mobilePattern = /^[0-9]{10}$/;
+    if (!mobilePattern.test(formData.mobile)) {
+      setValidationError("Validation Error: Please enter a valid 10-digit mobile number.");
+      return;
+    }
+
+    // Validate that city and orgName are not empty
+    if (!formData.city.trim()) {
+      setValidationError("Validation Error: Please specify your city.");
+      return;
+    }
+    if ((role === "student" || role === "internship" || role === "chapter" || role === "recruitment") && !formData.orgName.trim()) {
+      setValidationError("Validation Error: Please specify your college or university name.");
+      return;
+    }
+    if ((role === "student" || role === "internship") && !formData.regNumber.trim()) {
+      setValidationError("Validation Error: Please specify your Roll Number / Student ID.");
+      return;
+    }
+    if (role === "internship" && !formData.selectedCourse) {
+      setValidationError("Validation Error: Please select an NCIE Viksit Bharat 2047 Innovation Leadership Programs course.");
+      return;
+    }
+
+    setValidationError(null);
+
+    // Trigger Razorpay Payment Gateway modal if it is a student course registration (fee ₹700)
+    if (role === "internship" && !formData.txnRef) {
+      setIsSubmitting(true);
+      const scriptLoaded = await loadRazorpayScript();
+      if (!scriptLoaded) {
+        setValidationError("Failed to load Razorpay Payment Gateway script. Please check your internet connection.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      const razorpayKeyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_51b8D7pL4w9a8f";
+      
+      const options = {
+        key: razorpayKeyId,
+        amount: 70000, // ₹700 in paise
+        currency: "INR",
+        name: "NCIE India",
+        description: `Fee: ${formData.selectedCourse}`,
+        prefill: {
+          name: formData.fullName,
+          email: formData.email,
+          contact: formData.mobile
+        },
+        theme: {
+          color: "#0D6B4F" // NCIE Green
+        },
+        modal: {
+          ondismiss: function() {
+            setIsSubmitting(false);
+          }
+        },
+        handler: async function (response: any) {
+          const paymentId = response.razorpay_payment_id;
+          setFormData(prev => ({ ...prev, txnRef: paymentId }));
+          // Submit the data directly with the newly created transaction reference ID
+          await saveRegistrationRecord(paymentId);
+        }
+      };
+
+      try {
+        const rzp = new (window as any).Razorpay(options);
+        rzp.open();
+      } catch (err: any) {
+        setValidationError(`Failed to initialize payment gateway: ${err.message || err}`);
+        setIsSubmitting(false);
+      }
+    } else {
+      setIsSubmitting(true);
+      await saveRegistrationRecord(formData.txnRef);
     }
   };
 
@@ -1363,6 +1442,15 @@ export default function JoinClient() {
                               required
                             >
                               <option value="" className="text-zinc-500 font-sans">{t("placeholder_select_course")}</option>
+                              {PROGRAMS_DATA.filter(p => p.courseCode).map(p => {
+                                const key = `prog_${p.id.replace(/-/g, "_")}_title`;
+                                const label = t(key) !== key ? t(key) : p.title;
+                                return (
+                                  <option key={p.id} value={`${p.courseCode} - ${p.title}`} className="text-zinc-800 font-sans font-semibold">
+                                    {p.courseCode} - {label}
+                                  </option>
+                                );
+                              })}
                               <option value="Innovational & Technology Management" className="text-zinc-800 font-sans">
                                 {t("course_itm_option")}
                               </option>

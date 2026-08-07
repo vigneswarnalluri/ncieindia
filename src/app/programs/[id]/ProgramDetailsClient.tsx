@@ -420,39 +420,233 @@ export default function ProgramDetailPage() {
               </div>
             )}
 
-            {/* 4. Audit Stages Timeline */}
-            <div className="space-y-4 mb-8">
-              <h3 className="text-sm font-bold text-zinc-900 border-b border-zinc-200 pb-1.5 uppercase tracking-wide">
-                {program.tranches ? "4." : "3."} {program.id === "startup-seed-funding"
-                  ? (language === "hi" ? "5-चरण निधि जारी करने का मॉडल" : "5-Stage Funding Release Model")
-                  : t("prog_details_evaluation")}
-              </h3>
-              
-              <div className="relative pl-6 border-l border-zinc-300 ml-3 space-y-6">
-                {(program.id === "startup-seed-funding"
-                  ? (language === "hi" ? SEED_FUNDING_STAGES_HI : SEED_FUNDING_STAGES_EN)
-                  : (program.stages || [
-                      { title: t("prog_details_stage_1_title"), desc: t("prog_details_stage_1_desc") },
-                      { title: t("prog_details_stage_2_title"), desc: t("prog_details_stage_2_desc") },
-                      { title: t("prog_details_stage_3_title"), desc: t("prog_details_stage_3_desc") },
-                    ])
-                ).map((step, idx) => (
-                  <div key={idx} className="relative">
-                    {/* Circle marker with audit-like numbers */}
-                    <div className="absolute -left-[35px] top-0.5 w-4.5 h-4.5 rounded-full bg-white border border-zinc-400 text-zinc-550 flex items-center justify-center font-mono text-[9px] font-bold shadow-sm">
-                      {String(idx + 1).padStart(2, "0")}
-                    </div>
-                    <h4 className="text-xs sm:text-sm font-bold text-zinc-800 leading-snug">{step.title}</h4>
-                    <p className="text-[11px] sm:text-xs text-zinc-500 mt-1 leading-relaxed">{step.desc}</p>
+            {/* Course Objectives and Outcomes Grid */}
+            {(program.courseObjectives || program.courseOutcomes) && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                {program.courseObjectives && (
+                  <div className="space-y-3 bg-zinc-50/50 border border-zinc-200 p-5 rounded-sm">
+                    <h4 className="text-xs font-bold text-zinc-550 uppercase tracking-wider font-mono border-b border-zinc-200 pb-2 flex items-center gap-1.5">
+                      <Scroll className="w-3.5 h-3.5 text-primary" />
+                      {t("prog_details_course_objectives")}
+                    </h4>
+                    <ul className="space-y-2">
+                      {program.courseObjectives.map((obj, i) => (
+                        <li key={i} className="flex items-start gap-2 text-[11px] sm:text-xs text-zinc-650 leading-relaxed">
+                          <CheckCircle className="w-3.5 h-3.5 text-emerald-700 shrink-0 mt-0.5" />
+                          <span>{obj}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                ))}
+                )}
+                {program.courseOutcomes && (
+                  <div className="space-y-3 bg-zinc-50/50 border border-zinc-200 p-5 rounded-sm">
+                    <h4 className="text-xs font-bold text-zinc-550 uppercase tracking-wider font-mono border-b border-zinc-200 pb-2 flex items-center gap-1.5">
+                      <Award className="w-3.5 h-3.5 text-accent" />
+                      {t("prog_details_course_outcomes")}
+                    </h4>
+                    <ul className="space-y-2">
+                      {program.courseOutcomes.map((out, i) => (
+                        <li key={i} className="flex items-start gap-2 text-[11px] sm:text-xs text-zinc-650 leading-relaxed">
+                          <CheckCircle className="w-3.5 h-3.5 text-[#FF9933] shrink-0 mt-0.5" />
+                          <span>{out}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
 
-            {/* 5. FAQs Section */}
+            {/* Course Syllabus & Modules */}
+            {program.syllabusModules && (
+              <div className="space-y-4 mb-8">
+                <h3 className="text-sm font-bold text-zinc-900 border-b border-zinc-200 pb-1.5 uppercase tracking-wide">
+                  3. {t("prog_details_syllabus_modules")}
+                </h3>
+                <div className="space-y-4">
+                  {program.syllabusModules.map((mod, idx) => (
+                    <div key={idx} className="bg-zinc-50/60 border border-zinc-250 p-4 rounded-sm hover:bg-zinc-50 transition-colors">
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-2.5 pb-2 border-b border-zinc-200">
+                        <h4 className="text-xs sm:text-sm font-bold text-zinc-800 uppercase tracking-wide">
+                          {mod.title}
+                        </h4>
+                        {mod.duration && (
+                          <span className="text-[10px] font-bold font-mono text-primary bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded">
+                            {mod.duration}
+                          </span>
+                        )}
+                      </div>
+                      <ul className="list-disc pl-4 space-y-1.5 text-[11px] sm:text-xs text-zinc-600 leading-relaxed">
+                        {mod.topics.map((topic, i) => (
+                          <li key={i}>{topic}</li>
+                        ))}
+                      </ul>
+                      {mod.activity && (
+                        <div className="text-[11px] bg-emerald-50 text-emerald-800 border border-emerald-200 p-2.5 flex items-start gap-2 mt-3 font-medium">
+                          <span className="font-extrabold uppercase tracking-wider text-[9px] bg-emerald-850 text-white px-1.5 py-0.5 mt-0.5 shrink-0 rounded-sm">Activity</span>
+                          <span className="leading-relaxed">{mod.activity}</span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 4. Audit Stages Timeline (Default when no syllabus modules exist) */}
+            {!program.syllabusModules && (
+              <div className="space-y-4 mb-8">
+                <h3 className="text-sm font-bold text-zinc-900 border-b border-zinc-200 pb-1.5 uppercase tracking-wide">
+                  {program.tranches ? "4." : "3."} {program.id === "startup-seed-funding"
+                    ? (language === "hi" ? "5-चरण निधि जारी करने का मॉडल" : "5-Stage Funding Release Model")
+                    : t("prog_details_evaluation")}
+                </h3>
+                
+                <div className="relative pl-6 border-l border-zinc-300 ml-3 space-y-6">
+                  {(program.id === "startup-seed-funding"
+                    ? (language === "hi" ? SEED_FUNDING_STAGES_HI : SEED_FUNDING_STAGES_EN)
+                    : (program.stages || [
+                        { title: t("prog_details_stage_1_title"), desc: t("prog_details_stage_1_desc") },
+                        { title: t("prog_details_stage_2_title"), desc: t("prog_details_stage_2_desc") },
+                        { title: t("prog_details_stage_3_title"), desc: t("prog_details_stage_3_desc") },
+                      ])
+                  ).map((step, idx) => (
+                    <div key={idx} className="relative">
+                      {/* Circle marker with audit-like numbers */}
+                      <div className="absolute -left-[35px] top-0.5 w-4.5 h-4.5 rounded-full bg-white border border-zinc-400 text-zinc-550 flex items-center justify-center font-mono text-[9px] font-bold shadow-sm">
+                        {String(idx + 1).padStart(2, "0")}
+                      </div>
+                      <h4 className="text-xs sm:text-sm font-bold text-zinc-800 leading-snug">{step.title}</h4>
+                      <p className="text-[11px] sm:text-xs text-zinc-500 mt-1 leading-relaxed">{step.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Course Assessment Pattern (custom) */}
+            {program.assessmentPattern && (
+              <div className="space-y-4 mb-8">
+                <h3 className="text-sm font-bold text-zinc-900 border-b border-zinc-200 pb-1.5 uppercase tracking-wide">
+                  {program.syllabusModules ? "4." : "3."} {t("prog_details_assessment_pattern")}
+                </h3>
+                <div className="border border-zinc-300 rounded-sm overflow-hidden">
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead>
+                      <tr className="bg-zinc-50 border-b border-zinc-300 text-zinc-700 font-bold font-mono text-[10px] uppercase tracking-wider">
+                        <th className="p-3 border-r border-zinc-200">Assessment Component</th>
+                        <th className="p-3 w-36 text-center">Marks Allocated</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {program.assessmentPattern.map((item, idx) => (
+                        <tr key={idx} className="border-b border-zinc-200 last:border-b-0 hover:bg-zinc-50/50">
+                          <td className="p-3 border-r border-zinc-200 font-semibold text-zinc-850">{item.component}</td>
+                          <td className="p-3 text-center font-mono font-bold text-primary">{item.marks} / 100</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* Books, Software & Pedagogy Block */}
+            {(program.textBooks || program.referenceBooks || program.recommendedSoftware || program.pedagogy) && (
+              <div className="space-y-6 border-t border-zinc-200 pt-6 mb-8">
+                <h3 className="text-sm font-bold text-zinc-900 uppercase tracking-wide">
+                  {program.syllabusModules ? "5." : "4."} Reference Books, Software & Pedagogy
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {program.pedagogy && (
+                    <div className="space-y-2.5 md:col-span-2">
+                      <h4 className="text-xs font-bold text-zinc-550 uppercase tracking-wider font-mono flex items-center gap-1.5 border-b border-zinc-150 pb-1">
+                        <Scroll className="w-3.5 h-3.5 text-primary" />
+                        {t("prog_details_pedagogy")}
+                      </h4>
+                      <ul className="space-y-1.5 list-disc pl-4 text-[11px] sm:text-xs text-zinc-600 leading-relaxed font-semibold">
+                        {program.pedagogy.map((ped, idx) => (
+                          <li key={idx}>{ped}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {program.recommendedSoftware && (
+                    <div className="space-y-2.5 md:col-span-2 border-t border-zinc-150 pt-4">
+                      <h4 className="text-xs font-bold text-zinc-550 uppercase tracking-wider font-mono flex items-center gap-1.5 border-b border-zinc-150 pb-2">
+                        <Coins className="w-3.5 h-3.5 text-[#0D6B4F]" />
+                        {t("prog_details_recommended_software")}
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {program.recommendedSoftware.map((soft, idx) => (
+                          <span key={idx} className="bg-zinc-100 text-zinc-800 border border-zinc-200 text-[10px] font-extrabold uppercase px-3 py-1 tracking-wide font-mono rounded">
+                            {soft}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {program.textBooks && (
+                    <div className="space-y-2.5 md:col-span-2 border-t border-zinc-150 pt-4">
+                      <h4 className="text-xs font-bold text-zinc-550 uppercase tracking-wider font-mono flex items-center gap-1.5 border-b border-zinc-150 pb-1.5">
+                        <FileText className="w-3.5 h-3.5 text-[#FF9933]" />
+                        {t("prog_details_text_books")}
+                      </h4>
+                      <ol className="list-decimal pl-4 space-y-2 text-[11px] sm:text-xs text-zinc-650 leading-relaxed font-semibold">
+                        {program.textBooks.map((book, idx) => (
+                          <li key={idx}>{book}</li>
+                        ))}
+                      </ol>
+                    </div>
+                  )}
+
+                  {program.referenceBooks && (
+                    <div className="space-y-2.5 md:col-span-2 border-t border-zinc-150 pt-4">
+                      <h4 className="text-xs font-bold text-zinc-550 uppercase tracking-wider font-mono flex items-center gap-1.5 border-b border-zinc-150 pb-1.5">
+                        <FileText className="w-3.5 h-3.5 text-[#138808]" />
+                        {t("prog_details_reference_books")}
+                      </h4>
+                      <ol className="list-decimal pl-4 space-y-2 text-[11px] sm:text-xs text-zinc-650 leading-relaxed font-medium">
+                        {program.referenceBooks.map((book, idx) => (
+                          <li key={idx}>{book}</li>
+                        ))}
+                      </ol>
+                    </div>
+                  )}
+
+                  {program.webResources && (
+                    <div className="space-y-2.5 md:col-span-2 border-t border-zinc-150 pt-4">
+                      <h4 className="text-xs font-bold text-zinc-550 uppercase tracking-wider font-mono flex items-center gap-1.5 border-b border-zinc-150 pb-1.5">
+                        <FileText className="w-3.5 h-3.5 text-zinc-550" />
+                        {t("prog_details_web_resources")}
+                      </h4>
+                      <ul className="space-y-2 text-[11px] sm:text-xs text-zinc-600">
+                        {program.webResources.map((res, idx) => {
+                          const parts = res.split(" – ");
+                          return (
+                            <li key={idx} className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 leading-relaxed">
+                              <span className="font-bold text-zinc-800 shrink-0">{parts[0]}</span>
+                              <span className="hidden sm:inline text-zinc-300">|</span>
+                              <a href={parts[1]} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-mono text-[10px] sm:text-[11px] truncate">
+                                {parts[1]}
+                              </a>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* FAQs Section */}
             <div className="space-y-4 mb-8 pt-6 border-t border-zinc-200">
               <h3 className="text-sm font-bold text-zinc-900 uppercase tracking-wide">
-                {program.tranches ? "5." : "4."} {t("prog_details_faq")}
+                {program.syllabusModules ? "6." : program.tranches ? "5." : "4."} {t("prog_details_faq")}
               </h3>
               <div className="space-y-4">
                 {[
@@ -549,7 +743,7 @@ export default function ProgramDetailPage() {
                 </div>
 
                 <div className="space-y-3 pt-2">
-                  <Link href="/join" className="block">
+                  <Link href={`/join?role=internship&course=${program.courseCode || program.id}`} className="block">
                     <Button variant="primary" className="w-full justify-center text-xs font-bold py-2.5 gap-1.5 shadow-sm rounded-sm">
                       {t("prog_details_start_app")}
                       <ArrowRight className="w-3.5 h-3.5" />
