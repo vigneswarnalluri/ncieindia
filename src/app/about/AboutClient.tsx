@@ -11,6 +11,7 @@ import {
   Building2
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getStorageUrl } from "@/lib/supabase";
@@ -91,6 +92,23 @@ export default function AboutPage() {
             </div>
             <Link href="/vision-2047" className="text-xs font-bold text-primary hover:underline shrink-0 flex items-center gap-1">
               <span>{language === "hi" ? "विज़न 2047 देखें" : "Explore Vision 2047"}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="bg-amber-50/40 border border-[#C9A24B]/20 p-4 rounded-sm flex items-center justify-between gap-4 mt-4 select-none animate-fadeIn">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0 border border-amber-200/50">
+                <span className="text-[#8B6E30] font-bold text-xs">✉</span>
+              </div>
+              <p className="text-xs sm:text-sm text-zinc-800 font-bold leading-relaxed">
+                {language === "hi" 
+                  ? "कार्यकारी निदेशक डॉ. एलिया थगारम का संदेश पढ़ें।" 
+                  : "Read the message from Executive Director Dr. Elia Thagaram."}
+              </p>
+            </div>
+            <Link href="/executive-director" className="text-xs font-bold text-primary hover:underline shrink-0 flex items-center gap-1">
+              <span>{language === "hi" ? "निदेशक संदेश" : "Read Message"}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -193,7 +211,42 @@ export default function AboutPage() {
   );
 
   const renderTeamContent = () => (
-    <div className="animate-fadeIn">
+    <div className="animate-fadeIn space-y-6">
+      {/* Executive Director Spotlight Card */}
+      <div className="bg-white border border-zinc-200 p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xs">
+        <div className="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
+          <div className="relative w-20 h-24 sm:w-22 sm:h-28 shrink-0 bg-zinc-50 border border-zinc-200 shadow-xs overflow-hidden rounded-xs">
+            <Image
+              src="/images/executive-council/dr_elia_thagaram.jpg"
+              alt="Dr. Elia Thagaram"
+              fill
+              className="object-contain"
+              unoptimized
+            />
+          </div>
+          <div>
+            <span className="px-2.5 py-0.5 bg-emerald-50 text-primary border border-emerald-200/40 text-[9px] font-bold uppercase tracking-wider rounded-xs">
+              {language === "hi" ? "कार्यकारी निदेशक" : "Executive Director"}
+            </span>
+            <h3 className="text-base font-extrabold text-zinc-900 mt-1">
+              Dr. Elia Thagaram
+            </h3>
+            <p className="text-xs text-zinc-500 leading-relaxed max-w-xl">
+              {language === "hi"
+                ? "एनसीआईई भारत के कार्यकारी निदेशक एवं नवाचार और उद्यमिता के डीन।"
+                : "Executive Director of NCIE India & Dean of Innovation & Entrepreneurship."}
+            </p>
+          </div>
+        </div>
+        <Link
+          href="/executive-director"
+          className="inline-flex items-center gap-1.5 bg-[#0A5D45] hover:bg-[#074733] text-white font-bold text-xs uppercase px-4 py-2.5 rounded shadow-xs transition-colors shrink-0 cursor-pointer"
+        >
+          <span>{language === "hi" ? "निदेशक संदेश पढ़ें" : "Read Director Message"}</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
+      </div>
+
       <ExecutiveCouncil />
     </div>
   );

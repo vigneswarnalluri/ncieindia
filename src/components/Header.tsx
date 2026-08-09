@@ -33,7 +33,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 const NAV_LINKS = [
   { key: "nav_home", href: "/" },
-  { key: "nav_about", href: "/about" },
+  { key: "nav_about", href: "/about", hasMega: "about" as const },
   { key: "nav_programs", href: "/programs", hasMega: "programs" as const },
   { key: "nav_schemes", href: "/schemes", hasMega: "schemes" as const },
   { key: "nav_ecosystem", href: "/chapters", hasMega: "ecosystem" as const },
@@ -84,10 +84,10 @@ export default function Header() {
     }));
   };
 
-  const [activeMenu, setActiveMenu] = useState<"programs" | "schemes" | "ecosystem" | null>(null);
+  const [activeMenu, setActiveMenu] = useState<"about" | "programs" | "schemes" | "ecosystem" | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleMouseEnter = (menu: "programs" | "schemes" | "ecosystem") => {
+  const handleMouseEnter = (menu: "about" | "programs" | "schemes" | "ecosystem") => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setActiveMenu(menu);
   };
@@ -337,6 +337,71 @@ export default function Header() {
 
         {/* Mega Menu Dropdowns */}
         <AnimatePresence>
+          {activeMenu === "about" && (
+            <motion.div
+              initial={{ opacity: 0, y: 2 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 2 }}
+              transition={{ duration: 0.1, ease: "easeOut" }}
+              onMouseEnter={() => handleMouseEnter("about")}
+              onMouseLeave={handleHeaderMouseLeave}
+              style={{ willChange: "transform, opacity" }}
+              className="absolute left-[20%] xl:left-[25%] top-full w-full max-w-2xl px-4 z-[9999] pt-2"
+            >
+              <div className="bg-white border border-zinc-200 rounded-xl shadow-[0_12px_24px_rgba(0,0,0,0.06)] overflow-hidden grid grid-cols-12">
+                {/* Left Side: Spotlight Sidebar */}
+                <div className="col-span-5 bg-zinc-50 border-r border-zinc-200 p-5 flex flex-col justify-between min-h-[220px]">
+                  <div className="space-y-3">
+                    <h3 className="text-sm font-extrabold text-zinc-950 leading-snug font-sans">
+                      {language === "hi" ? "एनसीआईई शासन" : "NCIE Governance"}
+                    </h3>
+                    <p className="text-[11px] text-zinc-500 leading-relaxed font-sans">
+                      {language === "hi"
+                        ? "परिषद के दृष्टिकोण, नेतृत्व और संगठनात्मक संरचना का अन्वेषण करें।"
+                        : "Explore the leadership, institutional vision, and organizational structure guiding the council."}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right Side: Links */}
+                <div className="col-span-7 p-6 flex flex-col gap-4 bg-white">
+                  <Link href="/about?tab=about" className="group/item flex flex-col gap-0.5">
+                    <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
+                      {t("nav_about_council")}
+                    </span>
+                    <span className="text-[11px] text-zinc-500 font-sans leading-normal">
+                      {language === "hi"
+                        ? "एनसीआईई भारत के उद्देश्य और संचालन ढांचा"
+                        : "Institutional objectives and national operations framework"}
+                    </span>
+                  </Link>
+
+                  <Link href="/executive-director" className="group/item flex flex-col gap-0.5">
+                    <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
+                      {t("nav_executive_director")}
+                    </span>
+                    <span className="text-[11px] text-zinc-500 font-sans leading-normal">
+                      {language === "hi"
+                        ? "कार्यकारी निदेशक डॉ. एलिया थगारम का संदेश"
+                        : "Welcome message & vision statement from Dr. Elia Thagaram"}
+                    </span>
+                  </Link>
+
+                  <Link href="/about?tab=team" className="group/item flex flex-col gap-0.5">
+                    <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
+                      {language === "hi" ? "कार्यकारी परिषद एवं सलाहकार बोर्ड" : "Executive Council & Advisory Board"}
+                    </span>
+                    <span className="text-[11px] text-zinc-500 font-sans leading-normal">
+                      {language === "hi"
+                        ? "हमारे परिषद सदस्यों और सलाहकार पैनल से मिलें"
+                        : "Meet our council members and advisory panel"}
+                    </span>
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           {activeMenu === "programs" && (
             <motion.div
               initial={{ opacity: 0, y: 2 }}
@@ -766,7 +831,34 @@ export default function Header() {
                                 transition={{ duration: 0.2, ease: "easeInOut" }}
                                 className="overflow-hidden flex flex-col pl-4 pr-3 py-1 gap-1.5 border-l border-zinc-200 ml-4 mt-1"
                               >
-                                {hasMega === "programs" ? (
+                                {hasMega === "about" ? (
+                                  <>
+                                    <Link
+                                      href="/about"
+                                      className="text-xs font-bold text-primary hover:underline py-1.5 px-2 uppercase tracking-wide"
+                                    >
+                                      {language === "en" ? "• About Council Overview" : "• परिषद अवलोकन"}
+                                    </Link>
+                                    <Link
+                                      href="/about?tab=about"
+                                      className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
+                                    >
+                                      {t("nav_about_council")}
+                                    </Link>
+                                    <Link
+                                      href="/executive-director"
+                                      className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2 font-bold"
+                                    >
+                                      {t("nav_executive_director")}
+                                    </Link>
+                                    <Link
+                                      href="/about?tab=team"
+                                      className="text-xs font-medium text-zinc-600 hover:text-primary hover:underline py-1 px-2"
+                                    >
+                                      {language === "hi" ? "कार्यकारी परिषद एवं सलाहकार बोर्ड" : "Executive Council & Advisory Board"}
+                                    </Link>
+                                  </>
+                                ) : hasMega === "programs" ? (
                                   <>
                                     <Link
                                       href="/programs"
