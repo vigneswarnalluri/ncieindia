@@ -177,6 +177,23 @@ export const EXECUTIVE_COUNCIL_MEMBERS: CouncilMember[] = [
 
   // --- ADVISORY BOARD-NICE (8 Members) ---
   {
+    id: "dr-t-nageswara-prasad",
+    nameEn: "Dr. T. Nageswara Prasad",
+    nameHi: "डॉ. टी. नागेश्वर प्रसाद",
+    category: "advisory_board",
+    roleEn: "Advisory Board Member & Principal",
+    roleHi: "सलाहकार बोर्ड सदस्य एवं प्राचार्य",
+    institutionEn: "K.S.R.M. College of Engineering (Autonomous), Kadapa, Andhra Pradesh",
+    institutionHi: "के.एस.आर.एम. कॉलेज ऑफ इंजीनियरिंग (स्वायत्त), कड़पा, आंध्र प्रदेश",
+    qualificationsEn: "M.Tech., Ph.D. (Electrical & Electronics Engineering)",
+    qualificationsHi: "एम.टेक., पीएचडी (इलेक्ट्रिकल एवं इलेक्ट्रॉनिक्स इंजीनियरिंग)",
+    experienceEn: "27+ Years Experience in Higher Education & Academic Administration",
+    experienceHi: "27+ वर्ष उच्च शिक्षा एवं शैक्षणिक प्रशासन का अनुभव",
+    bioEn: "Dr. T. Nageswara Prasad, M.Tech., Ph.D., is an accomplished academician, researcher, and higher-education administrator with over 27 years of experience in Electrical and Electronics Engineering. Currently serving as Principal of K.S.R.M. College of Engineering (Autonomous), he has held several senior academic and administrative positions, including Vice-Principal, Dean Academics, Dean–Planning & Monitoring, HOD, and Chairman of Boards of Studies. His expertise encompasses Power Systems, Renewable Energy, Power Quality, Power Electronics, and Electrical Drives. He has guided numerous UG and PG projects and research scholars, published extensively in national and international journals and conferences, contributed chapters to Springer and CRC Press publications, and secured AICTE research/academic grants totaling ₹17.50 lakh. He has substantial experience in NAAC and NBA accreditation, academic governance, curriculum development, examinations, faculty development, and institutional quality enhancement. He is also a member of IEEE, IE(I), and ISTE.",
+    bioHi: "डॉ. टी. नागेश्वर प्रसाद, एम.टेक., पीएचडी, इलेक्ट्रिकल और इलेक्ट्रॉनिक्स इंजीनियरिंग में 27 से अधिक वर्षों के अनुभव के साथ एक कुशल शिक्षाविद, शोधकर्ता और उच्च शिक्षा प्रशासक हैं। वर्तमान में के.एस.आर.एम. कॉलेज ऑफ इंजीनियरिंग (स्वायत्त) के प्राचार्य के रूप में कार्यरत हैं, उन्होंने उप-प्राचार्य, डीन अकादमिक, डीन-योजना और निगरानी, विभागाध्यक्ष और अध्ययन बोर्ड के अध्यक्ष सहित कई वरिष्ठ शैक्षणिक और प्रशासनिक पदों पर कार्य किया है। उनकी विशेषज्ञता में पावर सिस्टम, नवीकरणीय ऊर्जा, पावर क्वालिटी, पावर इलेक्ट्रॉनिक्स और इलेक्ट्रिकल ड्राइव शामिल हैं। उन्होंने कई यूजी और पीजी परियोजनाओं और शोध विद्वानों का मार्गदर्शन किया है, राष्ट्रीय और अंतर्राष्ट्रीय पत्रिकाओं और सम्मेलनों में बड़े पैमाने पर प्रकाशित किया है, स्प्रिंगर और सीआरसी प्रेस प्रकाशनों में अध्यायों का योगदान दिया है, और कुल ₹17.50 लाख के एआईसीटीई अनुसंधान/शैक्षणिक अनुदान प्राप्त किए हैं। उन्हें नैक (NAAC) और एनबीए (NBA) मान्यता, शैक्षणिक शासन, पाठ्यक्रम विकास, परीक्षाओं, संकाय विकास और संस्थागत गुणवत्ता वृद्धि में व्यापक अनुभव है। वे आईईईई (IEEE), आईई(आई) और आईएसटीई (ISTE) के सदस्य भी हैं।",
+    image: "/images/executive-council/dr_t_nageswara_prasad.jpg"
+  },
+  {
     id: "dr-p-ramesh-babu",
     nameEn: "Dr. P. Ramesh Babu",
     nameHi: "डॉ. पी. रमेश बाबू",
