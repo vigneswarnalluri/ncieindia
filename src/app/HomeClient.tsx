@@ -109,6 +109,13 @@ const VISION_MILESTONES = [
 // Official Bulletins — Innovation India Council circular reference format
 const CIRCULARS = [
   {
+    id: "NCIE-VB-2026-124",
+    date: "August 10, 2026",
+    title: "Implementation of NCIE Activities under the Viksit Bharat @2047 Innovation Mission in Affiliated Colleges and Higher Educational Institutions",
+    description: "Official orders issued by the Office of the Executive Director for the implementation of NCIE activities, including student registration, Kalam Startup Validation, and establishing IEDCs.",
+    category: "Policy Docs",
+  },
+  {
     id: "NCIE-RECTT-2026-001",
     date: "July 01, 2026",
     title: "NCIE Contractual Recruitment Notification July 2026: 773 Vacancies Across 21 Administrative & Technical Positions",

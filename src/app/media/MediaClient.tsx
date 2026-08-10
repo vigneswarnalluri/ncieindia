@@ -23,6 +23,16 @@ import { supabase, getStorageUrl } from "@/lib/supabase";
 
 const MEDIA_ANNOUNCEMENTS = [
   {
+    refNo: "NCIE/VB/2026/124",
+    date: "August 10, 2026",
+    title: "Implementation of NCIE Activities under the Viksit Bharat @2047 Innovation Mission in Affiliated Colleges and Higher Educational Institutions",
+    category: "Official Order",
+    division: "Office of the Executive Director",
+    desc: "Official orders issued by the Office of the Executive Director for the implementation of NCIE activities under the Viksit Bharat @2047 Innovation Mission in Affiliated Colleges and Higher Educational Institutions.",
+    fileSize: "PDF (837 KB)",
+    fileUrl: "/Lt_No_124_08_26_NCIE_Viksit_Bharat_2047_Innovation_Mission.pdf"
+  },
+  {
     refNo: "NCIE/MEMO/2026/001",
     date: "July 06, 2026",
     title: "Academic Memorandum: Implementation Guidelines for Affiliated Institutions",
