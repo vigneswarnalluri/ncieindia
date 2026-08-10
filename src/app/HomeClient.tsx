@@ -109,6 +109,13 @@ const VISION_MILESTONES = [
 // Official Bulletins — Innovation India Council circular reference format
 const CIRCULARS = [
   {
+    id: "NCIE-DPR-2026",
+    date: "August 10, 2026",
+    title: "Release of NCIE Detailed Project Report (DPR) for National Startup & Innovation Ecosystem",
+    description: "Official Detailed Project Report (DPR) detailing the structure, programs, and roadmap of the National Council for Innovation & Entrepreneurship.",
+    category: "Policy Docs",
+  },
+  {
     id: "NCIE-VB-2026-124",
     date: "August 10, 2026",
     title: "Implementation of NCIE Activities under the Viksit Bharat @2047 Innovation Mission in Affiliated Colleges and Higher Educational Institutions",

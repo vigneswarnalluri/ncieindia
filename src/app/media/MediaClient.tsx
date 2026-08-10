@@ -23,6 +23,16 @@ import { supabase, getStorageUrl } from "@/lib/supabase";
 
 const MEDIA_ANNOUNCEMENTS = [
   {
+    refNo: "NCIE/DPR/2026/001",
+    date: "August 10, 2026",
+    title: "Release of NCIE Detailed Project Report (DPR) for National Startup & Innovation Ecosystem",
+    category: "Project Report",
+    division: "National Liaison Secretariat",
+    desc: "Comprehensive Detailed Project Report (DPR) outlining the structural design, funding allocations, and operational wings of the National Council for Innovation & Entrepreneurship (NCIE) India.",
+    fileSize: "PDF (1.2 MB)",
+    fileUrl: "/NCIE_DPR.pdf"
+  },
+  {
     refNo: "NCIE/VB/2026/124",
     date: "August 10, 2026",
     title: "Implementation of NCIE Activities under the Viksit Bharat @2047 Innovation Mission in Affiliated Colleges and Higher Educational Institutions",

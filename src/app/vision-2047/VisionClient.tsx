@@ -115,15 +115,26 @@ export default function Vision2047Page() {
             </p>
           </div>
 
-          <a
-            href="/NCIE_Viksit_Bharat_2047_Innovation_Leadership_Programmes.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[#C9A24B] hover:bg-[#b08d3d] text-[#063b2c] font-bold text-xs uppercase px-4 py-3 rounded shadow-md transition-all shrink-0 cursor-pointer"
-          >
-            <Download className="w-4 h-4" />
-            <span>Download Official Charter PDF</span>
-          </a>
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <a
+              href="/NCIE_Viksit_Bharat_2047_Innovation_Leadership_Programmes.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-[#C9A24B] hover:bg-[#b08d3d] text-[#063b2c] font-bold text-xs uppercase px-4 py-3 rounded shadow-md transition-all cursor-pointer"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download Official Charter PDF</span>
+            </a>
+            <a
+              href="/NCIE_DPR.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-[#0D6B4F] hover:bg-[#074733] text-white font-bold text-xs uppercase px-4 py-3 rounded shadow-md transition-all cursor-pointer border border-emerald-500/20"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download Detailed Project Report (DPR)</span>
+            </a>
+          </div>
         </div>
       </div>
 

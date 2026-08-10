@@ -62,6 +62,7 @@ export default function AboutPage() {
   ];
 
   const DOWNLOADS = [
+    { title: t("about_manual_dpr"), size: "1.2 MB", type: "PDF Document", url: "/NCIE_DPR.pdf" },
     { title: t("about_manual_1"), size: "2.8 MB", type: "PDF Manual", url: "/NCIE_Viksit_Bharat_2047_Innovation_Leadership_Programmes.pdf" },
     { title: t("about_manual_2"), size: "1.4 MB", type: "Circular Document", url: "/Kalam_Startup_Seed_Funding_Scheme.pdf" },
     { title: t("about_manual_3"), size: "1.9 MB", type: "Policy Brief", url: "/Institutional_Incubation_Development_Support_Scheme.pdf" }
