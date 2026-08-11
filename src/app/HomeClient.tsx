@@ -775,23 +775,23 @@ export default function Home() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.98 }}
               transition={{ duration: 0.3 }}
-              className="relative w-full max-w-2xl bg-white border border-zinc-200 rounded-none overflow-hidden shadow-2xl flex flex-col p-6 font-sans gap-4"
+              className="relative w-full max-w-2xl bg-white border border-zinc-200 rounded-none overflow-hidden shadow-2xl flex flex-col font-sans"
             >
-              {/* Close Button - Top Right Absolute */}
+              {/* Close Button - Top Right Absolute Overlaid on Banner */}
               <button
                 onClick={handleClosePromo}
-                className="absolute top-8 right-8 z-10 p-1.5 rounded-none bg-black/40 hover:bg-black/60 text-white transition-all cursor-pointer shadow-md border-0"
+                className="absolute top-4 right-4 z-10 p-1.5 rounded-none bg-black/40 hover:bg-black/60 text-white transition-all cursor-pointer shadow-md border-0"
                 title="Proceed to Website"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
 
-              {/* Banner Link */}
+              {/* Banner Link (Flush to borders) */}
               <a
                 href="https://harghartiranga.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block overflow-hidden rounded-none shadow-sm bg-white"
+                className="block w-full overflow-hidden"
               >
                 <img
                   src="/har-ghar-tiranga.png"
@@ -800,8 +800,8 @@ export default function Home() {
                 />
               </a>
               
-              {/* Description Text */}
-              <p className="text-zinc-600 text-xs sm:text-sm leading-relaxed font-sans font-medium text-justify px-1 mt-1">
+              {/* Description Text with content padding */}
+              <p className="text-zinc-650 text-xs sm:text-sm leading-relaxed font-sans font-medium text-justify px-6 pb-6 pt-4">
                 On the historic occasion of India's Independence Day, the Ministry of Culture invites all citizens to participate in the national flag celebration initiative. Bring the National Flag home and register to download your official certificate of participation.
               </p>
             </motion.div>
