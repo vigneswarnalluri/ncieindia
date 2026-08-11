@@ -94,6 +94,18 @@ export default function NoticesClient() {
     }
   }, [searchParams]);
 
+  // Lock body scroll when modals are active
+  useEffect(() => {
+    if (activeModalNotice || activeModalOrder) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [activeModalNotice, activeModalOrder]);
+
   // Filter notices based on search & category
   const filteredNotices = useMemo(() => {
     return NOTICES_DATA.filter((notice) => {
@@ -168,7 +180,7 @@ export default function NoticesClient() {
               setActiveMainTab("notices");
               setSearchQuery("");
             }}
-            className={`py-3 px-3 sm:px-6 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center justify-center gap-1.5 flex-1 sm:flex-initial whitespace-nowrap ${
+            className={`py-3 px-3 sm:px-6 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center justify-center gap-1.5 shrink-0 whitespace-nowrap ${
               activeMainTab === "notices"
                 ? "border-[#0D6B4F] text-[#0D6B4F]"
                 : "border-transparent text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50/50 rounded-t-none"
@@ -182,7 +194,7 @@ export default function NoticesClient() {
               setActiveMainTab("orders");
               setSearchQuery("");
             }}
-            className={`py-3 px-3 sm:px-6 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center justify-center gap-1.5 flex-1 sm:flex-initial whitespace-nowrap ${
+            className={`py-3 px-3 sm:px-6 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center justify-center gap-1.5 shrink-0 whitespace-nowrap ${
               activeMainTab === "orders"
                 ? "border-[#A68034] text-[#A68034]"
                 : "border-transparent text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50/50 rounded-t-none"
@@ -783,7 +795,7 @@ export default function NoticesClient() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 15, scale: 0.98 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="relative w-full max-w-5xl bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-2xl text-zinc-800 max-h-[92vh] flex flex-col"
+              className="relative w-full max-w-5xl bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-2xl text-zinc-800 max-h-[90vh] sm:max-h-[92vh] flex flex-col"
             >
               {/* Modal Header */}
               <div className="px-4 sm:px-6 py-3 sm:py-4 bg-white flex items-center gap-3 border-b border-zinc-200">
@@ -822,7 +834,7 @@ export default function NoticesClient() {
               </div>
 
               {/* Modal Body (Two-Column Layout) */}
-              <div className="p-6 overflow-y-auto flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 text-sm text-zinc-650 max-h-[70vh]">
+              <div className="p-4 sm:p-6 overflow-y-auto flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 text-sm text-zinc-650 max-h-[70vh]">
                 
                 {/* Left Column: Metadata & Brief (col-span-5) */}
                 <div className="lg:col-span-5 space-y-5">
@@ -874,7 +886,7 @@ export default function NoticesClient() {
                 </div>
 
                 {/* Right Column: PDF Preview Viewport (col-span-7) */}
-                <div className="lg:col-span-7">
+                <div className="hidden lg:block lg:col-span-7">
                   {activeModalNotice.fileUrl && activeModalNotice.fileUrl.endsWith(".pdf") ? (
                     <div className="border border-zinc-250 rounded-xl overflow-hidden shadow-sm bg-zinc-200 h-[460px] relative">
                       <iframe
@@ -936,7 +948,7 @@ export default function NoticesClient() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 15, scale: 0.98 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="relative w-full max-w-5xl bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-2xl text-zinc-855 max-h-[92vh] flex flex-col"
+              className="relative w-full max-w-5xl bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-2xl text-zinc-800 max-h-[90vh] sm:max-h-[92vh] flex flex-col"
             >
               {/* Modal Header */}
               <div className="px-4 sm:px-6 py-3 sm:py-4 bg-white flex items-center gap-3 border-b border-zinc-200">
@@ -975,7 +987,7 @@ export default function NoticesClient() {
               </div>
 
               {/* Modal Body (Two-Column Layout) */}
-              <div className="p-6 overflow-y-auto flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 text-sm text-zinc-650 max-h-[70vh]">
+              <div className="p-4 sm:p-6 overflow-y-auto flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 text-sm text-zinc-650 max-h-[70vh]">
                 
                 {/* Left Column: Metadata & Brief (col-span-5) */}
                 <div className="lg:col-span-5 space-y-5">
@@ -1032,7 +1044,7 @@ export default function NoticesClient() {
                 </div>
 
                 {/* Right Column: PDF Preview Viewport (col-span-7) */}
-                <div className="lg:col-span-7">
+                <div className="hidden lg:block lg:col-span-7">
                   {activeModalOrder.fileUrl && activeModalOrder.fileUrl.endsWith(".pdf") ? (
                     <div className="border border-zinc-250 rounded-xl overflow-hidden shadow-sm bg-zinc-200 h-[460px] relative">
                       <iframe

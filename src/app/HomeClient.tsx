@@ -181,6 +181,18 @@ export default function Home() {
     setShowPromoModal(true);
   }, []);
 
+  // Lock body scroll when promo modal is active
+  useEffect(() => {
+    if (showPromoModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showPromoModal]);
+
   const handleClosePromo = () => {
     setShowPromoModal(false);
   };
