@@ -819,7 +819,7 @@ export default function NoticesClient() {
 
               {/* Title Section */}
               <div className="px-6 py-4 border-b border-zinc-100 bg-zinc-50/15 shrink-0">
-                <div className="flex flex-wrap items-center gap-2 mb-2">
+                <div className="flex items-center gap-2 mb-2">
                   <span className="px-2.5 py-0.5 rounded bg-emerald-50 border border-emerald-150 text-[#0D6B4F] font-mono text-[10px] font-bold uppercase tracking-wider">
                     {activeModalNotice.noticeNo}
                   </span>
@@ -976,7 +976,7 @@ export default function NoticesClient() {
 
               {/* Title Section */}
               <div className="px-6 py-4 border-b border-zinc-100 bg-zinc-50/15 shrink-0">
-                <div className="flex flex-wrap items-center gap-2 mb-2">
+                <div className="flex items-center gap-2 mb-2">
                   <span className="px-2.5 py-0.5 rounded bg-amber-50 border border-amber-155 text-[#A68034] font-mono text-[10px] font-bold uppercase tracking-wider">
                     {activeModalOrder.orderNo}
                   </span>
