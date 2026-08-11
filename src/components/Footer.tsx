@@ -127,6 +127,8 @@ export default function Footer() {
               <h4 className="text-sm font-semibold tracking-wider uppercase text-accent">{t("footer_engage")}</h4>
               <ul className="space-y-2 text-sm text-zinc-300">
                 <li><Link href="/join" className="hover:text-accent transition-colors">{t("footer_join")}</Link></li>
+                <li><Link href="/notices" className="hover:text-accent transition-colors">Public Notices &amp; Bulletins</Link></li>
+                <li><Link href="/notices?tab=orders" className="hover:text-accent transition-colors">Official Orders &amp; Directives</Link></li>
                 <li><Link href="/media" className="hover:text-accent transition-colors">{t("footer_media")}</Link></li>
                 <li><Link href="/vision-2047" className="hover:text-accent transition-colors">{t("footer_vision")}</Link></li>
                 <li><Link href="/contact" className="hover:text-accent transition-colors">{t("footer_contact_inquiries")}</Link></li>

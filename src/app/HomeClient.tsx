@@ -11,7 +11,9 @@ import {
   HelpCircle,
   Info,
   UserCheck,
+  X,
 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Key Initiatives data — based on real MoE Innovation Cell programmes
 // Key Initiatives data — based on Innovation India Council
@@ -172,6 +174,24 @@ export default function Home() {
   const noticeRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
   const pausedRef = useRef(false);
+
+  const [showPromoModal, setShowPromoModal] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const dismissed = sessionStorage.getItem("ncie_promo_dismissed");
+      if (!dismissed) {
+        setShowPromoModal(true);
+      }
+    }
+  }, []);
+
+  const handleClosePromo = () => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("ncie_promo_dismissed", "true");
+    }
+    setShowPromoModal(false);
+  };
 
   // Tab mapping keys
   const tabLabels: Record<string, string> = {
@@ -440,13 +460,13 @@ export default function Home() {
                           {t(categoryTranslations[doc.category] || doc.category)}
                         </span>
                       </div>
-                      <Link href={doc.id === "NCIE-RECTT-2026-001" ? "/careers" : "/media"} className="text-xs font-bold text-zinc-850 hover:text-primary transition-colors block hover:underline leading-snug">
+                      <Link href={doc.id === "NCIE-RECTT-2026-001" ? "/careers" : `/notices?id=${doc.id.toLowerCase()}`} className="text-xs font-bold text-zinc-850 hover:text-primary transition-colors block hover:underline leading-snug">
                         {doc.title}
                       </Link>
                       <p className="text-[11px] text-zinc-500 leading-relaxed mt-1 line-clamp-2">{doc.description}</p>
                       <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-dashed border-zinc-200 text-[10px]">
                         <span className="text-zinc-400 font-medium">{doc.date}</span>
-                        <Link href={doc.id === "NCIE-RECTT-2026-001" ? "/careers" : "/media"} className="text-primary hover:text-accent-dark font-bold flex items-center gap-0.5">
+                        <Link href={doc.id === "NCIE-RECTT-2026-001" ? "/careers" : `/notices?id=${doc.id.toLowerCase()}`} className="text-primary hover:text-accent-dark font-bold flex items-center gap-0.5">
                           <span>{t("notice_view_circular")}</span>
                           <ArrowRight className="w-3 h-3" />
                         </Link>
@@ -462,13 +482,13 @@ export default function Home() {
                           {t(categoryTranslations[doc.category] || doc.category)}
                         </span>
                       </div>
-                      <Link href={doc.id === "NCIE-RECTT-2026-001" ? "/careers" : "/media"} className="text-xs font-bold text-zinc-850 hover:text-primary transition-colors block hover:underline leading-snug">
+                      <Link href={doc.id === "NCIE-RECTT-2026-001" ? "/careers" : `/notices?id=${doc.id.toLowerCase()}`} className="text-xs font-bold text-zinc-850 hover:text-primary transition-colors block hover:underline leading-snug">
                         {doc.title}
                       </Link>
                       <p className="text-[11px] text-zinc-500 leading-relaxed mt-1 line-clamp-2">{doc.description}</p>
                       <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-dashed border-zinc-200 text-[10px]">
                         <span className="text-zinc-400 font-medium">{doc.date}</span>
-                        <Link href={doc.id === "NCIE-RECTT-2026-001" ? "/careers" : "/media"} className="text-primary hover:text-accent-dark font-bold flex items-center gap-0.5">
+                        <Link href={doc.id === "NCIE-RECTT-2026-001" ? "/careers" : `/notices?id=${doc.id.toLowerCase()}`} className="text-primary hover:text-accent-dark font-bold flex items-center gap-0.5">
                           <span>{t("notice_view_circular")}</span>
                           <ArrowRight className="w-3 h-3" />
                         </Link>
@@ -480,10 +500,15 @@ export default function Home() {
                 </div>
 
                 {/* Notice Footer */}
-                <div className="bg-zinc-50 px-4 py-3 border-t border-zinc-200 text-center">
-                  <Link href="/media" className="text-xs text-primary font-bold hover:underline inline-flex items-center gap-1">
+                <div className="bg-zinc-50 px-4 py-3.5 border-t border-zinc-200 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-center">
+                  <Link href="/notices" className="text-xs text-[#0D6B4F] font-bold hover:underline inline-flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0">
                     <span>{t("notice_access_archive")}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+                  </Link>
+                  <div className="hidden sm:block w-px h-4 bg-zinc-300 shrink-0" />
+                  <Link href="/notices?tab=orders" className="text-xs text-[#A68034] font-bold hover:underline inline-flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0">
+                    <span>{t("notice_access_orders_archive")}</span>
+                    <ArrowRight className="w-3.5 h-3.5 shrink-0" />
                   </Link>
                 </div>
               </div>
@@ -740,6 +765,49 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* 8. Har Ghar Tiranga National Campaign Entry Modal */}
+      <AnimatePresence>
+        {showPromoModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.98 }}
+              transition={{ duration: 0.3 }}
+              className="relative w-full max-w-2xl bg-white border border-zinc-200 rounded-none overflow-hidden shadow-2xl flex flex-col p-6 font-sans gap-4"
+            >
+              {/* Close Button - Top Right Absolute */}
+              <button
+                onClick={handleClosePromo}
+                className="absolute top-8 right-8 z-10 p-1.5 rounded-none bg-black/40 hover:bg-black/60 text-white transition-all cursor-pointer shadow-md border-0"
+                title="Proceed to Website"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+
+              {/* Banner Link */}
+              <a
+                href="https://harghartiranga.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block overflow-hidden rounded-none shadow-sm bg-white"
+              >
+                <img
+                  src="/har-ghar-tiranga.png"
+                  alt="Har Ghar Tiranga Campaign - Dedicated to the Spirit of Vande Mataram"
+                  className="w-full h-auto object-cover"
+                />
+              </a>
+              
+              {/* Description Text */}
+              <p className="text-zinc-600 text-xs sm:text-sm leading-relaxed font-sans font-medium text-justify px-1 mt-1">
+                On the historic occasion of India's Independence Day, the Ministry of Culture invites all citizens to participate in the national flag celebration initiative. Bring the National Flag home and register to download your official certificate of participation.
+              </p>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
     </div>
   );

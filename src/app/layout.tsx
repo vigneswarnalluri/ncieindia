@@ -79,8 +79,7 @@ export const metadata: Metadata = {
   },
 };
 
-import TopProgressBar from "@/components/TopProgressBar";
-import Preloader from "@/components/Preloader";
+import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
 
 export default function RootLayout({
   children,
@@ -97,8 +96,7 @@ export default function RootLayout({
         className="min-h-full flex flex-col bg-white text-charcoal selection:bg-primary/10 selection:text-primary"
         suppressHydrationWarning
       >
-        <Preloader />
-        <TopProgressBar />
+        <ClientLayoutWrapper />
         <LanguageProvider>
           <Header />
           <main className="flex-1 flex flex-col">{children}</main>
