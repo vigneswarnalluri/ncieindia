@@ -504,21 +504,34 @@ export default function Home() {
                 </div>
 
                 {/* Notice Footer */}
-                <div className="bg-zinc-50 px-5 py-4 border-t border-zinc-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 text-center">
+                {/* Mobile View Notice Footer (Solid, stacked buttons) */}
+                <div className="flex sm:hidden flex-col bg-zinc-50 px-5 py-4 border-t border-zinc-200 gap-3 text-center">
                   <Link 
                     href="/notices" 
-                    className="group flex-1 sm:flex-initial bg-[#0D6B4F] hover:bg-[#074733] text-white font-bold text-[10px] sm:text-xs uppercase tracking-wider py-3 px-5 transition-all duration-200 cursor-pointer shadow-sm inline-flex items-center justify-center gap-1.5 whitespace-nowrap"
+                    className="group w-full bg-[#0D6B4F] hover:bg-[#074733] text-white font-bold text-[10px] uppercase tracking-wider py-3 px-5 transition-all duration-200 cursor-pointer shadow-sm inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-none"
                   >
                     <span>{t("notice_access_archive")}</span>
                     <ArrowRight className="w-3.5 h-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" />
                   </Link>
-                  
                   <Link 
                     href="/notices?tab=orders" 
-                    className="group flex-1 sm:flex-initial bg-[#C9A24B] hover:bg-[#A68034] text-zinc-950 hover:text-white font-bold text-[10px] sm:text-xs uppercase tracking-wider py-3 px-5 transition-all duration-200 cursor-pointer shadow-sm inline-flex items-center justify-center gap-1.5 whitespace-nowrap"
+                    className="group w-full bg-[#C9A24B] hover:bg-[#A68034] text-zinc-950 hover:text-white font-bold text-[10px] uppercase tracking-wider py-3 px-5 transition-all duration-200 cursor-pointer shadow-sm inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-none"
                   >
                     <span>{t("notice_access_orders_archive")}</span>
                     <ArrowRight className="w-3.5 h-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                </div>
+
+                {/* Desktop View Notice Footer (Original text links with vertical divider) */}
+                <div className="hidden sm:flex bg-zinc-50 px-4 py-3.5 border-t border-zinc-200 items-center justify-center gap-6 text-center">
+                  <Link href="/notices" className="text-xs text-[#0D6B4F] font-bold hover:underline inline-flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0">
+                    <span>{t("notice_access_archive")}</span>
+                    <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+                  </Link>
+                  <div className="w-px h-4 bg-zinc-300 shrink-0" />
+                  <Link href="/notices?tab=orders" className="text-xs text-[#A68034] font-bold hover:underline inline-flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0">
+                    <span>{t("notice_access_orders_archive")}</span>
+                    <ArrowRight className="w-3.5 h-3.5 shrink-0" />
                   </Link>
                 </div>
               </div>

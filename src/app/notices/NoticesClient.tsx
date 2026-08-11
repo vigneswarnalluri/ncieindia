@@ -914,7 +914,7 @@ export default function NoticesClient() {
                   <span>SHA-256 Validated: NCIE Central Registry Entry</span>
                 </div>
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
-                  {activeModalNotice.fileUrl && (
+                  {activeModalNotice.fileUrl && activeModalNotice.fileUrl.endsWith(".pdf") && (
                     <a
                       href={activeModalNotice.fileUrl}
                       target="_blank"
@@ -1072,7 +1072,7 @@ export default function NoticesClient() {
                   <span>SHA-256 Validated: NCIE Central Registry Entry</span>
                 </div>
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
-                  {activeModalOrder.fileUrl && (
+                  {activeModalOrder.fileUrl && activeModalOrder.fileUrl.endsWith(".pdf") && (
                     <a
                       href={activeModalOrder.fileUrl}
                       target="_blank"
