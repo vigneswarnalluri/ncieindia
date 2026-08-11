@@ -437,7 +437,11 @@ export default function OrdersClient() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center space-x-2 bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-colors shadow-lg"
                     >
-                      <span>Open Document PDF</span>
+                      <span>
+                        {activeModalOrder.fileUrl.endsWith(".pdf")
+                          ? "Open Document PDF"
+                          : "Open Web Portal"}
+                      </span>
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   )}

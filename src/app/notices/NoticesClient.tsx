@@ -914,14 +914,18 @@ export default function NoticesClient() {
                   <span>SHA-256 Validated: NCIE Central Registry Entry</span>
                 </div>
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
-                  {activeModalNotice.fileUrl && activeModalNotice.fileUrl.endsWith(".pdf") && (
+                  {activeModalNotice.fileUrl && (
                     <a
                       href={activeModalNotice.fileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center justify-center space-x-1.5 bg-[#0D6B4F] hover:bg-[#074733] text-white border border-transparent font-extrabold uppercase tracking-wider text-[10px] px-4 py-2.5 rounded-none shadow-sm hover:shadow-md transition-all cursor-pointer text-center"
                     >
-                      <span>Open Document PDF</span>
+                      <span>
+                        {activeModalNotice.fileUrl.endsWith(".pdf")
+                          ? "Open Document PDF"
+                          : "Open Web Portal"}
+                      </span>
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   )}
@@ -1072,14 +1076,18 @@ export default function NoticesClient() {
                   <span>SHA-256 Validated: NCIE Central Registry Entry</span>
                 </div>
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
-                  {activeModalOrder.fileUrl && activeModalOrder.fileUrl.endsWith(".pdf") && (
+                  {activeModalOrder.fileUrl && (
                     <a
                       href={activeModalOrder.fileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center justify-center space-x-1.5 bg-[#A68034] hover:bg-[#8A6726] text-white border border-transparent font-extrabold uppercase tracking-wider text-[10px] px-4 py-2.5 rounded-none shadow-sm hover:shadow-md transition-all cursor-pointer text-center"
                     >
-                      <span>Open Document PDF</span>
+                      <span>
+                        {activeModalOrder.fileUrl.endsWith(".pdf")
+                          ? "Open Document PDF"
+                          : "Open Web Portal"}
+                      </span>
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   )}
