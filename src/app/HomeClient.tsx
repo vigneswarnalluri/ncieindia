@@ -802,7 +802,7 @@ export default function Home() {
               
               {/* Description Text with content padding */}
               <p className="text-zinc-650 text-xs sm:text-sm leading-relaxed font-sans font-medium text-justify px-6 pb-6 pt-4">
-                On the historic occasion of India's Independence Day, the Ministry of Culture invites all citizens to participate in the national flag celebration initiative. Bring the National Flag home and register to download your official certificate of participation.
+                On the historic occasion of India&apos;s Independence Day, the Ministry of Culture invites all citizens to participate in the national flag celebration initiative. Bring the National Flag home and register to download your official certificate of participation.
               </p>
             </motion.div>
           </div>

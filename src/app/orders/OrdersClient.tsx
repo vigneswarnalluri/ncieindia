@@ -208,7 +208,7 @@ export default function OrdersClient() {
           <div className="bg-white/5 border border-white/10 rounded-2xl p-12 text-center">
             <AlertTriangle className="w-12 h-12 text-amber-500 mx-auto mb-3" />
             <h3 className="text-lg font-bold text-white">No official orders found matching criteria</h3>
-            <p className="text-xs text-zinc-400 mt-1">Try modifying your search query or selecting "All Directives".</p>
+            <p className="text-xs text-zinc-400 mt-1">Try modifying your search query or selecting &quot;All Directives&quot;.</p>
             <button
               onClick={() => {
                 setSearchQuery("");
