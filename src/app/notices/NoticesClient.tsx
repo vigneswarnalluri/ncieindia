@@ -162,19 +162,19 @@ export default function NoticesClient() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         
         {/* Navigation Tabs */}
-        <div className="flex border-b border-zinc-200 bg-white px-2 pt-2 border-t border-x rounded-t-xl">
+        <div className="flex border-b border-zinc-200 bg-white px-1 sm:px-2 pt-2 border-t border-x rounded-t-xl overflow-x-auto scrollbar-none">
           <button
             onClick={() => {
               setActiveMainTab("notices");
               setSearchQuery("");
             }}
-            className={`py-3.5 px-6 text-xs sm:text-sm font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center gap-2 ${
+            className={`py-3 px-3 sm:px-6 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center justify-center gap-1.5 flex-1 sm:flex-initial whitespace-nowrap ${
               activeMainTab === "notices"
                 ? "border-[#0D6B4F] text-[#0D6B4F]"
-                : "border-transparent text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50/50 rounded-t-lg"
+                : "border-transparent text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50/50 rounded-t-none"
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <Sparkles className="w-3.5 h-3.5 shrink-0" />
             <span>Public Notices & Circulars</span>
           </button>
           <button
@@ -182,13 +182,13 @@ export default function NoticesClient() {
               setActiveMainTab("orders");
               setSearchQuery("");
             }}
-            className={`py-3.5 px-6 text-xs sm:text-sm font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center gap-2 ${
+            className={`py-3 px-3 sm:px-6 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center justify-center gap-1.5 flex-1 sm:flex-initial whitespace-nowrap ${
               activeMainTab === "orders"
                 ? "border-[#A68034] text-[#A68034]"
-                : "border-transparent text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50/50 rounded-t-lg"
+                : "border-transparent text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50/50 rounded-t-none"
             }`}
           >
-            <FileText className="w-3.5 h-3.5" />
+            <FileText className="w-3.5 h-3.5 shrink-0" />
             <span>Official Orders & Directives</span>
           </button>
         </div>
@@ -259,7 +259,7 @@ export default function NoticesClient() {
                     <button
                       key={category}
                       onClick={() => setSelectedNoticeCategory(category)}
-                      className={`px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wide whitespace-nowrap transition-all cursor-pointer border ${
+                      className={`px-3 py-1 rounded-none text-[10px] font-bold uppercase tracking-wide whitespace-nowrap shrink-0 transition-all cursor-pointer border ${
                         isActive
                           ? "bg-[#0D6B4F] text-white border-transparent shadow-sm"
                           : "bg-zinc-50 text-zinc-600 border-zinc-200 hover:bg-zinc-100 hover:text-zinc-900"
@@ -275,7 +275,7 @@ export default function NoticesClient() {
                     <button
                       key={cat}
                       onClick={() => setSelectedOrderCategory(cat)}
-                      className={`px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wide whitespace-nowrap transition-all cursor-pointer border ${
+                      className={`px-3 py-1 rounded-none text-[10px] font-bold uppercase tracking-wide whitespace-nowrap shrink-0 transition-all cursor-pointer border ${
                         isActive
                           ? "bg-[#A68034] text-white border-transparent shadow-sm"
                           : "bg-zinc-50 text-zinc-600 border-zinc-200 hover:bg-zinc-100 hover:text-zinc-900"
@@ -327,118 +327,226 @@ export default function NoticesClient() {
                     setSearchQuery("");
                     setSelectedNoticeCategory("All");
                   }}
-                  className="mt-4 inline-flex items-center px-4 py-2 rounded bg-[#0D6B4F] hover:bg-[#074733] text-white text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
+                  className="mt-4 inline-flex items-center px-4 py-2 rounded-none bg-[#0D6B4F] hover:bg-[#074733] text-white text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
                 >
                   Clear Filters
                 </button>
               </div>
             ) : (
-              <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse min-w-[800px]">
-                    <thead>
-                      <tr className="bg-zinc-50 border-b border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-700">
-                        <th className="px-4 py-3 border-r border-zinc-200 w-16 text-center">S.No.</th>
-                        <th className="px-5 py-3 border-r border-zinc-200 w-44">Notice ID & Date</th>
-                        <th className="px-6 py-3 border-r border-zinc-200">Notice Description / Subject</th>
-                        <th className="px-5 py-3 border-r border-zinc-200 w-56">Issuing Office</th>
-                        <th className="px-4 py-3 w-36 text-center">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-zinc-200 text-xs">
-                      {filteredNotices.map((notice, idx) => (
-                        <tr key={notice.id} className="hover:bg-zinc-50/50 odd:bg-white even:bg-zinc-50/10 transition-colors">
-                          {/* S.No */}
-                          <td className="px-4 py-4 text-center font-mono font-bold text-zinc-400 border-r border-zinc-200">
-                            {String(idx + 1).padStart(2, "0")}
-                          </td>
-                          {/* Notice ID & Date */}
-                          <td className="px-5 py-4 border-r border-zinc-200 font-mono">
-                            <div className="font-bold text-zinc-900 text-[11px]">{notice.noticeNo}</div>
-                            <div className="text-[10px] text-zinc-500 mt-1 flex items-center gap-1.5">
-                              <Calendar className="w-3 h-3 text-zinc-400 shrink-0" />
-                              <span>{notice.date}</span>
-                            </div>
-                            {/* Tags/Badges */}
-                            <div className="flex items-center gap-1 mt-2">
-                              {notice.isNew && (
-                                <span className="px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 border border-amber-200 text-[8px] font-extrabold tracking-wider uppercase animate-pulse">
-                                  NEW
-                                </span>
-                              )}
-                              {notice.isImportant && (
-                                <span className="px-1.5 py-0.2 rounded bg-red-50 text-red-700 border border-red-200 text-[8px] font-extrabold tracking-wider uppercase">
-                                  IMPORTANT
-                                </span>
-                              )}
-                            </div>
-                          </td>
-                          {/* Title & Subject */}
-                          <td className="px-6 py-4 border-r border-zinc-200">
-                            <button
-                              onClick={() => setActiveModalNotice(notice)}
-                              className="font-bold text-zinc-900 text-left hover:text-[#0D6B4F] hover:underline leading-snug transition-colors cursor-pointer"
-                            >
-                              {notice.title}
-                            </button>
-                            <p className="text-[11px] text-zinc-500 mt-1 leading-relaxed line-clamp-2">
-                              {notice.description}
-                            </p>
-                            {/* Hashtag List */}
-                            {notice.tags && notice.tags.length > 0 && (
-                              <div className="flex flex-wrap gap-1 mt-2">
-                                {notice.tags.map((tag) => (
-                                  <span key={tag} className="text-[9px] font-mono text-zinc-400 font-semibold bg-zinc-50 border border-zinc-200/50 px-1 py-0.2 rounded">
-                                    #{tag}
-                                  </span>
-                                ))}
+              <>
+                {/* Desktop Table View */}
+                <div className="hidden md:block bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse min-w-[800px]">
+                      <thead>
+                        <tr className="bg-zinc-50 border-b border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-700">
+                          <th className="px-4 py-3 border-r border-zinc-200 w-16 text-center">S.No.</th>
+                          <th className="px-5 py-3 border-r border-zinc-200 w-44">Notice ID & Date</th>
+                          <th className="px-6 py-3 border-r border-zinc-200">Notice Description / Subject</th>
+                          <th className="px-5 py-3 border-r border-zinc-200 w-56">Issuing Office</th>
+                          <th className="px-4 py-3 w-36 text-center">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-zinc-200 text-xs">
+                        {filteredNotices.map((notice, idx) => (
+                          <tr key={notice.id} className="hover:bg-zinc-50/50 odd:bg-white even:bg-zinc-50/10 transition-colors">
+                            {/* S.No */}
+                            <td className="px-4 py-4 text-center font-mono font-bold text-zinc-400 border-r border-zinc-200">
+                              {String(idx + 1).padStart(2, "0")}
+                            </td>
+                            {/* Notice ID & Date */}
+                            <td className="px-5 py-4 border-r border-zinc-200 font-mono">
+                              <div className="font-bold text-zinc-900 text-[11px]">{notice.noticeNo}</div>
+                              <div className="text-[10px] text-zinc-500 mt-1 flex items-center gap-1.5">
+                                <Calendar className="w-3 h-3 text-zinc-400 shrink-0" />
+                                <span>{notice.date}</span>
                               </div>
-                            )}
-                          </td>
-                          {/* Issuing Authority / Category */}
-                          <td className="px-5 py-4 border-r border-zinc-200">
-                            <div className="font-bold text-zinc-800 flex items-center gap-1.5">
-                              <Building2 className="w-3.5 h-3.5 text-[#0D6B4F] shrink-0" />
-                              <span>{notice.issuingAuthority}</span>
-                            </div>
-                            <span className="inline-block mt-2 px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-150">
-                              {notice.category}
-                            </span>
-                          </td>
-                          {/* Actions */}
-                          <td className="px-4 py-4 text-center">
-                            <div className="flex items-center justify-center gap-1.5">
+                              {/* Tags/Badges */}
+                              <div className="flex items-center gap-1 mt-2">
+                                {notice.isNew && (
+                                  <span className="px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 border border-amber-200 text-[8px] font-extrabold tracking-wider uppercase animate-pulse">
+                                    NEW
+                                  </span>
+                                )}
+                                {notice.isImportant && (
+                                  <span className="px-1.5 py-0.2 rounded bg-red-50 text-red-700 border border-red-200 text-[8px] font-extrabold tracking-wider uppercase">
+                                    IMPORTANT
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                            {/* Title & Subject */}
+                            <td className="px-6 py-4 border-r border-zinc-200">
                               <button
                                 onClick={() => setActiveModalNotice(notice)}
-                                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded bg-[#0D6B4F] hover:bg-[#074733] text-white text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
-                                title="Open detail modal view"
+                                className="font-bold text-zinc-900 text-left hover:text-[#0D6B4F] hover:underline leading-snug transition-colors cursor-pointer"
                               >
-                                <Eye className="w-3.5 h-3.5" />
-                                <span>View</span>
+                                {notice.title}
                               </button>
-                              {notice.fileUrl && (
-                                <a
-                                  href={notice.fileUrl}
-                                  target={notice.fileUrl.endsWith(".pdf") ? "_blank" : "_self"}
-                                  rel="noopener noreferrer"
-                                  className="p-1.5 rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-600 hover:text-zinc-950 border border-zinc-200 transition-colors cursor-pointer"
-                                  title={notice.fileUrl.endsWith(".pdf") ? "View/Download PDF Attachment" : "Navigate to associated page"}
-                                >
-                                  {notice.fileUrl.endsWith(".pdf") ? (
-                                    <Download className="w-3.5 h-3.5 text-[#A68034]" />
-                                  ) : (
-                                    <ExternalLink className="w-3.5 h-3.5 text-[#0D6B4F]" />
-                                  )}
-                                </a>
+                              <p className="text-[11px] text-zinc-550 mt-1 leading-relaxed line-clamp-2">
+                                {notice.description}
+                              </p>
+                              {/* Hashtag List */}
+                              {notice.tags && notice.tags.length > 0 && (
+                                <div className="flex flex-wrap gap-1 mt-2">
+                                  {notice.tags.map((tag) => (
+                                    <span key={tag} className="text-[9px] font-mono text-zinc-400 font-semibold bg-zinc-50 border border-zinc-200/50 px-1 py-0.2 rounded">
+                                      #{tag}
+                                    </span>
+                                  ))}
+                                </div>
                               )}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                            </td>
+                            {/* Issuing Authority / Category */}
+                            <td className="px-5 py-4 border-r border-zinc-200">
+                              <div className="font-bold text-zinc-800 flex items-center gap-1.5">
+                                <Building2 className="w-3.5 h-3.5 text-[#0D6B4F] shrink-0" />
+                                <span>{notice.issuingAuthority}</span>
+                              </div>
+                              <span className="inline-block mt-2 px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-150">
+                                {notice.category}
+                              </span>
+                            </td>
+                            {/* Actions */}
+                            <td className="px-4 py-4 text-center">
+                              <div className="flex items-center justify-center gap-1.5">
+                                <button
+                                  onClick={() => setActiveModalNotice(notice)}
+                                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-none bg-[#0D6B4F] hover:bg-[#074733] text-white text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
+                                  title="Open detail modal view"
+                                >
+                                  <Eye className="w-3.5 h-3.5" />
+                                  <span>View</span>
+                                </button>
+                                {notice.fileUrl && (
+                                  <a
+                                    href={notice.fileUrl}
+                                    target={notice.fileUrl.endsWith(".pdf") ? "_blank" : "_self"}
+                                    rel="noopener noreferrer"
+                                    className="p-1.5 rounded-none bg-zinc-100 hover:bg-zinc-200 text-zinc-600 hover:text-zinc-950 border border-zinc-200 transition-colors cursor-pointer"
+                                    title={notice.fileUrl.endsWith(".pdf") ? "View/Download PDF Attachment" : "Navigate to associated page"}
+                                  >
+                                    {notice.fileUrl.endsWith(".pdf") ? (
+                                      <Download className="w-3.5 h-3.5 text-[#A68034]" />
+                                    ) : (
+                                      <ExternalLink className="w-3.5 h-3.5 text-[#0D6B4F]" />
+                                    )}
+                                  </a>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
+
+                {/* Mobile Card-Based View */}
+                <div className="space-y-4 md:hidden">
+                  {filteredNotices.map((notice, idx) => (
+                    <div 
+                      key={`mobile-notice-${notice.id}`} 
+                      className="bg-white border border-zinc-200 rounded-xl p-4 shadow-sm flex flex-col gap-3 relative hover:border-[#0D6B4F]/40 transition-colors"
+                    >
+                      {/* Header: S.No, ID and Category */}
+                      <div className="flex items-center justify-between border-b border-zinc-100 pb-2.5">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[10px] font-mono font-bold text-zinc-400 bg-zinc-100 px-1.5 py-0.5 rounded">
+                            #{String(idx + 1).padStart(2, "0")}
+                          </span>
+                          <span className="text-[10px] font-mono font-bold text-zinc-500">
+                            {notice.noticeNo}
+                          </span>
+                        </div>
+                        <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-150">
+                          {notice.category}
+                        </span>
+                      </div>
+
+                      {/* Date and Badges */}
+                      <div className="flex flex-wrap items-center gap-2 text-[10px] text-zinc-500 font-mono">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+                          <span>{notice.date}</span>
+                        </div>
+                        
+                        {/* Tags/Badges */}
+                        <div className="flex items-center gap-1">
+                          {notice.isNew && (
+                            <span className="px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 border border-amber-200 text-[8px] font-extrabold tracking-wider uppercase animate-pulse">
+                              NEW
+                            </span>
+                          )}
+                          {notice.isImportant && (
+                            <span className="px-1.5 py-0.2 rounded bg-red-50 text-red-700 border border-red-200 text-[8px] font-extrabold tracking-wider uppercase">
+                              IMPORTANT
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Title */}
+                      <div>
+                        <button
+                          onClick={() => setActiveModalNotice(notice)}
+                          className="font-bold text-zinc-900 text-left hover:text-[#0D6B4F] hover:underline leading-snug transition-colors text-sm cursor-pointer"
+                        >
+                          {notice.title}
+                        </button>
+                        <p className="text-[11px] text-zinc-550 leading-relaxed mt-1.5">
+                          {notice.description}
+                        </p>
+                      </div>
+
+                      {/* Tags List */}
+                      {notice.tags && notice.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {notice.tags.map((tag) => (
+                            <span key={tag} className="text-[9px] font-mono text-zinc-450 font-semibold bg-zinc-50 border border-zinc-200/50 px-1.5 py-0.2 rounded">
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Issuing Office & Actions Row */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-zinc-100 mt-1">
+                        <div className="font-bold text-zinc-800 flex items-center gap-1.5 text-[11px]">
+                          <Building2 className="w-3.5 h-3.5 text-[#0D6B4F] shrink-0" />
+                          <span>{notice.issuingAuthority}</span>
+                        </div>
+                        
+                        {/* Action buttons */}
+                        <div className="flex items-center gap-2 mt-1 sm:mt-0">
+                          <button
+                            onClick={() => setActiveModalNotice(notice)}
+                            className="flex-1 sm:flex-initial inline-flex items-center justify-center space-x-1.5 px-3 py-2 rounded-none bg-[#0D6B4F] hover:bg-[#074733] text-white text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>View Details</span>
+                          </button>
+                          {notice.fileUrl && (
+                            <a
+                              href={notice.fileUrl}
+                              target={notice.fileUrl.endsWith(".pdf") ? "_blank" : "_self"}
+                              rel="noopener noreferrer"
+                              className="p-2 rounded-none bg-zinc-100 hover:bg-zinc-200 text-zinc-605 hover:text-zinc-950 border border-zinc-200 transition-colors cursor-pointer flex items-center justify-center"
+                              title={notice.fileUrl.endsWith(".pdf") ? "View/Download PDF Attachment" : "Navigate to associated page"}
+                            >
+                              {notice.fileUrl.endsWith(".pdf") ? (
+                                <Download className="w-3.5 h-3.5 text-[#A68034]" />
+                              ) : (
+                                <ExternalLink className="w-3.5 h-3.5 text-[#0D6B4F]" />
+                              )}
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
             )
           ) : (
             /* Orders Directory Table */
@@ -453,112 +561,214 @@ export default function NoticesClient() {
                     setSelectedOrderCategory("All");
                     setSelectedOrderYear("All");
                   }}
-                  className="mt-4 inline-flex items-center px-4 py-2 rounded bg-[#A68034] hover:bg-[#8A6726] text-white text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
+                  className="mt-4 inline-flex items-center px-4 py-2 rounded-none bg-[#A68034] hover:bg-[#8A6726] text-white text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
                 >
                   Clear Filters
                 </button>
               </div>
             ) : (
-              <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse min-w-[800px]">
-                    <thead>
-                      <tr className="bg-zinc-50 border-b border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-700">
-                        <th className="px-4 py-3 border-r border-zinc-200 w-16 text-center">S.No.</th>
-                        <th className="px-5 py-3 border-r border-zinc-200 w-48">Order Reference & Date</th>
-                        <th className="px-6 py-3 border-r border-zinc-200">Subject / Directive Details</th>
-                        <th className="px-5 py-3 border-r border-zinc-200 w-56">Signing Department</th>
-                        <th className="px-4 py-3 w-36 text-center">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-zinc-200 text-xs">
-                      {filteredOrders.map((order, idx) => (
-                        <tr key={order.id} className="hover:bg-zinc-50/50 odd:bg-white even:bg-zinc-50/10 transition-colors">
-                          {/* S.No */}
-                          <td className="px-4 py-4 text-center font-mono font-bold text-zinc-400 border-r border-zinc-200">
-                            {String(idx + 1).padStart(2, "0")}
-                          </td>
-                          {/* Order Reference & Date */}
-                          <td className="px-5 py-4 border-r border-zinc-200 font-mono">
-                            <div className="font-bold text-zinc-900 text-[11px]">{order.orderNo}</div>
-                            <div className="text-[10px] text-zinc-500 mt-1 flex items-center gap-1.5">
-                              <Calendar className="w-3 h-3 text-zinc-400 shrink-0" />
-                              <span>{order.date}</span>
-                            </div>
-                            {/* Urgent Label */}
-                            {order.isUrgent && (
-                              <div className="mt-2">
-                                <span className="px-1.5 py-0.2 rounded bg-red-50 text-red-700 border border-red-200 text-[8px] font-extrabold tracking-wider uppercase animate-pulse">
-                                  URGENT
-                                </span>
+              <>
+                {/* Desktop Table View */}
+                <div className="hidden md:block bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse min-w-[800px]">
+                      <thead>
+                        <tr className="bg-zinc-50 border-b border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-700">
+                          <th className="px-4 py-3 border-r border-zinc-200 w-16 text-center">S.No.</th>
+                          <th className="px-5 py-3 border-r border-zinc-200 w-48">Order Reference & Date</th>
+                          <th className="px-6 py-3 border-r border-zinc-200">Subject / Directive Details</th>
+                          <th className="px-5 py-3 border-r border-zinc-200 w-56">Signing Department</th>
+                          <th className="px-4 py-3 w-36 text-center">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-zinc-200 text-xs">
+                        {filteredOrders.map((order, idx) => (
+                          <tr key={order.id} className="hover:bg-zinc-50/50 odd:bg-white even:bg-zinc-50/10 transition-colors">
+                            {/* S.No */}
+                            <td className="px-4 py-4 text-center font-mono font-bold text-zinc-400 border-r border-zinc-200">
+                              {String(idx + 1).padStart(2, "0")}
+                            </td>
+                            {/* Order Reference & Date */}
+                            <td className="px-5 py-4 border-r border-zinc-200 font-mono">
+                              <div className="font-bold text-zinc-900 text-[11px]">{order.orderNo}</div>
+                              <div className="text-[10px] text-zinc-500 mt-1 flex items-center gap-1.5">
+                                <Calendar className="w-3 h-3 text-zinc-400 shrink-0" />
+                                <span>{order.date}</span>
                               </div>
-                            )}
-                          </td>
-                          {/* Title & Subject */}
-                          <td className="px-6 py-4 border-r border-zinc-200">
-                            <button
-                              onClick={() => setActiveModalOrder(order)}
-                              className="font-bold text-zinc-900 text-left hover:text-[#A68034] hover:underline leading-snug transition-colors cursor-pointer"
-                            >
-                              {order.title}
-                            </button>
-                            <p className="text-[11px] text-zinc-500 mt-1 leading-relaxed line-clamp-2">
-                              {order.description}
-                            </p>
-                            {/* Tag Badges */}
-                            {order.tags && order.tags.length > 0 && (
-                              <div className="flex flex-wrap gap-1 mt-2">
-                                {order.tags.map((tag) => (
-                                  <span key={tag} className="text-[9px] font-mono text-zinc-400 font-semibold bg-zinc-50 border border-zinc-200/50 px-1 py-0.2 rounded">
-                                    #{tag}
+                              {/* Urgent Label */}
+                              {order.isUrgent && (
+                                <div className="mt-2">
+                                  <span className="px-1.5 py-0.2 rounded bg-red-50 text-red-700 border border-red-200 text-[8px] font-extrabold tracking-wider uppercase animate-pulse">
+                                    URGENT
                                   </span>
-                                ))}
-                              </div>
-                            )}
-                          </td>
-                          {/* Signing Authority / Category */}
-                          <td className="px-5 py-4 border-r border-zinc-200">
-                            <div className="font-bold text-zinc-800 flex items-center gap-1.5">
-                              <Building2 className="w-3.5 h-3.5 text-[#A68034] shrink-0" />
-                              <span>{order.department}</span>
-                            </div>
-                            <div className="text-[10px] text-zinc-500 mt-0.5 font-medium italic">
-                              Signed: {order.signedBy}
-                            </div>
-                            <span className="inline-block mt-2.5 px-2 py-0.5 rounded text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-150">
-                              {order.category}
-                            </span>
-                          </td>
-                          {/* Actions */}
-                          <td className="px-4 py-4 text-center">
-                            <div className="flex items-center justify-center gap-1.5">
+                                </div>
+                              )}
+                            </td>
+                            {/* Title & Subject */}
+                            <td className="px-6 py-4 border-r border-zinc-200">
                               <button
                                 onClick={() => setActiveModalOrder(order)}
-                                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded bg-[#A68034] hover:bg-[#8A6726] text-white text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
-                                title="Open detail modal view"
+                                className="font-bold text-zinc-900 text-left hover:text-[#A68034] hover:underline leading-snug transition-colors cursor-pointer"
                               >
-                                <Eye className="w-3.5 h-3.5" />
-                                <span>View</span>
+                                {order.title}
                               </button>
-                              {order.fileUrl && (
-                                <a
-                                  href={order.fileUrl}
-                                  target={order.fileUrl.endsWith(".pdf") ? "_blank" : "_self"}
-                                  rel="noopener noreferrer"
-                                  className="p-1.5 rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-600 hover:text-zinc-950 border border-zinc-200 transition-colors cursor-pointer"
-                                  title="Download associated PDF Gazette document"
-                                >
-                                  <Download className="w-3.5 h-3.5 text-[#0D6B4F]" />
-                                </a>
+                              <p className="text-[11px] text-zinc-550 mt-1 leading-relaxed line-clamp-2">
+                                {order.description}
+                              </p>
+                              {/* Tag Badges */}
+                              {order.tags && order.tags.length > 0 && (
+                                <div className="flex flex-wrap gap-1 mt-2">
+                                  {order.tags.map((tag) => (
+                                    <span key={tag} className="text-[9px] font-mono text-zinc-400 font-semibold bg-zinc-50 border border-zinc-200/50 px-1 py-0.2 rounded">
+                                      #{tag}
+                                    </span>
+                                  ))}
+                                </div>
                               )}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                            </td>
+                            {/* Signing Authority / Category */}
+                            <td className="px-5 py-4 border-r border-zinc-200">
+                              <div className="font-bold text-zinc-800 flex items-center gap-1.5">
+                                <Building2 className="w-3.5 h-3.5 text-[#A68034] shrink-0" />
+                                <span>{order.department}</span>
+                              </div>
+                              <div className="text-[10px] text-zinc-500 mt-0.5 font-medium italic">
+                                Signed: {order.signedBy}
+                              </div>
+                              <span className="inline-block mt-2.5 px-2 py-0.5 rounded text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-150">
+                                {order.category}
+                              </span>
+                            </td>
+                            {/* Actions */}
+                            <td className="px-4 py-4 text-center">
+                              <div className="flex items-center justify-center gap-1.5">
+                                <button
+                                  onClick={() => setActiveModalOrder(order)}
+                                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-none bg-[#A68034] hover:bg-[#8A6726] text-white text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
+                                  title="Open detail modal view"
+                                >
+                                  <Eye className="w-3.5 h-3.5" />
+                                  <span>View</span>
+                                </button>
+                                {order.fileUrl && (
+                                  <a
+                                    href={order.fileUrl}
+                                    target={order.fileUrl.endsWith(".pdf") ? "_blank" : "_self"}
+                                    rel="noopener noreferrer"
+                                    className="p-1.5 rounded-none bg-zinc-100 hover:bg-zinc-200 text-zinc-600 hover:text-zinc-950 border border-zinc-200 transition-colors cursor-pointer"
+                                    title="Download associated PDF Gazette document"
+                                  >
+                                    <Download className="w-3.5 h-3.5 text-[#0D6B4F]" />
+                                  </a>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
+
+                {/* Mobile Card-Based View */}
+                <div className="space-y-4 md:hidden">
+                  {filteredOrders.map((order, idx) => (
+                    <div 
+                      key={`mobile-order-${order.id}`} 
+                      className="bg-white border border-zinc-200 rounded-xl p-4 shadow-sm flex flex-col gap-3 relative hover:border-[#A68034]/40 transition-colors"
+                    >
+                      {/* Header: S.No, ID and Category */}
+                      <div className="flex items-center justify-between border-b border-zinc-100 pb-2.5">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[10px] font-mono font-bold text-zinc-400 bg-zinc-100 px-1.5 py-0.5 rounded">
+                            #{String(idx + 1).padStart(2, "0")}
+                          </span>
+                          <span className="text-[10px] font-mono font-bold text-zinc-500">
+                            {order.orderNo}
+                          </span>
+                        </div>
+                        <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-150">
+                          {order.category}
+                        </span>
+                      </div>
+
+                      {/* Date and Badges */}
+                      <div className="flex flex-wrap items-center gap-2 text-[10px] text-zinc-500 font-mono">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+                          <span>{order.date}</span>
+                        </div>
+                        
+                        {/* Urgent Badge */}
+                        {order.isUrgent && (
+                          <span className="px-1.5 py-0.2 rounded bg-red-50 text-red-700 border border-red-200 text-[8px] font-extrabold tracking-wider uppercase animate-pulse">
+                            URGENT
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Title */}
+                      <div>
+                        <button
+                          onClick={() => setActiveModalOrder(order)}
+                          className="font-bold text-zinc-900 text-left hover:text-[#A68034] hover:underline leading-snug transition-colors text-sm cursor-pointer"
+                        >
+                          {order.title}
+                        </button>
+                        <p className="text-[11px] text-zinc-550 leading-relaxed mt-1.5">
+                          {order.description}
+                        </p>
+                      </div>
+
+                      {/* Tags List */}
+                      {order.tags && order.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {order.tags.map((tag) => (
+                            <span key={tag} className="text-[9px] font-mono text-zinc-455 font-semibold bg-zinc-50 border border-zinc-200/50 px-1.5 py-0.2 rounded">
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Issuing Office & Actions Row */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-zinc-100 mt-1">
+                        <div className="text-[11px]">
+                          <div className="font-bold text-zinc-800 flex items-center gap-1.5">
+                            <Building2 className="w-3.5 h-3.5 text-[#A68034] shrink-0" />
+                            <span>{order.department}</span>
+                          </div>
+                          <div className="text-[10px] text-zinc-500 mt-0.5 font-medium italic pl-5">
+                            Signed: {order.signedBy}
+                          </div>
+                        </div>
+                        
+                        {/* Action buttons */}
+                        <div className="flex items-center gap-2 mt-1 sm:mt-0">
+                          <button
+                            onClick={() => setActiveModalOrder(order)}
+                            className="flex-1 sm:flex-initial inline-flex items-center justify-center space-x-1.5 px-3 py-2 rounded-none bg-[#A68034] hover:bg-[#8A6726] text-white text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>View Details</span>
+                          </button>
+                          {order.fileUrl && (
+                            <a
+                              href={order.fileUrl}
+                              target={order.fileUrl.endsWith(".pdf") ? "_blank" : "_self"}
+                              rel="noopener noreferrer"
+                              className="p-2 rounded-none bg-zinc-100 hover:bg-zinc-200 text-zinc-605 hover:text-zinc-950 border border-zinc-200 transition-colors cursor-pointer flex items-center justify-center"
+                              title="Download associated PDF Gazette document"
+                            >
+                              <Download className="w-3.5 h-3.5 text-[#0D6B4F]" />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
             )
           )}
         </div>
@@ -576,26 +786,20 @@ export default function NoticesClient() {
               className="relative w-full max-w-5xl bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-2xl text-zinc-800 max-h-[92vh] flex flex-col"
             >
               {/* Modal Header */}
-              <div className="px-6 py-4 bg-white flex items-center justify-between gap-4 border-b border-zinc-200">
-                <div className="flex items-center gap-3">
-                  <img src="/logo-new.png" className="h-9 sm:h-11 object-contain shrink-0" alt="NCIE Emblem" />
-                  <div className="w-px h-8 bg-zinc-200" />
-                  <img src="/gov-emblem.png" className="h-9 sm:h-11 object-contain shrink-0 opacity-80" alt="India Emblem" />
-                  <div className="ml-1 sm:ml-2">
-                    <div className="text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-[#0D6B4F] leading-none">
+              <div className="px-4 sm:px-6 py-3 sm:py-4 bg-white flex items-center gap-3 border-b border-zinc-200">
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                  <img src="/logo-new.png" className="h-8 sm:h-11 object-contain shrink-0" alt="NCIE Emblem" />
+                  <div className="hidden sm:block w-px h-7 bg-zinc-200 shrink-0" />
+                  <img src="/gov-emblem.png" className="hidden sm:block h-8 sm:h-11 object-contain shrink-0 opacity-80" alt="India Emblem" />
+                  <div className="ml-1 sm:ml-2 flex-1 min-w-0">
+                    <div className="text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-[#0D6B4F] leading-none whitespace-normal">
                       National Council for Innovation & Entrepreneurship
                     </div>
-                    <div className="text-[8px] text-zinc-400 font-bold uppercase tracking-widest mt-1">
+                    <div className="text-[8px] text-zinc-400 font-bold uppercase tracking-widest mt-1 whitespace-normal">
                       Official Gazette Repository
                     </div>
                   </div>
                 </div>
-                <button
-                  onClick={() => setActiveModalNotice(null)}
-                  className="p-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-500 hover:text-zinc-900 transition-all cursor-pointer shadow-sm border border-zinc-200 shrink-0"
-                >
-                  <X className="w-4 h-4" />
-                </button>
               </div>
 
               {/* Theme Anchor Stripe */}
@@ -692,30 +896,30 @@ export default function NoticesClient() {
               </div>
 
               {/* Modal Footer */}
-              <div className="p-4 bg-zinc-50 border-t border-zinc-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
-                <div className="flex items-center gap-2 text-zinc-500 text-[10px] font-mono select-none">
+              <div className="p-4 bg-zinc-50 border-t border-zinc-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 shrink-0">
+                <div className="flex items-center justify-center sm:justify-start gap-2 text-zinc-550 text-[10px] font-mono select-none">
                   <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>SHA-256 Validated: NCIE Central Registry Entry</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setActiveModalNotice(null)}
-                    className="px-4 py-2 rounded-xl text-xs font-bold text-zinc-650 hover:text-zinc-900 hover:bg-zinc-200/50 border border-transparent hover:border-zinc-200 transition-all cursor-pointer"
-                  >
-                    Close
-                  </button>
-
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
                   {activeModalNotice.fileUrl && (
                     <a
                       href={activeModalNotice.fileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center space-x-2 bg-[#0D6B4F] hover:bg-[#074733] text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-md cursor-pointer border border-transparent hover:shadow-lg"
+                      className="inline-flex items-center justify-center space-x-1.5 bg-[#0D6B4F] hover:bg-[#074733] text-white border border-transparent font-extrabold uppercase tracking-wider text-[10px] px-4 py-2.5 rounded-none shadow-sm hover:shadow-md transition-all cursor-pointer text-center"
                     >
                       <span>Open Document PDF</span>
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   )}
+
+                  <button
+                    onClick={() => setActiveModalNotice(null)}
+                    className="px-4 py-2.5 bg-white border border-zinc-250 hover:bg-zinc-50 text-zinc-700 font-extrabold uppercase tracking-wider text-[10px] rounded-none shadow-sm hover:shadow-md transition-all cursor-pointer text-center"
+                  >
+                    Close
+                  </button>
                 </div>
               </div>
             </motion.div>
@@ -735,26 +939,20 @@ export default function NoticesClient() {
               className="relative w-full max-w-5xl bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-2xl text-zinc-855 max-h-[92vh] flex flex-col"
             >
               {/* Modal Header */}
-              <div className="px-6 py-4 bg-white flex items-center justify-between gap-4 border-b border-zinc-200">
-                <div className="flex items-center gap-3">
-                  <img src="/logo-new.png" className="h-9 sm:h-11 object-contain shrink-0" alt="NCIE Emblem" />
-                  <div className="w-px h-8 bg-zinc-200" />
-                  <img src="/gov-emblem.png" className="h-9 sm:h-11 object-contain shrink-0 opacity-80" alt="India Emblem" />
-                  <div className="ml-1 sm:ml-2">
-                    <div className="text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-[#A68034] leading-none">
+              <div className="px-4 sm:px-6 py-3 sm:py-4 bg-white flex items-center gap-3 border-b border-zinc-200">
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                  <img src="/logo-new.png" className="h-8 sm:h-11 object-contain shrink-0" alt="NCIE Emblem" />
+                  <div className="hidden sm:block w-px h-7 bg-zinc-200 shrink-0" />
+                  <img src="/gov-emblem.png" className="hidden sm:block h-8 sm:h-11 object-contain shrink-0 opacity-80" alt="India Emblem" />
+                  <div className="ml-1 sm:ml-2 flex-1 min-w-0">
+                    <div className="text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-[#A68034] leading-none whitespace-normal">
                       National Council for Innovation & Entrepreneurship
                     </div>
-                    <div className="text-[8px] text-zinc-400 font-bold uppercase tracking-widest mt-1">
+                    <div className="text-[8px] text-zinc-400 font-bold uppercase tracking-widest mt-1 whitespace-normal">
                       Official Gazette Repository
                     </div>
                   </div>
                 </div>
-                <button
-                  onClick={() => setActiveModalOrder(null)}
-                  className="p-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-500 hover:text-zinc-900 transition-all cursor-pointer shadow-sm border border-zinc-200 shrink-0"
-                >
-                  <X className="w-4 h-4" />
-                </button>
               </div>
 
               {/* Theme Anchor Stripe */}
@@ -856,30 +1054,30 @@ export default function NoticesClient() {
               </div>
 
               {/* Modal Footer */}
-              <div className="p-4 bg-zinc-50 border-t border-zinc-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
-                <div className="flex items-center gap-2 text-zinc-550 text-[10px] font-mono select-none">
+              <div className="p-4 bg-zinc-50 border-t border-zinc-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 shrink-0">
+                <div className="flex items-center justify-center sm:justify-start gap-2 text-zinc-555 text-[10px] font-mono select-none">
                   <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0" />
                   <span>SHA-256 Validated: NCIE Central Registry Entry</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setActiveModalOrder(null)}
-                    className="px-4 py-2 rounded-xl text-xs font-bold text-zinc-650 hover:text-zinc-900 hover:bg-zinc-200/50 border border-transparent hover:border-zinc-200 transition-all cursor-pointer"
-                  >
-                    Close
-                  </button>
-
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
                   {activeModalOrder.fileUrl && (
                     <a
                       href={activeModalOrder.fileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center space-x-2 bg-[#A68034] hover:bg-[#8A6726] text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-md cursor-pointer border border-transparent hover:shadow-lg"
+                      className="inline-flex items-center justify-center space-x-1.5 bg-[#A68034] hover:bg-[#8A6726] text-white border border-transparent font-extrabold uppercase tracking-wider text-[10px] px-4 py-2.5 rounded-none shadow-sm hover:shadow-md transition-all cursor-pointer text-center"
                     >
                       <span>Open Document PDF</span>
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   )}
+
+                  <button
+                    onClick={() => setActiveModalOrder(null)}
+                    className="px-4 py-2.5 bg-white border border-zinc-250 hover:bg-zinc-50 text-zinc-700 font-extrabold uppercase tracking-wider text-[10px] rounded-none shadow-sm hover:shadow-md transition-all cursor-pointer text-center"
+                  >
+                    Close
+                  </button>
                 </div>
               </div>
             </motion.div>

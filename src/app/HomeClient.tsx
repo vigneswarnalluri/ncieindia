@@ -178,18 +178,10 @@ export default function Home() {
   const [showPromoModal, setShowPromoModal] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const dismissed = sessionStorage.getItem("ncie_promo_dismissed");
-      if (!dismissed) {
-        setShowPromoModal(true);
-      }
-    }
+    setShowPromoModal(true);
   }, []);
 
   const handleClosePromo = () => {
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("ncie_promo_dismissed", "true");
-    }
     setShowPromoModal(false);
   };
 
@@ -500,15 +492,21 @@ export default function Home() {
                 </div>
 
                 {/* Notice Footer */}
-                <div className="bg-zinc-50 px-4 py-3.5 border-t border-zinc-200 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-center">
-                  <Link href="/notices" className="text-xs text-[#0D6B4F] font-bold hover:underline inline-flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0">
+                <div className="bg-zinc-50 px-5 py-4 border-t border-zinc-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 text-center">
+                  <Link 
+                    href="/notices" 
+                    className="group flex-1 sm:flex-initial bg-[#0D6B4F] hover:bg-[#074733] text-white font-bold text-[10px] sm:text-xs uppercase tracking-wider py-3 px-5 transition-all duration-200 cursor-pointer shadow-sm inline-flex items-center justify-center gap-1.5 whitespace-nowrap"
+                  >
                     <span>{t("notice_access_archive")}</span>
-                    <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+                    <ArrowRight className="w-3.5 h-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" />
                   </Link>
-                  <div className="hidden sm:block w-px h-4 bg-zinc-300 shrink-0" />
-                  <Link href="/notices?tab=orders" className="text-xs text-[#A68034] font-bold hover:underline inline-flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0">
+                  
+                  <Link 
+                    href="/notices?tab=orders" 
+                    className="group flex-1 sm:flex-initial bg-[#C9A24B] hover:bg-[#A68034] text-zinc-950 hover:text-white font-bold text-[10px] sm:text-xs uppercase tracking-wider py-3 px-5 transition-all duration-200 cursor-pointer shadow-sm inline-flex items-center justify-center gap-1.5 whitespace-nowrap"
+                  >
                     <span>{t("notice_access_orders_archive")}</span>
-                    <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+                    <ArrowRight className="w-3.5 h-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" />
                   </Link>
                 </div>
               </div>
@@ -770,41 +768,44 @@ export default function Home() {
       <AnimatePresence>
         {showPromoModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-md">
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.98 }}
-              transition={{ duration: 0.3 }}
-              className="relative w-full max-w-2xl bg-white border border-zinc-200 rounded-none overflow-hidden shadow-2xl flex flex-col font-sans"
-            >
-              {/* Close Button - Top Right Absolute Overlaid on Banner */}
+            <div className="relative w-full max-w-2xl">
+              {/* Enhanced Close Button - Floats above the modal card with clear 'CLOSE' label */}
               <button
                 onClick={handleClosePromo}
-                className="absolute top-4 right-4 z-10 p-1.5 rounded-none bg-black/40 hover:bg-black/60 text-white transition-all cursor-pointer shadow-md border-0"
+                className="absolute bottom-full right-0 z-50 px-2.5 py-1.5 bg-black/60 hover:bg-black/85 text-white text-[9px] font-black uppercase tracking-widest border border-zinc-700/80 border-b-0 transition-all cursor-pointer shadow-md rounded-none flex items-center gap-1.5"
                 title="Proceed to Website"
               >
-                <X className="w-3.5 h-3.5" />
+                <span>Close</span>
+                <X className="w-3 h-3" />
               </button>
 
-              {/* Banner Link (Flush to borders) */}
-              <a
-                href="https://harghartiranga.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full overflow-hidden"
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20, scale: 0.98 }}
+                transition={{ duration: 0.3 }}
+                className="w-full bg-white border border-zinc-200 rounded-none overflow-hidden shadow-2xl flex flex-col font-sans"
               >
-                <img
-                  src="/har-ghar-tiranga.png"
-                  alt="Har Ghar Tiranga Campaign - Dedicated to the Spirit of Vande Mataram"
-                  className="w-full h-auto object-cover"
-                />
-              </a>
-              
-              {/* Description Text with content padding */}
-              <p className="text-zinc-650 text-xs sm:text-sm leading-relaxed font-sans font-medium text-justify px-6 pb-6 pt-4">
-                On the historic occasion of India&apos;s Independence Day, the Ministry of Culture invites all citizens to participate in the national flag celebration initiative. Bring the National Flag home and register to download your official certificate of participation.
-              </p>
-            </motion.div>
+                {/* Banner Link (Flush to borders) */}
+                <a
+                  href="https://harghartiranga.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full overflow-hidden"
+                >
+                  <img
+                    src="/har-ghar-tiranga.png"
+                    alt="Har Ghar Tiranga Campaign - Dedicated to the Spirit of Vande Mataram"
+                    className="w-full h-auto object-cover"
+                  />
+                </a>
+                
+                {/* Description Text with content padding */}
+                <p className="text-zinc-650 text-xs sm:text-sm leading-relaxed font-sans font-medium text-justify px-6 pb-6 pt-4">
+                  On the historic occasion of India&apos;s Independence Day, the Ministry of Culture invites all citizens to participate in the national flag celebration initiative. Bring the National Flag home and register to download your official certificate of participation.
+                </p>
+              </motion.div>
+            </div>
           </div>
         )}
       </AnimatePresence>
