@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, Award, BookOpen, Building2, ChevronRight } from "lucide-react";
+import { Mail, BookOpen, Building2, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function DirectorClient() {
@@ -85,20 +85,8 @@ export default function DirectorClient() {
                     <span className="font-bold text-zinc-900 block">{language === "hi" ? "शैक्षणिक पद" : "Academic Role"}</span>
                     <span className="leading-relaxed">
                       {language === "hi" 
-                        ? "डीन, नवाचार और उद्यमिता, के.एस.आर.एम. कॉलेज ऑफ इंजीनियरिंग (स्वायत्त)" 
-                        : "Dean, Innovation & Entrepreneurship, K.S.R.M. College of Engineering (Autonomous)"}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <Award className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-bold text-zinc-900 block">{language === "hi" ? "संस्थान एवं स्थान" : "Institution & Location"}</span>
-                    <span className="leading-relaxed">
-                      {language === "hi" 
-                        ? "कड़पा, आंध्र प्रदेश, भारत" 
-                        : "Kadapa, Andhra Pradesh, India"}
+                        ? "डीन, नवाचार और उद्यमिता" 
+                        : "Dean, Innovation & Entrepreneurship"}
                     </span>
                   </div>
                 </div>
@@ -168,7 +156,7 @@ export default function DirectorClient() {
                     <p className="font-bold text-primary text-sm">डॉ. एलिया थगारम</p>
                     <p className="text-[11px] text-zinc-500 font-medium uppercase tracking-wider leading-relaxed">
                       कार्यकारी निदेशक, एनसीआईई भारत<br />
-                      डीन, नवाचार और उद्यमिता, के.एस.आर.एम. कॉलेज ऑफ इंजीनियरिंग (स्वायत्त)
+                      डीन, नवाचार और उद्यमिता
                     </p>
                   </div>
                 </>
@@ -198,7 +186,7 @@ export default function DirectorClient() {
                     <p className="font-bold text-primary text-sm">Dr. Elia Thagaram</p>
                     <p className="text-[11px] text-zinc-500 font-medium uppercase tracking-wider leading-relaxed">
                       Executive Director, NCIE India<br />
-                      Dean, Innovation & Entrepreneurship, K.S.R.M. College of Engineering (Autonomous)
+                      Dean, Innovation & Entrepreneurship
                     </p>
                   </div>
                 </>

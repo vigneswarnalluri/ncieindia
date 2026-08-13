@@ -18,6 +18,23 @@ export interface OrderItem {
 
 export const ORDERS_DATA: OrderItem[] = [
   {
+    id: "ord-ncie-2026-1059",
+    orderNo: "NCIE/EC/APPT/2026/AP-1059",
+    date: "August 10, 2026",
+    effectiveDate: "August 10, 2026",
+    title: "Appointment of Dr. Elia Thagaram as Executive Director – NCIE India",
+    description: "Official appointment order issued by the Competent Authority appointing Dr. Elia Thagaram, Dean of Innovation & Entrepreneurship, as the Executive Director of the National Council for Innovation & Entrepreneurship (NCIE), India.",
+    category: "Executive Orders",
+    signedBy: "By Order of the Competent Authority",
+    department: "Executive Council",
+    fileUrl: "/_E-OFFICE_NIC__105478.pdf",
+    fileSize: "35 KB",
+    pages: 1,
+    isUrgent: false,
+    status: "Active",
+    tags: ["Appointment", "Executive Director", "NCIE Leadership"],
+  },
+  {
     id: "ord-ncie-2026-124",
     orderNo: "Lt.No. 124/08/26/NCIE",
     date: "August 10, 2026",
