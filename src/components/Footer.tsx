@@ -52,7 +52,7 @@ export default function Footer() {
       {/* Background Subtle Patterns & Glowing Orbs */}
       <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none" />
       <div className="absolute inset-0 opacity-[0.015] bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-[size:10px_10px] pointer-events-none" />
-      
+
       {/* Premium Blur Orbs */}
       <div className="absolute -top-[30%] -left-[10%] w-[550px] h-[550px] rounded-full bg-emerald-400/15 blur-[120px] pointer-events-none" />
       <div className="absolute -bottom-[20%] right-[5%] w-[450px] h-[450px] rounded-full bg-accent/10 blur-[130px] pointer-events-none" />
@@ -60,7 +60,7 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-          
+
           {/* Brand Column */}
           <div className="lg:col-span-2 flex flex-col space-y-4">
             <Link href="/" className="block focus:outline-none w-fit">
@@ -73,7 +73,7 @@ export default function Footer() {
                 unoptimized
               />
             </Link>
-            
+
             <p className="text-sm text-zinc-300 max-w-sm leading-relaxed">
               {t("footer_desc")}
             </p>

@@ -80,12 +80,34 @@ export const metadata: Metadata = {
 };
 
 import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
+import MaintenanceScreen from "@/components/MaintenanceScreen";
+
+// Site-wide maintenance lock flag (set to false to restore normal site)
+const IS_MAINTENANCE_MODE = process.env.NEXT_PUBLIC_MAINTENANCE_MODE !== "false";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  if (IS_MAINTENANCE_MODE) {
+    return (
+      <html
+        lang="en"
+        className={`${poppins.variable} h-full antialiased`}
+        suppressHydrationWarning
+      >
+        <body 
+          className="min-h-full flex flex-col bg-[#F4F6F9] text-[#1E293B] selection:bg-[#93C5FD] selection:text-[#0F172A]"
+          suppressHydrationWarning
+        >
+          <MaintenanceScreen />
+          <Analytics />
+        </body>
+      </html>
+    );
+  }
+
   return (
     <html
       lang="en"
