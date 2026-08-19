@@ -137,44 +137,91 @@ export default function Header() {
     <>
       <header className="sticky top-0 md:top-[-64px] z-50 w-full flex flex-col" onMouseLeave={handleHeaderMouseLeave}>
         {/* Top Black Bar (Gov/Institutional style) */}
-        <div className="bg-[#1A1A1A] text-white border-b border-white/5 text-xs font-sans relative z-40 hidden md:block h-16 py-3">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-full">
-            {/* Left: Socials */}
-            <div className="flex items-center space-x-6">
-              {/* Social Icons — black circles, white icons matching provided style */}
+        <div className="bg-[#111827] text-white border-b border-white/10 text-xs font-sans relative z-40 hidden md:block py-2.5">
+          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            {/* Left: Government of India & Ministry Branding + Socials */}
+            <div className="flex items-center gap-4 lg:gap-6">
+              {/* Government of India & Ministry Emblem Lockup */}
+              <div className="flex items-center gap-3">
+                <img
+                  src="/gov-emblem.png"
+                  alt="Government of India"
+                  className="h-8 w-auto object-contain shrink-0"
+                />
+                <div className="h-5 w-px bg-white/20" />
+                <img
+                  src="/ministry-commerce.png"
+                  alt="Ministry of Commerce and Industry"
+                  className="h-[18px] w-auto object-contain shrink-0 opacity-90"
+                />
+              </div>
+
+              <div className="h-5 w-px bg-white/20 hidden xl:block" />
+
+              {/* Social Icons — sleek circular badges */}
               <div className="flex items-center gap-1.5">
-                <a href="https://www.linkedin.com/company/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
-                  className="w-7 h-7 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center transition-colors shrink-0">
-                  <FaLinkedinIn className="w-3.5 h-3.5" />
+                <a
+                  href="https://www.linkedin.com/company/ncieindia"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                  className="w-6.5 h-6.5 rounded-full bg-zinc-800 hover:bg-[#0077b5] text-white flex items-center justify-center transition-colors shrink-0"
+                >
+                  <FaLinkedinIn className="w-3 h-3" />
                 </a>
-                <a href="https://www.facebook.com/ncieindiaofficial" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
-                  className="w-7 h-7 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center transition-colors shrink-0">
-                  <FaFacebook className="w-3.5 h-3.5" />
+                <a
+                  href="https://www.facebook.com/ncieindiaofficial"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook"
+                  className="w-6.5 h-6.5 rounded-full bg-zinc-800 hover:bg-[#1877f2] text-white flex items-center justify-center transition-colors shrink-0"
+                >
+                  <FaFacebook className="w-3 h-3" />
                 </a>
-                <a href="https://www.instagram.com/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
-                  className="w-7 h-7 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center transition-colors shrink-0">
-                  <FaInstagram className="w-3.5 h-3.5" />
+                <a
+                  href="https://www.instagram.com/ncieindia"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  className="w-6.5 h-6.5 rounded-full bg-zinc-800 hover:bg-[#e4405f] text-white flex items-center justify-center transition-colors shrink-0"
+                >
+                  <FaInstagram className="w-3 h-3" />
                 </a>
-                <a href="https://x.com/ncieindia" target="_blank" rel="noopener noreferrer" aria-label="Twitter / X"
-                  className="w-7 h-7 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center transition-colors shrink-0">
-                  <FaXTwitter className="w-3.5 h-3.5" />
+                <a
+                  href="https://x.com/ncieindia"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Twitter / X"
+                  className="w-6.5 h-6.5 rounded-full bg-zinc-800 hover:bg-black text-white flex items-center justify-center transition-colors shrink-0"
+                >
+                  <FaXTwitter className="w-3 h-3" />
                 </a>
-                <a href="https://youtube.com/@ncie.9" target="_blank" rel="noopener noreferrer" aria-label="YouTube"
-                  className="w-7 h-7 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center transition-colors shrink-0">
-                  <FaYoutube className="w-3.5 h-3.5" />
+                <a
+                  href="https://youtube.com/@ncie.9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                  className="w-6.5 h-6.5 rounded-full bg-zinc-800 hover:bg-[#ff0000] text-white flex items-center justify-center transition-colors shrink-0"
+                >
+                  <FaYoutube className="w-3 h-3" />
                 </a>
-                <a href="https://whatsapp.com/channel/0029Vb7s9A430LKNIB0OxD1w" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
-                  className="w-7 h-7 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center transition-colors shrink-0">
-                  <FaWhatsapp className="w-3.5 h-3.5" />
+                <a
+                  href="https://whatsapp.com/channel/0029Vb7s9A430LKNIB0OxD1w"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WhatsApp"
+                  className="w-6.5 h-6.5 rounded-full bg-zinc-800 hover:bg-[#25d366] text-white flex items-center justify-center transition-colors shrink-0"
+                >
+                  <FaWhatsapp className="w-3 h-3" />
                 </a>
               </div>
             </div>
 
             {/* Right: Support Contact */}
-            <div className="flex items-center text-white font-sans tracking-wide font-medium">
+            <div className="flex items-center text-white font-sans tracking-wide font-medium text-xs">
               <span>{t("toll_free")} : </span>
               <span className="text-accent font-bold ml-1.5">0863 232 1417</span>
-              <span className="text-zinc-200 ml-1.5">{t("timings")}</span>
+              <span className="text-zinc-300 ml-1.5 hidden lg:inline">{t("timings")}</span>
             </div>
           </div>
         </div>

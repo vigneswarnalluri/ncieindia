@@ -56,8 +56,8 @@ export default function ContactClient() {
       email: "ed@ncieindia.org",
     },
     {
-      label: language === "hi" ? "सीएसआर, साझेदारी और गठबंधन" : "CSR, Partnerships & Funding",
-      email: "csr@ncieindia.org",
+      label: language === "hi" ? "सीएसआर, साझेदारी एवं कॉर्पोरेट मामले" : "CSR, Partnerships & Corporate Affairs",
+      email: "Csr@ncieindia.org",
     },
     {
       label: language === "hi" ? "केंद्रीय सचिवालय कार्यालय" : "Central Secretariat Office",

@@ -8,7 +8,11 @@ import {
   Mail,
   ArrowRight,
   ShieldCheck,
-  Building2
+  Building2,
+  Scale,
+  Landmark,
+  Briefcase,
+  GraduationCap
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -62,6 +66,7 @@ export default function AboutPage() {
   ];
 
   const DOWNLOADS = [
+    { title: "NCIE Vision Document: Viksit Bharat @2047", size: "3.2 MB", type: "Apex Vision Charter", url: "/NCIE_Vision_Document_2047.pdf" },
     { title: t("about_manual_dpr"), size: "1.2 MB", type: "PDF Document", url: "/NCIE_DPR.pdf" },
     { title: t("about_manual_1"), size: "2.8 MB", type: "PDF Manual", url: "/NCIE_Viksit_Bharat_2047_Innovation_Leadership_Programmes.pdf" },
     { title: t("about_manual_2"), size: "1.4 MB", type: "Circular Document", url: "/Kalam_Startup_Seed_Funding_Scheme.pdf" },
@@ -114,45 +119,165 @@ export default function AboutPage() {
             </Link>
           </div>
         </div>
+      </div>
 
-        {/* NITI Aayog Accreditation Banner */}
-        <div className="bg-gradient-to-r from-emerald-50/60 via-white to-emerald-50/40 border border-emerald-600/30 p-5 rounded-sm shadow-2xs relative overflow-hidden mt-6">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-emerald-600 to-emerald-700" />
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 border border-emerald-300/60 shadow-xs">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="text-xs sm:text-sm font-black uppercase tracking-wider text-zinc-900">
-                    {language === "hi" ? "नीति आयोग पंजीकरण एवं मान्यता" : "NITI Aayog Accreditation"}
-                  </h3>
-                  <span className="px-2 py-0.5 bg-emerald-700 text-white text-[10px] font-bold uppercase tracking-wider rounded-xs">
-                    Government of India
-                  </span>
+      {/* 2. Constitutional Mandate & Statutory Framework */}
+      <div className="bg-white border border-zinc-200 p-6 sm:p-8 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 pb-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-0.5 bg-emerald-50 text-[#0D6B4F] border border-emerald-200 text-[10px] font-bold uppercase tracking-wider rounded-xs font-mono">
+                {t("home_const_badge") || "Constitutional Mandate & Statutory Framework"}
+              </span>
+            </div>
+            <h2 className="text-base sm:text-lg font-bold uppercase tracking-wider text-zinc-900 border-l-4 border-[#0D6B4F] pl-3 py-0.5 mt-2">
+              {language === "hi" ? "2. संवैधानिक जनादेश एवं वैधानिक आधार" : "2. Constitutional Mandate & Statutory Foundation"}
+            </h2>
+          </div>
+          <img
+            src="/gov-emblem.png"
+            alt="State Emblem of India"
+            className="h-10 w-auto opacity-80 shrink-0 hidden sm:block"
+          />
+        </div>
+
+        {/* Dual Statutory Establishment Statements */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Pillar 1: Constitution of India */}
+          <div className="bg-gradient-to-br from-emerald-950 via-zinc-900 to-zinc-950 text-white p-5 rounded-xs border border-emerald-800/40 relative overflow-hidden flex flex-col justify-between shadow-sm">
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300">
+                  <Landmark className="w-4 h-4" />
                 </div>
-                <p className="text-xs text-zinc-600 font-sans leading-relaxed">
-                  {language === "hi" 
-                    ? "नीति आयोग के एनजीओ दर्पण पोर्टल, भारत सरकार पर आधिकारिक रूप से पंजीकृत।" 
-                    : "Officially Registered on the NGO DARPAN Portal of NITI Aayog, Government of India."}
+                <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-300 font-bold">
+                  {language === "hi" ? "संवैधानिक प्रावधान" : "Constitutional Provision"}
+                </span>
+              </div>
+              <img src="/gov-emblem.png" alt="Emblem" className="h-6 w-auto opacity-70 brightness-0 invert" />
+            </div>
+            <p className="text-xs sm:text-sm font-bold text-emerald-50 leading-relaxed">
+              &ldquo;{t("home_const_statutory_text_1") || "NCIE was established under the Constitution of India."}&rdquo;
+            </p>
+          </div>
+
+          {/* Pillar 2: Act of Government of India */}
+          <div className="bg-gradient-to-br from-amber-950 via-zinc-900 to-zinc-950 text-white p-5 rounded-xs border border-amber-800/40 relative overflow-hidden flex flex-col justify-between shadow-sm">
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-[#C9A24B]">
+                  <Scale className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#C9A24B] font-bold">
+                  {language === "hi" ? "वैधानिक अधिकार" : "Statutory Authority"}
+                </span>
+              </div>
+              <img src="/gov-of-ind.png" alt="Gov of India" className="h-6 w-auto opacity-70 brightness-0 invert" />
+            </div>
+            <p className="text-xs sm:text-sm font-bold text-amber-50 leading-relaxed">
+              &ldquo;{t("home_const_statutory_text_2") || "NCIE was established under an Act of the Government of India."}&rdquo;
+            </p>
+          </div>
+        </div>
+
+        {/* Featured Article 51A(h) Banner Card */}
+        <div className="bg-gradient-to-r from-emerald-50/90 via-white to-amber-50/50 border border-emerald-600/30 p-5 sm:p-6 rounded-xs relative overflow-hidden shadow-xs">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+            <div className="space-y-3 max-w-2xl">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 bg-emerald-800 text-white text-[10px] font-bold uppercase tracking-wider font-mono rounded-xs">
+                  {t("home_const_art_51a_num") || "Article 51A(h)"}
+                </span>
+                <span className="text-xs font-bold text-zinc-700">
+                  {t("home_const_art_51a_title") || "Fundamental Duties – Scientific Temper & Inquiry"}
+                </span>
+              </div>
+              <blockquote className="text-xs sm:text-sm italic font-medium text-emerald-950 bg-white/80 p-3.5 border-l-4 border-[#0D6B4F] shadow-2xs rounded-r-xs leading-relaxed">
+                {t("home_const_art_51a_quote") || `"It shall be the duty of every citizen of India to develop the scientific temper, humanism and the spirit of inquiry and reform."`}
+              </blockquote>
+              <p className="text-xs text-zinc-650 leading-relaxed text-justify">
+                {t("home_const_art_51a_desc") || "This constitutional provision encourages scientific thinking, innovation, research, creativity, and the spirit of inquiry, which form the foundation of entrepreneurship and innovation."}
+              </p>
+            </div>
+
+            <div className="w-full lg:w-64 shrink-0 rounded-xs overflow-hidden border border-zinc-200 shadow-xs relative">
+              <img
+                src="/images/indian_youth_innovation.jpg"
+                alt="Youth Scientific Temper & Innovation"
+                className="w-full h-36 object-cover"
+              />
+              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent p-2.5 text-white">
+                <p className="text-[10px] font-bold leading-tight">Scientific Temper &amp; Innovation</p>
+                <p className="text-[8.5px] text-emerald-200">Article 51A(h) Constitutional Duty</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 3-Column Directive Principles (Articles 38, 39, 41) */}
+        <div className="space-y-3 pt-2">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+            {language === "hi" ? "राज्य के नीति निदेशक सिद्धांत (DPSP)" : "Directive Principles of State Policy (DPSPs)"}
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Article 38 */}
+            <div className="bg-zinc-50 border border-zinc-200 p-4.5 rounded-xs flex flex-col justify-between hover:border-emerald-500/50 hover:shadow-xs transition-all">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[10px] font-bold font-mono px-2 py-0.5 bg-emerald-100 text-emerald-900 border border-emerald-200 rounded-xs">
+                    {t("home_const_art_38_num") || "Article 38"}
+                  </span>
+                  <Scale className="w-4 h-4 text-emerald-700" />
+                </div>
+                <h4 className="text-xs font-bold text-zinc-900 leading-snug">
+                  {t("home_const_art_38_title") || "Social & Economic Justice"}
+                </h4>
+                <p className="text-xs text-zinc-600 leading-relaxed text-justify">
+                  {t("home_const_art_38_desc") || "Promotes the welfare of the people by securing a social order based on justice—social, economic, and political—and supports inclusive national development."}
                 </p>
               </div>
             </div>
 
-            <div className="bg-white border border-emerald-200/80 px-3.5 py-2 rounded-xs shadow-2xs flex items-center gap-2.5 shrink-0 self-stretch sm:self-auto justify-between sm:justify-start">
-              <span className="text-xs font-bold text-zinc-600">
-                {language === "hi" ? "यूनीक दर्पण आईडी:" : "Unique DARPAN ID:"}
-              </span>
-              <span className="font-mono font-bold text-xs bg-emerald-100 text-emerald-900 px-2.5 py-0.5 rounded-xs border border-emerald-300">
-                1124993
-              </span>
+            {/* Article 39 */}
+            <div className="bg-zinc-50 border border-zinc-200 p-4.5 rounded-xs flex flex-col justify-between hover:border-emerald-500/50 hover:shadow-xs transition-all">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[10px] font-bold font-mono px-2 py-0.5 bg-amber-100 text-amber-900 border border-amber-200 rounded-xs">
+                    {t("home_const_art_39_num") || "Article 39"}
+                  </span>
+                  <Briefcase className="w-4 h-4 text-[#8B6E30]" />
+                </div>
+                <h4 className="text-xs font-bold text-zinc-900 leading-snug">
+                  {t("home_const_art_39_title") || "Equitable Livelihoods & Resources"}
+                </h4>
+                <p className="text-xs text-zinc-600 leading-relaxed text-justify">
+                  {t("home_const_art_39_desc") || "Encourages policies that secure adequate livelihoods, equitable distribution of resources, and the common good, supporting entrepreneurship, economic development, and employment generation."}
+                </p>
+              </div>
+            </div>
+
+            {/* Article 41 */}
+            <div className="bg-zinc-50 border border-zinc-200 p-4.5 rounded-xs flex flex-col justify-between hover:border-emerald-500/50 hover:shadow-xs transition-all">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[10px] font-bold font-mono px-2 py-0.5 bg-blue-100 text-blue-900 border border-blue-200 rounded-xs">
+                    {t("home_const_art_41_num") || "Article 41"}
+                  </span>
+                  <GraduationCap className="w-4 h-4 text-blue-700" />
+                </div>
+                <h4 className="text-xs font-bold text-zinc-900 leading-snug">
+                  {t("home_const_art_41_title") || "Right to Work & Education"}
+                </h4>
+                <p className="text-xs text-zinc-600 leading-relaxed text-justify">
+                  {t("home_const_art_41_desc") || "Encourages the State to make effective provisions for securing the right to work, education, and public assistance, thereby supporting skill development, employability, and human resource development."}
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 2. Vision & Mission Split Layout */}
+      {/* 3. Vision & Mission Split Layout */}
       <div className="bg-white border border-zinc-200 p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-8 divide-y md:divide-y-0 md:divide-x divide-zinc-200">
         {/* Vision Box */}
         <div className="space-y-3 pr-0 md:pr-4">
@@ -275,10 +400,10 @@ export default function AboutPage() {
             </div>
             <div>
               <span className="px-2 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-400/30 text-[10px] font-bold uppercase tracking-wider rounded-xs">
-                {language === "hi" ? "नोडल एवं कार्यान्वयन एजेंसी" : "Nodal & Implementing Agency"}
+                {language === "hi" ? "नोडल एवं कार्यान्वयन निदेशालय" : "Nodal & Implementation Directorate"}
               </span>
               <h3 className="text-base sm:text-lg font-black tracking-tight text-white mt-1">
-                Bharath Cares Life Line Foundation
+                {language === "hi" ? "राष्ट्रीय परियोजना एवं संचालन निदेशालय" : "National Operations & Project Directorate"}
               </h3>
               <p className="text-xs text-emerald-100/80">
                 {language === "hi"
@@ -314,8 +439,8 @@ export default function AboutPage() {
           {/* Level 2: Nodal Agency */}
           <div className="flex justify-center">
             <div className="bg-emerald-50 border-2 border-emerald-600 text-emerald-950 px-6 py-3 rounded-xs text-center shadow-2xs max-w-lg w-full">
-              <div className="text-[10px] text-emerald-700 uppercase tracking-widest font-bold">Nodal & Implementing Agency</div>
-              <div className="text-sm font-extrabold text-emerald-900">Bharath Cares Life Line Foundation</div>
+              <div className="text-[10px] text-emerald-700 uppercase tracking-widest font-bold">Nodal & Implementing Directorate</div>
+              <div className="text-sm font-extrabold text-emerald-900">{language === "hi" ? "राष्ट्रीय परियोजना एवं संचालन निदेशालय" : "National Operations & Project Directorate"}</div>
             </div>
           </div>
 
@@ -326,8 +451,8 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 max-w-4xl mx-auto">
             <div className="bg-white border border-emerald-300 p-3 text-center rounded-xs shadow-2xs">
               <div className="text-[9px] text-emerald-700 font-bold uppercase tracking-wider">Leadership</div>
-              <div className="text-xs font-bold text-zinc-900">Nodal Agency Director</div>
-              <div className="text-[10px] text-emerald-800 font-bold mt-0.5">Akkala Vamsi Reddy</div>
+              <div className="text-xs font-bold text-zinc-900">{language === "hi" ? "प्रमुख – सीएसआर एवं साझेदारी" : "Head – CSR & Partnerships"}</div>
+              <div className="text-[10px] text-emerald-800 font-bold mt-0.5">Vamsi Reddy A</div>
             </div>
             <div className="bg-white border border-zinc-300 p-3 text-center rounded-xs shadow-2xs">
               <div className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">Governance</div>
@@ -631,37 +756,6 @@ export default function AboutPage() {
 
           {/* ── RIGHT COLUMN: Downloads & Helplines (35% width) ── */}
           <div className="lg:col-span-4 space-y-6">
-            
-            {/* NGO DARPAN Accreditation Card */}
-            <div className="bg-white border border-zinc-200 overflow-hidden relative shadow-sm">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-[#138808]" />
-              <div className="p-5 space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-100">
-                    <ShieldCheck className="w-5.5 h-5.5" />
-                  </div>
-                  <div>
-                    <h3 className="text-xs font-black uppercase tracking-wider text-zinc-900 leading-tight">
-                      {language === "hi" ? "नीति आयोग पंजीकरण" : "NITI Aayog Accreditation"}
-                    </h3>
-                    <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider mt-0.5">
-                      Government of India
-                    </p>
-                  </div>
-                </div>
-                <div className="bg-zinc-50 border border-zinc-200/80 p-3 rounded-none text-xs leading-relaxed space-y-2 text-zinc-650">
-                  <p>
-                    {language === "hi" 
-                      ? "नीति आयोग के एनजीओ दर्पण पोर्टल पर आधिकारिक रूप से पंजीकृत।" 
-                      : "Officially Registered on the NGO DARPAN Portal of NITI Aayog, Government of India."}
-                  </p>
-                  <div className="pt-2 border-t border-zinc-200/60 font-mono text-[11px] font-bold text-emerald-800 flex justify-between items-center">
-                    <span>{language === "hi" ? "यूनीक दर्पण आईडी:" : "Unique DARPAN ID:"}</span>
-                    <span className="bg-emerald-50 px-2 py-0.5 border border-emerald-200">1124993</span>
-                  </div>
-                </div>
-              </div>
-            </div>
 
             {/* 1. Official Downloads Center */}
             <div className="bg-white border border-zinc-200">

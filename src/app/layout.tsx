@@ -82,8 +82,8 @@ export const metadata: Metadata = {
 import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
 import MaintenanceScreen from "@/components/MaintenanceScreen";
 
-// Site-wide maintenance lock flag (set to false to restore normal site)
-const IS_MAINTENANCE_MODE = process.env.NEXT_PUBLIC_MAINTENANCE_MODE !== "false";
+// Site-wide maintenance lock flag (set NEXT_PUBLIC_MAINTENANCE_MODE="true" to enable maintenance mode)
+const IS_MAINTENANCE_MODE = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
 
 export default function RootLayout({
   children,
