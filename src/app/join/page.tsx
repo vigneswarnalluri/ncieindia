@@ -3,10 +3,11 @@ import { Metadata } from "next";
 import JoinClient from "./JoinClient";
 
 export const metadata: Metadata = {
-  title: "Registration & Application Gateway | NCIE India",
+  title: "Apply for Internships, Memberships & Campus Chapters | NCIE India",
   description:
-    "Apply for NCIE Viksit Bharat 2047 Innovation Leadership Programs, Student Memberships, Collegiate Campus Chapters, Institutional Affiliations, and CSR Partnerships.",
+    "Join NCIE India. Apply for Viksit Bharat 2047 Internships, Innovation Leadership Programs, Student Memberships, and Institutional Campus Chapters.",
   keywords: [
+    "NCIE Internship Application",
     "NCIE Application Portal",
     "NCIE Viksit Bharat 2047 Innovation Leadership Programs Registration",
     "Campus Chapter Affiliation",
@@ -17,12 +18,18 @@ export const metadata: Metadata = {
     canonical: "https://ncieindia.org/join",
   },
   openGraph: {
-    title: "Registration & Application Gateway | NCIE India",
+    title: "Apply for Internships, Memberships & Campus Chapters | NCIE India",
     description:
-      "Apply for NCIE Viksit Bharat 2047 Innovation Leadership Programs, Student Memberships, Collegiate Campus Chapters, Institutional Affiliations, and CSR Partnerships.",
+      "Join NCIE India. Apply for Viksit Bharat 2047 Internships, Innovation Leadership Programs, Student Memberships, and Institutional Campus Chapters.",
     url: "https://ncieindia.org/join",
     siteName: "NCIE India",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Apply for Internships, Memberships & Campus Chapters | NCIE India",
+    description:
+      "Join NCIE India. Apply for Viksit Bharat 2047 Internships, Innovation Leadership Programs, Student Memberships, and Institutional Campus Chapters.",
   },
 };
 
