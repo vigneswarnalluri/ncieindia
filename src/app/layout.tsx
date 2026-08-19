@@ -118,8 +118,8 @@ export default function RootLayout({
         className="min-h-full flex flex-col bg-white text-charcoal selection:bg-primary/10 selection:text-primary"
         suppressHydrationWarning
       >
-        <ClientLayoutWrapper />
         <LanguageProvider>
+          <ClientLayoutWrapper />
           <Header />
           <main className="flex-1 flex flex-col">{children}</main>
           <Footer />
