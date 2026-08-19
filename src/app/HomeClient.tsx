@@ -342,12 +342,25 @@ export default function Home() {
   }));
 
   // Localize Key Programmes dynamically
-  const localizedProgrammes = KEY_PROGRAMMES.map((item, idx) => ({
-    title: t(`home_key_prog_${idx}_title`) || item.title,
-    description: t(`home_key_prog_${idx}_desc`) || item.description,
-    focus: item.focus.map((point, pIdx) => t(`home_key_prog_${idx}_focus_${pIdx}`) || point),
-    badge: t(`home_key_prog_${idx}_badge`) || item.badge,
-  }));
+  const localizedProgrammes = KEY_PROGRAMMES.map((item, idx) => {
+    const titleKey = `home_key_prog_${idx}_title`;
+    const descKey = `home_key_prog_${idx}_desc`;
+    const badgeKey = `home_key_prog_${idx}_badge`;
+    const trTitle = t(titleKey);
+    const trDesc = t(descKey);
+    const trBadge = t(badgeKey);
+
+    return {
+      title: trTitle && trTitle !== titleKey ? trTitle : item.title,
+      description: trDesc && trDesc !== descKey ? trDesc : item.description,
+      focus: item.focus.map((point, pIdx) => {
+        const k = `home_key_prog_${idx}_focus_${pIdx}`;
+        const tr = t(k);
+        return tr && tr !== k ? tr : point;
+      }),
+      badge: trBadge && trBadge !== badgeKey ? trBadge : item.badge,
+    };
+  });
 
   // Localize journey steps dynamically
   const localizedJourneySteps = JOURNEY_STEPS.map((step, idx) => ({
