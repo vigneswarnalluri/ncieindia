@@ -147,9 +147,13 @@ export default function Vision2047Page() {
               <span className="text-white/60">{t("vis_slash") || "Vision 2047"}</span>
             </div>
             
-            <div className="flex items-center gap-2 mb-2">
-              <span className="bg-amber-400/20 text-amber-300 border border-amber-400/40 text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-xs font-mono">
-                Centenary Masterplan 1947–2047
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              <span className="bg-amber-400/20 text-amber-300 border border-amber-400/40 text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-xs font-mono inline-flex items-center gap-1.5">
+                <Sparkles className="w-3 h-3 text-amber-400" />
+                <span>80th Year of Independence &bull; 150 Years of Vande Mataram</span>
+              </span>
+              <span className="bg-emerald-950/70 text-emerald-200 border border-emerald-500/30 text-[10px] font-semibold px-2.5 py-1 rounded-xs">
+                Launched by Hon&apos;ble PM Shri Narendra Modi
               </span>
             </div>
 
@@ -157,7 +161,7 @@ export default function Vision2047Page() {
               {t("vis_title") || "Viksit Bharat @ 2047 Vision Document"}
             </h1>
             <p className="text-emerald-100/90 text-xs sm:text-sm max-w-3xl mt-3 leading-relaxed">
-              {t("vis_desc") || "A transformative national blueprint by the National Council for Innovation and Entrepreneurship (NCIE) to build the world's largest student innovation and entrepreneurship ecosystem."}
+              Official Vision Document unveiled and launched by <strong>Hon&apos;ble Prime Minister Shri Narendra Modi</strong> on the landmark occasion of the <strong>80th Year of Independence</strong> and <strong>150 Years of Vande Mataram</strong>, setting the national blueprint to empower students, startups, and higher education institutions under the vision of <em>&ldquo;One Family – One Entrepreneur&rdquo;</em>.
             </p>
           </div>
 

@@ -46,6 +46,37 @@ const translations: Record<Language, Record<string, string>> = {
     home_cta_register: "Register Now",
     home_cta_partner: "Partner with NCIE",
     home_cta_ambassador: "Become an Innovation Ambassador",
+
+    // Hero Slider Translations
+    slider_slide_1_badge: "80th Year of Independence • 150 Years of Vande Mataram",
+    slider_slide_1_title: "Building an Innovative India for Viksit Bharat @2047",
+    slider_slide_1_desc: "Hon'ble Prime Minister Shri Narendra Modi launched the NCIE Vision Document: Viksit Bharat @ 2047 to empower students, startups, researchers, and institutions under the national mission of 'One Family – One Entrepreneur'.",
+    slider_slide_1_cta1: "Explore Vision 2047 Roadmap",
+    slider_slide_1_cta2: "Download Vision Charter (PDF)",
+    slider_slide_1_pm_note: "Launched by Hon'ble PM Shri Narendra Modi",
+    
+    slider_slide_2_badge: "National Internship Mission 2026-27",
+    slider_slide_2_title: "Empowering Youth Across 10 Core Undergraduate Sectors",
+    slider_slide_2_desc: "Structured, industry-oriented internships and experiential learning across AI, Engineering, Healthcare, AgriTech, Finance, and Public Policy.",
+    slider_slide_2_cta1: "Register for Internship",
+    slider_slide_2_cta2: "Explore 10 Sector Tracks",
+
+    slider_slide_3_badge: "₹1,000 Crore National Startup Fund",
+    slider_slide_3_title: "Dr. A.P.J. Abdul Kalam Startup Seed Funding Scheme",
+    slider_slide_3_desc: "Direct equity-free grants of up to ₹5,00,000 with a 5-Stage Milestone Growth Model and follow-on investor connect ranging from ₹25 Lakhs to ₹25 Crores.",
+    slider_slide_3_cta1: "Apply for Seed Grant",
+    slider_slide_3_cta2: "Download Scheme Circular",
+
+    slider_slide_4_badge: "Institutional Incubation Support (₹20L – ₹50L)",
+    slider_slide_4_title: "Transform Higher Education Campuses into Innovation Hubs",
+    slider_slide_4_desc: "Infrastructure grants and CSR alignments to establish AI labs, makerspaces, and accredited Entrepreneurship Development Cells (EDCs) nationwide.",
+    slider_slide_4_cta1: "Affiliate Your Institution",
+    slider_slide_4_cta2: "Download IIDSS Policy",
+
+    slider_stat_schemes: "Flagship Schemes",
+    slider_stat_sectors: "Core UG Sectors",
+    slider_stat_chapters: "Campus Chapters",
+    slider_stat_funds: "National Support Pools",
     
     // Vision & Mission
     home_core_vision_title: "Vision",
@@ -517,7 +548,7 @@ const translations: Record<Language, Record<string, string>> = {
     search_min_chars: "Please type at least 3 characters to search...",
     search_custom_use: "+ Use \"{search}\" as custom name",
     role_appl_student: "Innovator Application",
-    role_appl_internship: "NCIE Viksit Bharat 2047 Innovation Leadership Programs Course Application",
+    role_appl_internship: "Viksit Bharat 2047 | Course Nomination",
     role_appl_chapter: "Chapter Affiliation",
     role_appl_partner: "Partner Liaison",
     placeholder_fullname_student: "e.g. Sneha Sen",
@@ -1124,6 +1155,37 @@ const translations: Record<Language, Record<string, string>> = {
     home_cta_register: "अभी पंजीकरण करें",
     home_cta_partner: "एनसीआईई के साथ साझेदारी करें",
     home_cta_ambassador: "नवाचार राजदूत बनें",
+
+    // Hero Slider Translations
+    slider_slide_1_badge: "स्वतंत्रता का 80वां वर्ष • वंदे मातरम के 150 वर्ष",
+    slider_slide_1_title: "विकसित भारत @2047 के लिए एक अभिनव भारत का निर्माण",
+    slider_slide_1_desc: "माननीय प्रधानमंत्री श्री नरेन्द्र मोदी द्वारा 'एक परिवार – एक उद्यमी' के राष्ट्रीय मिशन के तहत छात्रों, युवा नवप्रवर्तकों, शोधकर्ताओं और उच्च शिक्षण संस्थानों को सशक्त बनाने हेतु एनसीआईई विज़न दस्तावेज़ का शुभारंभ किया गया।",
+    slider_slide_1_cta1: "विज़न 2047 रोडमैप देखें",
+    slider_slide_1_cta2: "विज़न चार्टर डाउनलोड करें (PDF)",
+    slider_slide_1_pm_note: "माननीय प्रधानमंत्री श्री नरेन्द्र मोदी द्वारा शुभारंभ",
+    
+    slider_slide_2_badge: "राष्ट्रीय इंटर्नशिप मिशन 2026-27",
+    slider_slide_2_title: "10 प्रमुख स्नातक क्षेत्रों में युवाओं का सशक्तिकरण",
+    slider_slide_2_desc: "एआई, इंजीनियरिंग, स्वास्थ्य सेवा, कृषि तकनीक, वित्त और सार्वजनिक नीति में संरचित, उद्योग-उन्मुख इंटर्नशिप और व्यावहारिक शिक्षा।",
+    slider_slide_2_cta1: "इंटर्नशिप के लिए पंजीकरण करें",
+    slider_slide_2_cta2: "10 सेक्टर ट्रैक देखें",
+
+    slider_slide_3_badge: "₹1,000 करोड़ राष्ट्रीय स्टार्टअप कोष",
+    slider_slide_3_title: "डॉ. एपीजे अब्दुल कलाम स्टार्टअप सीड फंडिंग योजना",
+    slider_slide_3_desc: "5-चरणीय मील का पत्थर विकास मॉडल और ₹25 लाख से ₹25 करोड़ तक के निवेशक नेटवर्क के साथ ₹5,00,000 तक का प्रत्यक्ष इक्विटी-मुक्त अनुदान।",
+    slider_slide_3_cta1: "सीड अनुदान के लिए आवेदन करें",
+    slider_slide_3_cta2: "योजना परिपत्र डाउनलोड करें",
+
+    slider_slide_4_badge: "संस्थागत इनक्यूबेशन सहायता (₹20 लाख – ₹50 लाख)",
+    slider_slide_4_title: "उच्च शिक्षण परिसरों को नवाचार केंद्रों में बदलें",
+    slider_slide_4_desc: "देशभर में एआई लैब, मेकरस्पेस और मान्यता प्राप्त उद्यमिता विकास सेल (ईडीसी) स्थापित करने के लिए बुनियादी ढांचा अनुदान और सीएसआर सहयोग।",
+    slider_slide_4_cta1: "अपने संस्थान को संबद्ध करें",
+    slider_slide_4_cta2: "आईआईडीएसएस नीति डाउनलोड करें",
+
+    slider_stat_schemes: "फ्लैगशिप योजनाएं",
+    slider_stat_sectors: "मुख्य यूजी क्षेत्र",
+    slider_stat_chapters: "परिसर शाखाएं",
+    slider_stat_funds: "राष्ट्रीय सहायता कोष",
     
     // Vision & Mission
     home_core_vision_title: "दृष्टिकोण",
@@ -1595,7 +1657,7 @@ const translations: Record<Language, Record<string, string>> = {
     search_min_chars: "खोजने के लिए कृपया कम से कम 3 वर्ण टाइप करें...",
     search_custom_use: "+ \"{search}\" को कस्टम नाम के रूप में उपयोग करें",
     role_appl_student: "नवाचार आवेदन",
-    role_appl_internship: "एनसीआईई विकसित भारत 2047 नवाचार नेतृत्व कार्यक्रम पाठ्यक्रम आवेदन",
+    role_appl_internship: "विकसित भारत 2047 | पाठ्यक्रम नामांकन",
     role_appl_chapter: "शाखा संबद्धता",
     role_appl_partner: "भागीदार संपर्क",
     placeholder_fullname_student: "उदा. स्नेहा सेन",

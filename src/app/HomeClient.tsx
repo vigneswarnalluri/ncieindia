@@ -43,6 +43,7 @@ import {
   FLAGSHIP_INITIATIVES,
   FlagshipInitiative,
 } from "@/data/flagshipInitiativesData";
+import HeroSlider from "@/components/HeroSlider";
 
 // Key Programmes data — directly based on Hero Banner.pdf
 const KEY_PROGRAMMES = [
@@ -479,7 +480,10 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 2. HERO BANNER: Building an Innovative India for Viksit Bharat @2047 */}
+      {/* ── 1. PRIMARY HERO SECTION (Interactive National Hero Slider) ── */}
+      <HeroSlider />
+
+      {/* ── 2. NATIONAL INNOVATION PLATFORM & NOTICE BOARD (Building an Innovative India for Viksit Bharat @2047) ── */}
       <section className="relative border-b border-zinc-200 bg-white pt-10 sm:pt-14 pb-16 overflow-hidden">
         {/* Subtle decorative background pattern */}
         <div className="absolute inset-0 bg-grid-pattern opacity-40 pointer-events-none" />
@@ -498,7 +502,7 @@ export default function Home() {
               </h1>
 
               {/* Exact Subheading from Hero Banner.pdf */}
-              <p className="text-sm sm:text-base text-zinc-700 leading-relaxed font-normal text-justify">
+              <p className="text-sm sm:text-base text-zinc-700 leading-relaxed font-normal text-left">
                 {t("home_hero_desc")}
               </p>
 
@@ -850,7 +854,7 @@ export default function Home() {
 
               {/* NCIE Alignment Commitment */}
               <div className="relative z-10 mt-6 pt-5 border-t border-zinc-800/80 bg-zinc-900/60 p-4 border-l-2 border-[#0D6B4F]">
-                <p className="text-xs text-emerald-100/90 leading-relaxed font-sans text-justify">
+                <p className="text-xs text-emerald-100/90 leading-relaxed font-sans text-left">
                   {t("home_pm_vision_commit")}
                 </p>
               </div>
@@ -865,7 +869,7 @@ export default function Home() {
                   </h3>
                 </div>
 
-                <p className="text-xs text-zinc-650 leading-relaxed text-justify">
+                <p className="text-xs text-zinc-650 leading-relaxed text-left">
                   {t("home_nat_vision_desc")}
                 </p>
 
@@ -952,17 +956,17 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Category Filter Chips */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pt-3 border-t border-zinc-100 mt-3 pb-1 scrollbar-thin">
+            {/* Category Filter Chips (Strictly Single Horizontal Line with Smooth Scroll) */}
+            <div className="flex flex-nowrap items-center gap-2 overflow-x-auto w-full pt-3 border-t border-zinc-100 mt-3 pb-2 scrollbar-thin">
               {FLAGSHIP_CATEGORIES.map((cat) => {
                 const isActive = activeFlagshipCat === cat.id;
                 return (
                   <button
                     key={cat.id}
                     onClick={() => setActiveFlagshipCat(cat.id)}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${isActive
+                    className={`shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold whitespace-nowrap transition-all cursor-pointer rounded-xs ${isActive
                         ? "bg-[#0D6B4F] text-white shadow-xs"
-                        : "bg-zinc-100 hover:bg-zinc-200 text-zinc-700"
+                        : "bg-zinc-100 hover:bg-zinc-200 text-zinc-700 hover:text-zinc-900"
                       }`}
                   >
                     {getCategoryIcon(cat.icon)}
@@ -1063,10 +1067,6 @@ export default function Home() {
       <section className="py-16 bg-white border-b border-zinc-200" id="key-programmes">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="inline-flex items-center gap-1 text-[#A68034] font-bold text-xs uppercase tracking-wider">
-              <Award className="w-3.5 h-3.5" />
-              <span>Apex Framework</span>
-            </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight mt-1">
               {t("home_key_progs_title")}
             </h2>
@@ -1147,10 +1147,6 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Heading */}
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="inline-flex items-center gap-1 text-[#0D6B4F] font-bold text-xs uppercase tracking-wider">
-              <TrendingUp className="w-3.5 h-3.5" />
-              <span>National Impact Section</span>
-            </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight mt-1">
               {t("home_impact_title")}
             </h2>

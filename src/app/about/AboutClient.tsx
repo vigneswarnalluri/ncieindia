@@ -450,9 +450,9 @@ export default function AboutPage() {
           {/* Level 3: Executive & Governance Boards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 max-w-4xl mx-auto">
             <div className="bg-white border border-emerald-300 p-3 text-center rounded-xs shadow-2xs">
-              <div className="text-[9px] text-emerald-700 font-bold uppercase tracking-wider">Leadership</div>
-              <div className="text-xs font-bold text-zinc-900">{language === "hi" ? "प्रमुख – सीएसआर एवं साझेदारी" : "Head – CSR & Partnerships"}</div>
-              <div className="text-[10px] text-emerald-800 font-bold mt-0.5">Vamsi Reddy A</div>
+              <div className="text-[9px] text-emerald-700 font-bold uppercase tracking-wider">{language === "hi" ? "नेतृत्व" : "Leadership"}</div>
+              <div className="text-xs font-bold text-zinc-900">{language === "hi" ? "कार्यकारी निदेशक" : "Executive Director"}</div>
+              <div className="text-[10px] text-emerald-800 font-bold mt-0.5">Dr. Elia Thagaram</div>
             </div>
             <div className="bg-white border border-zinc-300 p-3 text-center rounded-xs shadow-2xs">
               <div className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">Governance</div>

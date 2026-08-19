@@ -605,7 +605,11 @@ export default function JoinClient() {
           p => p.courseCode?.toLowerCase() === courseParam.toLowerCase() || p.id.toLowerCase() === courseParam.toLowerCase()
         );
         if (found) {
-          setFormData(prev => ({ ...prev, selectedCourse: `${found.courseCode} - ${found.title}` }));
+          setFormData(prev => ({ ...prev, selectedCourse: found.title }));
+        } else if (courseParam.toLowerCase() === "itm" || courseParam.toLowerCase().includes("technology")) {
+          setFormData(prev => ({ ...prev, selectedCourse: "Innovational & Technology Management" }));
+        } else if (courseParam.toLowerCase() === "absi" || courseParam.toLowerCase().includes("ai") || courseParam.toLowerCase().includes("startup")) {
+          setFormData(prev => ({ ...prev, selectedCourse: "AI Business & Startup Innovation" }));
         }
       }
     }
@@ -1325,9 +1329,11 @@ export default function JoinClient() {
                   
                   {/* Form Header */}
                   <div className="bg-zinc-50 px-6 py-4 border-b border-zinc-200">
-                    <span className="text-[10px] font-bold text-accent-dark tracking-wider uppercase bg-white border border-zinc-200 px-2 py-0.5 rounded shadow-sm">
-                      {role === "student" ? t("role_appl_student") : role === "internship" ? t("role_appl_internship") : role === "chapter" ? t("role_appl_chapter") : role === "recruitment" ? t("role_appl_recruitment") : t("role_appl_partner")}
-                    </span>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-[#C9A24B]/40 rounded shadow-xs max-w-full">
+                      <span className="text-[10px] sm:text-[11px] font-bold text-[#A68034] tracking-wider uppercase truncate">
+                        {role === "student" ? t("role_appl_student") : role === "internship" ? t("role_appl_internship") : role === "chapter" ? t("role_appl_chapter") : role === "recruitment" ? t("role_appl_recruitment") : t("role_appl_partner")}
+                      </span>
+                    </div>
                     <h2 className="text-base font-extrabold text-zinc-800 mt-2 uppercase tracking-wide">{t("form_title")}</h2>
                   </div>
 
@@ -1446,8 +1452,8 @@ export default function JoinClient() {
                                 const key = `prog_${p.id.replace(/-/g, "_")}_title`;
                                 const label = t(key) !== key ? t(key) : p.title;
                                 return (
-                                  <option key={p.id} value={`${p.courseCode} - ${p.title}`} className="text-zinc-800 font-sans font-semibold">
-                                    {p.courseCode} - {label}
+                                  <option key={p.id} value={p.title} className="text-zinc-800 font-sans font-semibold">
+                                    {label}
                                   </option>
                                 );
                               })}
@@ -1768,108 +1774,110 @@ export default function JoinClient() {
                     </div>
 
                     {/* Verification Documents Upload */}
-                    <div className="border-t border-zinc-200 pt-5 mt-5 space-y-4">
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{t("form_required_docs")}</p>
-                      
-                      <div className={`grid grid-cols-1 ${role === "internship" || role === "recruitment" ? "sm:grid-cols-1" : "sm:grid-cols-3"} gap-4`}>
+                    {role !== "internship" && (
+                      <div className="border-t border-zinc-200 pt-5 mt-5 space-y-4">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{t("form_required_docs")}</p>
                         
-                        {/* File 1: Consent Form */}
-                        {role !== "internship" && role !== "recruitment" && (
-                          <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block min-h-[30px]">
-                              {role === "student"
-                                ? t("label_file_consent_student") 
-                                : role === "chapter" 
-                                  ? t("label_file_consent_chapter") 
-                                  : t("label_file_consent_partner")}{"\u00A0"}
-                              <span className="text-red-500">*</span>
-                            </label>
-                            <input
-                              type="file"
-                              accept=".pdf"
-                              required
-                              onChange={(e) => handleFileChange(e, "consentForm", [".pdf"], 2)}
-                              className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
-                            />
-                            <span className="text-[9px] text-zinc-400 block font-medium">
-                              {role === "student"
-                                ? t("help_file_consent_student") 
-                                : role === "chapter" 
-                                  ? t("help_file_consent_chapter") 
-                                  : t("help_file_consent_partner")}
-                            </span>
-                          </div>
-                        )}
+                        <div className={`grid grid-cols-1 ${role === "recruitment" ? "sm:grid-cols-1" : "sm:grid-cols-3"} gap-4`}>
+                          
+                          {/* File 1: Consent Form */}
+                          {role !== "recruitment" && (
+                            <div className="space-y-1.5">
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block min-h-[30px]">
+                                {role === "student"
+                                  ? t("label_file_consent_student") 
+                                  : role === "chapter" 
+                                    ? t("label_file_consent_chapter") 
+                                    : t("label_file_consent_partner")}{"\u00A0"}
+                                <span className="text-red-500">*</span>
+                              </label>
+                              <input
+                                type="file"
+                                accept=".pdf"
+                                required
+                                onChange={(e) => handleFileChange(e, "consentForm", [".pdf"], 2)}
+                                className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
+                              />
+                              <span className="text-[9px] text-zinc-400 block font-medium">
+                                {role === "student"
+                                  ? t("help_file_consent_student") 
+                                  : role === "chapter" 
+                                    ? t("help_file_consent_chapter") 
+                                    : t("help_file_consent_partner")}
+                              </span>
+                            </div>
+                          )}
 
-                        {/* File 2: ID Card */}
-                        {role !== "internship" && role !== "recruitment" && (
+                          {/* File 2: ID Card */}
+                          {role !== "recruitment" && (
+                            <div className="space-y-1.5">
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block min-h-[30px]">
+                                {role === "student"
+                                  ? t("label_file_id_student") 
+                                  : role === "chapter" 
+                                    ? t("label_file_id_chapter") 
+                                    : t("label_file_id_partner")}{"\u00A0"}
+                                <span className="text-red-500">*</span>
+                              </label>
+                              <input
+                                type="file"
+                                accept=".pdf,.jpg,.jpeg,.png"
+                                required
+                                onChange={(e) => handleFileChange(
+                                  e, 
+                                  "idCard", 
+                                  [".jpg", ".jpeg", ".png", ".pdf"], 
+                                  2
+                                )}
+                                className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
+                              />
+                              <span className="text-[9px] text-zinc-400 block font-medium">
+                                {role === "student"
+                                  ? t("help_file_id_student") 
+                                  : role === "chapter" 
+                                    ? t("help_file_id_chapter") 
+                                    : t("help_file_id_partner")}
+                              </span>
+                            </div>
+                          )}
+
+                          {/* File 3: Proposal Roster */}
                           <div className="space-y-1.5">
                             <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block min-h-[30px]">
-                              {role === "student"
-                                ? t("label_file_id_student") 
-                                : role === "chapter" 
-                                  ? t("label_file_id_chapter") 
-                                  : t("label_file_id_partner")}{"\u00A0"}
+                              {role === "student" 
+                                ? t("label_file_roster_student") 
+                                : role === "recruitment"
+                                  ? t("label_file_roster_internship")
+                                  : role === "chapter" 
+                                    ? t("label_file_roster_chapter") 
+                                    : t("label_file_roster_partner")}{"\u00A0"}
                               <span className="text-red-500">*</span>
                             </label>
                             <input
                               type="file"
-                              accept=".pdf,.jpg,.jpeg,.png"
+                              accept={role === "partner" ? ".pdf" : ".pdf,.docx,.doc"}
                               required
                               onChange={(e) => handleFileChange(
                                 e, 
-                                "idCard", 
-                                [".jpg", ".jpeg", ".png", ".pdf"], 
+                                "proposalRoster", 
+                                role === "partner" ? [".pdf"] : [".pdf", ".docx", ".doc"], 
                                 2
                               )}
                               className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
                             />
                             <span className="text-[9px] text-zinc-400 block font-medium">
-                              {role === "student"
-                                ? t("help_file_id_student") 
-                                : role === "chapter" 
-                                  ? t("help_file_id_chapter") 
-                                  : t("help_file_id_partner")}
+                              {role === "student" 
+                                ? t("help_file_roster_student") 
+                                : role === "recruitment"
+                                  ? t("help_file_roster_internship")
+                                  : role === "chapter" 
+                                    ? t("help_file_roster_chapter") 
+                                    : t("help_file_roster_partner")}
                             </span>
                           </div>
-                        )}
-
-                        {/* File 3: Proposal Roster */}
-                        <div className="space-y-1.5">
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-[#0D6B4F] block min-h-[30px]">
-                            {role === "student" 
-                              ? t("label_file_roster_student") 
-                              : role === "internship" || role === "recruitment"
-                                ? t("label_file_roster_internship")
-                                : role === "chapter" 
-                                  ? t("label_file_roster_chapter") 
-                                  : t("label_file_roster_partner")}{"\u00A0"}
-                            <span className="text-red-500">*</span>
-                          </label>
-                          <input
-                            type="file"
-                            accept={role === "partner" ? ".pdf" : ".pdf,.docx,.doc"}
-                            required
-                            onChange={(e) => handleFileChange(
-                              e, 
-                              "proposalRoster", 
-                              role === "partner" ? [".pdf"] : [".pdf", ".docx", ".doc"], 
-                              2
-                            )}
-                            className="w-full text-xs text-zinc-550 file:mr-2 file:py-1 file:px-2 file:rounded file:border file:border-zinc-300 file:text-[10px] file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-150 cursor-pointer border border-zinc-300 bg-white p-1 rounded"
-                          />
-                          <span className="text-[9px] text-zinc-400 block font-medium">
-                            {role === "student" 
-                              ? t("help_file_roster_student") 
-                              : role === "internship" || role === "recruitment"
-                                ? t("help_file_roster_internship")
-                                : role === "chapter" 
-                                  ? t("help_file_roster_chapter") 
-                                  : t("help_file_roster_partner")}
-                          </span>
                         </div>
                       </div>
-                    </div>
+                    )}
 
                     {/* Official Declaration Tick box */}
                     <div className="p-3 bg-zinc-50 border border-zinc-200 rounded flex gap-2.5 items-start text-[11px] text-zinc-650">
@@ -1916,71 +1924,73 @@ export default function JoinClient() {
                 </div>
 
                 {/* Required Documents */}
-                <div className="bg-white border border-zinc-200 rounded p-5 shadow-sm space-y-4">
-                  <div className="flex items-center gap-1.5 text-zinc-800 pb-2 border-b border-zinc-150">
-                    <FileText className="w-4 h-4 text-accent-dark" />
-                    <h3 className="text-xs font-bold uppercase tracking-wider">{t("label_required_docs_sidebar")}</h3>
-                  </div>
-                  <div className="space-y-3">
-                    {role !== "internship" && role !== "recruitment" && (
-                      <>
-                        <div className="flex items-start gap-3 p-3 bg-zinc-50/50 border border-zinc-200/60 rounded">
-                          <div className="w-7 h-7 bg-emerald-50 text-primary flex items-center justify-center shrink-0 mt-0.5 rounded border border-primary/10">
-                            <FileText className="w-3.5 h-3.5" />
+                {role !== "internship" && (
+                  <div className="bg-white border border-zinc-200 rounded p-5 shadow-sm space-y-4">
+                    <div className="flex items-center gap-1.5 text-zinc-800 pb-2 border-b border-zinc-150">
+                      <FileText className="w-4 h-4 text-accent-dark" />
+                      <h3 className="text-xs font-bold uppercase tracking-wider">{t("label_required_docs_sidebar")}</h3>
+                    </div>
+                    <div className="space-y-3">
+                      {role !== "recruitment" && (
+                        <>
+                          <div className="flex items-start gap-3 p-3 bg-zinc-50/50 border border-zinc-200/60 rounded">
+                            <div className="w-7 h-7 bg-emerald-50 text-primary flex items-center justify-center shrink-0 mt-0.5 rounded border border-primary/10">
+                              <FileText className="w-3.5 h-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-xs font-bold text-zinc-800">
+                                {role === "student" 
+                                  ? t("label_file_consent_student") 
+                                  : role === "chapter" 
+                                    ? t("label_file_consent_chapter") 
+                                    : t("label_file_consent_partner")}
+                              </p>
+                              <span className="text-[10px] text-zinc-400 font-medium">{t("help_signed_pdf")}</span>
+                            </div>
                           </div>
-                          <div>
-                            <p className="text-xs font-bold text-zinc-800">
-                              {role === "student" 
-                                ? t("label_file_consent_student") 
-                                : role === "chapter" 
-                                  ? t("label_file_consent_chapter") 
-                                  : t("label_file_consent_partner")}
-                            </p>
-                            <span className="text-[10px] text-zinc-400 font-medium">{t("help_signed_pdf")}</span>
+                          
+                          <div className="flex items-start gap-3 p-3 bg-zinc-50/50 border border-zinc-200/60 rounded">
+                            <div className="w-7 h-7 bg-amber-50 text-accent-dark flex items-center justify-center shrink-0 mt-0.5 rounded border border-accent/20">
+                              <FileText className="w-3.5 h-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-xs font-bold text-zinc-800">
+                                {role === "student" 
+                                  ? t("label_file_id_student") 
+                                  : role === "chapter" 
+                                    ? t("label_file_id_chapter") 
+                                    : t("label_file_id_partner")}
+                              </p>
+                              <span className="text-[10px] text-zinc-400 font-medium">
+                                {role === "student" ? t("help_id_type_student") : t("help_id_type_other")}
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                        
-                        <div className="flex items-start gap-3 p-3 bg-zinc-50/50 border border-zinc-200/60 rounded">
-                          <div className="w-7 h-7 bg-amber-50 text-accent-dark flex items-center justify-center shrink-0 mt-0.5 rounded border border-accent/20">
-                            <FileText className="w-3.5 h-3.5" />
-                          </div>
-                          <div>
-                            <p className="text-xs font-bold text-zinc-800">
-                              {role === "student" 
-                                ? t("label_file_id_student") 
-                                : role === "chapter" 
-                                  ? t("label_file_id_chapter") 
-                                  : t("label_file_id_partner")}
-                            </p>
-                            <span className="text-[10px] text-zinc-400 font-medium">
-                              {role === "student" ? t("help_id_type_student") : t("help_id_type_other")}
-                            </span>
-                          </div>
-                        </div>
-                      </>
-                    )}
+                        </>
+                      )}
 
-                    <div className="flex items-start gap-3 p-3 bg-zinc-50/50 border border-zinc-200/60 rounded">
-                      <div className="w-7 h-7 bg-purple-50 text-purple-700 flex items-center justify-center shrink-0 mt-0.5 rounded border border-purple-100">
-                        <FileText className="w-3.5 h-3.5" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold text-zinc-800">
-                          {role === "student" 
-                            ? t("label_file_roster_student") 
-                            : role === "internship" || role === "recruitment"
-                              ? t("label_file_roster_internship")
-                              : role === "chapter" 
-                                ? t("label_file_roster_chapter") 
-                                : t("label_file_roster_partner")}
-                        </p>
-                        <span className="text-[10px] text-zinc-400 font-medium">
-                          {role === "partner" ? t("help_roster_type_partner") : t("help_roster_type_other")}
-                        </span>
+                      <div className="flex items-start gap-3 p-3 bg-zinc-50/50 border border-zinc-200/60 rounded">
+                        <div className="w-7 h-7 bg-purple-50 text-purple-700 flex items-center justify-center shrink-0 mt-0.5 rounded border border-purple-100">
+                          <FileText className="w-3.5 h-3.5" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-zinc-800">
+                            {role === "student" 
+                              ? t("label_file_roster_student") 
+                              : role === "recruitment"
+                                ? t("label_file_roster_internship")
+                                : role === "chapter" 
+                                  ? t("label_file_roster_chapter") 
+                                  : t("label_file_roster_partner")}
+                          </p>
+                          <span className="text-[10px] text-zinc-400 font-medium">
+                            {role === "partner" ? t("help_roster_type_partner") : t("help_roster_type_other")}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
 
             </div>
