@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, Download, Sparkles, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Download, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function HeroSlider() {

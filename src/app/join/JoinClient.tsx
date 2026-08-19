@@ -803,13 +803,13 @@ export default function JoinClient() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Safety check: ensure files are selected
-    if (role === "internship" || role === "recruitment") {
+    // Safety check: ensure files are selected where mandatory
+    if (role === "recruitment") {
       if (!files.proposalRoster) {
         setValidationError("Security Verification: Please upload your Resume / CV.");
         return;
       }
-    } else {
+    } else if (role !== "internship") {
       if (!files.consentForm || !files.idCard || !files.proposalRoster) {
         setValidationError("Security Verification: All required files must be uploaded before submitting.");
         return;
