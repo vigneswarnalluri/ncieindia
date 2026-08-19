@@ -503,25 +503,25 @@ export default function Home() {
               </p>
 
               {/* Call to Action Buttons from Hero Banner.pdf */}
-              <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 pt-2">
-                <Link href="/join" className="w-full sm:w-auto">
-                  <button className="w-full sm:w-auto bg-[#0D6B4F] hover:bg-[#074733] text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 transition-all shadow-md inline-flex items-center justify-center gap-2 cursor-pointer border border-[#0D6B4F]">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 pt-2 sm:flex-nowrap">
+                <Link href="/join" className="shrink-0">
+                  <button className="w-full sm:w-auto whitespace-nowrap bg-[#0D6B4F] hover:bg-[#074733] text-white font-bold text-[11px] sm:text-xs uppercase tracking-wider px-4 sm:px-4.5 py-3 transition-all shadow-xs inline-flex items-center justify-center gap-1.5 cursor-pointer border border-[#0D6B4F] rounded-xs">
                     <span>{t("home_cta_register")}</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </Link>
 
-                <Link href="/partnerships" className="w-full sm:w-auto">
-                  <button className="w-full sm:w-auto bg-[#C9A24B] hover:bg-[#A68034] text-zinc-950 hover:text-white font-bold text-xs uppercase tracking-wider px-5 py-3.5 transition-all shadow-md inline-flex items-center justify-center gap-1.5 cursor-pointer">
+                <Link href="/partnerships" className="shrink-0">
+                  <button className="w-full sm:w-auto whitespace-nowrap bg-[#C9A24B] hover:bg-[#A68034] text-zinc-950 hover:text-white font-bold text-[11px] sm:text-xs uppercase tracking-wider px-4 sm:px-4.5 py-3 transition-all shadow-xs inline-flex items-center justify-center gap-1.5 cursor-pointer rounded-xs">
                     <span>{t("home_cta_partner")}</span>
-                    <Building2 className="w-4 h-4" />
+                    <Building2 className="w-3.5 h-3.5" />
                   </button>
                 </Link>
 
-                <Link href="/opportunities" className="w-full sm:w-auto">
-                  <button className="w-full sm:w-auto border border-zinc-300 hover:border-[#0D6B4F] hover:bg-emerald-50 text-zinc-800 hover:text-[#0D6B4F] font-bold text-xs uppercase tracking-wider px-5 py-3.5 transition-colors cursor-pointer inline-flex items-center justify-center gap-1.5">
+                <Link href="/opportunities" className="shrink-0">
+                  <button className="w-full sm:w-auto whitespace-nowrap border border-zinc-300 hover:border-[#0D6B4F] hover:bg-emerald-50 text-zinc-800 hover:text-[#0D6B4F] font-bold text-[11px] sm:text-xs uppercase tracking-wider px-4 sm:px-4.5 py-3 transition-colors cursor-pointer inline-flex items-center justify-center gap-1.5 rounded-xs bg-white shadow-2xs">
                     <span>{t("home_cta_ambassador")}</span>
-                    <Award className="w-4 h-4 text-[#A68034]" />
+                    <Award className="w-3.5 h-3.5 text-[#A68034]" />
                   </button>
                 </Link>
               </div>
