@@ -44,6 +44,7 @@ import {
   FlagshipInitiative,
 } from "@/data/flagshipInitiativesData";
 import HeroSlider from "@/components/HeroSlider";
+import AnimatedCounter from "@/components/AnimatedCounter";
 
 // Key Programmes data — directly based on Hero Banner.pdf
 const KEY_PROGRAMMES = [
@@ -1159,48 +1160,72 @@ export default function Home() {
           {/* 4 Quantified Impact Indicator Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
             {/* Metric 1 */}
-            <div className="bg-white border-t-4 border-t-[#0D6B4F] border-x border-b border-zinc-200 p-6 text-center shadow-xs">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: 0.05 }}
+              className="bg-white border-t-4 border-t-[#0D6B4F] border-x border-b border-zinc-200 p-6 text-center shadow-xs hover:shadow-md transition-shadow"
+            >
               <div className="text-3xl sm:text-4xl font-black text-[#0D6B4F] font-mono">
-                {t("home_impact_metric_1_val")}
+                <AnimatedCounter value={t("home_impact_metric_1_val")} duration={2.0} delay={0.1} />
               </div>
               <h3 className="text-sm font-bold text-zinc-900 uppercase tracking-wider mt-2">
                 {t("home_impact_metric_1_label")}
               </h3>
               <p className="text-xs text-zinc-500 mt-1">{t("home_impact_metric_1_desc")}</p>
-            </div>
+            </motion.div>
 
             {/* Metric 2 */}
-            <div className="bg-white border-t-4 border-t-[#C9A24B] border-x border-b border-zinc-200 p-6 text-center shadow-xs">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="bg-white border-t-4 border-t-[#C9A24B] border-x border-b border-zinc-200 p-6 text-center shadow-xs hover:shadow-md transition-shadow"
+            >
               <div className="text-3xl sm:text-4xl font-black text-[#A68034] font-mono">
-                {t("home_impact_metric_2_val")}
+                <AnimatedCounter value={t("home_impact_metric_2_val")} duration={2.0} delay={0.2} />
               </div>
               <h3 className="text-sm font-bold text-zinc-900 uppercase tracking-wider mt-2">
                 {t("home_impact_metric_2_label")}
               </h3>
               <p className="text-xs text-zinc-500 mt-1">{t("home_impact_metric_2_desc")}</p>
-            </div>
+            </motion.div>
 
             {/* Metric 3 */}
-            <div className="bg-white border-t-4 border-t-[#0D6B4F] border-x border-b border-zinc-200 p-6 text-center shadow-xs">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+              className="bg-white border-t-4 border-t-[#0D6B4F] border-x border-b border-zinc-200 p-6 text-center shadow-xs hover:shadow-md transition-shadow"
+            >
               <div className="text-3xl sm:text-4xl font-black text-[#0D6B4F] font-mono">
-                {t("home_impact_metric_3_val")}
+                <AnimatedCounter value={t("home_impact_metric_3_val")} duration={2.0} delay={0.3} />
               </div>
               <h3 className="text-sm font-bold text-zinc-900 uppercase tracking-wider mt-2">
                 {t("home_impact_metric_3_label")}
               </h3>
               <p className="text-xs text-zinc-500 mt-1">{t("home_impact_metric_3_desc")}</p>
-            </div>
+            </motion.div>
 
             {/* Metric 4 */}
-            <div className="bg-white border-t-4 border-t-[#C9A24B] border-x border-b border-zinc-200 p-6 text-center shadow-xs">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: 0.35 }}
+              className="bg-white border-t-4 border-t-[#C9A24B] border-x border-b border-zinc-200 p-6 text-center shadow-xs hover:shadow-md transition-shadow"
+            >
               <div className="text-3xl sm:text-4xl font-black text-[#A68034] font-mono">
-                {t("home_impact_metric_4_val")}
+                <AnimatedCounter value={t("home_impact_metric_4_val")} duration={2.0} delay={0.4} />
               </div>
               <h3 className="text-sm font-bold text-zinc-900 uppercase tracking-wider mt-2">
                 {t("home_impact_metric_4_label")}
               </h3>
               <p className="text-xs text-zinc-500 mt-1">{t("home_impact_metric_4_desc")}</p>
-            </div>
+            </motion.div>
           </div>
 
           {/* Academic Registry Benchmarks Table */}
