@@ -141,7 +141,6 @@ export default function Footer() {
             <h4 className="text-sm font-semibold tracking-wider uppercase text-accent">{t("footer_contact_desk")}</h4>
             <p className="text-sm text-zinc-300 leading-relaxed space-y-1">
               <span className="block"><strong>Headquarters:</strong> {t("footer_address_main")}</span>
-              <span className="block"><strong>Nodal Desk:</strong> {t("footer_address_nodal")}</span>
               <span className="block">
                 <strong>{t("footer_email").split(":")[0] || "Email"}:</strong>{" "}
                 <a href="mailto:office@ncieindia.org" className="hover:underline hover:text-accent transition-colors">

@@ -127,17 +127,6 @@ export default function ContactClient() {
                 </div>
 
                 <div className="flex gap-3.5 pt-4 border-t border-zinc-100">
-                  <MapPin className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="font-bold text-zinc-800 uppercase tracking-wide">Nodal &amp; Implementation Agency</h3>
-                    <p className="text-zinc-500 mt-1 leading-relaxed">
-                      NCIE Desk, Guntur,<br />
-                      Andhra Pradesh, India
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3.5 pt-4 border-t border-zinc-100">
                   <Phone className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
                     <h3 className="font-bold text-zinc-800 uppercase tracking-wide">{t("contact_phone_title")}</h3>
