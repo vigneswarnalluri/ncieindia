@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { User, Landmark, Building, CheckCircle, ArrowLeft, ShieldCheck, Info, FileText, Check, BookOpen, Briefcase } from "lucide-react";
+import { User, Landmark, Building, CheckCircle, ArrowLeft, ShieldCheck, Info, FileText, Check, BookOpen, Briefcase, Download, Mail } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -498,8 +498,13 @@ export default function JoinClient() {
     email: string;
     orgName: string;
     regId: string;
+    fullName?: string;
+    selectedCourse?: string;
   } | null>(null);
   const [regId, setRegId] = useState<string>("");
+  const [isEmailSending, setIsEmailSending] = useState(false);
+  const [emailStatus, setEmailStatus] = useState<"sent" | "failed" | "queued" | null>(null);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
 
   const [files, setFiles] = useState<{
     consentForm: File | null;
@@ -585,6 +590,35 @@ export default function JoinClient() {
       txnRef: "",
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleDownloadPdf = async () => {
+    try {
+      setDownloadingPdf(true);
+      const activeRegId = regId || existingSubmission?.regId || "REG-2026-0000";
+      const activeName = formData.fullName || existingSubmission?.fullName || "Student / Participant";
+      const activeCourse = formData.selectedCourse || existingSubmission?.selectedCourse || "Viksit Bharat @2047 Innovation Leadership Programme";
+      
+      const response = await fetch(
+        `/api/send-confirmation-letter?regId=${encodeURIComponent(activeRegId)}&name=${encodeURIComponent(activeName)}&course=${encodeURIComponent(activeCourse)}`
+      );
+      if (!response.ok) throw new Error("Failed to download confirmation letter");
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `REGISTRATION_CONFIRMATION_LETTER_${activeRegId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err: any) {
+      console.error("PDF Download failed:", err);
+      alert("Could not download the confirmation letter PDF. Please try again or contact helpdesk.");
+    } finally {
+      setDownloadingPdf(false);
+    }
   };
 
   useEffect(() => {
@@ -788,9 +822,43 @@ export default function JoinClient() {
         email: formData.email,
         orgName: formData.orgName,
         regId: generatedId,
+        fullName: formData.fullName,
+        selectedCourse: formData.selectedCourse,
       };
       localStorage.setItem("ncie_submission_details", JSON.stringify(submissionDetails));
       setExistingSubmission(submissionDetails);
+
+      // Trigger automatic confirmation letter email dispatch
+      setIsEmailSending(true);
+      fetch("/api/send-confirmation-letter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          fullName: formData.fullName,
+          regId: generatedId,
+          course: formData.selectedCourse || "Viksit Bharat @2047 Innovation Leadership Programme",
+          orgName: formData.orgName,
+          paymentId: paymentId || "N/A",
+          date: new Date().toISOString(),
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.emailSent) {
+            setEmailStatus("sent");
+          } else {
+            setEmailStatus("queued");
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to send confirmation letter email:", err);
+          setEmailStatus("failed");
+        })
+        .finally(() => {
+          setIsEmailSending(false);
+        });
+
       setStep("success");
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err: any) {
@@ -2013,7 +2081,7 @@ export default function JoinClient() {
                 {role === "recruitment" ? (
                   <>
                     {t("success_msg_recruitment").split("{fullName}")[0]}
-                    <span className="font-bold text-primary">{formData.fullName}</span>
+                    <span className="font-bold text-primary">{formData.fullName || existingSubmission?.fullName}</span>
                     {t("success_msg_recruitment").split("{fullName}")[1]?.split("{position}")[0]}
                     <span className="font-semibold text-zinc-800">{formData.designation}</span>
                     {t("success_msg_recruitment").split("{fullName}")[1]?.split("{position}")[1]}
@@ -2021,9 +2089,9 @@ export default function JoinClient() {
                 ) : (
                   <>
                     {t("success_msg").split("{fullName}")[0]}
-                    <span className="font-bold text-primary">{formData.fullName}</span>
+                    <span className="font-bold text-primary">{formData.fullName || existingSubmission?.fullName}</span>
                     {t("success_msg").split("{fullName}")[1]?.split("{orgName}")[0]}
-                    <span className="font-semibold text-zinc-800">{formData.orgName}</span>
+                    <span className="font-semibold text-zinc-800">{formData.orgName || existingSubmission?.orgName}</span>
                     {t("success_msg").split("{fullName}")[1]?.split("{orgName}")[1]}
                   </>
                 )}
@@ -2035,16 +2103,51 @@ export default function JoinClient() {
               </div>
             </div>
 
+            {/* Email Dispatched Notice */}
+            <div className="bg-emerald-50/80 border border-emerald-200/80 rounded p-4 text-left flex gap-3 text-xs text-emerald-950 leading-relaxed shadow-xs">
+              <Mail className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
+              <div>
+                <strong className="block text-emerald-900 font-bold mb-0.5">
+                  Registration Confirmation Letter Dispatched
+                </strong>
+                <span className="text-emerald-800">
+                  Your official <strong>REGISTRATION CONFIRMATION LETTER</strong> with Registration ID has been dispatched to{" "}
+                  <strong className="text-emerald-950 font-bold">{formData.email || existingSubmission?.email}</strong> with your personalized PDF attached.
+                </span>
+              </div>
+            </div>
+
             <div className="bg-zinc-50 border border-zinc-200 rounded p-4 text-left flex gap-3 text-xs text-zinc-650 leading-relaxed">
               <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
               <span>
-                <strong>{t("success_next_step")}</strong> {t("success_next_step_desc").split("{email}")[0]}<strong className="text-primary">{formData.email}</strong>{t("success_next_step_desc").split("{email}")[1]}
+                <strong>{t("success_next_step")}</strong> {t("success_next_step_desc").split("{email}")[0]}<strong className="text-primary">{formData.email || existingSubmission?.email}</strong>{t("success_next_step_desc").split("{email}")[1]}
               </span>
             </div>
 
-            <div className="pt-4">
+            {/* Direct PDF Download & Reset Buttons */}
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
-                className="inline-flex items-center gap-2 px-5 py-2.5 border border-primary text-primary hover:bg-emerald-50 rounded font-bold uppercase tracking-wider text-xs transition-colors cursor-pointer shadow-sm"
+                type="button"
+                onClick={handleDownloadPdf}
+                disabled={downloadingPdf}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#0D6B4F] hover:bg-[#08533d] text-white font-bold text-xs uppercase tracking-wider rounded shadow-sm transition-all cursor-pointer disabled:opacity-50"
+              >
+                {downloadingPdf ? (
+                  <>
+                    <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin shrink-0" />
+                    <span>Generating PDF...</span>
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-4 h-4" />
+                    <span>Download Confirmation Letter (PDF)</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-zinc-300 text-zinc-700 hover:bg-zinc-100 rounded font-bold uppercase tracking-wider text-xs transition-colors cursor-pointer shadow-sm"
                 onClick={() => {
                   if (window.confirm(t("confirm_reset"))) {
                     localStorage.removeItem("ncie_submission_details");
