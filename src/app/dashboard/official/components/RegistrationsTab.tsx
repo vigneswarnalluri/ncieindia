@@ -23,7 +23,8 @@ import {
   Mail,
   MapPin,
   CreditCard,
-  X
+  X,
+  Loader2
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
@@ -65,6 +66,40 @@ export default function RegistrationsTab({ onNotify }: Props) {
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [selectedRecord, setSelectedRecord] = useState<RegistrationRecord | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
+
+  const handleSendEmail = async (rec: RegistrationRecord) => {
+    if (!rec.email) {
+      onNotify?.("Error: Candidate does not have a registered email address.");
+      return;
+    }
+    try {
+      setIsSendingEmail(true);
+      const res = await fetch("/api/send-confirmation-letter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: rec.email,
+          fullName: rec.full_name,
+          regId: rec.reg_id,
+          course: extractDetails(rec),
+          orgName: rec.org_name,
+          paymentId: extractPaymentId(rec.proposal) || "N/A",
+          date: rec.submitted_at || new Date().toISOString(),
+        }),
+      });
+      const data = await res.json();
+      if (data?.emailSent) {
+        onNotify?.(`Official Confirmation Letter successfully dispatched to ${rec.email}`);
+      } else {
+        onNotify?.(`Notice: ${data?.warning || "Processed PDF successfully."}`);
+      }
+    } catch (err: any) {
+      onNotify?.(`Failed to send email: ${err.message}`);
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
 
   // Fetch all registrations from Supabase
   const fetchRecords = async () => {
@@ -838,25 +873,48 @@ export default function RegistrationsTab({ onNotify }: Props) {
                 );
               })()}
 
-              {/* Direct PDF Download for Internship Confirmations */}
+              {/* Direct PDF Download and Email Dispatch for Internship Confirmations */}
               {selectedRecord.role === "internship" && (
-                <div className="p-3 bg-amber-50 border border-amber-200 rounded flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <GraduationCap className="w-5 h-5 text-amber-700" />
+                <div className="p-3.5 bg-amber-50 border border-amber-200 rounded flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-2 bg-amber-100 rounded-full text-amber-800 shrink-0">
+                      <GraduationCap className="w-4 h-4" />
+                    </div>
                     <div>
-                      <strong className="text-xs text-amber-900 block font-bold">Official Registration Confirmation Letter</strong>
-                      <span className="text-[10px] text-amber-800">Generate and download official PDF for this candidate</span>
+                      <strong className="text-xs text-amber-900 block font-bold">Registration Confirmation Letter</strong>
+                      <span className="text-[10px] text-amber-700">Official dynamic PDF issued for {selectedRecord.full_name}</span>
                     </div>
                   </div>
-                  <a
-                    href={`/api/send-confirmation-letter?regId=${encodeURIComponent(selectedRecord.reg_id)}&name=${encodeURIComponent(selectedRecord.full_name)}&course=${encodeURIComponent(extractDetails(selectedRecord))}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded text-xs font-bold cursor-pointer"
-                  >
-                    <Download className="w-3.5 h-3.5" />
-                    <span>Download PDF</span>
-                  </a>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={() => handleSendEmail(selectedRecord)}
+                      disabled={isSendingEmail}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0D6B4F] hover:bg-[#0a5840] text-white rounded text-xs font-bold cursor-pointer shadow-xs transition-colors disabled:opacity-50"
+                    >
+                      {isSendingEmail ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          <span>Sending Email...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Mail className="w-3.5 h-3.5" />
+                          <span>Send Email</span>
+                        </>
+                      )}
+                    </button>
+
+                    <a
+                      href={`/api/send-confirmation-letter?regId=${encodeURIComponent(selectedRecord.reg_id)}&name=${encodeURIComponent(selectedRecord.full_name)}&course=${encodeURIComponent(extractDetails(selectedRecord))}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded text-xs font-bold cursor-pointer shadow-xs transition-colors"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>Download PDF</span>
+                    </a>
+                  </div>
                 </div>
               )}
             </div>

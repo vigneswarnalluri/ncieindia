@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { ClipboardList, Eye, FileText, Download, GraduationCap, X, Check } from "lucide-react";
+import { ClipboardList, Eye, FileText, Download, GraduationCap, X, Check, Mail, CheckCircle, Loader2 } from "lucide-react";
 
 export interface Student {
   id: string;
@@ -32,6 +32,42 @@ interface Props {
 export default function VerifyTab({ students, onAction }: Props) {
   const [selected, setSelected] = useState<Student | null>(null);
   const [filterRole, setFilterRole] = useState<string>("all");
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [emailNotice, setEmailNotice] = useState<string | null>(null);
+
+  const handleSendEmail = async (student: Student) => {
+    if (!student.email) {
+      setEmailNotice("Error: Student email address is not recorded.");
+      return;
+    }
+    try {
+      setIsSendingEmail(true);
+      setEmailNotice(null);
+      const res = await fetch("/api/send-confirmation-letter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: student.email,
+          fullName: student.name,
+          regId: student.id,
+          course: student.course || "Viksit Bharat Innovation Leadership Programme",
+          orgName: student.orgName,
+          paymentId: student.paymentId || "N/A",
+          date: student.submittedAt || new Date().toISOString(),
+        }),
+      });
+      const data = await res.json();
+      if (data?.emailSent) {
+        setEmailNotice(`Confirmation Letter sent successfully to ${student.email}`);
+      } else {
+        setEmailNotice(`Notice: ${data?.warning || "PDF processed successfully."}`);
+      }
+    } catch (err: any) {
+      setEmailNotice(`Failed to dispatch email: ${err.message}`);
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
 
   const filteredStudents = students.filter((s) => {
     if (filterRole === "all") return true;
@@ -331,25 +367,59 @@ export default function VerifyTab({ students, onAction }: Props) {
               })()}
 
               {selected.role === "internship" && (
-                <div className="p-3.5 bg-amber-50 border border-amber-200 rounded flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <div className="p-2 bg-amber-100 rounded-full text-amber-800">
-                      <GraduationCap className="w-4 h-4" />
+                <div className="space-y-2">
+                  <div className="p-3.5 bg-amber-50 border border-amber-200 rounded flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-2 bg-amber-100 rounded-full text-amber-800 shrink-0">
+                        <GraduationCap className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <strong className="text-xs text-amber-900 block font-bold">Registration Confirmation Letter</strong>
+                        <span className="text-[10px] text-amber-700">Official dynamic PDF issued for {selected.name}</span>
+                      </div>
                     </div>
-                    <div>
-                      <strong className="text-xs text-amber-900 block font-bold">Registration Confirmation Letter</strong>
-                      <span className="text-[10px] text-amber-700">Official dynamic PDF issued for this student</span>
+                    
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        onClick={() => handleSendEmail(selected)}
+                        disabled={isSendingEmail}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0D6B4F] hover:bg-[#0a5840] text-white rounded text-xs font-bold cursor-pointer shadow-xs transition-colors disabled:opacity-50"
+                      >
+                        {isSendingEmail ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            <span>Sending Email...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Mail className="w-3.5 h-3.5" />
+                            <span>Send Email</span>
+                          </>
+                        )}
+                      </button>
+
+                      <a
+                        href={`/api/send-confirmation-letter?regId=${encodeURIComponent(selected.id)}&name=${encodeURIComponent(selected.name)}&course=${encodeURIComponent(selected.course || "Viksit Bharat Innovation Leadership Programme")}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded text-xs font-bold cursor-pointer shadow-xs transition-colors"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        <span>Download PDF</span>
+                      </a>
                     </div>
                   </div>
-                  <a
-                    href={`/api/send-confirmation-letter?regId=${encodeURIComponent(selected.id)}&name=${encodeURIComponent(selected.name)}&course=${encodeURIComponent(selected.course || "Viksit Bharat Innovation Leadership Programme")}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded text-xs font-bold cursor-pointer shadow-xs transition-colors"
-                  >
-                    <Download className="w-3.5 h-3.5" />
-                    <span>Download PDF</span>
-                  </a>
+
+                  {emailNotice && (
+                    <div className={`p-2.5 rounded text-xs font-semibold flex items-center gap-2 ${
+                      emailNotice.includes("successfully") 
+                        ? "bg-emerald-50 text-emerald-800 border border-emerald-300" 
+                        : "bg-blue-50 text-blue-800 border border-blue-300"
+                    }`}>
+                      <CheckCircle className="w-4 h-4 shrink-0" />
+                      <span>{emailNotice}</span>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

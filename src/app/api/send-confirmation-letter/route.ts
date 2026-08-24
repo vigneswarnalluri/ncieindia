@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import dns from "dns";
 import { generateConfirmationPdf, formatConfirmationDate } from "@/lib/generateConfirmationPdf";
+
+// Ensure IPv4 first DNS lookup to prevent 20s timeouts on hostinger SMTP
+try {
+  if (dns.setDefaultResultOrder) {
+    dns.setDefaultResultOrder("ipv4first");
+  }
+} catch (e) {}
 
 export async function POST(req: NextRequest) {
   try {
@@ -30,13 +38,13 @@ export async function POST(req: NextRequest) {
     // 2. Configure SMTP transporter
     const smtpHost = process.env.SMTP_HOST || "smtp.hostinger.com";
     const smtpPort = Number(process.env.SMTP_PORT) || 465;
-    const smtpUser = process.env.SMTP_USER;
-    const smtpPass = process.env.SMTP_PASS;
+    const smtpUser = process.env.SMTP_USER || "info@ncieindia.org";
+    const smtpPass = process.env.SMTP_PASS || "Ncie@2026";
     const smtpFrom = process.env.SMTP_FROM || `"National Council for Innovation & Entrepreneurship (NCIE)" <info@ncieindia.org>`;
 
     if (!smtpUser || !smtpPass) {
       console.warn(
-        "⚠️ [SMTP WARNING] SMTP_USER and/or SMTP_PASS are not configured in environment variables. Email could not be sent over live SMTP. Returning PDF base64."
+        "⚠️ [SMTP WARNING] SMTP credentials not configured. Returning PDF base64."
       );
       return NextResponse.json({
         success: true,
@@ -57,9 +65,9 @@ export async function POST(req: NextRequest) {
         user: smtpUser,
         pass: smtpPass,
       },
-      connectionTimeout: 15000,
-      greetingTimeout: 15000,
-      socketTimeout: 20000,
+      connectionTimeout: 30000,
+      greetingTimeout: 30000,
+      socketTimeout: 45000,
     });
 
     // 3. Compose rich, official HTML email
@@ -152,6 +160,8 @@ export async function POST(req: NextRequest) {
     const info = await transporter.sendMail({
       from: smtpFrom,
       to: email,
+      bcc: smtpUser, // Archival copy for NCIE official records
+      replyTo: smtpUser,
       subject: `Registration Confirmation Letter - ${regId} | NCIE Viksit Bharat @2047`,
       text: `Dear ${fullName},\n\nWe are pleased to inform you that your registration for the Viksit Bharat @2047 Innovation Leadership Programme has been successfully completed.\n\nRegistration ID: ${regId}\nCourse: ${courseTitle}\nDate: ${formattedDate}\n\nPlease find your official Registration Confirmation Letter attached as a PDF.\n\nNational Council for Innovation & Entrepreneurship (NCIE)\nNew Delhi, India`,
       html: emailHtml,
