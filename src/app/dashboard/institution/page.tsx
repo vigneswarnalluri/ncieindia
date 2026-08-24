@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { supabase } from "@/lib/supabase";
+import { isSuperAdminEmail } from "@/lib/allowedEmails";
 
 import OverviewTab from "./components/OverviewTab";
 import VerifyTab, { Student } from "./components/VerifyTab";
@@ -37,7 +38,7 @@ const INIT_GRANTS: Grant[] = [];
 
 export default function InstitutionDashboard() {
   const router = useRouter();
-  const { session, demoSession, loading } = useAuthGuard();
+  const { session, demoSession, loading, isSuperAdmin } = useAuthGuard();
   const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -49,13 +50,15 @@ export default function InstitutionDashboard() {
   const [userOrg, setUserOrg] = useState("Indian Institute of Technology, Madras");
   const [userName, setUserName] = useState("Prof. V. K. Prasad");
   const userEmail = session?.user?.email || demoSession?.email || "spoc@iitmadras.ac.in";
-  const userRole = "SPOC";
+  const isSuper = isSuperAdmin || isSuperAdminEmail(userEmail);
+  const userRole = isSuper ? "SUPER ADMIN / DEV ROOT" : "SPOC";
 
   // Load real SPOC profile and registrations from Supabase
   useEffect(() => {
     const loadData = async () => {
       let resolvedOrg = "Indian Institute of Technology, Madras";
       const email = session?.user?.email || demoSession?.email;
+      const isSuperUser = isSuperAdmin || (email && isSuperAdminEmail(email));
       
       if (email) {
         try {
@@ -72,6 +75,9 @@ export default function InstitutionDashboard() {
             if (profile.full_name) {
               setUserName(profile.full_name);
             }
+          } else if (isSuperUser) {
+            setUserOrg("National Central Registry (All Institutions)");
+            setUserName("NCIE Master Developer");
           }
         } catch (err) {
           console.error("Failed to fetch SPOC profile:", err);
@@ -104,19 +110,46 @@ export default function InstitutionDashboard() {
             "Postgraduate": "PG",
           };
 
-          // Filter matching org_name
-          const matched = data.filter((rec: any) => isSameOrg(rec.org_name, resolvedOrg));
+          // Filter matching org_name (or show all for super admin)
+          const matched = isSuperUser
+            ? data
+            : data.filter((rec: any) => isSameOrg(rec.org_name, resolvedOrg));
 
-          const dbStudents: Student[] = matched.map((rec: any) => ({
-            id: rec.reg_id,
-            name: rec.full_name,
-            rollNo: rec.reg_number || rec.email.split("@")[0].toUpperCase() || rec.reg_id,
-            stream: rec.stream || "Engineering & Tech",
-            year: yearMap[rec.year_of_study] || rec.year_of_study || "I",
-            status: (rec.status || "pending") as Student["status"],
-            docUrl: rec.website_url,
-            isDbRecord: true,
-          }));
+          const dbStudents: Student[] = matched.map((rec: any) => {
+            let courseName = "";
+            let paymentId = "";
+            if (rec.proposal?.includes("Course:")) {
+              const match = rec.proposal.match(/Course:\s*([^|]+)/i);
+              if (match) courseName = match[1].trim();
+            }
+            if (rec.proposal?.includes("Payment ID:")) {
+              const match = rec.proposal.match(/Payment ID:\s*([^|]+)/i);
+              if (match) paymentId = match[1].trim();
+            }
+
+            return {
+              id: rec.reg_id,
+              name: rec.full_name,
+              rollNo: rec.reg_number || rec.email.split("@")[0].toUpperCase() || rec.reg_id,
+              stream: rec.stream || "Engineering & Tech",
+              year: yearMap[rec.year_of_study] || rec.year_of_study || "I",
+              status: (rec.status || "pending") as Student["status"],
+              docUrl: rec.website_url,
+              role: rec.role || "student",
+              course: courseName || (rec.role === "internship" ? "Viksit Bharat Innovation Leadership Programme" : undefined),
+              paymentId: paymentId || undefined,
+              email: rec.email,
+              mobile: rec.mobile,
+              orgName: rec.org_name,
+              department: rec.department,
+              specialization: rec.specialization,
+              state: rec.state,
+              city: rec.city,
+              submittedAt: rec.submitted_at,
+              proposal: rec.proposal,
+              isDbRecord: true,
+            };
+          });
 
           const dbProjects: Project[] = matched
             .filter((rec: any) => rec.proposal)
@@ -357,6 +390,16 @@ export default function InstitutionDashboard() {
             <p className="text-[10px] text-zinc-500 uppercase tracking-wider">Logged in as</p>
             <p className="text-xs font-bold text-zinc-800">{userName} &nbsp;|&nbsp; {userRole}</p>
           </div>
+          {isSuper && (
+            <button
+              onClick={() => router.push("/dashboard/official")}
+              className="flex items-center gap-1.5 text-[11px] font-bold text-[#0D6B4F] hover:text-[#094835] border border-[#0D6B4F] bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 transition-all cursor-pointer shadow-2xs"
+              title="Switch to Central Command Official Portal"
+            >
+              <LayoutDashboard className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Central Command</span>
+            </button>
+          )}
           <div className="w-px h-8 bg-zinc-200 hidden sm:block" />
           <button
             onClick={async () => {
@@ -422,7 +465,7 @@ export default function InstitutionDashboard() {
               <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
               <span className="text-[11px] font-bold text-emerald-700">Active &amp; Compliant</span>
             </div>
-            <p className="text-[9px] text-zinc-400 mt-0.5">MIC Star Rating: ★★★★☆ (4.5)</p>
+            <p className="text-[9px] text-zinc-400 mt-0.5">MIC Star Rating: 4.5 / 5.0 (High Rating)</p>
           </div>
         </aside>
 

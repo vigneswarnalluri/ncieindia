@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Plus, Edit2, Trash2, HelpCircle, AlertCircle, Award, Coins, ListChecks } from "lucide-react";
+import { Plus, Edit2, Trash2, HelpCircle, AlertCircle, Award, Coins, ListChecks, X } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { PROGRAMS_DATA, Program, Tranche } from "@/data/programsData";
 
@@ -258,7 +258,9 @@ export default function ProgramsTab({ onToast }: Props) {
                 <p className="text-[9px] font-bold text-emerald-200 uppercase tracking-widest">MoE Registry Editor</p>
                 <h3 className="text-sm font-bold">{editingProgram ? `Edit Program: ${editingProgram.title}` : "Create New Program Entry"}</h3>
               </div>
-              <button onClick={() => setEditorOpen(false)} className="text-white/80 hover:text-white border border-white/20 px-2 py-1 text-xs cursor-pointer">✕ Close</button>
+              <button onClick={() => setEditorOpen(false)} className="text-white/80 hover:text-white border border-white/20 px-2 py-1 text-xs cursor-pointer flex items-center gap-1">
+                <X className="w-3.5 h-3.5" /> Close
+              </button>
             </div>
 
             {/* Modal Body (Scrollable form) */}
@@ -390,9 +392,9 @@ export default function ProgramsTab({ onToast }: Props) {
                       <button
                         type="button"
                         onClick={() => setFormBenefits(formBenefits.filter((_, idx) => idx !== i))}
-                        className="text-red-700 hover:text-red-950 font-bold px-1 cursor-pointer"
+                        className="text-red-700 hover:text-red-950 font-bold px-1 cursor-pointer flex items-center"
                       >
-                        ✕
+                        <X className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   ))}
@@ -479,9 +481,9 @@ export default function ProgramsTab({ onToast }: Props) {
                         <button
                           type="button"
                           onClick={() => setFormTranches(formTranches.filter((_, idx) => idx !== i))}
-                          className="text-red-700 hover:text-red-950 font-bold px-1.5 cursor-pointer self-center"
+                          className="text-red-700 hover:text-red-950 font-bold px-1.5 cursor-pointer self-center flex items-center"
                         >
-                          ✕
+                          <X className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>
@@ -519,9 +521,9 @@ export default function ProgramsTab({ onToast }: Props) {
                         <button
                           type="button"
                           onClick={() => setFormStages(formStages.filter((_, idx) => idx !== i))}
-                          className="text-red-700 hover:text-red-950 font-bold px-1.5 cursor-pointer"
+                          className="text-red-700 hover:text-red-950 font-bold px-1.5 cursor-pointer flex items-center"
                         >
-                          ✕
+                          <X className="w-3.5 h-3.5" />
                         </button>
                       </div>
                       <input

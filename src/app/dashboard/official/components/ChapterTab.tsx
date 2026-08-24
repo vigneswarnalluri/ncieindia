@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Eye, FileText, Download, CheckCircle } from "lucide-react";
+import { Eye, FileText, Download, CheckCircle, X, Check } from "lucide-react";
 
 export interface ChapterReq { id: string; aishe: string; name: string; state: string; type: string; spoc: string; spocEmail: string; docUrl: string; status: "pending"|"approved"|"rejected"; }
 interface Props { requests: ChapterReq[]; onVerify: (id: string, action: "approved"|"rejected") => void; }
@@ -78,7 +78,9 @@ export default function ChapterTab({ requests, onVerify }: Props) {
                 <p className="text-[9px] font-bold text-emerald-200 uppercase tracking-widest">Document Audit — {selected.aishe}</p>
                 <p className="text-sm font-bold">{selected.name}</p>
               </div>
-              <button onClick={() => setSelected(null)} className="text-white/70 hover:text-white text-xs border border-white/30 px-2 py-1 cursor-pointer">✕ Close</button>
+              <button onClick={() => setSelected(null)} className="text-white/70 hover:text-white text-xs border border-white/30 px-2 py-1 cursor-pointer flex items-center gap-1">
+                <X className="w-3.5 h-3.5" /> Close
+              </button>
             </div>
             <div className="p-5 space-y-4">
               <table className="w-full text-xs border border-zinc-200">
@@ -165,8 +167,12 @@ export default function ChapterTab({ requests, onVerify }: Props) {
               })()}
               <div className="text-[10px] bg-amber-50 border border-amber-200 px-3 py-2 text-zinc-500">Verify AICTE/UGC affiliation document authenticity before approving. Approval generates the Chapter Registration Certificate automatically.</div>
               <div className="flex justify-end gap-3 pt-1">
-                <button onClick={() => { onVerify(selected.id,"rejected"); setSelected(null); }} className="bg-white hover:bg-red-50 text-red-700 text-xs font-bold px-4 py-2 border border-red-400 cursor-pointer transition-all">✕ Reject Application</button>
-                <button onClick={() => { onVerify(selected.id,"approved"); setSelected(null); }} className="bg-[#0D6B4F] hover:bg-[#0a5840] text-white text-xs font-bold px-4 py-2 border border-[#0D6B4F] cursor-pointer transition-all">✓ Approve Chapter</button>
+                <button onClick={() => { onVerify(selected.id,"rejected"); setSelected(null); }} className="bg-white hover:bg-red-50 text-red-700 text-xs font-bold px-4 py-2 border border-red-400 cursor-pointer transition-all flex items-center gap-1.5">
+                  <X className="w-3.5 h-3.5" /> Reject Application
+                </button>
+                <button onClick={() => { onVerify(selected.id,"approved"); setSelected(null); }} className="bg-[#0D6B4F] hover:bg-[#0a5840] text-white text-xs font-bold px-4 py-2 border border-[#0D6B4F] cursor-pointer transition-all flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5" /> Approve Chapter
+                </button>
               </div>
             </div>
           </div>

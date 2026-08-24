@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import type { Session } from "@supabase/supabase-js";
-import { ALLOWED_OFFICIAL_EMAILS, ALLOWED_INSTITUTION_EMAILS } from "@/lib/allowedEmails";
+import { ALLOWED_OFFICIAL_EMAILS, ALLOWED_INSTITUTION_EMAILS, isSuperAdminEmail } from "@/lib/allowedEmails";
 
 /**
  * useAuthGuard — call this at the top of any protected page component.
@@ -22,9 +22,14 @@ export function useAuthGuard() {
 
     const handleRoleVerification = (email: string, sessionRole?: string) => {
       const emailLower = email.toLowerCase();
-      const isOfficial = ALLOWED_OFFICIAL_EMAILS.some(e => e.toLowerCase() === emailLower);
-      const isInstitution = ALLOWED_INSTITUTION_EMAILS.some(e => e.toLowerCase() === emailLower);
+      const isSuper = isSuperAdminEmail(emailLower);
+      const isOfficial = isSuper || ALLOWED_OFFICIAL_EMAILS.some(e => e.toLowerCase() === emailLower);
+      const isInstitution = isSuper || ALLOWED_INSTITUTION_EMAILS.some(e => e.toLowerCase() === emailLower);
       const pathname = typeof window !== "undefined" ? window.location.pathname : "";
+
+      if (isSuper) {
+        return true; // Super Admin has unrestricted access to everything
+      }
 
       if (!isOfficial && !isInstitution) {
         supabase.auth.signOut().then(() => {
@@ -137,5 +142,8 @@ export function useAuthGuard() {
     };
   }, [router]);
 
-  return { session, demoSession, loading };
+  const currentEmail = session?.user?.email || demoSession?.email || null;
+  const isSuperAdmin = isSuperAdminEmail(currentEmail);
+
+  return { session, demoSession, loading, isSuperAdmin };
 }

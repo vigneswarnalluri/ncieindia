@@ -6,28 +6,31 @@ import { useRouter } from "next/navigation";
 import {
   LayoutDashboard, Building2, Landmark, FileText, Activity,
   LogOut, CheckCircle, ChevronRight, Printer, Download,
-  Menu, X, Award, RefreshCw
+  Menu, X, Award, RefreshCw, ClipboardList
 } from "lucide-react";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { supabase } from "@/lib/supabase";
+import { isSuperAdminEmail } from "@/lib/allowedEmails";
 
 import EcoTab from "./components/EcoTab";
 import ChapterTab, { ChapterReq } from "./components/ChapterTab";
+import RegistrationsTab from "./components/RegistrationsTab";
 import GrantsTab, { GrantRow } from "./components/GrantsTab";
 import CircularsTab, { Circular } from "./components/CircularsTab";
 import SecurityTab, { AuditLog } from "./components/SecurityTab";
 import ProgramsTab from "./components/ProgramsTab";
 import { PROGRAMS_DATA } from "@/data/programsData";
 
-type Tab = "overview" | "verify" | "grants" | "circulars" | "security" | "programs";
+type Tab = "overview" | "registrations" | "verify" | "grants" | "circulars" | "security" | "programs";
 
 const MENU: { tab: Tab; label: string; icon: React.ReactNode }[] = [
-  { tab: "overview",  label: "Ecosystem Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
-  { tab: "verify",    label: "Chapter Affiliation",  icon: <Building2 className="w-4 h-4" /> },
-  { tab: "grants",    label: "Grants Disbursement",  icon: <Landmark className="w-4 h-4" /> },
-  { tab: "circulars", label: "Gazette & Circulars",  icon: <FileText className="w-4 h-4" /> },
-  { tab: "programs",  label: "Program Registry",     icon: <Award className="w-4 h-4" /> },
-  { tab: "security",  label: "Audit & System Logs",  icon: <Activity className="w-4 h-4" /> },
+  { tab: "overview",      label: "Ecosystem Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
+  { tab: "registrations", label: "Application Registry", icon: <ClipboardList className="w-4 h-4" /> },
+  { tab: "verify",        label: "Chapter Affiliation",  icon: <Building2 className="w-4 h-4" /> },
+  { tab: "grants",        label: "Grants Disbursement",  icon: <Landmark className="w-4 h-4" /> },
+  { tab: "circulars",     label: "Gazette & Circulars",  icon: <FileText className="w-4 h-4" /> },
+  { tab: "programs",      label: "Program Registry",     icon: <Award className="w-4 h-4" /> },
+  { tab: "security",      label: "Audit & System Logs",  icon: <Activity className="w-4 h-4" /> },
 ];
 
 const INIT_REQUESTS: ChapterReq[] = [];
@@ -37,7 +40,7 @@ const INIT_LOGS: AuditLog[] = [];
 
 export default function OfficialDashboard() {
   const router = useRouter();
-  const { session, demoSession, loading } = useAuthGuard();
+  const { session, demoSession, loading, isSuperAdmin } = useAuthGuard();
   const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -47,8 +50,9 @@ export default function OfficialDashboard() {
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>(INIT_LOGS);
 
   const userEmail = session?.user?.email || demoSession?.email || "admin@ncie.gov.in";
-  const userName = demoSession?.name || (session?.user?.email ? session.user.email.split("@")[0] : "Nodal Administrator");
-  const userRole = "NODAL ADMINISTRATOR";
+  const isSuper = isSuperAdmin || isSuperAdminEmail(userEmail);
+  const userName = isSuper ? "NCIE Master Developer" : (demoSession?.name || (session?.user?.email ? session.user.email.split("@")[0] : "Nodal Administrator"));
+  const userRole = isSuper ? "SUPER ADMIN / DEVELOPER" : "NODAL ADMINISTRATOR";
 
   // Load real registration records from Supabase
   useEffect(() => {
@@ -342,8 +346,18 @@ export default function OfficialDashboard() {
         <div className="flex items-center gap-3">
           <div className="text-right hidden sm:block">
             <p className="text-[10px] text-zinc-500 uppercase tracking-wider">Authorization Level</p>
-            <p className="text-xs font-bold text-zinc-800">{userRole} — Level 2</p>
+            <p className="text-xs font-bold text-zinc-800">{userRole} {isSuper ? "— Root Access" : "— Level 2"}</p>
           </div>
+          {isSuper && (
+            <button
+              onClick={() => router.push("/dashboard/institution")}
+              className="flex items-center gap-1.5 text-[11px] font-bold text-[#0D6B4F] hover:text-[#094835] border border-[#0D6B4F] bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 transition-all cursor-pointer shadow-2xs"
+              title="Switch to Institution Chapter Portal"
+            >
+              <Building2 className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Institution Portal</span>
+            </button>
+          )}
           <div className="w-px h-8 bg-zinc-200 hidden sm:block" />
           <button
             onClick={async () => {
@@ -427,12 +441,13 @@ export default function OfficialDashboard() {
           </div>
 
           <div className="p-4 sm:p-6">
-            {activeTab === "overview"  && <EcoTab />}
-            {activeTab === "verify"    && <ChapterTab requests={requests} onVerify={handleVerify} />}
-            {activeTab === "grants"    && <GrantsTab grants={grants} onDisburse={handleDisburse} />}
-            {activeTab === "circulars" && <CircularsTab circulars={circulars} onAdd={handleAddCircular} />}
-            {activeTab === "programs"  && <ProgramsTab onToast={showToast} />}
-            {activeTab === "security"  && <SecurityTab logs={auditLogs} />}
+            {activeTab === "overview"      && <EcoTab />}
+            {activeTab === "registrations" && <RegistrationsTab onNotify={showToast} />}
+            {activeTab === "verify"        && <ChapterTab requests={requests} onVerify={handleVerify} />}
+            {activeTab === "grants"        && <GrantsTab grants={grants} onDisburse={handleDisburse} />}
+            {activeTab === "circulars"     && <CircularsTab circulars={circulars} onAdd={handleAddCircular} />}
+            {activeTab === "programs"      && <ProgramsTab onToast={showToast} />}
+            {activeTab === "security"      && <SecurityTab logs={auditLogs} />}
           </div>
 
           <div className="border-t border-zinc-200 bg-white px-6 py-3 flex flex-col md:flex-row justify-between items-center gap-1.5 md:gap-0 text-[10px] text-zinc-400 text-center md:text-left">

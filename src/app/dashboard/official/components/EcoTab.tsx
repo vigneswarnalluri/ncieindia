@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Building2, TrendingUp, Landmark, FileText, MapPin, Eye } from "lucide-react";
+import { Building2, TrendingUp, Landmark, FileText, MapPin, Eye, GraduationCap } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export default function EcoTab() {
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
+  const [dbStats, setDbStats] = useState<{ total: number; students: number; chapters: number; internships: number } | null>(null);
 
   useEffect(() => {
     const fetchCount = async () => {
@@ -17,14 +19,62 @@ export default function EcoTab() {
       }
     };
     fetchCount();
+
+    const fetchDbStats = async () => {
+      try {
+        const { count: total } = await supabase.from("registrations").select("*", { count: "exact", head: true });
+        const { count: students } = await supabase.from("registrations").select("*", { count: "exact", head: true }).in("role", ["student"]);
+        const { count: internships } = await supabase.from("registrations").select("*", { count: "exact", head: true }).eq("role", "internship");
+        const { count: chapters } = await supabase.from("registrations").select("*", { count: "exact", head: true }).eq("role", "chapter");
+        setDbStats({
+          total: total || 0,
+          students: students || 0,
+          internships: internships || 0,
+          chapters: chapters || 0,
+        });
+      } catch (e) {
+        console.error("Error fetching db stats:", e);
+      }
+    };
+    fetchDbStats();
   }, []);
 
   const stats = [
-    { label: "Registered Chapters", value: "1,245",    sub: "+8% this quarter", color: "border-t-[#0D6B4F]", icon: <Building2 className="w-5 h-5 text-[#0D6B4F]" /> },
-    { label: "Student Innovators",  value: "14,205",   sub: "Active registry",  color: "border-t-blue-600",  icon: <TrendingUp className="w-5 h-5 text-blue-600" /> },
-    { label: "Grants Disbursed",    value: "₹5.42 Cr", sub: "FY 2025–26",      color: "border-t-purple-600",icon: <Landmark className="w-5 h-5 text-purple-600" /> },
-    { label: "Patents Filed",       value: "189",       sub: "via NCIE IP Cell", color: "border-t-amber-500", icon: <FileText className="w-5 h-5 text-amber-500" /> },
-    { label: "Total Site Visitors",  value: visitorCount !== null ? visitorCount.toLocaleString() : "...", sub: "Live portal count", color: "border-t-[#C9A24B]", icon: <Eye className="w-5 h-5 text-[#C9A24B]" /> },
+    {
+      label: "Course Internships",
+      value: dbStats ? dbStats.internships.toLocaleString() : "...",
+      sub: "Active enrolled candidates",
+      color: "border-t-[#0D6B4F]",
+      icon: <GraduationCap className="w-5 h-5 text-[#0D6B4F]" />
+    },
+    {
+      label: "Student Innovators",
+      value: dbStats ? dbStats.students.toLocaleString() : "...",
+      sub: "Research registry",
+      color: "border-t-blue-600",
+      icon: <TrendingUp className="w-5 h-5 text-blue-600" />
+    },
+    {
+      label: "Affiliated Chapters",
+      value: dbStats ? (1245 + dbStats.chapters).toLocaleString() : "1,245",
+      sub: "Institutional network",
+      color: "border-t-purple-600",
+      icon: <Building2 className="w-5 h-5 text-purple-600" />
+    },
+    {
+      label: "Total DB Responses",
+      value: dbStats ? dbStats.total.toLocaleString() : "...",
+      sub: "Live Supabase records",
+      color: "border-t-amber-500",
+      icon: <FileText className="w-5 h-5 text-amber-500" />
+    },
+    {
+      label: "Total Site Visitors",
+      value: visitorCount !== null ? visitorCount.toLocaleString() : "...",
+      sub: "Live portal count",
+      color: "border-t-[#C9A24B]",
+      icon: <Eye className="w-5 h-5 text-[#C9A24B]" />
+    },
   ];
 
   return (

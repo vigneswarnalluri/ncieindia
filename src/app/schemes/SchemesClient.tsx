@@ -4,7 +4,7 @@ import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Download } from "lucide-react";
+import { Download, Check, Star } from "lucide-react";
 import { getStorageUrl } from "@/lib/supabase";
 import {
   SCHEMES_DATA,
@@ -472,7 +472,7 @@ export default function SchemesClient() {
                         className="flex items-start gap-3 bg-white p-3 rounded-xl border border-slate-200/80"
                       >
                         <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">
-                          ✓
+                          <Check className="w-3.5 h-3.5" />
                         </div>
                         <span className="text-slate-700">{item}</span>
                       </div>
@@ -492,7 +492,7 @@ export default function SchemesClient() {
                         className="flex items-start gap-3 bg-emerald-50/60 p-3 rounded-xl border border-emerald-200/60 text-emerald-950"
                       >
                         <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">
-                          ★
+                          <Star className="w-3 h-3 fill-white" />
                         </div>
                         <span>{item}</span>
                       </div>

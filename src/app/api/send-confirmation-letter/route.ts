@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     const smtpPort = Number(process.env.SMTP_PORT) || 465;
     const smtpUser = process.env.SMTP_USER;
     const smtpPass = process.env.SMTP_PASS;
-    const smtpFrom = process.env.SMTP_FROM || `"National Council for Innovation & Entrepreneurship (NCIE)" <office@ncieindia.org>`;
+    const smtpFrom = process.env.SMTP_FROM || `"National Council for Innovation & Entrepreneurship (NCIE)" <info@ncieindia.org>`;
 
     if (!smtpUser || !smtpPass) {
       console.warn(
@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
       </table>
 
       <div class="notice-box">
-        <strong>📎 Official Confirmation Attached:</strong> Your formal <strong>Registration Confirmation Letter</strong> has been attached to this email as a PDF document. Please download and preserve it for your institutional submissions and verification.
+        <strong>Official Confirmation Attached:</strong> Your formal <strong>Registration Confirmation Letter</strong> has been attached to this email as a PDF document. Please download and preserve it for your institutional submissions and verification.
       </div>
 
       <p>You are requested to actively participate in all programme sessions, coursework, assignments, and innovation-related engagements as communicated by the council.</p>

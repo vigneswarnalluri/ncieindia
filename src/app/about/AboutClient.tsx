@@ -12,7 +12,8 @@ import {
   Scale,
   Landmark,
   Briefcase,
-  GraduationCap
+  GraduationCap,
+  Star
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -88,7 +89,7 @@ export default function AboutPage() {
           <div className="bg-emerald-50/50 border border-primary/10 p-4 rounded-sm flex items-center justify-between gap-4 mt-6 select-none">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 border border-emerald-200/50">
-                <span className="text-primary font-bold text-xs">★</span>
+                <Star className="w-4 h-4 text-primary fill-primary" />
               </div>
               <p className="text-xs sm:text-sm text-zinc-800 font-bold leading-relaxed">
                 {language === "hi" 
@@ -105,7 +106,7 @@ export default function AboutPage() {
           <div className="bg-amber-50/40 border border-[#C9A24B]/20 p-4 rounded-sm flex items-center justify-between gap-4 mt-4 select-none animate-fadeIn">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0 border border-amber-200/50">
-                <span className="text-[#8B6E30] font-bold text-xs">✉</span>
+                <Mail className="w-4 h-4 text-[#8B6E30]" />
               </div>
               <p className="text-xs sm:text-sm text-zinc-800 font-bold leading-relaxed">
                 {language === "hi" 
