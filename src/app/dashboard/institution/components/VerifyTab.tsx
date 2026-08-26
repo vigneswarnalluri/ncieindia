@@ -1087,18 +1087,20 @@ export default function VerifyTab({ students, onAction }: Props) {
                           <div className="flex justify-center gap-1.5">
                             <button
                               onClick={() => setSelected(s)}
-                              className="bg-[#0D6B4F] hover:bg-[#0a5840] text-white text-[10px] font-bold px-3 py-1 border border-[#0D6B4F] cursor-pointer transition-all flex items-center gap-1 shadow-2xs rounded-xs"
+                              className="bg-[#0D6B4F] hover:bg-[#0a5840] text-white text-[10px] font-bold px-3 py-1 border border-[#0D6B4F] cursor-pointer transition-all flex items-center gap-1.5 shadow-2xs rounded-xs"
+                              title="Audit Candidate & Review Uploaded Documents"
                             >
-                              <Eye className="w-3 h-3" /> Audit
+                              <Eye className="w-3.5 h-3.5" /> Audit &amp; Documents
                             </button>
                           </div>
                         ) : (
                           <div className="flex justify-center gap-1.5">
                             <button
                               onClick={() => setSelected(s)}
-                              className="text-zinc-600 hover:text-zinc-900 text-[10px] font-bold px-2.5 py-1 border border-zinc-200 hover:border-zinc-300 rounded-xs cursor-pointer transition-all flex items-center gap-1 bg-white"
+                              className="bg-zinc-50 hover:bg-[#e8f5f0] text-zinc-800 hover:text-[#0D6B4F] text-[10px] font-bold px-2.5 py-1 border border-zinc-300 hover:border-[#0D6B4F] rounded-xs cursor-pointer transition-all flex items-center gap-1.5 shadow-2xs"
+                              title="View Candidate Documents, Confirmation Letter & Verification Details"
                             >
-                              <Eye className="w-3 h-3" /> Details
+                              <FileText className="w-3.5 h-3.5 text-[#0D6B4F]" /> Audit &amp; Documents
                             </button>
                           </div>
                         )}
