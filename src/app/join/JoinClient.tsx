@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabase";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { VACANCIES_DATA } from "@/data/vacanciesData";
 import { PROGRAMS_DATA } from "@/data/programsData";
+import { normalizeCollegeName } from "@/lib/collegeNormalization";
 
 const uploadFile = async (file: File, path: string) => {
   const { data, error } = await supabase.storage
@@ -550,7 +551,9 @@ export default function JoinClient() {
     ? collegesCache[collegeSearchLetter] || []
     : (collegeSearchLetter ? collegesCache["other"] || [] : []);
 
-  const displayedColleges = Array.from(new Set([...COLLEGES, ...currentLetterColleges])).sort();
+  const displayedColleges = Array.from(
+    new Set([...COLLEGES, ...currentLetterColleges].map((c) => normalizeCollegeName(c)))
+  ).sort();
 
   useEffect(() => {
     const savedSubmission = localStorage.getItem("ncie_submission_details");

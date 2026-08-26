@@ -11,6 +11,7 @@ import {
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { supabase } from "@/lib/supabase";
 import { isSuperAdminEmail } from "@/lib/allowedEmails";
+import { normalizeCollegeName } from "@/lib/collegeNormalization";
 
 import OverviewTab from "./components/OverviewTab";
 import VerifyTab, { Student } from "./components/VerifyTab";
@@ -140,7 +141,7 @@ export default function InstitutionDashboard() {
               paymentId: paymentId || undefined,
               email: rec.email,
               mobile: rec.mobile,
-              orgName: rec.org_name,
+              orgName: normalizeCollegeName(rec.org_name),
               department: rec.department,
               specialization: rec.specialization,
               state: rec.state,
