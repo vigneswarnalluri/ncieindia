@@ -149,11 +149,14 @@ export default function Header() {
                   className="h-8 w-auto object-contain shrink-0"
                 />
                 <div className="h-5 w-px bg-white/20" />
-                <img
-                  src="/ministry-commerce.png"
-                  alt="Ministry of Commerce and Industry"
-                  className="h-[18px] w-auto object-contain shrink-0 opacity-90"
-                />
+                <div className="flex flex-col justify-center select-none">
+                  <span className="text-[11px] font-medium text-white/95 tracking-wide leading-tight">
+                    कौशल विकास और उद्यमशीलता मंत्रालय
+                  </span>
+                  <span className="text-[9px] font-bold text-white/80 uppercase tracking-wider leading-tight mt-0.5">
+                    Ministry of Skill Development &amp; Entrepreneurship
+                  </span>
+                </div>
               </div>
 
               <div className="h-5 w-px bg-white/20 hidden xl:block" />

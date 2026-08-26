@@ -85,6 +85,36 @@ export default function AboutPage() {
         <div className="space-y-4 text-xs sm:text-sm text-zinc-700 leading-relaxed font-sans">
           <p className="indent-8 text-justify">{t("about_intro_p1")}</p>
           <p className="indent-8 text-justify">{t("about_intro_p2")}</p>
+          <p className="indent-8 text-justify">{t("about_intro_p3")}</p>
+
+          {/* Core Focus Badge Card */}
+          <div className="bg-gradient-to-r from-emerald-50/70 via-zinc-50 to-amber-50/40 border border-emerald-600/20 p-4 sm:p-5 rounded-xs space-y-3 mt-4 select-none">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#0D6B4F] animate-pulse" />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#0D6B4F] font-mono">
+                {language === "hi" ? "मुख्य फोकस क्षेत्र" : "Core Focus"}
+              </h3>
+            </div>
+            <div className="flex flex-wrap gap-2 pt-1">
+              {[
+                { en: "Innovation", hi: "नवाचार" },
+                { en: "Entrepreneurship", hi: "उद्यमिता" },
+                { en: "Leadership", hi: "नेतृत्व" },
+                { en: "Skill Development", hi: "कौशल विकास" },
+                { en: "Startup Development", hi: "स्टार्टअप विकास" },
+                { en: "Youth Empowerment", hi: "युवा सशक्तिकरण" },
+                { en: "Institutional Collaboration", hi: "संस्थागत सहयोग" }
+              ].map((item, idx) => (
+                <span
+                  key={idx}
+                  className="inline-flex items-center px-3 py-1 bg-white border border-zinc-200 shadow-2xs text-zinc-800 text-[11px] sm:text-xs font-semibold rounded-xs hover:border-emerald-500 hover:text-[#0D6B4F] transition-colors"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-2 shrink-0" />
+                  {language === "hi" ? item.hi : item.en}
+                </span>
+              ))}
+            </div>
+          </div>
 
           <div className="bg-emerald-50/50 border border-primary/10 p-4 rounded-sm flex items-center justify-between gap-4 mt-6 select-none">
             <div className="flex items-center gap-3">
