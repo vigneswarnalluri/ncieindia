@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import {
   LayoutDashboard, Users, Lightbulb, Landmark, Award,
   LogOut, CheckCircle, ChevronRight, HelpCircle, Printer, Download,
-  Menu, X
+  Menu, X, Mail
 } from "lucide-react";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { supabase } from "@/lib/supabase";
@@ -18,8 +18,9 @@ import VerifyTab, { Student } from "./components/VerifyTab";
 import InnovationsTab, { Project } from "./components/InnovationsTab";
 import GrantsTab, { Grant } from "./components/GrantsTab";
 import ActivitiesTab from "./components/ActivitiesTab";
+import MailboxTab from "./components/MailboxTab";
 
-type Tab = "overview" | "verify" | "innovations" | "grants" | "activities";
+type Tab = "overview" | "verify" | "innovations" | "grants" | "activities" | "mailbox";
 
 const MENU: { tab: Tab; label: string; icon: React.ReactNode }[] = [
   { tab: "overview",    label: "Dashboard Overview",     icon: <LayoutDashboard className="w-4 h-4" /> },
@@ -27,6 +28,7 @@ const MENU: { tab: Tab; label: string; icon: React.ReactNode }[] = [
   { tab: "innovations", label: "Innovation Repository",  icon: <Lightbulb className="w-4 h-4" /> },
   { tab: "grants",      label: "Grants & Utilisation",   icon: <Landmark className="w-4 h-4" /> },
   { tab: "activities",  label: "Activity Reporting",     icon: <Award className="w-4 h-4" /> },
+  { tab: "mailbox",     label: "Institutional Mailbox",  icon: <Mail className="w-4 h-4" /> },
 ];
 
 const INIT_STUDENTS: Student[] = [];
@@ -50,6 +52,7 @@ export default function InstitutionDashboard() {
 
   const [userOrg, setUserOrg] = useState("Indian Institute of Technology, Madras");
   const [userName, setUserName] = useState("Prof. V. K. Prasad");
+  const [unreadMailCount, setUnreadMailCount] = useState(2);
   const userEmail = session?.user?.email || demoSession?.email || "spoc@iitmadras.ac.in";
   const isSuper = isSuperAdmin || isSuperAdminEmail(userEmail);
   const userRole = isSuper ? "SUPER ADMIN / DEV ROOT" : "SPOC";
@@ -153,18 +156,44 @@ export default function InstitutionDashboard() {
           });
 
           const dbProjects: Project[] = matched
-            .filter((rec: any) => rec.proposal)
+            .filter((rec: any) => {
+              // Exclude course internship registrations - they belong in student verification
+              if (rec.role === "internship") return false;
+              if (!rec.proposal) return false;
+              const prop = rec.proposal.trim();
+              if (prop.startsWith("Course:") || prop.startsWith("Payment ID:")) return false;
+              // Exclude test dummy entries like "dedede", "sd", etc.
+              const lower = prop.toLowerCase();
+              if (["dedede", "sd", "test", "asdf", "xyz"].includes(lower) || lower.length < 3) return false;
+              return true;
+            })
             .map((rec: any) => {
-              const cleanTitle = rec.proposal.startsWith("Course:")
-                ? rec.proposal.split(" | ")[0]
-                : (rec.proposal ? rec.proposal.slice(0, 50) + (rec.proposal.length > 50 ? "..." : "") : "Untitled Innovation");
+              let cleanTitle = rec.proposal ? rec.proposal.trim() : "Untitled Innovation";
+              if (cleanTitle.includes("Project Title:")) {
+                const match = cleanTitle.match(/Project Title:\s*([^|]+)/i);
+                if (match) cleanTitle = match[1].trim();
+              } else if (cleanTitle.includes("Title:")) {
+                const match = cleanTitle.match(/Title:\s*([^|]+)/i);
+                if (match) cleanTitle = match[1].trim();
+              } else if (cleanTitle.length > 65) {
+                cleanTitle = cleanTitle.slice(0, 65) + "...";
+              }
+
               return {
                 id: rec.reg_id,
                 title: cleanTitle,
                 teamLeader: rec.full_name,
-                stream: rec.stream || "Innovation",
+                email: rec.email,
+                mobile: rec.mobile,
+                college: normalizeCollegeName(rec.org_name),
+                rollNo: rec.reg_number || rec.accreditation_code,
+                stream: rec.stream || "Innovation & Technology",
                 trl: 3,
                 status: (rec.status === "approved" ? "endorsed" : "draft") as Project["status"],
+                description: rec.proposal,
+                proposal: rec.proposal,
+                docUrl: rec.website_url,
+                submittedAt: rec.created_at,
                 isDbRecord: true,
               };
             });
@@ -210,6 +239,29 @@ export default function InstitutionDashboard() {
     showToast(`Membership ${action}. Ref: NCIE-VRF-${Date.now().toString().slice(-6)}`);
   };
 
+  const handleBatchStudentAction = async (ids: string[], action: "approved" | "rejected") => {
+    if (ids.length === 0) return;
+    setStudents(prev => prev.map(s => ids.includes(s.id) ? { ...s, status: action } : s));
+
+    const dbIds = ids.filter(id => id.startsWith("REG-") || id.startsWith("PROJ-") || students.find(s => s.id === id)?.isDbRecord);
+    if (dbIds.length > 0) {
+      try {
+        const { error } = await supabase
+          .from("registrations")
+          .update({ status: action })
+          .in("reg_id", dbIds);
+        if (error) {
+          console.error("Failed to batch update registrations:", error);
+          showToast(`Error batch updating: ${error.message}`);
+          return;
+        }
+      } catch (err) {
+        console.error("Error updating batch registration status:", err);
+      }
+    }
+    showToast(`Successfully ${action} ${ids.length} candidate application(s).`);
+  };
+
   const handleEndorse = async (id: string) => {
     setProjects(prev => prev.map(p => p.id === id ? { ...p, status: "endorsed" } : p));
     if (id.startsWith("REG-") || !id.startsWith("P")) {
@@ -228,9 +280,70 @@ export default function InstitutionDashboard() {
     showToast("Project endorsed and forwarded to NCIE National Selection Pool.");
   };
 
-  const handleAddProject = (p: Omit<Project, "id" | "status">) => {
-    setProjects(prev => [{ id: `P${Date.now()}`, ...p, status: "draft" }, ...prev]);
-    showToast("Project draft saved to Innovation Repository.");
+  const handleAddProject = async (p: Omit<Project, "id" | "status">) => {
+    const regId = `PROJ-2026-${Date.now().toString().slice(-4)}`;
+    const fullProposal = `Project Title: ${p.title} | Team Leader: ${p.teamLeader} | Stream: ${p.stream} | TRL-${p.trl} | Abstract: ${p.description || "Project draft initiated by institutional chapter."}`;
+    
+    const newProject: Project = {
+      id: regId,
+      title: p.title,
+      teamLeader: p.teamLeader,
+      email: p.email || userEmail,
+      mobile: p.mobile || "",
+      college: userOrg,
+      rollNo: p.rollNo || "",
+      stream: p.stream,
+      trl: p.trl,
+      status: "draft",
+      description: p.description || p.proposal || "Project draft registered in institutional innovation repository.",
+      proposal: fullProposal,
+      submittedAt: new Date().toISOString(),
+      isDbRecord: true,
+    };
+
+    setProjects(prev => [newProject, ...prev]);
+    showToast("Project draft saved and registered to Innovation Repository.");
+
+    try {
+      const { error } = await supabase.from("registrations").insert([
+        {
+          reg_id: regId,
+          full_name: p.teamLeader,
+          email: p.email || `team_${Date.now()}@ncie.org`,
+          mobile: p.mobile || "",
+          org_name: userOrg,
+          stream: p.stream,
+          reg_number: p.rollNo || "",
+          role: "student",
+          proposal: fullProposal,
+          status: "pending",
+        }
+      ]);
+      if (error) {
+        console.error("Failed to insert project draft into Supabase:", error);
+      }
+    } catch (err) {
+      console.error("Error saving project draft to DB:", err);
+    }
+  };
+
+  const handleDeleteProject = async (id: string) => {
+    setProjects(prev => prev.filter(p => p.id !== id));
+    showToast("Project removed from Innovation Repository.");
+
+    if (id.startsWith("REG-") || id.startsWith("PROJ-")) {
+      try {
+        const { error } = await supabase
+          .from("registrations")
+          .delete()
+          .eq("reg_id", id);
+        if (error) {
+          console.error("Failed to delete project from Supabase:", error);
+        }
+      } catch (err) {
+        console.error("Error deleting project from DB:", err);
+      }
+    }
   };
 
   const handleAddEvent = (e: { title: string; type: string; date: string; attendees: number }) => {
@@ -451,6 +564,9 @@ export default function InstitutionDashboard() {
                 {item.tab === "verify" && pendingCount > 0 && (
                   <span className="bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 min-w-[18px] text-center">{pendingCount}</span>
                 )}
+                {item.tab === "mailbox" && unreadMailCount > 0 && (
+                  <span className="bg-[#0D6B4F] text-white text-[9px] font-bold px-1.5 py-0.5 min-w-[18px] text-center rounded-xs">{unreadMailCount}</span>
+                )}
               </button>
             ))}
             <div className="border-t border-zinc-200 mt-3 pt-3">
@@ -498,10 +614,11 @@ export default function InstitutionDashboard() {
                 />
               );
             })()}
-            {activeTab === "verify"      && <VerifyTab      students={students} onAction={handleStudentAction} />}
-            {activeTab === "innovations" && <InnovationsTab projects={projects} onEndorse={handleEndorse} onAdd={handleAddProject} />}
+            {activeTab === "verify"      && <VerifyTab      students={students} onAction={handleStudentAction} onBatchAction={handleBatchStudentAction} />}
+            {activeTab === "innovations" && <InnovationsTab projects={projects} onEndorse={handleEndorse} onAdd={handleAddProject} onDelete={handleDeleteProject} />}
             {activeTab === "grants"      && <GrantsTab      grants={grants} onToast={showToast} />}
             {activeTab === "activities"  && <ActivitiesTab  events={events} onAdd={handleAddEvent} />}
+            {activeTab === "mailbox"     && <MailboxTab     userOrg={userOrg} userEmail={userEmail} onUnreadCountChange={setUnreadMailCount} />}
           </div>
 
           <div className="border-t border-zinc-200 bg-white px-6 py-3 flex flex-col md:flex-row justify-between items-center gap-1.5 md:gap-0 text-[10px] text-zinc-400 text-center md:text-left">

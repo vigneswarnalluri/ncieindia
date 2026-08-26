@@ -55,10 +55,14 @@ export interface Student {
 interface Props {
   students: Student[];
   onAction: (id: string, action: "approved" | "rejected") => void;
+  onBatchAction?: (ids: string[], action: "approved" | "rejected") => void;
 }
 
-export default function VerifyTab({ students, onAction }: Props) {
+export default function VerifyTab({ students, onAction, onBatchAction }: Props) {
   const [selected, setSelected] = useState<Student | null>(null);
+  
+  // Multi-Selection State
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   
   // Primary Filters
   const [filterRole, setFilterRole] = useState<string>("all");
@@ -324,13 +328,27 @@ export default function VerifyTab({ students, onAction }: Props) {
     sortBy,
   ]);
 
-  // Overall KPI counts
+  // Role-scoped students (for dynamic dropdown counts)
+  const roleScopedStudents = useMemo(() => {
+    return students.filter((s) => {
+      if (filterRole === "internship" && s.role !== "internship") return false;
+      if (filterRole === "student" && s.role === "internship") return false;
+      return true;
+    });
+  }, [students, filterRole]);
+
+  // Overall & Scoped KPI counts
   const totalCount = students.length;
   const pendingCount = students.filter((s) => s.status === "pending").length;
   const approvedCount = students.filter((s) => s.status === "approved").length;
   const rejectedCount = students.filter((s) => s.status === "rejected").length;
   const internshipCount = students.filter((s) => s.role === "internship").length;
   const studentMembCount = students.filter((s) => s.role === "student" || !s.role).length;
+
+  const scopedTotalCount = roleScopedStudents.length;
+  const scopedPendingCount = roleScopedStudents.filter((s) => s.status === "pending").length;
+  const scopedApprovedCount = roleScopedStudents.filter((s) => s.status === "approved").length;
+  const scopedRejectedCount = roleScopedStudents.filter((s) => s.status === "rejected").length;
 
   // Pagination calculations
   const totalPages = pageSize === -1 ? 1 : Math.max(1, Math.ceil(filteredStudents.length / pageSize));
@@ -403,6 +421,115 @@ export default function VerifyTab({ students, onAction }: Props) {
     URL.revokeObjectURL(url);
   };
 
+  // Multi-Selection Actions
+  const handleToggleSelect = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleToggleSelectAllPage = () => {
+    const pageIds = paginatedStudents.map((s) => s.id);
+    const allPageSelected = pageIds.length > 0 && pageIds.every((id) => selectedIds.includes(id));
+    if (allPageSelected) {
+      setSelectedIds((prev) => prev.filter((id) => !pageIds.includes(id)));
+    } else {
+      setSelectedIds((prev) => Array.from(new Set([...prev, ...pageIds])));
+    }
+  };
+
+  const handleSelectAllFiltered = () => {
+    const allFilteredIds = filteredStudents.map((s) => s.id);
+    setSelectedIds(allFilteredIds);
+  };
+
+  const handleClearSelection = () => {
+    setSelectedIds([]);
+  };
+
+  const handleBatchApprove = () => {
+    if (selectedIds.length === 0) return;
+    if (onBatchAction) {
+      onBatchAction(selectedIds, "approved");
+    } else {
+      selectedIds.forEach((id) => onAction(id, "approved"));
+    }
+    setSelectedIds([]);
+  };
+
+  const handleBatchReject = () => {
+    if (selectedIds.length === 0) return;
+    if (onBatchAction) {
+      onBatchAction(selectedIds, "rejected");
+    } else {
+      selectedIds.forEach((id) => onAction(id, "rejected"));
+    }
+    setSelectedIds([]);
+  };
+
+  const handleExportSelectedCsv = () => {
+    const selectedStudents = students.filter((s) => selectedIds.includes(s.id));
+    if (selectedStudents.length === 0) return;
+
+    const headers = [
+      "S.No",
+      "Registration ID",
+      "Student Name",
+      "Role/Category",
+      "College / Institution",
+      "Course",
+      "Roll Number",
+      "Stream/Branch",
+      "Department",
+      "Specialization",
+      "Year",
+      "Email",
+      "Mobile",
+      "Payment ID",
+      "Status",
+      "Submission Date"
+    ];
+
+    const rows = selectedStudents.map((s, idx) => [
+      idx + 1,
+      s.id,
+      s.name,
+      s.role === "internship" ? "Course Internship" : "Student Innovator",
+      normalizeCollegeName(s.orgName) || "N/A",
+      s.course || "N/A",
+      s.rollNo || "N/A",
+      s.stream || "N/A",
+      s.department || "N/A",
+      s.specialization || "N/A",
+      s.year || "N/A",
+      s.email || "N/A",
+      s.mobile || "N/A",
+      s.paymentId || "N/A",
+      s.status.toUpperCase(),
+      s.submittedAt ? new Date(s.submittedAt).toLocaleString("en-IN") : "N/A"
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) =>
+        row
+          .map((val) => {
+            const str = String(val).replace(/"/g, '""');
+            return str.includes(",") || str.includes("\n") ? `"${str}"` : str;
+          })
+          .join(",")
+      )
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `NCIE_Selected_Students_Export_${Date.now()}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   // Generate visible page numbers for pagination with ellipsis
   const getPageNumbers = () => {
     if (totalPages <= 7) {
@@ -437,23 +564,55 @@ export default function VerifyTab({ students, onAction }: Props) {
 
         {/* Quick KPI Badges & Export */}
         <div className="flex flex-wrap items-center gap-2 text-xs">
-          <div className="px-3 py-1.5 bg-zinc-50 border border-zinc-200 rounded text-zinc-700 font-medium flex items-center gap-1.5">
+          <button
+            onClick={() => {
+              setFilterRole("all");
+              setFilterStatus("all");
+              setCurrentPage(1);
+            }}
+            className="px-3 py-1.5 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 rounded text-zinc-700 font-medium flex items-center gap-1.5 cursor-pointer transition-colors"
+            title="View All Applications"
+          >
             <span className="text-[10px] uppercase text-zinc-400 font-bold">Total:</span>
             <strong className="text-zinc-900 font-bold">{totalCount}</strong>
-          </div>
-          <div className="px-3 py-1.5 bg-amber-50/80 border border-amber-200 rounded text-amber-900 font-medium flex items-center gap-1.5">
+          </button>
+          <button
+            onClick={() => {
+              setFilterRole("all");
+              setFilterStatus("pending");
+              setCurrentPage(1);
+            }}
+            className="px-3 py-1.5 bg-amber-50/80 hover:bg-amber-100 border border-amber-200 rounded text-amber-900 font-medium flex items-center gap-1.5 cursor-pointer transition-colors"
+            title="View All Pending Applications"
+          >
             <span className="text-[10px] uppercase text-amber-600 font-bold">Pending:</span>
             <strong className="text-amber-800 font-bold">{pendingCount}</strong>
-          </div>
-          <div className="px-3 py-1.5 bg-emerald-50/80 border border-emerald-200 rounded text-emerald-900 font-medium flex items-center gap-1.5">
+          </button>
+          <button
+            onClick={() => {
+              setFilterRole("all");
+              setFilterStatus("approved");
+              setCurrentPage(1);
+            }}
+            className="px-3 py-1.5 bg-emerald-50/80 hover:bg-emerald-100 border border-emerald-200 rounded text-emerald-900 font-medium flex items-center gap-1.5 cursor-pointer transition-colors"
+            title="View All Approved Applications"
+          >
             <span className="text-[10px] uppercase text-emerald-600 font-bold">Approved:</span>
             <strong className="text-emerald-800 font-bold">{approvedCount}</strong>
-          </div>
+          </button>
           {rejectedCount > 0 && (
-            <div className="px-3 py-1.5 bg-red-50/80 border border-red-200 rounded text-red-900 font-medium flex items-center gap-1.5">
+            <button
+              onClick={() => {
+                setFilterRole("all");
+                setFilterStatus("rejected");
+                setCurrentPage(1);
+              }}
+              className="px-3 py-1.5 bg-red-50/80 hover:bg-red-100 border border-red-200 rounded text-red-900 font-medium flex items-center gap-1.5 cursor-pointer transition-colors"
+              title="View All Rejected Applications"
+            >
               <span className="text-[10px] uppercase text-red-600 font-bold">Rejected:</span>
               <strong className="text-red-800 font-bold">{rejectedCount}</strong>
-            </div>
+            </button>
           )}
           <button
             onClick={handleExportCsv}
@@ -591,10 +750,10 @@ export default function VerifyTab({ students, onAction }: Props) {
               }}
               className="w-full py-1.5 px-2.5 text-xs bg-zinc-50 border border-zinc-200 rounded focus:bg-white focus:outline-none focus:border-[#0D6B4F] text-zinc-700 font-medium cursor-pointer"
             >
-              <option value="all">Status: All ({totalCount})</option>
-              <option value="pending">Status: Pending ({pendingCount})</option>
-              <option value="approved">Status: Approved ({approvedCount})</option>
-              <option value="rejected">Status: Rejected ({rejectedCount})</option>
+              <option value="all">Status: All ({scopedTotalCount})</option>
+              <option value="pending">Status: Pending ({scopedPendingCount})</option>
+              <option value="approved">Status: Approved ({scopedApprovedCount})</option>
+              <option value="rejected">Status: Rejected ({scopedRejectedCount})</option>
             </select>
           </div>
 
@@ -946,6 +1105,60 @@ export default function VerifyTab({ students, onAction }: Props) {
         )}
       </div>
 
+      {/* Bulk Action Toolbar */}
+      {selectedIds.length > 0 && (
+        <div className="bg-[#1a3a2a] text-white p-3 rounded-xs shadow-lg flex flex-wrap items-center justify-between gap-3 border-l-4 border-emerald-500 animate-in fade-in slide-in-from-top-2 duration-150">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2">
+              <span className="bg-emerald-500 text-white font-mono font-bold text-xs px-2.5 py-0.5 rounded-full shadow-xs">
+                {selectedIds.length}
+              </span>
+              <span className="text-xs font-bold tracking-wide">
+                Candidate{selectedIds.length > 1 ? "s" : ""} Selected
+              </span>
+            </div>
+            {selectedIds.length < filteredStudents.length && (
+              <button
+                onClick={handleSelectAllFiltered}
+                className="text-[11px] text-emerald-300 hover:text-white underline font-semibold cursor-pointer"
+              >
+                Select all {filteredStudents.length} matching candidates
+              </button>
+            )}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={handleBatchApprove}
+              className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3 py-1.5 rounded-xs cursor-pointer transition-colors flex items-center gap-1.5 shadow-xs"
+              title={`Approve ${selectedIds.length} selected candidate(s)`}
+            >
+              <Check className="w-3.5 h-3.5" /> Approve ({selectedIds.length})
+            </button>
+            <button
+              onClick={handleBatchReject}
+              className="bg-red-600 hover:bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-xs cursor-pointer transition-colors flex items-center gap-1.5 shadow-xs"
+              title={`Reject ${selectedIds.length} selected candidate(s)`}
+            >
+              <X className="w-3.5 h-3.5" /> Reject ({selectedIds.length})
+            </button>
+            <button
+              onClick={handleExportSelectedCsv}
+              className="bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-3 py-1.5 rounded-xs border border-white/20 cursor-pointer transition-colors flex items-center gap-1.5"
+              title="Export selected candidates to CSV"
+            >
+              <Download className="w-3.5 h-3.5" /> Export Selected
+            </button>
+            <button
+              onClick={handleClearSelection}
+              className="text-zinc-300 hover:text-white text-xs px-2 py-1.5 cursor-pointer ml-1 font-medium"
+            >
+              Clear Selection
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Main Table Card */}
       <div className="bg-white border border-zinc-200 rounded-xs shadow-2xs overflow-hidden">
         <div className="px-4 py-2.5 border-b border-zinc-200 bg-zinc-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
@@ -980,7 +1193,16 @@ export default function VerifyTab({ students, onAction }: Props) {
           <table className="w-full text-xs border-collapse">
             <thead>
               <tr className="bg-[#0D6B4F] text-white text-[10px] uppercase tracking-wider select-none">
-                <th className="px-4 py-2.5 font-semibold text-left w-14">S.No.</th>
+                <th className="px-3 py-2.5 font-semibold text-center w-10">
+                  <input
+                    type="checkbox"
+                    checked={paginatedStudents.length > 0 && paginatedStudents.every((s) => selectedIds.includes(s.id))}
+                    onChange={handleToggleSelectAllPage}
+                    className="w-3.5 h-3.5 rounded border-zinc-300 text-[#0D6B4F] focus:ring-[#0D6B4F] cursor-pointer"
+                    title="Select All on Current Page"
+                  />
+                </th>
+                <th className="px-3 py-2.5 font-semibold text-left w-12">S.No.</th>
                 <th className="px-4 py-2.5 font-semibold text-left">Student Name</th>
                 <th className="px-4 py-2.5 font-semibold text-left">Category / Course</th>
                 <th className="px-4 py-2.5 font-semibold text-left">Roll Number</th>
@@ -994,12 +1216,21 @@ export default function VerifyTab({ students, onAction }: Props) {
               {paginatedStudents.length > 0 ? (
                 paginatedStudents.map((s, i) => {
                   const itemIndex = startIndex + i + 1;
+                  const isSelected = selectedIds.includes(s.id);
                   return (
                     <tr
                       key={s.id}
-                      className={`${i % 2 === 0 ? "bg-white" : "bg-zinc-50/50"} hover:bg-[#e8f5f0]/40 transition-colors`}
+                      className={`${isSelected ? "bg-[#e8f5f0]/80" : (i % 2 === 0 ? "bg-white" : "bg-zinc-50/50")} hover:bg-[#e8f5f0]/40 transition-colors`}
                     >
-                      <td className="px-4 py-2.5 text-zinc-500 font-mono font-medium">{itemIndex}</td>
+                      <td className="px-3 py-2.5 text-center">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => handleToggleSelect(s.id)}
+                          className="w-3.5 h-3.5 rounded border-zinc-300 text-[#0D6B4F] focus:ring-[#0D6B4F] cursor-pointer"
+                        />
+                      </td>
+                      <td className="px-3 py-2.5 text-zinc-500 font-mono font-medium">{itemIndex}</td>
                       <td className="px-4 py-2.5 font-semibold text-zinc-900">
                         <div className="flex items-center gap-1.5">
                           <span>{s.name}</span>
@@ -1027,7 +1258,7 @@ export default function VerifyTab({ students, onAction }: Props) {
                         )}
                         {s.orgName && (
                           <span className="block text-[10px] text-zinc-500 font-normal truncate max-w-[220px]" title={normalizeCollegeName(s.orgName)}>
-                            🏫 {normalizeCollegeName(s.orgName)}
+                            {normalizeCollegeName(s.orgName)}
                           </span>
                         )}
                       </td>
@@ -1110,14 +1341,49 @@ export default function VerifyTab({ students, onAction }: Props) {
                 })
               ) : (
                 <tr>
-                  <td colSpan={8} className="px-4 py-12 text-center text-zinc-400 italic">
+                  <td colSpan={9} className="px-4 py-12 text-center text-zinc-400 italic">
                     <div className="flex flex-col items-center justify-center gap-2">
                       <Filter className="w-8 h-8 text-zinc-300" />
-                      <p className="font-medium text-xs text-zinc-500">
-                        No applications match your selected filter or search criteria.
+                      <p className="font-medium text-xs text-zinc-600 not-italic">
+                        No applications match your current filter criteria in this category.
                       </p>
+
+                      {/* Helpful Banner if matches exist in other categories */}
+                      {(() => {
+                        const matchingInOtherRoles = students.filter((s) => {
+                          if (filterStatus !== "all" && s.status !== filterStatus) return false;
+                          if (filterCollege !== "all" && normalizeCollegeName(s.orgName) !== filterCollege) return false;
+                          return true;
+                        });
+                        if (matchingInOtherRoles.length > 0 && filterRole !== "all") {
+                          const internshipMatches = matchingInOtherRoles.filter((s) => s.role === "internship").length;
+                          const studentMatches = matchingInOtherRoles.filter((s) => s.role !== "internship").length;
+                          return (
+                            <div className="mt-2 p-3 bg-amber-50 border border-amber-200 rounded text-amber-900 text-xs flex flex-col sm:flex-row items-center justify-between gap-3 max-w-lg mx-auto not-italic text-left shadow-2xs">
+                              <span className="leading-snug">
+                                <strong>{matchingInOtherRoles.length}</strong> {filterStatus === "all" ? "" : filterStatus} record{matchingInOtherRoles.length > 1 ? "s" : ""} found under{" "}
+                                <strong>{internshipMatches > 0 ? "Course Internships" : "Student Innovators"}</strong>.
+                              </span>
+                              <button
+                                onClick={() => {
+                                  setFilterRole(internshipMatches > 0 ? "internship" : "all");
+                                  setCurrentPage(1);
+                                }}
+                                className="px-3 py-1.5 bg-[#0D6B4F] hover:bg-[#0a5840] text-white font-bold rounded cursor-pointer shrink-0 text-xs transition-colors shadow-2xs"
+                              >
+                                View in {internshipMatches > 0 ? "Course Internships" : "All Applications"}
+                              </button>
+                            </div>
+                          );
+                        }
+                        return null;
+                      })()}
+
                       {hasActiveFilters && (
-                        <button onClick={handleClearFilters} className="mt-1 text-xs text-[#0D6B4F] hover:underline font-bold">
+                        <button
+                          onClick={handleClearFilters}
+                          className="mt-2 text-xs text-[#0D6B4F] hover:underline font-bold not-italic cursor-pointer"
+                        >
                           Clear all filters
                         </button>
                       )}
