@@ -654,7 +654,7 @@ export default function InnovationsTab({ projects, onEndorse, onAdd, onDelete }:
                     Confirm Project Deletion
                   </h3>
                   <p className="text-xs text-zinc-600 mt-1.5 leading-relaxed">
-                    Are you sure you want to permanently delete <strong className="text-zinc-900">"{projectToDelete.title}"</strong> (Team Leader: {projectToDelete.teamLeader})?
+                    Are you sure you want to permanently delete <strong className="text-zinc-900">&quot;{projectToDelete.title}&quot;</strong> (Team Leader: {projectToDelete.teamLeader})?
                   </p>
                   <div className="mt-3 p-2.5 bg-red-50 border border-red-200 rounded text-[11px] text-red-800 leading-snug">
                     <strong>Warning:</strong> This will permanently delete this innovation prototype and its candidate record from both the institutional roster and the central database.

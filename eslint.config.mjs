@@ -11,6 +11,8 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-unused-vars": "warn",
       "react-hooks/set-state-in-effect": "off",
       "react-hooks/purity": "off",
+      "react/no-unescaped-entities": "warn",
+      "@next/next/no-img-element": "warn",
       "prefer-const": "warn",
     },
   },
@@ -20,6 +22,8 @@ const eslintConfig = defineConfig([
     ".next/**",
     "out/**",
     "build/**",
+    "scratch/**",
+    "scripts/**",
     "next-env.d.ts",
   ]),
 ]);
