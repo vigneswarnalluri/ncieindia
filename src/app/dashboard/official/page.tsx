@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import {
   LayoutDashboard, Building2, Landmark, FileText, Activity,
   LogOut, CheckCircle, ChevronRight, Printer, Download,
-  Menu, X, Award, RefreshCw, ClipboardList
+  Menu, X, Award, RefreshCw, ClipboardList, Mail
 } from "lucide-react";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { supabase } from "@/lib/supabase";
@@ -19,12 +19,14 @@ import GrantsTab, { GrantRow } from "./components/GrantsTab";
 import CircularsTab, { Circular } from "./components/CircularsTab";
 import SecurityTab, { AuditLog } from "./components/SecurityTab";
 import ProgramsTab from "./components/ProgramsTab";
+import AdminMailboxTab, { loadAdminMails } from "./components/AdminMailboxTab";
 import { PROGRAMS_DATA } from "@/data/programsData";
 
-type Tab = "overview" | "registrations" | "verify" | "grants" | "circulars" | "security" | "programs";
+type Tab = "overview" | "mailbox" | "registrations" | "verify" | "grants" | "circulars" | "security" | "programs";
 
 const MENU: { tab: Tab; label: string; icon: React.ReactNode }[] = [
   { tab: "overview",      label: "Ecosystem Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
+  { tab: "mailbox",       label: "Admin Mailbox Desk",  icon: <Mail className="w-4 h-4" /> },
   { tab: "registrations", label: "Application Registry", icon: <ClipboardList className="w-4 h-4" /> },
   { tab: "verify",        label: "Chapter Affiliation",  icon: <Building2 className="w-4 h-4" /> },
   { tab: "grants",        label: "Grants Disbursement",  icon: <Landmark className="w-4 h-4" /> },
@@ -48,6 +50,12 @@ export default function OfficialDashboard() {
   const [grants, setGrants]     = useState<GrantRow[]>(INIT_GRANTS);
   const [circulars, setCirculars] = useState<Circular[]>(INIT_CIRCULARS);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>(INIT_LOGS);
+  const [unreadMailCount, setUnreadMailCount] = useState<number>(0);
+
+  useEffect(() => {
+    const adminMails = loadAdminMails();
+    setUnreadMailCount(adminMails.filter((m) => m.folder === "inbox" && !m.read).length);
+  }, []);
 
   const userEmail = session?.user?.email || demoSession?.email || "admin@ncie.gov.in";
   const isSuper = isSuperAdmin || isSuperAdminEmail(userEmail);
@@ -144,6 +152,20 @@ export default function OfficialDashboard() {
     const filename = `ncie_official_export_${activeTab}_${Date.now()}.csv`;
 
     switch (activeTab) {
+      case "mailbox":
+        dataToExport = loadAdminMails().map(m => ({
+          ID: m.id,
+          Ref: m.refNumber || "N/A",
+          Sender: m.sender,
+          SenderEmail: m.senderEmail,
+          Recipient: m.recipient,
+          Subject: m.subject,
+          Category: m.category,
+          Date: m.date,
+          Folder: m.folder,
+          Status: m.read ? "Read" : "Unread",
+        }));
+        break;
       case "verify":
         dataToExport = requests.map(r => ({
           AISHE: r.aishe,
@@ -408,6 +430,9 @@ export default function OfficialDashboard() {
                 {item.tab === "verify" && pendingChapters > 0 && (
                   <span className="bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 min-w-[18px] text-center">{pendingChapters}</span>
                 )}
+                {item.tab === "mailbox" && unreadMailCount > 0 && (
+                  <span className="bg-[#0D6B4F] text-white text-[9px] font-bold px-1.5 py-0.5 min-w-[18px] text-center rounded-full">{unreadMailCount}</span>
+                )}
               </button>
             ))}
           </nav>
@@ -442,8 +467,22 @@ export default function OfficialDashboard() {
 
           <div className="p-4 sm:p-6">
             {activeTab === "overview"      && <EcoTab />}
+            {activeTab === "mailbox"       && (
+              <AdminMailboxTab
+                userEmail={userEmail}
+                onUnreadCountChange={setUnreadMailCount}
+                onLogAudit={addLog}
+                onToast={showToast}
+                registeredInstitutions={requests.map(r => ({
+                  name: r.name,
+                  email: r.spocEmail,
+                  aishe: r.aishe,
+                  spoc: r.spoc,
+                }))}
+              />
+            )}
             {activeTab === "registrations" && <RegistrationsTab onNotify={showToast} />}
-            {activeTab === "verify"        && <ChapterTab requests={requests} onVerify={handleVerify} />}
+            {activeTab === "verify"        && <ChapterTab requests={requests} onVerify={handleVerify} onNotify={showToast} />}
             {activeTab === "grants"        && <GrantsTab grants={grants} onDisburse={handleDisburse} />}
             {activeTab === "circulars"     && <CircularsTab circulars={circulars} onAdd={handleAddCircular} />}
             {activeTab === "programs"      && <ProgramsTab onToast={showToast} />}

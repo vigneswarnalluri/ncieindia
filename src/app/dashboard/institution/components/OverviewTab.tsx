@@ -6,17 +6,22 @@ interface Props {
   verifiedCount: number;
   ideasCount: number;
   grantsReceived: string;
+  userOrg?: string;
+  aisheCode?: string;
 }
 
-export default function OverviewTab({ pendingCount, verifiedCount, ideasCount, grantsReceived }: Props) {
+export default function OverviewTab({ pendingCount, verifiedCount, ideasCount, grantsReceived, userOrg, aisheCode }: Props) {
+  const currentOrg = userOrg || "Affiliated Institutional Chapter";
+  const currentChapterId = aisheCode || "NCIE-CH-AFFILIATED";
+
   return (
     <div className="space-y-5">
       <div className="flex flex-col sm:flex-row justify-between items-start gap-2 sm:gap-0">
         <div>
           <h1 className="text-base font-bold text-zinc-900">Dashboard Overview</h1>
-          <p className="text-[11px] text-zinc-500 mt-0.5">Chapter performance summary for IIT Madras — Academic Year 2025–26</p>
+          <p className="text-[11px] text-zinc-500 mt-0.5">Chapter performance summary for {currentOrg} — Academic Year 2025–26</p>
         </div>
-        <span className="text-[10px] bg-[#e8f5f0] border border-[#c2dfd4] text-[#0D6B4F] font-bold px-3 py-1 uppercase tracking-wider whitespace-nowrap self-start sm:self-auto">Chapter ID: NCIE-CH-IIT-MDR-001</span>
+        <span className="text-[10px] bg-[#e8f5f0] border border-[#c2dfd4] text-[#0D6B4F] font-bold px-3 py-1 uppercase tracking-wider whitespace-nowrap self-start sm:self-auto">Chapter ID: {currentChapterId}</span>
       </div>
 
       <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4">

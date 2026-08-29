@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability */
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
@@ -6,21 +7,20 @@ import Image from "next/image";
 import {
   Building2,
   ShieldCheck,
-  Eye,
-  EyeOff,
   Lock,
   AlertCircle,
   ArrowLeft,
   Mail,
   Phone,
   RefreshCw,
-  Fingerprint
+  Fingerprint,
+  PlusCircle,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { ALLOWED_OFFICIAL_EMAILS, ALLOWED_INSTITUTION_EMAILS } from "@/lib/allowedEmails";
+import { ALLOWED_OFFICIAL_EMAILS, isAllowedInstitutionEmail } from "@/lib/allowedEmails";
 
 type Role = "institution" | "official";
 
@@ -140,9 +140,7 @@ export default function LoginPage() {
         const isOfficial = ALLOWED_OFFICIAL_EMAILS.some(
           (allowed) => allowed.toLowerCase() === emailToVerify.toLowerCase()
         );
-        const isInstitution = ALLOWED_INSTITUTION_EMAILS.some(
-          (allowed) => allowed.toLowerCase() === emailToVerify.toLowerCase()
-        );
+        const isInstitution = isAllowedInstitutionEmail(emailToVerify);
 
         let targetRole: Role = role;
         if (role === "official" && !isOfficial) {
@@ -268,11 +266,9 @@ export default function LoginPage() {
         return;
       }
     } else {
-      isAllowed = ALLOWED_INSTITUTION_EMAILS.some(
-        (allowed) => allowed.toLowerCase() === email
-      );
+      isAllowed = isAllowedInstitutionEmail(email);
       if (!isAllowed) {
-        setAuthError("This email is not registered for Collegiate Chapter/SPOC access.");
+        setAuthError("This email is not registered for Collegiate Chapter/SPOC access. Please register your chapter first.");
         generateCaptcha();
         return;
       }
@@ -434,9 +430,8 @@ export default function LoginPage() {
                 />
               </div>
 
-              {/* Form elements */}
+              {/* Direct Email OTP Login Form */}
               <form onSubmit={handleSubmit} className="space-y-3">
-                
                 {/* Email input */}
                 <div className="space-y-1.5">
                   <label htmlFor="login-id" className="block text-xs font-semibold text-zinc-700">
@@ -455,15 +450,15 @@ export default function LoginPage() {
                       onChange={(e) => setId(e.target.value)}
                       placeholder={idPlaceholder}
                       required
-                      className="w-full bg-white border border-zinc-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-primary/15 focus:border-primary transition-all shadow-sm"
+                      className="w-full bg-white border border-zinc-200 rounded-xl pl-10 pr-4 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-primary/15 focus:border-primary transition-all shadow-sm"
                     />
                   </div>
                 </div>
 
                 {/* Passwordless notice */}
-                <div className="flex items-center gap-2 bg-emerald-50/60 border border-emerald-200/60 rounded-xl px-3 py-2">
+                <div className="flex items-center gap-2 bg-emerald-50/60 border border-emerald-200/60 rounded-xl px-3 py-1.5">
                   <Lock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <p className="text-[10px] text-emerald-800">A secure <strong>6-digit OTP</strong> will be sent to your email — no password required.</p>
+                  <p className="text-[10px] text-emerald-800">A secure <strong>6-digit OTP</strong> will be dispatched to your registered email.</p>
                 </div>
 
                 {/* CAPTCHA validation card */}
@@ -483,11 +478,8 @@ export default function LoginPage() {
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
-                    {/* Simulated Captcha Security Box */}
-                    <div className="relative bg-zinc-100 border border-zinc-200 rounded-xl flex items-center justify-center select-none overflow-hidden h-[38px]">
-                      {/* background lines pattern */}
+                    <div className="relative bg-zinc-100 border border-zinc-200 rounded-xl flex items-center justify-center select-none overflow-hidden h-[36px]">
                       <div className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(45deg,#000_25%,transparent_25%),linear-gradient(-45deg,#000_25%,transparent_25%)] bg-[size:6px_6px]" />
-                      {/* security noise bar */}
                       <div className="absolute w-full h-[1px] bg-zinc-400/50 top-[18px] -rotate-2" />
                       <span className="font-mono text-base font-extrabold tracking-widest text-zinc-800 italic select-none">
                         {captchaCode}
@@ -504,7 +496,7 @@ export default function LoginPage() {
                         setCaptchaError(false);
                       }}
                       required
-                      className={`w-full bg-white border rounded-xl px-4 py-2 text-center text-sm font-mono tracking-widest placeholder:font-sans placeholder:tracking-normal placeholder:text-xs focus:outline-none transition-all shadow-sm ${
+                      className={`w-full bg-white border rounded-xl px-3 py-1.5 text-center text-sm font-mono tracking-widest focus:outline-none transition-all shadow-sm ${
                         captchaError
                           ? "border-red-400 focus:ring-2 focus:ring-red-105"
                           : "border-zinc-200 focus:ring-2 focus:ring-primary/15 focus:border-primary"
@@ -512,30 +504,16 @@ export default function LoginPage() {
                     />
                   </div>
                   {captchaError && (
-                    <p className="text-red-500 text-xs flex items-center gap-1 mt-1">
+                    <p className="text-red-500 text-xs flex items-center gap-1 mt-0.5">
                       <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                       {t("captcha_error")}
                     </p>
                   )}
                 </div>
 
-                {/* Remember Me and Forgot Password row */}
-                <div className="flex justify-between items-center text-xs pt-1">
-                  <label className="flex items-center gap-2 text-zinc-650 font-normal cursor-pointer select-none">
-                    <input
-                      type="checkbox"
-                      className="rounded border-zinc-300 text-primary focus:ring-primary/10 cursor-pointer h-3.5 w-3.5"
-                    />
-                    <span>{t("remember_device")}</span>
-                  </label>
-                  <a href="mailto:support-ncie@nic.in" className="text-primary hover:text-primary-light font-semibold transition-colors">
-                    {t("forgot_password")}
-                  </a>
-                </div>
-
                 {/* Auth error */}
                 {authError && (
-                  <div className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-xl px-3 py-2.5">
+                  <div className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
                     <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
                     <p className="text-xs text-red-700 font-medium">{authError}</p>
                   </div>
@@ -546,16 +524,32 @@ export default function LoginPage() {
                   id="login-submit"
                   type="submit"
                   disabled={loading || ssoLoading}
-                  className="w-full flex items-center justify-center gap-2 bg-[#0D6B4F] hover:bg-[#0b5c43] active:scale-[0.99] text-white font-semibold text-sm rounded-xl py-2.5 transition-all shadow-[0_4px_12px_rgba(13,107,79,0.15)] hover:shadow-[0_4px_16px_rgba(13,107,79,0.25)] disabled:opacity-75 cursor-pointer mt-2"
+                  className="w-full flex items-center justify-center gap-2 bg-[#0D6B4F] hover:bg-[#0b5c43] active:scale-[0.99] text-white font-semibold text-sm rounded-xl py-2.5 transition-all shadow-md disabled:opacity-75 cursor-pointer"
                 >
                   {loading ? (
                     <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   ) : (
                     <Lock className="w-3.5 h-3.5" />
                   )}
-                  {loading ? t("signing_in") : t("signin_button")}
+                  {loading
+                    ? t("signing_in")
+                    : role === "institution"
+                    ? "Request SPOC Access OTP"
+                    : t("signin_button")}
                 </button>
               </form>
+
+              {role === "institution" && (
+                <div className="pt-1 text-center">
+                  <Link
+                    href="/join"
+                    className="inline-flex items-center gap-1 text-xs text-[#0D6B4F] hover:text-[#0a5840] font-bold hover:underline"
+                  >
+                    <PlusCircle className="w-3.5 h-3.5" />
+                    <span>Not registered? Establish your Campus Chapter →</span>
+                  </Link>
+                </div>
+              )}
 
               {/* SSO Divider */}
               <div className="relative flex py-1 items-center">

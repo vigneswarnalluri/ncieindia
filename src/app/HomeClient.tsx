@@ -435,14 +435,10 @@ export default function Home() {
           <div className="overflow-hidden relative w-full">
             <div className="flex gap-12 whitespace-nowrap animate-marquee" aria-live="off">
               <span className="text-zinc-100">{t("home_news_1")}</span>
-              <span className="text-zinc-100">{t("home_news_2")}</span>
               <span className="text-zinc-100">{t("home_news_3")}</span>
               {/* Duplicate for seamless loop */}
               <span className="text-zinc-100" aria-hidden>
                 {t("home_news_1")}
-              </span>
-              <span className="text-zinc-100" aria-hidden>
-                {t("home_news_2")}
               </span>
               <span className="text-zinc-100" aria-hidden>
                 {t("home_news_3")}

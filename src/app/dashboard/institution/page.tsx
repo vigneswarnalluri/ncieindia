@@ -12,6 +12,7 @@ import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { supabase } from "@/lib/supabase";
 import { isSuperAdminEmail } from "@/lib/allowedEmails";
 import { normalizeCollegeName } from "@/lib/collegeNormalization";
+import { KNOWN_INSTITUTIONS, loadInstitutionMails } from "@/lib/institutionMailbox";
 
 import OverviewTab from "./components/OverviewTab";
 import VerifyTab, { Student } from "./components/VerifyTab";
@@ -50,25 +51,58 @@ export default function InstitutionDashboard() {
   const [events, setEvents]     = useState(INIT_EVENTS);
   const [grants, setGrants]     = useState<Grant[]>(INIT_GRANTS);
 
-  const [userOrg, setUserOrg] = useState("Indian Institute of Technology, Madras");
-  const [userName, setUserName] = useState("Prof. V. K. Prasad");
-  const [unreadMailCount, setUnreadMailCount] = useState(2);
-  const userEmail = session?.user?.email || demoSession?.email || "spoc@iitmadras.ac.in";
-  const isSuper = isSuperAdmin || isSuperAdminEmail(userEmail);
+  const [userOrg, setUserOrg] = useState("");
+  const [userName, setUserName] = useState("");
+  const [aisheCode, setAisheCode] = useState("");
+  const [spocEmail, setSpocEmail] = useState("");
+  const [unreadMailCount, setUnreadMailCount] = useState(0);
+  const userEmail = session?.user?.email || demoSession?.email || "";
+  const isSuper = isSuperAdmin || (userEmail ? isSuperAdminEmail(userEmail) : false);
   const userRole = isSuper ? "SUPER ADMIN / DEV ROOT" : "SPOC";
 
-  // Load real SPOC profile and registrations from Supabase
+  useEffect(() => {
+    if (typeof window !== "undefined" && userEmail) {
+      const mails = loadInstitutionMails(userEmail, userOrg, userName, aisheCode);
+      setUnreadMailCount(mails.filter((m) => m.folder === "inbox" && !m.read).length);
+    }
+  }, [userEmail, userOrg, userName, aisheCode]);
+
+  // Load real SPOC profile and registrations from Supabase or known institutions
   useEffect(() => {
     const loadData = async () => {
-      let resolvedOrg = "Indian Institute of Technology, Madras";
+      let resolvedOrg = "";
       const email = session?.user?.email || demoSession?.email;
       const isSuperUser = isSuperAdmin || (email && isSuperAdminEmail(email));
+      let matchedKnown = email ? KNOWN_INSTITUTIONS.find(
+        (k) => k.email.toLowerCase() === email.toLowerCase()
+      ) : undefined;
       
       if (email) {
+        // First check demo session
+        if (demoSession?.org) {
+          resolvedOrg = demoSession.org;
+          setUserOrg(demoSession.org);
+        }
+        if (demoSession?.name && demoSession?.role === "chapter") {
+          setUserName(demoSession.name);
+        }
+        if (demoSession?.aishe) {
+          setAisheCode(demoSession.aishe);
+        }
+
+        // Check known institutions
+        if (matchedKnown) {
+          resolvedOrg = matchedKnown.name;
+          setUserOrg(matchedKnown.name);
+          setUserName(matchedKnown.spoc);
+          setAisheCode(matchedKnown.aishe);
+          setSpocEmail(matchedKnown.email);
+        }
+
         try {
           const { data: profile } = await supabase
             .from("registrations")
-            .select("org_name, full_name")
+            .select("org_name, full_name, accreditation_code, reg_number, email, role")
             .eq("email", email)
             .maybeSingle();
           if (profile) {
@@ -76,10 +110,18 @@ export default function InstitutionDashboard() {
               resolvedOrg = profile.org_name;
               setUserOrg(profile.org_name);
             }
-            if (profile.full_name) {
-              setUserName(profile.full_name);
+            if (profile.role === "chapter") {
+              if (profile.full_name) {
+                setUserName(profile.full_name);
+              }
+              if (profile.email) {
+                setSpocEmail(profile.email);
+              }
+              if (profile.accreditation_code || profile.reg_number) {
+                setAisheCode(profile.accreditation_code || profile.reg_number);
+              }
             }
-          } else if (isSuperUser) {
+          } else if (isSuperUser && !demoSession?.org) {
             setUserOrg("National Central Registry (All Institutions)");
             setUserName("NCIE Master Developer");
           }
@@ -92,18 +134,61 @@ export default function InstitutionDashboard() {
         const { data, error } = await supabase
           .from("registrations")
           .select("*")
-          .in("role", ["student", "internship"]);
+          .order("submitted_at", { ascending: false });
         if (error) {
           console.error("Error fetching registrations:", error);
           return;
         }
 
         if (data) {
-          // Normalization check helper for same organization
-          const isSameOrg = (org1: string, org2: string) => {
-            const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
-            return norm(org1).includes(norm(org2)) || norm(org2).includes(norm(org1));
+          // Robust multi-variant check helper for same organization
+          const isSameOrg = (studentOrg?: string | null, targetOrg?: string | null) => {
+            if (!studentOrg || !targetOrg) return false;
+            
+            const s1 = studentOrg.toLowerCase();
+            const s2 = targetOrg.toLowerCase();
+
+            // 1. Direct contains check
+            if (s1.includes(s2) || s2.includes(s1)) return true;
+
+            // 2. KKR & KSR / KITS keyword matching
+            const isKits1 = s1.includes("kkr") || s1.includes("kits") || (s1.includes("ksr") && (s1.includes("tech") || s1.includes("guntur")));
+            const isKits2 = s2.includes("kkr") || s2.includes("kits") || (s2.includes("ksr") && (s2.includes("tech") || s2.includes("guntur")));
+            if (isKits1 && isKits2) return true;
+
+            // 3. Normalized names matching
+            const n1 = normalizeCollegeName(studentOrg).toLowerCase().replace(/[^a-z0-9]/g, "");
+            const n2 = normalizeCollegeName(targetOrg).toLowerCase().replace(/[^a-z0-9]/g, "");
+            if (n1.includes(n2) || n2.includes(n1)) return true;
+
+            // 4. Significant token overlap
+            const stopWords = new Set(["college", "institute", "of", "technology", "sciences", "and", "&", "the", "university", "autonomous", "engineering", "deemed"]);
+            const tokens1 = s1.split(/[^a-z0-9]+/).filter(t => t.length > 2 && !stopWords.has(t));
+            const tokens2 = s2.split(/[^a-z0-9]+/).filter(t => t.length > 2 && !stopWords.has(t));
+            return tokens1.some(t => tokens2.includes(t));
           };
+
+          // Resolve the official Chapter SPOC / Head for this institution from database records
+          const chapterHead = data.find((r: any) => r.role === "chapter" && isSameOrg(r.org_name, resolvedOrg));
+          if (chapterHead) {
+            const formattedSpoc = chapterHead.designation
+              ? `${chapterHead.full_name} (${chapterHead.designation} & SPOC)`
+              : `${chapterHead.full_name} (SPOC)`;
+            setUserName(formattedSpoc);
+            if (chapterHead.email) {
+              setSpocEmail(chapterHead.email);
+            }
+            if (chapterHead.accreditation_code || chapterHead.reg_number) {
+              setAisheCode(chapterHead.accreditation_code || chapterHead.reg_number);
+            }
+          } else if (matchedKnown) {
+            setUserName(matchedKnown.spoc);
+            setAisheCode(matchedKnown.aishe);
+            setSpocEmail(matchedKnown.email);
+          } else {
+            // No chapter SPOC registered or known: leave blank
+            setUserName("");
+          }
 
           const yearMap: Record<string, string> = {
             "1st Year": "I",
@@ -114,10 +199,15 @@ export default function InstitutionDashboard() {
             "Postgraduate": "PG",
           };
 
-          // Filter matching org_name (or show all for super admin)
-          const matched = isSuperUser
-            ? data
-            : data.filter((rec: any) => isSameOrg(rec.org_name, resolvedOrg));
+          // Filter out chapters and corporate partners to get student & internship records
+          const studentRecords = data.filter(
+            (rec: any) => rec.role !== "chapter" && rec.role !== "partner" && rec.role !== "recruitment"
+          );
+
+          // Filter matching org_name strictly for the active institution portal
+          const matched = resolvedOrg && !resolvedOrg.includes("All Institutions")
+            ? studentRecords.filter((rec: any) => isSameOrg(rec.org_name, resolvedOrg))
+            : studentRecords;
 
           const dbStudents: Student[] = matched.map((rec: any) => {
             let courseName = "";
@@ -126,8 +216,8 @@ export default function InstitutionDashboard() {
               const match = rec.proposal.match(/Course:\s*([^|]+)/i);
               if (match) courseName = match[1].trim();
             }
-            if (rec.proposal?.includes("Payment ID:")) {
-              const match = rec.proposal.match(/Payment ID:\s*([^|]+)/i);
+            if (rec.proposal?.includes("Payment ID:") || rec.proposal?.includes("Txn:")) {
+              const match = rec.proposal.match(/(?:Payment ID|Txn):\s*([^|\s]+)/i);
               if (match) paymentId = match[1].trim();
             }
 
@@ -139,7 +229,7 @@ export default function InstitutionDashboard() {
               year: yearMap[rec.year_of_study] || rec.year_of_study || "I",
               status: (rec.status || "pending") as Student["status"],
               docUrl: rec.website_url,
-              role: rec.role || "student",
+              role: rec.role || "internship",
               course: courseName || (rec.role === "internship" ? "Viksit Bharat Innovation Leadership Programme" : undefined),
               paymentId: paymentId || undefined,
               email: rec.email,
@@ -156,50 +246,56 @@ export default function InstitutionDashboard() {
           });
 
           const dbProjects: Project[] = matched
-            .filter((rec: any) => {
-              // Exclude course internship registrations - they belong in student verification
-              if (rec.role === "internship") return false;
-              if (!rec.proposal) return false;
-              const prop = rec.proposal.trim();
-              if (prop.startsWith("Course:") || prop.startsWith("Payment ID:")) return false;
-              // Exclude test dummy entries like "dedede", "sd", etc.
-              const lower = prop.toLowerCase();
-              if (["dedede", "sd", "test", "asdf", "xyz"].includes(lower) || lower.length < 3) return false;
-              return true;
-            })
+            .filter((rec: any) => rec.role === "student" || (rec.role !== "internship" && rec.role !== "chapter" && rec.role !== "recruitment"))
             .map((rec: any) => {
-              let cleanTitle = rec.proposal ? rec.proposal.trim() : "Untitled Innovation";
+              let cleanTitle = rec.proposal ? rec.proposal.trim() : "";
               if (cleanTitle.includes("Project Title:")) {
-                const match = cleanTitle.match(/Project Title:\s*([^|]+)/i);
+                const match = cleanTitle.match(/Project Title:\s*([^|\n]+)/i);
                 if (match) cleanTitle = match[1].trim();
               } else if (cleanTitle.includes("Title:")) {
-                const match = cleanTitle.match(/Title:\s*([^|]+)/i);
+                const match = cleanTitle.match(/Title:\s*([^|\n]+)/i);
                 if (match) cleanTitle = match[1].trim();
+              } else if (cleanTitle.length < 4) {
+                cleanTitle = `${rec.stream || rec.department || "Student"} Innovation Project`;
               } else if (cleanTitle.length > 65) {
                 cleanTitle = cleanTitle.slice(0, 65) + "...";
               }
 
               return {
                 id: rec.reg_id,
-                title: cleanTitle,
+                title: cleanTitle || `${rec.full_name}'s Innovation Project`,
                 teamLeader: rec.full_name,
                 email: rec.email,
                 mobile: rec.mobile,
                 college: normalizeCollegeName(rec.org_name),
                 rollNo: rec.reg_number || rec.accreditation_code,
-                stream: rec.stream || "Innovation & Technology",
+                stream: rec.stream || rec.department || "Innovation & Technology",
                 trl: 3,
                 status: (rec.status === "approved" ? "endorsed" : "draft") as Project["status"],
-                description: rec.proposal,
-                proposal: rec.proposal,
+                description: rec.proposal || "Student Innovation & Prototype Submission",
+                proposal: rec.proposal || "",
                 docUrl: rec.website_url,
-                submittedAt: rec.created_at,
+                submittedAt: rec.created_at || rec.submitted_at,
                 isDbRecord: true,
               };
             });
 
-          setStudents([...dbStudents, ...INIT_STUDENTS]);
-          setProjects([...dbProjects, ...INIT_PROJECTS]);
+          // Use ONLY live database records from Supabase
+          setStudents(dbStudents);
+          setProjects(dbProjects);
+          setGrants([]);
+
+          // Stored Activities for the institution
+          const storedEvents = typeof window !== "undefined" && email ? localStorage.getItem(`ncie_activities_${email}`) : null;
+          if (storedEvents) {
+            try {
+              setEvents(JSON.parse(storedEvents));
+            } catch (e) {
+              setEvents([]);
+            }
+          } else {
+            setEvents([]);
+          }
         }
       } catch (err) {
         console.error("Failed to fetch registrations from Supabase:", err);
@@ -329,7 +425,8 @@ export default function InstitutionDashboard() {
 
   const handleDeleteProject = async (id: string) => {
     setProjects(prev => prev.filter(p => p.id !== id));
-    showToast("Project removed from Innovation Repository.");
+    setStudents(prev => prev.filter(s => s.id !== id));
+    showToast("Project removed and candidate record deleted.");
 
     if (id.startsWith("REG-") || id.startsWith("PROJ-")) {
       try {
@@ -347,7 +444,14 @@ export default function InstitutionDashboard() {
   };
 
   const handleAddEvent = (e: { title: string; type: string; date: string; attendees: number }) => {
-    setEvents(prev => [{ id: `E${Date.now()}`, ...e, status: "pending" }, ...prev]);
+    const newEvent = { id: `E${Date.now()}`, ...e, status: "pending" };
+    setEvents(prev => {
+      const updated = [newEvent, ...prev];
+      if (typeof window !== "undefined") {
+        localStorage.setItem(`ncie_activities_${userEmail}`, JSON.stringify(updated));
+      }
+      return updated;
+    });
     showToast("Activity report submitted for nodal desk verification.");
   };
 
@@ -476,9 +580,15 @@ export default function InstitutionDashboard() {
       <div className="bg-[#1a1a1a] text-white text-[10px] px-4 py-1.5 flex flex-col sm:flex-row justify-between items-center gap-1 sm:gap-0">
         <span className="tracking-wider uppercase font-medium text-center sm:text-left">National Council for Innovation &amp; Entrepreneurship</span>
         <div className="flex items-center gap-4">
-          <span className="text-zinc-400">Session: {userName}</span>
-          <span className="hidden xs:inline">|</span>
-          <span className="text-zinc-400 font-mono">Email: {userEmail}</span>
+          {userName ? (
+            <>
+              <span className="text-zinc-400">Session: {userName}</span>
+              <span className="hidden xs:inline">|</span>
+            </>
+          ) : null}
+          {(spocEmail || userEmail) ? (
+            <span className="text-zinc-400 font-mono">Email: {spocEmail || userEmail}</span>
+          ) : null}
         </div>
       </div>
 
@@ -496,25 +606,19 @@ export default function InstitutionDashboard() {
           <div className="w-px h-10 bg-zinc-200 hidden sm:block" />
           <div className="hidden sm:block">
             <p className="text-[11px] font-bold text-[#0D6B4F] uppercase tracking-widest">Institutional Chapter Portal</p>
-            <p className="text-[13px] font-bold text-zinc-900">{userOrg}</p>
+            <p className="text-[13px] font-bold text-zinc-900">{userOrg || "Affiliated Institution"}</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <div className="text-right hidden sm:block">
-            <p className="text-[10px] text-zinc-500 uppercase tracking-wider">Logged in as</p>
-            <p className="text-xs font-bold text-zinc-800">{userName} &nbsp;|&nbsp; {userRole}</p>
-          </div>
-          {isSuper && (
-            <button
-              onClick={() => router.push("/dashboard/official")}
-              className="flex items-center gap-1.5 text-[11px] font-bold text-[#0D6B4F] hover:text-[#094835] border border-[#0D6B4F] bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 transition-all cursor-pointer shadow-2xs"
-              title="Switch to Central Command Official Portal"
-            >
-              <LayoutDashboard className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Central Command</span>
-            </button>
-          )}
-          <div className="w-px h-8 bg-zinc-200 hidden sm:block" />
+          {userName ? (
+            <>
+              <div className="text-right hidden sm:block">
+                <p className="text-[10px] text-zinc-500 uppercase tracking-wider">Logged in as</p>
+                <p className="text-xs font-bold text-zinc-800">{userName}</p>
+              </div>
+              <div className="w-px h-8 bg-zinc-200 hidden sm:block" />
+            </>
+          ) : null}
           <button
             onClick={async () => {
               localStorage.removeItem("ncie_demo_session");
@@ -611,14 +715,24 @@ export default function InstitutionDashboard() {
                   verifiedCount={students.filter(s => s.status === "approved").length}
                   ideasCount={projects.length}
                   grantsReceived={grantsReceivedStr}
+                  userOrg={userOrg}
+                  aisheCode={aisheCode}
                 />
               );
             })()}
             {activeTab === "verify"      && <VerifyTab      students={students} onAction={handleStudentAction} onBatchAction={handleBatchStudentAction} />}
             {activeTab === "innovations" && <InnovationsTab projects={projects} onEndorse={handleEndorse} onAdd={handleAddProject} onDelete={handleDeleteProject} />}
-            {activeTab === "grants"      && <GrantsTab      grants={grants} onToast={showToast} />}
+            {activeTab === "grants"      && <GrantsTab      grants={grants} onToast={showToast} userOrg={userOrg} aisheCode={aisheCode} />}
             {activeTab === "activities"  && <ActivitiesTab  events={events} onAdd={handleAddEvent} />}
-            {activeTab === "mailbox"     && <MailboxTab     userOrg={userOrg} userEmail={userEmail} onUnreadCountChange={setUnreadMailCount} />}
+            {activeTab === "mailbox"     && (
+              <MailboxTab
+                userOrg={userOrg}
+                userEmail={userEmail}
+                userName={userName}
+                aisheCode={aisheCode}
+                onUnreadCountChange={setUnreadMailCount}
+              />
+            )}
           </div>
 
           <div className="border-t border-zinc-200 bg-white px-6 py-3 flex flex-col md:flex-row justify-between items-center gap-1.5 md:gap-0 text-[10px] text-zinc-400 text-center md:text-left">

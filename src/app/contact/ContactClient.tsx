@@ -118,10 +118,35 @@ export default function ContactClient() {
                 <div className="flex gap-3.5">
                   <MapPin className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-bold text-zinc-800 uppercase tracking-wide">Main Head Office (HQ)</h3>
+                    <h3 className="font-bold text-zinc-800 uppercase tracking-wide">{language === "hi" ? "मुख्य प्रधान कार्यालय (HQ)" : "Main Head Office (HQ)"}</h3>
                     <p className="text-zinc-500 mt-1 leading-relaxed">
                       Old Secretariat, Near Vidhan Sabha,<br />
                       Delhi, 110054
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3.5 pt-4 border-t border-zinc-100">
+                  <MapPin className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <div>
+                    <h3 className="font-bold text-zinc-800 uppercase tracking-wide">{language === "hi" ? "आंचलिक कार्यालय 1" : "Zonal Office 1"}</h3>
+                    <p className="text-zinc-500 mt-1 leading-relaxed">
+                      Office: 108, Sachdeva Corporate Tower,<br />
+                      Karkardooma Community Centre,<br />
+                      New Delhi - 110092
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3.5 pt-4 border-t border-zinc-100">
+                  <MapPin className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <div>
+                    <h3 className="font-bold text-zinc-800 uppercase tracking-wide">{language === "hi" ? "आंचलिक कार्यालय 2" : "Zonal Office 2"}</h3>
+                    <p className="text-zinc-500 mt-1 leading-relaxed">
+                      Lokhandwala Road, 4 Bungalows<br />
+                      (next to Kokilaben Dhirubhai Ambani Hospital),<br />
+                      SV Patel Nagar, Andheri West,<br />
+                      Mumbai, Maharashtra 400053
                     </p>
                   </div>
                 </div>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import type { Session } from "@supabase/supabase-js";
-import { ALLOWED_OFFICIAL_EMAILS, ALLOWED_INSTITUTION_EMAILS, isSuperAdminEmail } from "@/lib/allowedEmails";
+import { ALLOWED_OFFICIAL_EMAILS, ALLOWED_INSTITUTION_EMAILS, isSuperAdminEmail, isAllowedInstitutionEmail } from "@/lib/allowedEmails";
 
 /**
  * useAuthGuard — call this at the top of any protected page component.
@@ -14,7 +14,7 @@ import { ALLOWED_OFFICIAL_EMAILS, ALLOWED_INSTITUTION_EMAILS, isSuperAdminEmail 
 export function useAuthGuard() {
   const router = useRouter();
   const [session, setSession] = useState<Session | null>(null);
-  const [demoSession, setDemoSession] = useState<{ email: string; role: string; name?: string; org?: string; } | null>(null);
+  const [demoSession, setDemoSession] = useState<{ email: string; role: string; name?: string; org?: string; aishe?: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export function useAuthGuard() {
       const emailLower = email.toLowerCase();
       const isSuper = isSuperAdminEmail(emailLower);
       const isOfficial = isSuper || ALLOWED_OFFICIAL_EMAILS.some(e => e.toLowerCase() === emailLower);
-      const isInstitution = isSuper || ALLOWED_INSTITUTION_EMAILS.some(e => e.toLowerCase() === emailLower);
+      const isInstitution = isSuper || isAllowedInstitutionEmail(emailLower);
       const pathname = typeof window !== "undefined" ? window.location.pathname : "";
 
       if (isSuper) {

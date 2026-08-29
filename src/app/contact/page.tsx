@@ -45,6 +45,31 @@ export default function ContactPage() {
         postalCode: "110054",
         addressCountry: "IN",
       },
+      subOrganization: [
+        {
+          "@type": "Organization",
+          name: "NCIE Zonal Office 1",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "108, Sachdeva Corporate Tower, Karkardooma Community Centre",
+            addressLocality: "New Delhi",
+            postalCode: "110092",
+            addressCountry: "IN",
+          },
+        },
+        {
+          "@type": "Organization",
+          name: "NCIE Zonal Office 2",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Lokhandwala Road, 4 Bungalows (next to Kokilaben Dhirubhai Ambani Hospital), SV Patel Nagar, Andheri West",
+            addressLocality: "Mumbai",
+            addressRegion: "Maharashtra",
+            postalCode: "400053",
+            addressCountry: "IN",
+          },
+        },
+      ],
     },
   };
 

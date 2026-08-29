@@ -17,7 +17,8 @@ import {
   Mail,
   Phone,
   Calendar,
-  Building
+  Building,
+  AlertTriangle
 } from "lucide-react";
 
 export interface Project {
@@ -70,6 +71,7 @@ const TRL_LABELS = [
 
 export default function InnovationsTab({ projects, onEndorse, onAdd, onDelete }: Props) {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newP, setNewP] = useState({
     title: "",
@@ -237,7 +239,7 @@ export default function InnovationsTab({ projects, onEndorse, onAdd, onDelete }:
                           {/* Delete Action */}
                           {onDelete && (
                             <button
-                              onClick={() => onDelete(p.id)}
+                              onClick={() => setProjectToDelete(p)}
                               className="p-1 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded cursor-pointer transition-colors"
                               title="Delete Project Draft"
                             >
@@ -604,10 +606,7 @@ export default function InnovationsTab({ projects, onEndorse, onAdd, onDelete }:
               <div>
                 {onDelete && (
                   <button
-                    onClick={() => {
-                      onDelete(selectedProject.id);
-                      setSelectedProject(null);
-                    }}
+                    onClick={() => setProjectToDelete(selectedProject)}
                     className="text-red-600 hover:text-red-800 text-xs font-bold flex items-center gap-1 cursor-pointer"
                   >
                     <Trash2 className="w-3.5 h-3.5" /> Delete Project Draft
@@ -634,6 +633,59 @@ export default function InnovationsTab({ projects, onEndorse, onAdd, onDelete }:
                   </button>
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* DELETE CONFIRMATION MODAL */}
+      {/* ========================================================================= */}
+      {projectToDelete && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
+          <div className="bg-white rounded-lg shadow-2xl border border-zinc-200 w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-5">
+              <div className="flex items-start gap-3.5">
+                <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                  <AlertTriangle className="w-5 h-5 text-red-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-sm font-bold text-zinc-900">
+                    Confirm Project Deletion
+                  </h3>
+                  <p className="text-xs text-zinc-600 mt-1.5 leading-relaxed">
+                    Are you sure you want to permanently delete <strong className="text-zinc-900">"{projectToDelete.title}"</strong> (Team Leader: {projectToDelete.teamLeader})?
+                  </p>
+                  <div className="mt-3 p-2.5 bg-red-50 border border-red-200 rounded text-[11px] text-red-800 leading-snug">
+                    <strong>Warning:</strong> This will permanently delete this innovation prototype and its candidate record from both the institutional roster and the central database.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="px-5 py-3.5 bg-zinc-50 border-t border-zinc-200 flex justify-end gap-2.5">
+              <button
+                type="button"
+                onClick={() => setProjectToDelete(null)}
+                className="px-4 py-2 border border-zinc-300 text-zinc-700 hover:bg-zinc-100 rounded text-xs font-bold transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (projectToDelete && onDelete) {
+                    onDelete(projectToDelete.id);
+                    if (selectedProject?.id === projectToDelete.id) {
+                      setSelectedProject(null);
+                    }
+                    setProjectToDelete(null);
+                  }
+                }}
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-bold transition-colors shadow-xs cursor-pointer flex items-center gap-1.5"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Yes, Delete Project</span>
+              </button>
             </div>
           </div>
         </div>

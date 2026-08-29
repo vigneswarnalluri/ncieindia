@@ -13,11 +13,14 @@ export interface Grant {
 interface Props {
   grants: Grant[];
   onToast: (msg: string) => void;
+  userOrg?: string;
+  aisheCode?: string;
 }
 
-export default function GrantsTab({ grants, onToast }: Props) {
+export default function GrantsTab({ grants, onToast, userOrg, aisheCode }: Props) {
   const [ucUploaded, setUcUploaded] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const code = (aisheCode || userOrg || "INST").replace(/[^a-zA-Z0-9]/g, "").slice(0, 10).toUpperCase();
 
   const handleUcUpload = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +28,7 @@ export default function GrantsTab({ grants, onToast }: Props) {
     setTimeout(() => {
       setUploading(false);
       setUcUploaded(true);
-      onToast("Utilization Certificate uploaded. Ref: NCIE-UC-2026-IIT-MDR-02");
+      onToast(`Utilization Certificate uploaded. Ref: NCIE-UC-2026-${code}-01`);
     }, 1600);
   };
 
@@ -115,7 +118,7 @@ export default function GrantsTab({ grants, onToast }: Props) {
               <div className="flex items-center gap-2 p-2.5 bg-green-50 border border-green-300">
                 <FileText className="w-4 h-4 text-green-700 shrink-0" />
                 <div>
-                  <p className="text-[10px] font-bold text-green-800">UC_IIT_MDR_NCIE_2026_SIGNED.pdf</p>
+                  <p className="text-[10px] font-bold text-green-800">UC_{code}_NCIE_2026_SIGNED.pdf</p>
                   <p className="text-[9px] text-green-600">Uploaded — Pending nodal desk verification</p>
                 </div>
               </div>
