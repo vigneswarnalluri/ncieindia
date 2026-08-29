@@ -662,13 +662,6 @@ export default function MailboxTab({
             </div>
           </div>
 
-          {/* Storage Meter */}
-          <div className="px-4 py-3 space-y-1.5 text-[11px] text-zinc-500 border-t border-[#e1e3e1]">
-            <div className="w-full bg-zinc-200 h-1.5 rounded-full overflow-hidden">
-              <div className="bg-[#0D6B4F] h-full w-[15%]" />
-            </div>
-            <p>2.1 GB of 15 GB used</p>
-          </div>
         </aside>
 
         {/* ======================================================================= */}

@@ -802,16 +802,6 @@ export default function AdminMailboxTab({
             </div>
           </div>
 
-          {/* Secure Storage Meter */}
-          <div className="px-4 py-3 space-y-1.5 text-[11px] text-zinc-500 border-t border-[#e1e3e1]">
-            <div className="w-full bg-zinc-200 h-1.5 rounded-full overflow-hidden">
-              <div className="bg-[#0D6B4F] h-full w-[24%]" />
-            </div>
-            <div className="flex justify-between items-center">
-              <span>Secure Vault: 3.6 GB / 50 GB</span>
-              <span className="font-mono text-[10px] text-emerald-700 font-bold">AES-256</span>
-            </div>
-          </div>
         </aside>
 
         {/* ======================================================================= */}
