@@ -3,7 +3,6 @@
  * Exports the list of emails permitted to log into the NCIE portal.
  */
 export const SUPER_ADMIN_EMAILS = [
-  "ncie.ap.gov@gmail.com",
   "vigneswarnalluri10@gmail.com",
   "admin@ncieindia.org",
   "ceo@ncieindia.org",
@@ -25,7 +24,6 @@ export const ALLOWED_OFFICIAL_EMAILS = [
 ];
 
 export const ALLOWED_INSTITUTION_EMAILS = [
-  "ncie.ap.gov@gmail.com",
   "spoc@institution.ac.in",
   "spoc@institution.edu.in",
   "spoc@iitmadras.ac.in",
@@ -41,6 +39,16 @@ export const ALLOWED_INSTITUTION_EMAILS = [
 export const isAllowedInstitutionEmail = (email?: string | null): boolean => {
   if (!email) return false;
   const lower = email.trim().toLowerCase();
+  
+  // Explicitly deny official/governmental desk accounts from accessing the institutional portal
+  if (
+    lower === "ncie.ap.gov@gmail.com" ||
+    lower === "officer@ncie.gov.in" ||
+    lower === "directorate@ncie.gov.in"
+  ) {
+    return false;
+  }
+
   if (isSuperAdminEmail(lower)) return true;
   if (ALLOWED_INSTITUTION_EMAILS.some((e) => e.toLowerCase() === lower)) return true;
   // Allow valid educational / college domains or any valid email for institutional SPOCs
