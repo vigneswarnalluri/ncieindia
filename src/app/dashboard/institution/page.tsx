@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import {
   LayoutDashboard, Users, Lightbulb, Landmark, Award,
   LogOut, CheckCircle, ChevronRight, HelpCircle, Printer, Download,
-  Menu, X, Mail
+  Menu, X, Mail, ShieldCheck, Building2
 } from "lucide-react";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { supabase } from "@/lib/supabase";
@@ -14,7 +14,7 @@ import { isSuperAdminEmail } from "@/lib/allowedEmails";
 import { normalizeCollegeName } from "@/lib/collegeNormalization";
 import { KNOWN_INSTITUTIONS, loadInstitutionMails } from "@/lib/institutionMailbox";
 
-import OverviewTab from "./components/OverviewTab";
+import OverviewTab, { SpocInfo } from "./components/OverviewTab";
 import VerifyTab, { Student } from "./components/VerifyTab";
 import InnovationsTab, { Project } from "./components/InnovationsTab";
 import GrantsTab, { Grant } from "./components/GrantsTab";
@@ -33,12 +33,37 @@ const MENU: { tab: Tab; label: string; icon: React.ReactNode }[] = [
 ];
 
 const INIT_STUDENTS: Student[] = [];
-
 const INIT_PROJECTS: Project[] = [];
-
 const INIT_EVENTS: any[] = [];
-
 const INIT_GRANTS: Grant[] = [];
+
+// Robust multi-variant check helper for same organization
+const isSameOrg = (studentOrg?: string | null, targetOrg?: string | null) => {
+  if (!studentOrg || !targetOrg) return false;
+  if (targetOrg.includes("All Institutions") || studentOrg.includes("All Institutions")) return true;
+  
+  const s1 = studentOrg.toLowerCase();
+  const s2 = targetOrg.toLowerCase();
+
+  // 1. Direct contains check
+  if (s1.includes(s2) || s2.includes(s1)) return true;
+
+  // 2. KKR & KSR / KITS keyword matching
+  const isKits1 = s1.includes("kkr") || s1.includes("kits") || (s1.includes("ksr") && (s1.includes("tech") || s1.includes("guntur")));
+  const isKits2 = s2.includes("kkr") || s2.includes("kits") || (s2.includes("ksr") && (s2.includes("tech") || s2.includes("guntur")));
+  if (isKits1 && isKits2) return true;
+
+  // 3. Normalized names matching
+  const n1 = normalizeCollegeName(studentOrg).toLowerCase().replace(/[^a-z0-9]/g, "");
+  const n2 = normalizeCollegeName(targetOrg).toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (n1.includes(n2) || n2.includes(n1)) return true;
+
+  // 4. Significant token overlap
+  const stopWords = new Set(["college", "institute", "of", "technology", "sciences", "and", "&", "the", "university", "autonomous", "engineering", "deemed"]);
+  const tokens1 = s1.split(/[^a-z0-9]+/).filter(t => t.length > 2 && !stopWords.has(t));
+  const tokens2 = s2.split(/[^a-z0-9]+/).filter(t => t.length > 2 && !stopWords.has(t));
+  return tokens1.some(t => tokens2.includes(t));
+};
 
 export default function InstitutionDashboard() {
   const router = useRouter();
@@ -50,6 +75,11 @@ export default function InstitutionDashboard() {
   const [projects, setProjects] = useState<Project[]>(INIT_PROJECTS);
   const [events, setEvents]     = useState(INIT_EVENTS);
   const [grants, setGrants]     = useState<Grant[]>(INIT_GRANTS);
+
+  const [rawAllStudents, setRawAllStudents] = useState<Student[]>([]);
+  const [rawAllProjects, setRawAllProjects] = useState<Project[]>([]);
+  const [allSpocs, setAllSpocs] = useState<SpocInfo[]>([]);
+  const [selectedSpocId, setSelectedSpocId] = useState<string>("all");
 
   const [userOrg, setUserOrg] = useState("");
   const [userName, setUserName] = useState("");
@@ -67,7 +97,30 @@ export default function InstitutionDashboard() {
     }
   }, [userEmail, userOrg, userName, aisheCode]);
 
-  // Load real SPOC profile and registrations from Supabase or known institutions
+  // Handle selecting a specific SPOC / Institution for Super Admin
+  const handleSelectSpoc = (spoc: SpocInfo | null) => {
+    if (!spoc || spoc.id === "all") {
+      setSelectedSpocId("all");
+      setUserOrg("National Central Registry (All Institutions)");
+      setUserName("NCIE Master Developer");
+      setAisheCode("NCIE-ROOT-ALL");
+      setSpocEmail(userEmail);
+      setStudents(rawAllStudents);
+      setProjects(rawAllProjects);
+      showToast("Switched to Consolidated National Registry (All SPOCs Active)");
+    } else {
+      setSelectedSpocId(spoc.id);
+      setUserOrg(spoc.institution);
+      setUserName(spoc.name);
+      setAisheCode(spoc.aishe);
+      setSpocEmail(spoc.email);
+      setStudents(rawAllStudents.filter((s) => isSameOrg(s.orgName, spoc.institution)));
+      setProjects(rawAllProjects.filter((p) => isSameOrg(p.college, spoc.institution)));
+      showToast(`Active Chapter: ${spoc.shortName || spoc.institution} (SPOC: ${spoc.name})`);
+    }
+  };
+
+  // Load real SPOC profile, all chapters, and registrations from Supabase or known institutions
   useEffect(() => {
     const loadData = async () => {
       let resolvedOrg = "";
@@ -124,6 +177,7 @@ export default function InstitutionDashboard() {
           } else if (isSuperUser && !demoSession?.org) {
             setUserOrg("National Central Registry (All Institutions)");
             setUserName("NCIE Master Developer");
+            setAisheCode("NCIE-ROOT-ALL");
           }
         } catch (err) {
           console.error("Failed to fetch SPOC profile:", err);
@@ -141,55 +195,6 @@ export default function InstitutionDashboard() {
         }
 
         if (data) {
-          // Robust multi-variant check helper for same organization
-          const isSameOrg = (studentOrg?: string | null, targetOrg?: string | null) => {
-            if (!studentOrg || !targetOrg) return false;
-            
-            const s1 = studentOrg.toLowerCase();
-            const s2 = targetOrg.toLowerCase();
-
-            // 1. Direct contains check
-            if (s1.includes(s2) || s2.includes(s1)) return true;
-
-            // 2. KKR & KSR / KITS keyword matching
-            const isKits1 = s1.includes("kkr") || s1.includes("kits") || (s1.includes("ksr") && (s1.includes("tech") || s1.includes("guntur")));
-            const isKits2 = s2.includes("kkr") || s2.includes("kits") || (s2.includes("ksr") && (s2.includes("tech") || s2.includes("guntur")));
-            if (isKits1 && isKits2) return true;
-
-            // 3. Normalized names matching
-            const n1 = normalizeCollegeName(studentOrg).toLowerCase().replace(/[^a-z0-9]/g, "");
-            const n2 = normalizeCollegeName(targetOrg).toLowerCase().replace(/[^a-z0-9]/g, "");
-            if (n1.includes(n2) || n2.includes(n1)) return true;
-
-            // 4. Significant token overlap
-            const stopWords = new Set(["college", "institute", "of", "technology", "sciences", "and", "&", "the", "university", "autonomous", "engineering", "deemed"]);
-            const tokens1 = s1.split(/[^a-z0-9]+/).filter(t => t.length > 2 && !stopWords.has(t));
-            const tokens2 = s2.split(/[^a-z0-9]+/).filter(t => t.length > 2 && !stopWords.has(t));
-            return tokens1.some(t => tokens2.includes(t));
-          };
-
-          // Resolve the official Chapter SPOC / Head for this institution from database records
-          const chapterHead = data.find((r: any) => r.role === "chapter" && isSameOrg(r.org_name, resolvedOrg));
-          if (chapterHead) {
-            const formattedSpoc = chapterHead.designation
-              ? `${chapterHead.full_name} (${chapterHead.designation} & SPOC)`
-              : `${chapterHead.full_name} (SPOC)`;
-            setUserName(formattedSpoc);
-            if (chapterHead.email) {
-              setSpocEmail(chapterHead.email);
-            }
-            if (chapterHead.accreditation_code || chapterHead.reg_number) {
-              setAisheCode(chapterHead.accreditation_code || chapterHead.reg_number);
-            }
-          } else if (matchedKnown) {
-            setUserName(matchedKnown.spoc);
-            setAisheCode(matchedKnown.aishe);
-            setSpocEmail(matchedKnown.email);
-          } else {
-            // No chapter SPOC registered or known: leave blank
-            setUserName("");
-          }
-
           const yearMap: Record<string, string> = {
             "1st Year": "I",
             "2nd Year": "II",
@@ -204,12 +209,52 @@ export default function InstitutionDashboard() {
             (rec: any) => rec.role !== "chapter" && rec.role !== "partner" && rec.role !== "recruitment"
           );
 
-          // Filter matching org_name strictly for the active institution portal
-          const matched = resolvedOrg && !resolvedOrg.includes("All Institutions")
-            ? studentRecords.filter((rec: any) => isSameOrg(rec.org_name, resolvedOrg))
-            : studentRecords;
+          // Build unified SPOC list from known institutions + database chapter registrations
+          const knownList: SpocInfo[] = KNOWN_INSTITUTIONS.map((k, idx) => ({
+            id: `known-${idx}`,
+            name: k.spoc,
+            institution: k.name,
+            shortName: k.shortName,
+            aishe: k.aishe,
+            email: k.email,
+            city: k.city,
+            state: k.state,
+            grantAmount: k.grantAmount || "₹8.00 Lakhs",
+            studentCount: 0,
+          }));
 
-          const dbStudents: Student[] = matched.map((rec: any) => {
+          const dbChapters = data.filter((r: any) => r.role === "chapter");
+          const dbList: SpocInfo[] = dbChapters.map((r: any) => ({
+            id: r.reg_id,
+            name: r.full_name || "Institutional SPOC",
+            designation: r.designation || "SPOC & Coordinator",
+            institution: r.org_name || "Registered Chapter",
+            shortName: r.org_name ? (r.org_name.split(",")[0] || r.org_name) : "Chapter",
+            aishe: r.accreditation_code || r.reg_number || `AISHE-${r.reg_id.slice(-4)}`,
+            email: r.email,
+            phone: r.mobile,
+            city: r.city,
+            state: r.state,
+            grantAmount: "₹8.00 Lakhs",
+            studentCount: 0,
+          }));
+
+          const mergedMap = new Map<string, SpocInfo>();
+          knownList.forEach((s) => mergedMap.set(s.institution.toLowerCase(), s));
+          dbList.forEach((s) => {
+            const key = s.institution.toLowerCase();
+            const existing = mergedMap.get(key);
+            mergedMap.set(key, existing ? { ...existing, ...s } : s);
+          });
+          const mergedSpocs = Array.from(mergedMap.values());
+
+          mergedSpocs.forEach((spoc) => {
+            spoc.studentCount = studentRecords.filter((rec: any) => isSameOrg(rec.org_name, spoc.institution)).length;
+          });
+          setAllSpocs(mergedSpocs);
+
+          // Map all student records
+          const allDbStudents: Student[] = studentRecords.map((rec: any) => {
             let courseName = "";
             let paymentId = "";
             if (rec.proposal?.includes("Course:")) {
@@ -245,7 +290,8 @@ export default function InstitutionDashboard() {
             };
           });
 
-          const dbProjects: Project[] = matched
+          // Map all project records
+          const allDbProjects: Project[] = studentRecords
             .filter((rec: any) => rec.role === "student" || (rec.role !== "internship" && rec.role !== "chapter" && rec.role !== "recruitment"))
             .map((rec: any) => {
               let cleanTitle = rec.proposal ? rec.proposal.trim() : "";
@@ -280,9 +326,45 @@ export default function InstitutionDashboard() {
               };
             });
 
-          // Use ONLY live database records from Supabase
-          setStudents(dbStudents);
-          setProjects(dbProjects);
+          setRawAllStudents(allDbStudents);
+          setRawAllProjects(allDbProjects);
+
+          if (isSuperUser && (!resolvedOrg || resolvedOrg.includes("All Institutions"))) {
+            setUserOrg("National Central Registry (All Institutions)");
+            setUserName("NCIE Master Developer");
+            setAisheCode("NCIE-ROOT-ALL");
+            setStudents(allDbStudents);
+            setProjects(allDbProjects);
+          } else {
+            // Filter matching org_name strictly for the active institution
+            const matchedStudents = resolvedOrg && !resolvedOrg.includes("All Institutions")
+              ? allDbStudents.filter((s) => isSameOrg(s.orgName, resolvedOrg))
+              : allDbStudents;
+            const matchedProjects = resolvedOrg && !resolvedOrg.includes("All Institutions")
+              ? allDbProjects.filter((p) => isSameOrg(p.college, resolvedOrg))
+              : allDbProjects;
+
+            // Resolve the official Chapter SPOC / Head for this institution
+            const chapterHead = data.find((r: any) => r.role === "chapter" && isSameOrg(r.org_name, resolvedOrg));
+            if (chapterHead) {
+              const formattedSpoc = chapterHead.designation
+                ? `${chapterHead.full_name} (${chapterHead.designation} & SPOC)`
+                : `${chapterHead.full_name} (SPOC)`;
+              setUserName(formattedSpoc);
+              if (chapterHead.email) setSpocEmail(chapterHead.email);
+              if (chapterHead.accreditation_code || chapterHead.reg_number) {
+                setAisheCode(chapterHead.accreditation_code || chapterHead.reg_number);
+              }
+            } else if (matchedKnown) {
+              setUserName(matchedKnown.spoc);
+              setAisheCode(matchedKnown.aishe);
+              setSpocEmail(matchedKnown.email);
+            }
+
+            setStudents(matchedStudents);
+            setProjects(matchedProjects);
+          }
+
           setGrants([]);
 
           // Stored Activities for the institution
@@ -305,7 +387,7 @@ export default function InstitutionDashboard() {
     if (!loading) {
       loadData();
     }
-  }, [session, demoSession, loading]);
+  }, [session, demoSession, loading, isSuperAdmin]);
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -610,11 +692,43 @@ export default function InstitutionDashboard() {
           </div>
         </div>
         <div className="flex items-center gap-3">
+          {isSuper && allSpocs.length > 0 && (
+            <div className="hidden lg:flex items-center gap-1.5 bg-emerald-50 border border-emerald-300 rounded px-2.5 py-1 text-xs shadow-2xs">
+              <Building2 className="w-3.5 h-3.5 text-[#0D6B4F] shrink-0" />
+              <span className="text-[10px] uppercase font-bold text-[#0D6B4F]">Chapter View:</span>
+              <select
+                value={selectedSpocId}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  const found = allSpocs.find((s) => s.id === val);
+                  handleSelectSpoc(found || null);
+                }}
+                className="bg-transparent font-bold text-zinc-900 text-xs focus:outline-hidden cursor-pointer max-w-[240px] truncate"
+              >
+                <option value="all">🌐 All SPOCs (National Central Registry)</option>
+                {allSpocs.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    👤 {s.name} — {s.shortName || s.institution}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+          {isSuper && (
+            <button
+              onClick={() => router.push("/dashboard/official")}
+              className="flex items-center gap-1.5 text-[11px] font-bold text-[#0D6B4F] hover:text-[#094835] border border-[#0D6B4F] bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 transition-all cursor-pointer shadow-2xs"
+              title="Switch to Central Administrative Command"
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Official Command</span>
+            </button>
+          )}
           {userName ? (
             <>
               <div className="text-right hidden sm:block">
                 <p className="text-[10px] text-zinc-500 uppercase tracking-wider">Logged in as</p>
-                <p className="text-xs font-bold text-zinc-800">{userName}</p>
+                <p className="text-xs font-bold text-zinc-800">{userName} {isSuper ? "(Root Access)" : ""}</p>
               </div>
               <div className="w-px h-8 bg-zinc-200 hidden sm:block" />
             </>
@@ -712,11 +826,15 @@ export default function InstitutionDashboard() {
               return (
                 <OverviewTab
                   pendingCount={pendingCount}
-                  verifiedCount={students.filter(s => s.status === "approved").length}
+                  verifiedCount={students.filter((s) => s.status === "approved").length}
                   ideasCount={projects.length}
                   grantsReceived={grantsReceivedStr}
                   userOrg={userOrg}
                   aisheCode={aisheCode}
+                  isSuper={isSuper}
+                  spocs={allSpocs}
+                  onSelectSpoc={handleSelectSpoc}
+                  selectedSpocId={selectedSpocId}
                 />
               );
             })()}

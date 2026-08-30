@@ -5,18 +5,27 @@
 export function normalizeCollegeName(rawName?: string | null): string {
   if (!rawName) return "Other / Unspecified Institution";
   const trimmed = rawName.trim();
-  if (!trimmed) return "Other / Unspecified Institution";
-
   const lower = trimmed.toLowerCase();
 
-  // 1. KKR & KSR Institute of Technology and Sciences (all variants)
+  // 1. KITS Akshar Institute of Technology
+  if (lower.includes("akshar") && (lower.includes("kits") || lower.includes("technology") || lower.includes("institute"))) {
+    return "KITS Akshar Institute of Technology";
+  }
+
+  // 2. KKR & KSR Institute of Technology and Sciences (all variants)
   if (
-    (lower.includes("kkr") && (lower.includes("ksr") || lower.includes("&") || lower.includes("and") || lower.includes("tech"))) ||
-    lower.includes("kits") ||
-    lower.includes("kkr & ksr") ||
-    lower.includes("kkr and ksr")
+    !lower.includes("akshar") &&
+    (
+      (lower.includes("kkr") && (lower.includes("ksr") || lower.includes("&") || lower.includes("and") || lower.includes("tech") || lower.includes("guntur"))) ||
+      (lower.includes("kits") && (lower.includes("guntur") || lower.includes("vinjanampadu") || lower.includes("kkr") || lower.includes("ksr") || !lower.includes("akshar"))) ||
+      lower.includes("kkr & ksr") ||
+      lower.includes("kkr and ksr")
+    )
   ) {
-    return "KKR & KSR Institute of Technology & Sciences (KITS), Guntur";
+    // If it specifically contains another known institute name, skip KKR
+    if (!lower.includes("akshar") && !lower.includes("singapuram") && !lower.includes("ramtek") && !lower.includes("kakatiya")) {
+      return "KKR & KSR Institute of Technology & Sciences (KITS), Guntur";
+    }
   }
 
   // 2. D. Y. Patil Deemed to be University

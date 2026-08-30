@@ -151,6 +151,7 @@ const COLLEGES = [
   "Symbiosis International University, Pune",
   "Vellore Institute of Technology (VIT), Andhra Pradesh",
   "KKR & KSR Institute of Technology & Sciences (KITS), Guntur",
+  "KITS Akshar Institute of Technology",
   "Vasireddy Venkatadri Institute of Technology (VVIT), Guntur",
   "RVR & JC College of Engineering, Guntur",
   "Gokaraju Rangaraju Institute of Engineering and Technology (GRIET), Hyderabad",
