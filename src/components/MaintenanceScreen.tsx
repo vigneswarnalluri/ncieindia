@@ -191,13 +191,6 @@ export default function MaintenanceScreen() {
           >
             office@ncieindia.org
           </a>
-          <span>•</span>
-          <a
-            href="tel:08632321417"
-            className="text-[#0D6B4F] hover:underline"
-          >
-            0863 232 1417
-          </a>
         </div>
       </footer>
     </div>

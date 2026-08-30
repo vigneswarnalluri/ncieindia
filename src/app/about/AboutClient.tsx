@@ -838,14 +838,6 @@ export default function AboutPage() {
               
               <div className="p-5 space-y-4 text-xs">
                 <div className="flex items-start gap-3">
-                  <Phone className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
-                  <div className="space-y-0.5">
-                    <p className="font-semibold text-zinc-800">{t("helpline_phone").split(":")[0] || "Helpdesk"}</p>
-                    <p className="text-zinc-500 font-mono font-semibold">{t("helpline_phone").split(":")[1]?.trim() || "08632321417"}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
                   <Mail className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
                   <div className="space-y-0.5">
                     <p className="font-semibold text-zinc-800">Support Email</p>

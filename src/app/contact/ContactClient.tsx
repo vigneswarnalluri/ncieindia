@@ -152,12 +152,12 @@ export default function ContactClient() {
                 </div>
 
                 <div className="flex gap-3.5 pt-4 border-t border-zinc-100">
-                  <Phone className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <Mail className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-bold text-zinc-800 uppercase tracking-wide">{t("contact_phone_title")}</h3>
-                    <p className="text-zinc-500 mt-1 font-mono leading-relaxed">
-                      0863 232 1417
-                    </p>
+                    <h3 className="font-bold text-zinc-800 uppercase tracking-wide">{language === "hi" ? "आधिकारिक समर्थन डेस्क" : "Official Support Desk"}</h3>
+                    <a href="mailto:office@ncieindia.org" className="text-primary font-bold hover:underline block mt-1">
+                      office@ncieindia.org
+                    </a>
                     <p className="text-[10px] text-zinc-400 mt-0.5">Mon–Sat, 9:00 AM – 5:30 PM IST</p>
                   </div>
                 </div>

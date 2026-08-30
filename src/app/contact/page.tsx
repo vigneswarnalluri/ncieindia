@@ -36,7 +36,6 @@ export default function ContactPage() {
     mainEntity: {
       "@type": "Organization",
       name: "National Council for Innovation and Entrepreneurship (NCIE) India",
-      telephone: "0863 232 1417",
       email: "office@ncieindia.org",
       address: {
         "@type": "PostalAddress",

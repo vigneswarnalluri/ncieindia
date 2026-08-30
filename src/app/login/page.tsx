@@ -375,7 +375,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-140px)] bg-slate-50 relative flex flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 selection:bg-[#0D6B4F] selection:text-white">
+    <div className="min-h-[calc(100vh-140px)] bg-slate-50 relative flex flex-col justify-center py-4 sm:py-8 lg:py-12 px-3 xs:px-4 sm:px-6 lg:px-8 selection:bg-[#0D6B4F] selection:text-white">
       {/* Clean Subtle Background Grid Pattern */}
       <div 
         className="absolute inset-0 opacity-[0.035] pointer-events-none" 
@@ -387,95 +387,22 @@ export default function LoginPage() {
 
       <div className="max-w-6xl w-full mx-auto relative z-10">
         {/* Navigation Breadcrumb Bar */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-4 sm:mb-6">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-slate-600 hover:text-[#0D6B4F] text-xs font-bold transition-colors bg-white px-3 py-1.5 rounded-md border border-slate-200 shadow-2xs"
+            className="inline-flex items-center gap-1.5 text-slate-600 hover:text-[#0D6B4F] text-xs font-bold transition-colors bg-white px-2.5 sm:px-3 py-1.5 rounded-md border border-slate-200 shadow-2xs"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>{t("back_to_portal")}</span>
           </Link>
         </div>
 
-        {/* 2-Column Split Portal Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* 2-Column Responsive Portal Layout: Login Card First on Mobile (order-1 lg:order-2), Info Second (order-2 lg:order-1) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           
-          {/* Left Column: Authority, Purpose & Highlights */}
-          <div className="lg:col-span-6 space-y-6 pt-2">
-            <div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                Institutional Innovation &amp; Nodal Command Gateway
-              </h1>
-              <p className="mt-3 text-sm text-slate-600 leading-relaxed font-normal">
-                Authorized central portal for higher educational chapter SPOCs, faculty coordinators, and central nodal directors to manage incubation grants, verify student innovators, and dispatch gazette directives.
-              </p>
-            </div>
-
-            {/* Feature Callout Cards */}
-            <div className="space-y-3">
-              <div className="bg-white border border-slate-200/90 rounded-xl p-3.5 flex items-start gap-3.5 shadow-2xs hover:border-emerald-300 transition-colors">
-                <div className="p-2 bg-emerald-50 text-[#0D6B4F] rounded-lg shrink-0 border border-emerald-100">
-                  <Landmark className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-xs font-bold text-slate-900">
-                    Institutional Incubation &amp; Seed Grants
-                  </h3>
-                  <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
-                    Access pre-incubation grants (₹8.00L to ₹50.00L), track fund utilization certificates, and manage chapter star ratings.
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-white border border-slate-200/90 rounded-xl p-3.5 flex items-start gap-3.5 shadow-2xs hover:border-emerald-300 transition-colors">
-                <div className="p-2 bg-blue-50 text-blue-700 rounded-lg shrink-0 border border-blue-100">
-                  <GraduationCap className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-xs font-bold text-slate-900">
-                    Student Innovator &amp; Internship Verification
-                  </h3>
-                  <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
-                    Review and endorse undergraduate innovation internships across 10 core national tracks with real-time audit registries.
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-white border border-slate-200/90 rounded-xl p-3.5 flex items-start gap-3.5 shadow-2xs hover:border-emerald-300 transition-colors">
-                <div className="p-2 bg-purple-50 text-purple-700 rounded-lg shrink-0 border border-purple-100">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-xs font-bold text-slate-900">
-                    Secure Institutional Mailbox &amp; Gazette Desks
-                  </h3>
-                  <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
-                    Direct cryptographic communications with the Central Directorate, official notifications, and compliance alerts.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Live Trust Metrics */}
-            <div className="grid grid-cols-3 gap-3 pt-2">
-              <div className="bg-white border border-slate-200 rounded-xl p-3 text-center shadow-2xs">
-                <div className="text-lg font-black text-[#0D6B4F]">180+</div>
-                <div className="text-[10px] uppercase font-bold text-slate-500 mt-0.5">Chapters</div>
-              </div>
-              <div className="bg-white border border-slate-200 rounded-xl p-3 text-center shadow-2xs">
-                <div className="text-lg font-black text-slate-900">10,000+</div>
-                <div className="text-[10px] uppercase font-bold text-slate-500 mt-0.5">Innovators</div>
-              </div>
-              <div className="bg-white border border-slate-200 rounded-xl p-3 text-center shadow-2xs">
-                <div className="text-lg font-black text-[#f5a623]">₹10 Cr+</div>
-                <div className="text-[10px] uppercase font-bold text-slate-500 mt-0.5">Fund Support</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: Clean White Authorization Card */}
-          <div className="lg:col-span-6">
-            <div className="bg-white border border-slate-200 rounded-2xl shadow-xl p-6 sm:p-8 relative overflow-hidden">
+          {/* Right/Top Column on Mobile: Clean White Authorization Card */}
+          <div className="order-1 lg:order-2 lg:col-span-6 w-full">
+            <div className="bg-white border border-slate-200 rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl p-4 xs:p-5 sm:p-8 relative overflow-hidden">
               {/* National Tricolor Top Strip */}
               <div className="absolute top-0 left-0 right-0 h-1.5 flex">
                 <div className="flex-1 bg-[#FF9933]" />
@@ -484,22 +411,22 @@ export default function LoginPage() {
               </div>
 
               {/* Portal Authorization Header */}
-              <div className="text-center space-y-1 mb-5 pt-1">
-                <div className="inline-flex items-center justify-center p-2.5 bg-emerald-50 text-[#0D6B4F] rounded-full mb-1 border border-emerald-200/60 shadow-inner">
-                  <Lock className="w-5 h-5" />
+              <div className="text-center space-y-1 mb-4 sm:mb-5 pt-1">
+                <div className="inline-flex items-center justify-center p-2 sm:p-2.5 bg-emerald-50 text-[#0D6B4F] rounded-full mb-1 border border-emerald-200/60 shadow-inner">
+                  <Lock className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
-                <h2 className="text-xl font-black text-slate-900 tracking-tight">
+                <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
                   Portal Authorization
                 </h2>
-                <p className="text-slate-500 text-xs">
+                <p className="text-slate-500 text-[11px] sm:text-xs">
                   Enter your registered credentials to receive an authentication OTP.
                 </p>
               </div>
 
               {/* Security Advisory Callout */}
-              <div className="flex items-start gap-2.5 bg-amber-50/70 border border-amber-200/80 rounded-xl p-3 mb-4 text-left">
+              <div className="flex items-start gap-2 sm:gap-2.5 bg-amber-50/70 border border-amber-200/80 rounded-lg sm:rounded-xl p-2.5 sm:p-3 mb-3.5 sm:mb-4 text-left">
                 <AlertCircle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
-                <p className="text-[11px] text-amber-900 leading-snug">
+                <p className="text-[10px] sm:text-[11px] text-amber-900 leading-snug">
                   <strong>Notice:</strong> Restricted to authorized university coordinators and nodal personnel under Sec. 66 IT Act, 2000. All sessions logged.
                 </p>
               </div>
@@ -512,45 +439,45 @@ export default function LoginPage() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.15 }}
-                    className="space-y-4"
+                    className="space-y-3.5 sm:space-y-4"
                   >
-                    {/* Role Toggle Selector */}
-                    <div className="p-1 bg-slate-100 border border-slate-200 rounded-xl grid grid-cols-2 gap-1 shadow-inner">
+                    {/* Role Toggle Selector - Responsive on all screen widths */}
+                    <div className="p-1 bg-slate-100 border border-slate-200 rounded-lg sm:rounded-xl grid grid-cols-2 gap-1 shadow-inner">
                       <button
                         id="role-institution"
                         type="button"
                         onClick={() => setRole("institution")}
-                        className={`py-2 px-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                        className={`py-1.5 sm:py-2 px-1 xs:px-2 text-[10.5px] xs:text-[11px] sm:text-xs font-bold uppercase tracking-wider rounded-md sm:rounded-lg transition-all flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer truncate ${
                           role === "institution"
                             ? "bg-[#0D6B4F] text-white shadow-md font-black"
                             : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
                         }`}
                       >
                         <Building2 className="w-3.5 h-3.5 shrink-0" />
-                        <span>INSTITUTION (SPOC)</span>
+                        <span className="truncate">INSTITUTION (SPOC)</span>
                       </button>
                       <button
                         id="role-official"
                         type="button"
                         onClick={() => setRole("official")}
-                        className={`py-2 px-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                        className={`py-1.5 sm:py-2 px-1 xs:px-2 text-[10.5px] xs:text-[11px] sm:text-xs font-bold uppercase tracking-wider rounded-md sm:rounded-lg transition-all flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer truncate ${
                           role === "official"
                             ? "bg-[#093325] text-white shadow-md font-black"
                             : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
                         }`}
                       >
                         <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-                        <span>NODAL OFFICER</span>
+                        <span className="truncate">NODAL OFFICER</span>
                       </button>
                     </div>
 
                     {/* Form Input */}
-                    <form onSubmit={handleSubmit} className="space-y-3.5">
+                    <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-3.5">
                       {/* Email Input */}
                       <div className="space-y-1 text-left">
                         <label
                           htmlFor="login-id"
-                          className="block text-[11px] font-bold uppercase tracking-wider text-slate-700"
+                          className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-700"
                         >
                           {role === "institution"
                             ? "Institutional SPOC Email Address"
@@ -558,8 +485,8 @@ export default function LoginPage() {
                           <span className="text-red-500 ml-0.5">*</span>
                         </label>
                         <div className="relative">
-                          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                            <Mail className="w-4 h-4" />
+                          <div className="absolute inset-y-0 left-0 pl-3 sm:pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                           </div>
                           <input
                             ref={firstInputRef}
@@ -574,13 +501,13 @@ export default function LoginPage() {
                                 : "e.g. nodal.officer@ncie.gov.in"
                             }
                             required
-                            className="w-full bg-slate-50/50 border border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D6B4F]/20 focus:border-[#0D6B4F] transition-all shadow-2xs font-mono"
+                            className="w-full bg-slate-50/50 border border-slate-300 rounded-lg sm:rounded-xl pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D6B4F]/20 focus:border-[#0D6B4F] transition-all shadow-2xs font-mono"
                           />
                         </div>
                       </div>
 
                       {/* Passwordless OTP Notice */}
-                      <div className="flex items-center gap-2 bg-emerald-50/70 border border-emerald-200 rounded-xl px-3.5 py-2 text-[11px] text-emerald-900 text-left">
+                      <div className="flex items-center gap-2 bg-emerald-50/70 border border-emerald-200 rounded-lg sm:rounded-xl px-3 py-1.5 sm:py-2 text-[10px] sm:text-[11px] text-emerald-900 text-left">
                         <Lock className="w-3.5 h-3.5 text-[#0D6B4F] shrink-0" />
                         <span>
                           A secure <strong>6-digit OTP</strong> will be dispatched to your registered email.
@@ -588,28 +515,28 @@ export default function LoginPage() {
                       </div>
 
                       {/* Security CAPTCHA Card */}
-                      <div className="space-y-1.5 pt-0.5 text-left">
+                      <div className="space-y-1 sm:space-y-1.5 pt-0.5 text-left">
                         <div className="flex justify-between items-center">
-                          <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700">
+                          <label className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-700">
                             Security Captcha <span className="text-red-500">*</span>
                           </label>
                           <button
                             type="button"
                             onClick={generateCaptcha}
-                            className="text-[#0D6B4F] hover:text-[#094e39] transition-colors flex items-center gap-1 text-[11px] font-bold cursor-pointer"
+                            className="text-[#0D6B4F] hover:text-[#094e39] transition-colors flex items-center gap-1 text-[10px] sm:text-[11px] font-bold cursor-pointer"
                           >
                             <RefreshCw
-                              className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin" : ""}`}
+                              className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${isRefreshing ? "animate-spin" : ""}`}
                             />
                             <span>Refresh Code</span>
                           </button>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
-                          <div className="relative bg-slate-100 border border-slate-300 rounded-xl flex items-center justify-center select-none overflow-hidden h-[40px] shadow-inner">
+                        <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                          <div className="relative bg-slate-100 border border-slate-300 rounded-lg sm:rounded-xl flex items-center justify-center select-none overflow-hidden h-[38px] sm:h-[40px] shadow-inner">
                             <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(45deg,#000_25%,transparent_25%),linear-gradient(-45deg,#000_25%,transparent_25%)] bg-[size:6px_6px]" />
-                            <div className="absolute w-full h-[1px] bg-slate-400/60 top-[20px] -rotate-2" />
-                            <span className="font-mono text-lg font-black tracking-[0.3em] text-slate-900 italic select-none">
+                            <div className="absolute w-full h-[1px] bg-slate-400/60 top-[19px] sm:top-[20px] -rotate-2" />
+                            <span className="font-mono text-base sm:text-lg font-black tracking-[0.25em] sm:tracking-[0.3em] text-slate-900 italic select-none">
                               {captchaCode}
                             </span>
                           </div>
@@ -624,7 +551,7 @@ export default function LoginPage() {
                               setCaptchaError(false);
                             }}
                             required
-                            className={`w-full bg-slate-50/50 focus:bg-white border rounded-xl px-3 py-2 text-center text-sm font-mono font-bold tracking-widest focus:outline-none transition-all shadow-2xs ${
+                            className={`w-full bg-slate-50/50 focus:bg-white border rounded-lg sm:rounded-xl px-2.5 sm:px-3 py-1.5 sm:py-2 text-center text-xs sm:text-sm font-mono font-bold tracking-widest focus:outline-none transition-all shadow-2xs ${
                               captchaError
                                 ? "border-red-500 focus:ring-2 focus:ring-red-200"
                                 : "border-slate-300 focus:ring-2 focus:ring-[#0D6B4F]/20 focus:border-[#0D6B4F]"
@@ -632,7 +559,7 @@ export default function LoginPage() {
                           />
                         </div>
                         {captchaError && (
-                          <p className="text-red-600 text-xs font-semibold flex items-center gap-1 mt-0.5">
+                          <p className="text-red-600 text-[11px] sm:text-xs font-semibold flex items-center gap-1 mt-0.5">
                             <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                             <span>Incorrect captcha code. Please try again.</span>
                           </p>
@@ -641,7 +568,7 @@ export default function LoginPage() {
 
                       {/* Error Banner */}
                       {authError && (
-                        <div className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-xl p-3 animate-in fade-in text-left">
+                        <div className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-lg sm:rounded-xl p-2.5 sm:p-3 animate-in fade-in text-left">
                           <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
                           <p className="text-xs text-red-700 font-semibold">{authError}</p>
                         </div>
@@ -652,16 +579,16 @@ export default function LoginPage() {
                         id="login-submit"
                         type="submit"
                         disabled={loading || ssoLoading}
-                        className="w-full flex items-center justify-center gap-2 bg-[#0D6B4F] hover:bg-[#0a5840] active:scale-[0.99] text-white font-bold text-xs sm:text-sm rounded-xl py-3 transition-all shadow-md hover:shadow-lg disabled:opacity-70 cursor-pointer"
+                        className="w-full flex items-center justify-center gap-2 bg-[#0D6B4F] hover:bg-[#0a5840] active:scale-[0.99] text-white font-bold text-xs sm:text-sm rounded-lg sm:rounded-xl py-2.5 sm:py-3 transition-all shadow-md hover:shadow-lg disabled:opacity-70 cursor-pointer min-h-[42px]"
                       >
                         {loading ? (
                           <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         ) : (
-                          <Lock className="w-4 h-4" />
+                          <Lock className="w-3.5 h-3.5" />
                         )}
                         <span>
                           {loading
-                            ? "Dispatched Security Verification..."
+                            ? "Dispatching Access OTP..."
                             : role === "institution"
                             ? "Request SPOC Access OTP"
                             : "Request Nodal Officer Access OTP"}
@@ -671,10 +598,10 @@ export default function LoginPage() {
 
                     {/* Establish Chapter Register Link */}
                     {role === "institution" && (
-                      <div className="pt-1 text-center">
+                      <div className="pt-0.5 text-center">
                         <Link
                           href="/join"
-                          className="inline-flex items-center gap-1.5 text-xs text-[#0D6B4F] hover:text-[#084231] font-bold hover:underline"
+                          className="inline-flex items-center gap-1 text-[11px] sm:text-xs text-[#0D6B4F] hover:text-[#084231] font-bold hover:underline"
                         >
                           <PlusCircle className="w-3.5 h-3.5" />
                           <span>Not registered? Establish your Campus Chapter →</span>
@@ -683,9 +610,9 @@ export default function LoginPage() {
                     )}
 
                     {/* SSO Divider */}
-                    <div className="relative flex py-1 items-center">
+                    <div className="relative flex py-0.5 sm:py-1 items-center">
                       <div className="flex-grow border-t border-slate-200"></div>
-                      <span className="flex-shrink mx-3 text-slate-400 font-bold uppercase tracking-widest text-[10px]">
+                      <span className="flex-shrink mx-3 text-slate-400 font-bold uppercase tracking-widest text-[9px] sm:text-[10px]">
                         NATIONAL CENTRAL SSO
                       </span>
                       <div className="flex-grow border-t border-slate-200"></div>
@@ -696,7 +623,7 @@ export default function LoginPage() {
                       type="button"
                       onClick={handleSsoLogin}
                       disabled={loading || ssoLoading}
-                      className="w-full flex items-center justify-center gap-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-300 rounded-xl py-2.5 transition-all text-xs font-bold text-slate-800 cursor-pointer shadow-2xs"
+                      className="w-full flex items-center justify-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-300 rounded-lg sm:rounded-xl py-2 sm:py-2.5 transition-all text-[11px] sm:text-xs font-bold text-slate-800 cursor-pointer shadow-2xs min-h-[40px]"
                     >
                       {ssoLoading ? (
                         <span className="w-3.5 h-3.5 border-2 border-slate-400/30 border-t-slate-700 rounded-full animate-spin" />
@@ -712,30 +639,30 @@ export default function LoginPage() {
                     key="auth-success-pane"
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="text-center space-y-4 py-2"
+                    className="text-center space-y-3.5 sm:space-y-4 py-1 sm:py-2"
                   >
-                    <div className="w-14 h-14 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center mx-auto text-[#0D6B4F] shadow-inner">
-                      <KeyRound className="w-7 h-7" />
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center mx-auto text-[#0D6B4F] shadow-inner">
+                      <KeyRound className="w-6 h-6 sm:w-7 sm:h-7" />
                     </div>
 
                     <div className="space-y-1">
-                      <h3 className="text-lg font-black text-slate-900">
+                      <h3 className="text-base sm:text-lg font-black text-slate-900">
                         Enter Security Verification OTP
                       </h3>
-                      <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
+                      <p className="text-[11px] sm:text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
                         A 6-digit access code has been dispatched to:
                       </p>
                       {otpEmail && (
-                        <p className="text-xs font-mono font-bold text-slate-900 bg-slate-100 border border-slate-200 rounded-lg px-3 py-1 inline-block">
+                        <p className="text-xs font-mono font-bold text-slate-900 bg-slate-100 border border-slate-200 rounded-lg px-2.5 py-1 inline-block break-all max-w-full">
                           {otpEmail}
                         </p>
                       )}
                     </div>
 
-                    {/* 6-Box Segmented OTP Inputs */}
-                    <form onSubmit={handleVerifyOtp} className="space-y-4 max-w-sm mx-auto pt-1">
+                    {/* 6-Box Segmented OTP Inputs - Seamless on small screens */}
+                    <form onSubmit={handleVerifyOtp} className="space-y-3.5 sm:space-y-4 max-w-sm mx-auto pt-1">
                       <div className="space-y-2">
-                        <div className="flex justify-center gap-2">
+                        <div className="flex justify-center gap-1.5 xs:gap-2">
                           {[0, 1, 2, 3, 4, 5].map((idx) => (
                             <input
                               key={idx}
@@ -748,7 +675,7 @@ export default function LoginPage() {
                               value={otp[idx]}
                               onChange={(e) => handleOtpBoxChange(idx, e.target.value)}
                               onKeyDown={(e) => handleOtpKeyDown(idx, e)}
-                              className={`w-10 h-12 text-center text-xl font-bold font-mono border rounded-xl focus:outline-none transition-all shadow-2xs ${
+                              className={`w-8 h-10 xs:w-9 xs:h-11 sm:w-10 sm:h-12 text-center text-lg sm:text-xl font-bold font-mono border rounded-lg sm:rounded-xl focus:outline-none transition-all shadow-2xs ${
                                 otpError
                                   ? "border-red-400 bg-red-50/40 text-red-900"
                                   : "border-slate-300 bg-white text-slate-900 focus:border-[#0D6B4F] focus:ring-2 focus:ring-[#0D6B4F]/20"
@@ -758,7 +685,7 @@ export default function LoginPage() {
                         </div>
 
                         {otpError && (
-                          <p className="text-red-600 text-xs font-semibold flex items-center justify-center gap-1 mt-1">
+                          <p className="text-red-600 text-[11px] sm:text-xs font-semibold flex items-center justify-center gap-1 mt-1">
                             <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                             <span>{otpError}</span>
                           </p>
@@ -769,7 +696,7 @@ export default function LoginPage() {
                         id="otp-verify-submit"
                         type="submit"
                         disabled={verifyingOtp}
-                        className="w-full flex items-center justify-center gap-2 bg-[#0D6B4F] hover:bg-[#0a5840] text-white font-bold text-sm rounded-xl py-3 transition-all shadow-md disabled:opacity-75 cursor-pointer"
+                        className="w-full flex items-center justify-center gap-2 bg-[#0D6B4F] hover:bg-[#0a5840] text-white font-bold text-xs sm:text-sm rounded-lg sm:rounded-xl py-2.5 sm:py-3 transition-all shadow-md disabled:opacity-75 cursor-pointer min-h-[42px]"
                       >
                         {verifyingOtp ? (
                           <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -782,12 +709,12 @@ export default function LoginPage() {
                       </button>
 
                       {/* Resend Cooldown */}
-                      <div className="pt-1 flex flex-col items-center gap-2">
+                      <div className="pt-1 flex flex-col items-center gap-1.5">
                         <button
                           type="button"
                           onClick={handleResendOtp}
                           disabled={resendCountdown > 0}
-                          className="text-xs text-slate-600 hover:text-[#0D6B4F] disabled:opacity-50 disabled:cursor-not-allowed font-semibold cursor-pointer"
+                          className="text-[11px] sm:text-xs text-slate-600 hover:text-[#0D6B4F] disabled:opacity-50 disabled:cursor-not-allowed font-semibold cursor-pointer"
                         >
                           {resendCountdown > 0
                             ? `Resend OTP in ${resendCountdown}s`
@@ -803,7 +730,7 @@ export default function LoginPage() {
                             setAuthError(null);
                             generateCaptcha();
                           }}
-                          className="text-xs text-[#0D6B4F] hover:underline font-bold"
+                          className="text-[11px] sm:text-xs text-[#0D6B4F] hover:underline font-bold"
                         >
                           ← Re-enter Email Address
                         </button>
@@ -814,25 +741,94 @@ export default function LoginPage() {
               </AnimatePresence>
             </div>
           </div>
+
+          {/* Left Column on Desktop / Bottom on Mobile: Authority, Purpose & Highlights */}
+          <div className="order-2 lg:order-1 lg:col-span-6 space-y-4 sm:space-y-6 pt-1 lg:pt-2">
+            <div>
+              <h1 className="text-xl xs:text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-snug sm:leading-tight">
+                Institutional Innovation &amp; Nodal Command Gateway
+              </h1>
+              <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                Authorized central portal for higher educational chapter SPOCs, faculty coordinators, and central nodal directors to manage incubation grants, verify student innovators, and dispatch gazette directives.
+              </p>
+            </div>
+
+            {/* Feature Callout Cards */}
+            <div className="space-y-2.5 sm:space-y-3">
+              <div className="bg-white border border-slate-200/90 rounded-lg sm:rounded-xl p-3 sm:p-3.5 flex items-start gap-3 shadow-2xs hover:border-emerald-300 transition-colors">
+                <div className="p-1.5 sm:p-2 bg-emerald-50 text-[#0D6B4F] rounded-lg shrink-0 border border-emerald-100">
+                  <Landmark className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+                <div>
+                  <h3 className="text-xs font-bold text-slate-900">
+                    Institutional Incubation &amp; Seed Grants
+                  </h3>
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 mt-0.5 leading-snug">
+                    Access pre-incubation grants (₹8.00L to ₹50.00L), track fund utilization certificates, and manage chapter star ratings.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white border border-slate-200/90 rounded-lg sm:rounded-xl p-3 sm:p-3.5 flex items-start gap-3 shadow-2xs hover:border-emerald-300 transition-colors">
+                <div className="p-1.5 sm:p-2 bg-blue-50 text-blue-700 rounded-lg shrink-0 border border-blue-100">
+                  <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+                <div>
+                  <h3 className="text-xs font-bold text-slate-900">
+                    Student Innovator &amp; Internship Verification
+                  </h3>
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 mt-0.5 leading-snug">
+                    Review and endorse undergraduate innovation internships across 10 core national tracks with real-time audit registries.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white border border-slate-200/90 rounded-lg sm:rounded-xl p-3 sm:p-3.5 flex items-start gap-3 shadow-2xs hover:border-emerald-300 transition-colors">
+                <div className="p-1.5 sm:p-2 bg-purple-50 text-purple-700 rounded-lg shrink-0 border border-purple-100">
+                  <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+                <div>
+                  <h3 className="text-xs font-bold text-slate-900">
+                    Secure Institutional Mailbox &amp; Gazette Desks
+                  </h3>
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 mt-0.5 leading-snug">
+                    Direct cryptographic communications with the Central Directorate, official notifications, and compliance alerts.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Live Trust Metrics */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-1">
+              <div className="bg-white border border-slate-200 rounded-lg sm:rounded-xl p-2.5 sm:p-3 text-center shadow-2xs">
+                <div className="text-base sm:text-lg font-black text-[#0D6B4F]">180+</div>
+                <div className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-500 mt-0.5">Chapters</div>
+              </div>
+              <div className="bg-white border border-slate-200 rounded-lg sm:rounded-xl p-2.5 sm:p-3 text-center shadow-2xs">
+                <div className="text-base sm:text-lg font-black text-slate-900">10,000+</div>
+                <div className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-500 mt-0.5">Innovators</div>
+              </div>
+              <div className="bg-white border border-slate-200 rounded-lg sm:rounded-xl p-2.5 sm:p-3 text-center shadow-2xs">
+                <div className="text-base sm:text-lg font-black text-[#f5a623]">₹10 Cr+</div>
+                <div className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-500 mt-0.5">Fund Support</div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         {/* Support & Helpline Footer */}
-        <div className="mt-8 pt-4 border-t border-slate-200/80 flex flex-wrap justify-between items-center gap-3 text-xs text-slate-500">
-          <div className="flex items-center gap-4">
+        <div className="mt-6 sm:mt-8 pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-3 text-xs text-slate-500 text-center sm:text-left">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-4">
             <span className="flex items-center gap-1.5">
               <Mail className="w-3.5 h-3.5 text-slate-400" />
               <a href="mailto:info@ncieindia.org" className="hover:text-[#0D6B4F] transition-colors font-medium">
                 info@ncieindia.org
               </a>
             </span>
-            <span>•</span>
-            <span className="flex items-center gap-1.5">
-              <Phone className="w-3.5 h-3.5 text-slate-400" />
-              <span>Toll Free: 0863 232 1417 (10 AM to 5:30 PM)</span>
-            </span>
           </div>
 
-          <p className="text-[11px] text-slate-400 font-mono">
+          <p className="text-[10px] sm:text-[11px] text-slate-400 font-mono">
             © 2026 National Council for Innovation &amp; Entrepreneurship (NCIE).
           </p>
         </div>
@@ -841,7 +837,7 @@ export default function LoginPage() {
       {/* Help Modal */}
       {showHelpModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-300 w-full max-w-md shadow-2xl rounded-2xl p-6 relative animate-in fade-in">
+          <div className="bg-white border border-slate-300 w-full max-w-md shadow-2xl rounded-2xl p-5 sm:p-6 relative animate-in fade-in">
             <button
               onClick={() => setShowHelpModal(false)}
               className="absolute top-4 right-4 text-slate-400 hover:text-slate-700 p-1 rounded-full hover:bg-slate-100 cursor-pointer"

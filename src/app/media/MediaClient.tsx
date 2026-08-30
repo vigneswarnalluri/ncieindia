@@ -702,16 +702,6 @@ export default function MediaClient() {
                       </a>
                     </div>
                   </div>
-
-                  <div className="flex gap-3">
-                    <Phone className="w-4.5 h-4.5 text-[#0D6B4F] shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-[9px] font-bold text-zinc-400 uppercase">{t("media_helpline")}</p>
-                      <p className="text-xs text-zinc-700 font-bold mt-0.5">
-                        0863 232 1417
-                      </p>
-                    </div>
-                  </div>
                 </div>
 
                 <div className="pt-4 border-t border-zinc-150">

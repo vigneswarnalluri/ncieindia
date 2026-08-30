@@ -149,12 +149,6 @@ export default function Footer() {
                   office@ncieindia.org
                 </a>
               </span>
-              <span className="block">
-                <strong>{t("footer_phone").split(":")[0] || "Phone"}:</strong>{" "}
-                <a href="tel:08632321417" className="hover:underline hover:text-accent transition-colors font-mono">
-                  0863 232 1417
-                </a>
-              </span>
             </p>
           </div>
 

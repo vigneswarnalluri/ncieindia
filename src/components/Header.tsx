@@ -222,9 +222,10 @@ export default function Header() {
 
             {/* Right: Support Contact */}
             <div className="flex items-center text-white font-sans tracking-wide font-medium text-xs">
-              <span>{t("toll_free")} : </span>
-              <span className="text-accent font-bold ml-1.5">0863 232 1417</span>
-              <span className="text-zinc-300 ml-1.5 hidden lg:inline">{t("timings")}</span>
+              <span>Official Support: </span>
+              <a href="mailto:info@ncieindia.org" className="text-accent font-bold ml-1.5 hover:underline">
+                info@ncieindia.org
+              </a>
             </div>
           </div>
         </div>
@@ -552,12 +553,12 @@ export default function Header() {
                           </span>
                         </Link>
 
-                        <a href="tel:08632321417" className="group/item flex flex-col gap-1">
+                        <a href="mailto:info@ncieindia.org" className="group/item flex flex-col gap-1">
                           <span className="text-[13px] font-bold text-zinc-850 group-hover/item:text-primary group-hover/item:underline transition-colors font-sans leading-tight">
-                            Official Toll-Free Helpdesk
+                            Official Support Helpdesk
                           </span>
                           <span className="text-xs text-zinc-500 font-sans leading-normal">
-                            Support line: 0863 232 1417
+                            Desk: info@ncieindia.org
                           </span>
                         </a>
                       </div>
@@ -1100,14 +1101,11 @@ export default function Header() {
                       {/* Support Details */}
                       <div className="text-center space-y-0.5 bg-zinc-50 p-2.5 rounded-lg border border-zinc-200">
                         <p className="text-[9px] uppercase font-bold tracking-widest text-zinc-400">
-                          {t("toll_free")}
+                          Official Secretariat Desk
                         </p>
-                        <p className="text-xs font-bold text-primary">
-                          0863 232 1417
-                        </p>
-                        <p className="text-[9px] text-zinc-400">
-                          {t("timings")}
-                        </p>
+                        <a href="mailto:info@ncieindia.org" className="text-xs font-bold text-primary hover:underline block">
+                          info@ncieindia.org
+                        </a>
                       </div>
                     </div>
                   </div>

@@ -93,12 +93,13 @@ export default function RegistrationsTab({ onNotify }: Props) {
   const [filterCollege, setFilterCollege] = useState<string>("all");
   const [filterCourse, setFilterCourse] = useState<string>("all");
   const [filterStream, setFilterStream] = useState<string>("all");
+  const [filterDept, setFilterDept] = useState<string>("all");
+  const [filterSpecialization, setFilterSpecialization] = useState<string>("all");
   const [filterYear, setFilterYear] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("newest");
 
   // Advanced Filters
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
-  const [filterDept, setFilterDept] = useState<string>("all");
   const [filterDoc, setFilterDoc] = useState<string>("all");
   const [filterPayment, setFilterPayment] = useState<string>("all");
   const [filterDateRange, setFilterDateRange] = useState<string>("all");
@@ -349,6 +350,11 @@ export default function RegistrationsTab({ onNotify }: Props) {
     return Array.from(new Set(depts)).sort();
   }, [records]);
 
+  const uniqueSpecializations = useMemo(() => {
+    const specs = records.map((r) => r.specialization).filter(Boolean) as string[];
+    return Array.from(new Set(specs)).sort();
+  }, [records]);
+
   // Reset all filters
   const handleClearFilters = () => {
     setSelectedRole("all");
@@ -356,8 +362,9 @@ export default function RegistrationsTab({ onNotify }: Props) {
     setFilterCollege("all");
     setFilterCourse("all");
     setFilterStream("all");
-    setFilterYear("all");
     setFilterDept("all");
+    setFilterSpecialization("all");
+    setFilterYear("all");
     setFilterDoc("all");
     setFilterPayment("all");
     setFilterDateRange("all");
@@ -367,7 +374,6 @@ export default function RegistrationsTab({ onNotify }: Props) {
   };
 
   const activeAdvancedCount = [
-    filterDept !== "all",
     filterDoc !== "all",
     filterPayment !== "all",
     filterDateRange !== "all",
@@ -379,6 +385,8 @@ export default function RegistrationsTab({ onNotify }: Props) {
     filterCollege !== "all" ||
     filterCourse !== "all" ||
     filterStream !== "all" ||
+    filterDept !== "all" ||
+    filterSpecialization !== "all" ||
     filterYear !== "all" ||
     activeAdvancedCount > 0 ||
     searchQuery.trim() !== "" ||
@@ -408,11 +416,14 @@ export default function RegistrationsTab({ onNotify }: Props) {
         // Stream filter
         if (filterStream !== "all" && r.stream !== filterStream) return false;
 
-        // Year filter
-        if (filterYear !== "all" && r.year_of_study !== filterYear) return false;
-
         // Department filter
         if (filterDept !== "all" && r.department !== filterDept) return false;
+
+        // Specialization filter
+        if (filterSpecialization !== "all" && r.specialization !== filterSpecialization) return false;
+
+        // Year filter
+        if (filterYear !== "all" && r.year_of_study !== filterYear) return false;
 
         // Document attachment filter
         const docs = parseDocumentUrls(r.website_url);
@@ -502,8 +513,9 @@ export default function RegistrationsTab({ onNotify }: Props) {
     filterCollege,
     filterCourse,
     filterStream,
-    filterYear,
     filterDept,
+    filterSpecialization,
+    filterYear,
     filterDoc,
     filterPayment,
     filterDateRange,
@@ -885,13 +897,13 @@ export default function RegistrationsTab({ onNotify }: Props) {
       {/* Main Filter Toolbar */}
       <div className="bg-white border border-zinc-200 p-3.5 space-y-3 rounded-xs shadow-2xs">
         {/* Row 1: Primary Controls */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-9 gap-2">
           {/* Live Search Input */}
           <div className="relative">
             <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search Name, Reg ID, College..."
+              placeholder="Search Name, Reg ID..."
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
@@ -921,9 +933,9 @@ export default function RegistrationsTab({ onNotify }: Props) {
                 setCurrentPage(1);
               }}
               className="w-full py-1.5 px-2.5 text-xs bg-zinc-50 border border-zinc-200 rounded focus:bg-white focus:outline-none focus:border-[#0D6B4F] text-zinc-700 font-medium cursor-pointer truncate"
-              title={filterCollege !== "all" ? filterCollege : "All Colleges / Institutions"}
+              title={filterCollege !== "all" ? filterCollege : "All Colleges"}
             >
-              <option value="all">College: All Colleges</option>
+              <option value="all">College: All</option>
               {uniqueColleges.map((col) => (
                 <option key={col} value={col}>
                   {col}
@@ -958,8 +970,9 @@ export default function RegistrationsTab({ onNotify }: Props) {
                 setCurrentPage(1);
               }}
               className="w-full py-1.5 px-2.5 text-xs bg-zinc-50 border border-zinc-200 rounded focus:bg-white focus:outline-none focus:border-[#0D6B4F] text-zinc-700 font-medium cursor-pointer truncate"
+              title={filterCourse !== "all" ? filterCourse : "All Courses"}
             >
-              <option value="all">Course: All Courses</option>
+              <option value="all">Course: All</option>
               {uniqueCourses.map((c) => (
                 <option key={c} value={c}>
                   {c}
@@ -977,11 +990,52 @@ export default function RegistrationsTab({ onNotify }: Props) {
                 setCurrentPage(1);
               }}
               className="w-full py-1.5 px-2.5 text-xs bg-zinc-50 border border-zinc-200 rounded focus:bg-white focus:outline-none focus:border-[#0D6B4F] text-zinc-700 font-medium cursor-pointer truncate"
+              title={filterStream !== "all" ? filterStream : "All Streams"}
             >
-              <option value="all">Stream: All Streams</option>
+              <option value="all">Stream: All</option>
               {uniqueStreams.map((s) => (
                 <option key={s} value={s}>
                   {s}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Department Filter Dropdown */}
+          <div>
+            <select
+              value={filterDept}
+              onChange={(e) => {
+                setFilterDept(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-full py-1.5 px-2.5 text-xs bg-zinc-50 border border-zinc-200 rounded focus:bg-white focus:outline-none focus:border-[#0D6B4F] text-zinc-700 font-medium cursor-pointer truncate"
+              title={filterDept !== "all" ? filterDept : "All Departments"}
+            >
+              <option value="all">Dept: All</option>
+              {uniqueDepts.map((d) => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Specialization Filter Dropdown */}
+          <div>
+            <select
+              value={filterSpecialization}
+              onChange={(e) => {
+                setFilterSpecialization(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-full py-1.5 px-2.5 text-xs bg-zinc-50 border border-zinc-200 rounded focus:bg-white focus:outline-none focus:border-[#0D6B4F] text-zinc-700 font-medium cursor-pointer truncate"
+              title={filterSpecialization !== "all" ? filterSpecialization : "All Specializations"}
+            >
+              <option value="all">Spec: All</option>
+              {uniqueSpecializations.map((sp) => (
+                <option key={sp} value={sp}>
+                  {sp}
                 </option>
               ))}
             </select>
@@ -997,7 +1051,7 @@ export default function RegistrationsTab({ onNotify }: Props) {
               }}
               className="w-full py-1.5 px-2.5 text-xs bg-zinc-50 border border-zinc-200 rounded focus:bg-white focus:outline-none focus:border-[#0D6B4F] text-zinc-700 font-medium cursor-pointer truncate"
             >
-              <option value="all">Year: All Years</option>
+              <option value="all">Year: All</option>
               {uniqueYears.map((yr) => (
                 <option key={yr} value={yr}>
                   Year {yr}
@@ -1016,14 +1070,14 @@ export default function RegistrationsTab({ onNotify }: Props) {
               }}
               className="w-full py-1.5 px-2.5 text-xs bg-zinc-50 border border-zinc-200 rounded focus:bg-white focus:outline-none focus:border-[#0D6B4F] text-zinc-700 font-medium cursor-pointer"
             >
-              <option value="newest">Sort: Newest First</option>
-              <option value="oldest">Sort: Oldest First</option>
+              <option value="newest">Sort: Newest</option>
+              <option value="oldest">Sort: Oldest</option>
               <option value="name_asc">Sort: Name (A-Z)</option>
               <option value="name_desc">Sort: Name (Z-A)</option>
-              <option value="college">Sort: College Name</option>
-              <option value="course">Sort: Course Name</option>
+              <option value="college">Sort: College</option>
+              <option value="course">Sort: Course</option>
               <option value="roll_asc">Sort: Roll / Reg ID</option>
-              <option value="status">Sort: Verification Status</option>
+              <option value="status">Sort: Status</option>
             </select>
           </div>
         </div>
@@ -1216,6 +1270,18 @@ export default function RegistrationsTab({ onNotify }: Props) {
                 <button
                   onClick={() => setFilterDept("all")}
                   className="p-0.5 rounded hover:bg-teal-200 text-teal-700 hover:text-red-600 transition-colors cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </span>
+            )}
+
+            {filterSpecialization !== "all" && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-sky-50 text-sky-900 border border-sky-300 rounded-md font-medium text-xs shadow-2xs">
+                <span>Spec: <strong>{filterSpecialization}</strong></span>
+                <button
+                  onClick={() => setFilterSpecialization("all")}
+                  className="p-0.5 rounded hover:bg-sky-200 text-sky-700 hover:text-red-600 transition-colors cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
