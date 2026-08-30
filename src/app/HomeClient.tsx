@@ -183,13 +183,6 @@ const CIRCULARS = [
     category: "Policy Docs",
   },
   {
-    id: "NCIE-RECTT-2026-001",
-    date: "July 01, 2026",
-    title: "NCIE Contractual Recruitment Notification July 2026: 773 Vacancies Across 21 Administrative & Technical Positions",
-    description: "Applications are invited from eligible Indian citizens for engagement to various contractual positions (1 Year tenure, AP posting). Last date: August 25, 2026.",
-    category: "Applications",
-  },
-  {
     id: "IIC-INT-2026-001",
     date: "June 18, 2026",
     title: "NCIE Viksit Bharat 2047 Innovation Leadership Programs Registrations Open: Innovational & Technology Management and AI Business & Startup Innovation",
@@ -624,11 +617,7 @@ export default function Home() {
                         </span>
                       </div>
                       <Link
-                        href={
-                          doc.id === "NCIE-RECTT-2026-001"
-                            ? "/careers"
-                            : `/notices?id=${doc.id.toLowerCase()}`
-                        }
+                        href={`/notices?id=${doc.id.toLowerCase()}`}
                         className="text-xs font-bold text-zinc-900 hover:text-[#0D6B4F] transition-colors block hover:underline leading-snug"
                       >
                         {doc.title}
@@ -639,11 +628,7 @@ export default function Home() {
                       <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-dashed border-zinc-200 text-[10px]">
                         <span className="text-zinc-400 font-medium">{doc.date}</span>
                         <Link
-                          href={
-                            doc.id === "NCIE-RECTT-2026-001"
-                              ? "/careers"
-                              : `/notices?id=${doc.id.toLowerCase()}`
-                          }
+                          href={`/notices?id=${doc.id.toLowerCase()}`}
                           className="text-[#0D6B4F] hover:text-[#074733] font-bold flex items-center gap-0.5"
                         >
                           <span>{t("notice_view_circular")}</span>
@@ -668,11 +653,7 @@ export default function Home() {
                         </span>
                       </div>
                       <Link
-                        href={
-                          doc.id === "NCIE-RECTT-2026-001"
-                            ? "/careers"
-                            : `/notices?id=${doc.id.toLowerCase()}`
-                        }
+                        href={`/notices?id=${doc.id.toLowerCase()}`}
                         className="text-xs font-bold text-zinc-900 hover:text-[#0D6B4F] transition-colors block hover:underline leading-snug"
                       >
                         {doc.title}
@@ -683,11 +664,7 @@ export default function Home() {
                       <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-dashed border-zinc-200 text-[10px]">
                         <span className="text-zinc-400 font-medium">{doc.date}</span>
                         <Link
-                          href={
-                            doc.id === "NCIE-RECTT-2026-001"
-                              ? "/careers"
-                              : `/notices?id=${doc.id.toLowerCase()}`
-                          }
+                          href={`/notices?id=${doc.id.toLowerCase()}`}
                           className="text-[#0D6B4F] hover:text-[#074733] font-bold flex items-center gap-0.5"
                         >
                           <span>{t("notice_view_circular")}</span>
