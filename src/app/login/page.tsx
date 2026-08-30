@@ -15,6 +15,19 @@ import {
   RefreshCw,
   Fingerprint,
   PlusCircle,
+  CheckCircle2,
+  Shield,
+  HelpCircle,
+  ExternalLink,
+  KeyRound,
+  Sparkles,
+  ChevronRight,
+  Info,
+  Award,
+  Users,
+  GraduationCap,
+  Landmark,
+  Check
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -27,8 +40,7 @@ type Role = "institution" | "official";
 const getCleanErrorMessage = (error: any): string => {
   if (!error) return "An unexpected error occurred.";
   let msg = error.message;
-  
-  // Attempt to parse JSON string error messages
+
   try {
     if (msg && typeof msg === "string" && msg.trim().startsWith("{")) {
       const parsed = JSON.parse(msg);
@@ -36,23 +48,21 @@ const getCleanErrorMessage = (error: any): string => {
     }
   } catch {}
 
-  // Fallbacks for empty or generic object errors
   if (!msg || msg === "{}" || typeof msg !== "string") {
     if (error.status === 429) {
-      return "Email rate limit exceeded. Please configure custom SMTP or try again in a few minutes.";
+      return "Email rate limit exceeded. Please try again in a few minutes.";
     }
     if (error.status === 400) {
       return "Invalid email request or captcha. Please check and try again.";
     }
-    return `Authentication failed (Status ${error.status || 'unknown'}). Please verify connection.`;
+    return `Authentication failed (Status ${error.status || "unknown"}). Please verify connection.`;
   }
 
-  // Translate common raw error codes into clean user-friendly text
   if (msg.includes("rate limit exceeded")) {
-    return "Email rate limit exceeded. Please configure custom SMTP or try again in a few minutes.";
+    return "Email rate limit exceeded. Please try again in a few minutes.";
   }
   if (msg.includes("Signup is disabled")) {
-    return "Registration is closed. Access is limited to already registered emails.";
+    return "Access is limited to approved SPOCs and registered institutional coordinators.";
   }
 
   return msg;
@@ -60,105 +70,25 @@ const getCleanErrorMessage = (error: any): string => {
 
 export default function LoginPage() {
   const [role, setRole] = useState<Role>("institution");
-  const [showPass, setShowPass] = useState(false);
   const [id, setId] = useState("");
-  const [pass, setPass] = useState("");
   const [loading, setLoading] = useState(false);
   const [ssoLoading, setSsoLoading] = useState(false);
-  const [ssoModalOpen, setSsoModalOpen] = useState(false);
   const [success, setSuccess] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [showHelpModal, setShowHelpModal] = useState(false);
   const emailRef = useRef<string>("");
   const firstInputRef = useRef<HTMLInputElement>(null);
   const { t } = useLanguage();
   const router = useRouter();
 
-
   // OTP Verification state
-  const [otp, setOtp] = useState("");
-  const [otpEmail, setOtpEmail] = useState(""); // Store email in state (not just ref) to survive re-renders
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [otpEmail, setOtpEmail] = useState("");
   const [otpError, setOtpError] = useState<string | null>(null);
   const [verifyingOtp, setVerifyingOtp] = useState(false);
   const [resendCountdown, setResendCountdown] = useState(0);
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const startResendCooldown = () => {
-    setResendCountdown(60);
-    if (countdownRef.current) clearInterval(countdownRef.current);
-    countdownRef.current = setInterval(() => {
-      setResendCountdown(prev => {
-        if (prev <= 1) { clearInterval(countdownRef.current!); return 0; }
-        return prev - 1;
-      });
-    }, 1000);
-  };
-
-  const handleResendOtp = async () => {
-    if (resendCountdown > 0) return;
-    setOtpError(null);
-    setOtp("");
-    try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email: otpEmail,
-        options: { shouldCreateUser: true },
-      });
-      if (error) {
-        setOtpError(getCleanErrorMessage(error));
-      } else {
-        startResendCooldown();
-        setOtpError(null);
-      }
-    } catch {
-      setOtpError("Failed to resend OTP. Please try again.");
-    }
-  };
-
-  const handleVerifyOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setVerifyingOtp(true);
-    setOtpError(null);
-
-    // Use state value (otpEmail) — more reliable than ref which can reset on page refresh
-    const emailToVerify = otpEmail || emailRef.current;
-    if (!emailToVerify) {
-      setOtpError("Session lost. Please go back and re-enter your email.");
-      setVerifyingOtp(false);
-      return;
-    }
-
-    try {
-      const { error } = await supabase.auth.verifyOtp({
-        email: emailToVerify,
-        token: otp.trim(),
-        type: "email",
-      });
-      if (error) {
-        setOtpError(getCleanErrorMessage(error));
-      } else {
-        // Use full page navigation (not router.push) so the middleware
-        // can read the newly-set Supabase session cookie on the next request.
-        const isOfficial = ALLOWED_OFFICIAL_EMAILS.some(
-          (allowed) => allowed.toLowerCase() === emailToVerify.toLowerCase()
-        );
-        const isInstitution = isAllowedInstitutionEmail(emailToVerify);
-
-        let targetRole: Role = role;
-        if (role === "official" && !isOfficial) {
-          targetRole = "institution";
-        } else if (role === "institution" && !isInstitution) {
-          targetRole = "official";
-        } else if (!role) {
-          targetRole = isOfficial ? "official" : "institution";
-        }
-
-        window.location.href = `/dashboard/${targetRole}`;
-      }
-    } catch {
-      setOtpError("Verification failed. Please try again.");
-    } finally {
-      setVerifyingOtp(false);
-    }
-  };
+  const otpInputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   // Captcha state
   const [captchaCode, setCaptchaCode] = useState("");
@@ -166,7 +96,20 @@ export default function LoginPage() {
   const [captchaError, setCaptchaError] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Generate random captcha
+  const startResendCooldown = () => {
+    setResendCountdown(60);
+    if (countdownRef.current) clearInterval(countdownRef.current);
+    countdownRef.current = setInterval(() => {
+      setResendCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(countdownRef.current!);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
   const generateCaptcha = () => {
     setIsRefreshing(true);
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -177,8 +120,22 @@ export default function LoginPage() {
     setCaptchaCode(result);
     setCaptchaInput("");
     setCaptchaError(false);
-    setTimeout(() => setIsRefreshing(false), 400);
+    setTimeout(() => setIsRefreshing(false), 300);
   };
+
+  useEffect(() => {
+    generateCaptcha();
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setId("");
+      setCaptchaInput("");
+      setCaptchaError(false);
+      firstInputRef.current?.focus();
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [role]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -188,9 +145,12 @@ export default function LoginPage() {
         try {
           const sessionData = JSON.parse(decodeURIComponent(ssoSession));
           localStorage.setItem("ncie_demo_session", JSON.stringify(sessionData));
-          document.cookie = `ncie_demo_session=${encodeURIComponent(JSON.stringify(sessionData))}; path=/; SameSite=Lax; max-age=${60 * 60 * 24 * 7}`;
-          
-          const targetUrl = sessionData.role === "official" ? "/dashboard/official" : "/dashboard/institution";
+          document.cookie = `ncie_demo_session=${encodeURIComponent(
+            JSON.stringify(sessionData)
+          )}; path=/; SameSite=Lax; max-age=${60 * 60 * 24 * 7}`;
+
+          const targetUrl =
+            sessionData.role === "official" ? "/dashboard/official" : "/dashboard/institution";
           window.location.href = targetUrl;
         } catch (e) {
           console.error("Failed to parse SSO session:", e);
@@ -217,31 +177,114 @@ export default function LoginPage() {
         }
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    generateCaptcha();
-  }, []);
+  const handleResendOtp = async () => {
+    if (resendCountdown > 0) return;
+    setOtpError(null);
+    setOtp(["", "", "", "", "", ""]);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: otpEmail,
+        options: { shouldCreateUser: true },
+      });
+      if (error) {
+        setOtpError(getCleanErrorMessage(error));
+      } else {
+        startResendCooldown();
+        setOtpError(null);
+      }
+    } catch {
+      setOtpError("Failed to resend OTP. Please try again.");
+    }
+  };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setId("");
-      setPass("");
-      setShowPass(false);
-      setCaptchaInput("");
-      setCaptchaError(false);
-      firstInputRef.current?.focus();
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [role]);
+  const handleOtpBoxChange = (index: number, val: string) => {
+    const clean = val.replace(/\D/g, "");
+    if (!clean) {
+      const newOtp = [...otp];
+      newOtp[index] = "";
+      setOtp(newOtp);
+      return;
+    }
 
-  const idLabel = role === "institution"
-    ? t("id_label_institution")
-    : t("id_label_official");
-  const idPlaceholder = role === "institution"
-    ? t("id_placeholder_institution")
-    : t("id_placeholder_official");
+    if (clean.length > 1) {
+      const pasted = clean.slice(0, 6).split("");
+      const newOtp = [...otp];
+      pasted.forEach((char, i) => {
+        if (i < 6) newOtp[i] = char;
+      });
+      setOtp(newOtp);
+      const nextIdx = Math.min(pasted.length, 5);
+      otpInputRefs.current[nextIdx]?.focus();
+      return;
+    }
+
+    const newOtp = [...otp];
+    newOtp[index] = clean;
+    setOtp(newOtp);
+
+    if (index < 5 && clean) {
+      otpInputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      otpInputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const tokenStr = otp.join("").trim();
+    if (tokenStr.length < 6) {
+      setOtpError("Please enter the complete 6-digit OTP.");
+      return;
+    }
+
+    setVerifyingOtp(true);
+    setOtpError(null);
+
+    const emailToVerify = otpEmail || emailRef.current;
+    if (!emailToVerify) {
+      setOtpError("Session expired. Please go back and re-enter your email.");
+      setVerifyingOtp(false);
+      return;
+    }
+
+    try {
+      const { error } = await supabase.auth.verifyOtp({
+        email: emailToVerify,
+        token: tokenStr,
+        type: "email",
+      });
+
+      if (error) {
+        setOtpError(getCleanErrorMessage(error));
+      } else {
+        const isOfficial = ALLOWED_OFFICIAL_EMAILS.some(
+          (allowed) => allowed.toLowerCase() === emailToVerify.toLowerCase()
+        );
+        const isInstitution = isAllowedInstitutionEmail(emailToVerify);
+
+        let targetRole: Role = role;
+        if (role === "official" && !isOfficial) {
+          targetRole = "institution";
+        } else if (role === "institution" && !isInstitution) {
+          targetRole = "official";
+        } else if (!role) {
+          targetRole = isOfficial ? "official" : "institution";
+        }
+
+        window.location.href = `/dashboard/${targetRole}`;
+      }
+    } catch {
+      setOtpError("Verification failed. Please try again.");
+    } finally {
+      setVerifyingOtp(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -261,14 +304,16 @@ export default function LoginPage() {
         (allowed) => allowed.toLowerCase() === email
       );
       if (!isAllowed) {
-        setAuthError("This email is not registered for Nodal Officer/Official access.");
+        setAuthError("This email address is not registered for Official/Nodal Command access.");
         generateCaptcha();
         return;
       }
     } else {
       isAllowed = isAllowedInstitutionEmail(email);
       if (!isAllowed) {
-        setAuthError("This email is not registered for Collegiate Chapter/SPOC access. Please register your chapter first.");
+        setAuthError(
+          "This email address is not registered for Institutional Chapter/SPOC access. Please establish your Campus Chapter first."
+        );
         generateCaptcha();
         return;
       }
@@ -277,7 +322,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       emailRef.current = email;
-      setOtpEmail(email); // Also store in state for reliability
+      setOtpEmail(email);
 
       const { error } = await supabase.auth.signInWithOtp({
         email,
@@ -290,9 +335,12 @@ export default function LoginPage() {
       } else {
         setSuccess(true);
         startResendCooldown();
+        setTimeout(() => {
+          otpInputRefs.current[0]?.focus();
+        }, 300);
       }
     } catch {
-      setAuthError("An unexpected error occurred. Please try again.");
+      setAuthError("An unexpected connection error occurred. Please try again.");
       generateCaptcha();
     } finally {
       setLoading(false);
@@ -309,7 +357,7 @@ export default function LoginPage() {
 
     if (!clientId || !authUrl || !redirectUri) {
       setAuthError(
-        "MeriPehchaan SSO is not configured on this server. Missing required environment variables."
+        "MeriPehchaan SSO is currently in scheduled maintenance. Please use Direct Email OTP verification."
       );
       setSsoLoading(false);
       return;
@@ -327,375 +375,516 @@ export default function LoginPage() {
   };
 
   return (
-    <div 
-      className="min-h-[calc(100vh-140px)] flex flex-col items-center justify-center relative py-6 px-4 sm:px-6 lg:px-8 bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/login-bg.png')" }}
-    >
-      {/* Sophisticated backdrop overlay for readability & professional contrast */}
-      <div className="absolute inset-0 bg-zinc-950/25 backdrop-blur-[3px] pointer-events-none" />
-      
-      {/* Top action header */}
-      <div className="w-full max-w-md flex justify-between items-center mb-3 px-1 relative z-10">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-white/80 hover:text-white text-xs font-semibold tracking-wide transition-colors duration-200"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          {t("back_to_portal")}
-        </Link>
-        <span className="text-[10px] bg-white/10 backdrop-blur-md border border-white/20 text-white px-2.5 py-0.5 rounded-full font-mono tracking-wider">
-          {t("nic_secure")}
-        </span>
-      </div>
+    <div className="min-h-[calc(100vh-140px)] bg-slate-50 relative flex flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 selection:bg-[#0D6B4F] selection:text-white">
+      {/* Clean Subtle Background Grid Pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.035] pointer-events-none" 
+        style={{
+          backgroundImage: "radial-gradient(#0D6B4F 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }} 
+      />
 
-      {/* Main Login Card */}
-      <div className="w-full max-w-md bg-white/90 backdrop-blur-lg border border-white/30 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-4 xs:p-5 sm:p-6 relative overflow-hidden z-10">
-        
-        {/* Elegant Top Decorative Border */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary" />
-
-        {/* Department Branding */}
-        <div className="flex flex-col items-center text-center space-y-3 mb-3">
-          <Image
-            src="/logo-new.svg"
-            alt="NCIE India Logo"
-            width={170}
-            height={48}
-            className="h-9 w-auto object-contain mt-1"
-            unoptimized
-            priority
-          />
+      <div className="max-w-6xl w-full mx-auto relative z-10">
+        {/* Navigation Breadcrumb Bar */}
+        <div className="flex justify-between items-center mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-slate-600 hover:text-[#0D6B4F] text-xs font-bold transition-colors bg-white px-3 py-1.5 rounded-md border border-slate-200 shadow-2xs"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>{t("back_to_portal")}</span>
+          </Link>
         </div>
 
-        {/* Header Title */}
-        <div className="text-center space-y-1 mb-3">
-          <h1 className="text-xl font-extrabold text-zinc-900 tracking-tight">
-            {t("login_title")}
-          </h1>
-          <p className="text-zinc-500 text-xs">
-            {t("login_subtitle")}
-          </p>
-        </div>
+        {/* 2-Column Split Portal Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Left Column: Authority, Purpose & Highlights */}
+          <div className="lg:col-span-6 space-y-6 pt-2">
+            <div>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                Institutional Innovation &amp; Nodal Command Gateway
+              </h1>
+              <p className="mt-3 text-sm text-slate-600 leading-relaxed font-normal">
+                Authorized central portal for higher educational chapter SPOCs, faculty coordinators, and central nodal directors to manage incubation grants, verify student innovators, and dispatch gazette directives.
+              </p>
+            </div>
 
-        {/* Security Notice Alert */}
-        <div className="flex items-start gap-2.5 bg-amber-50/60 border border-amber-200/60 rounded-xl p-3 mb-3.5">
-          <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-          <p className="text-[10px] text-amber-800 leading-normal">
-            <strong>{t("security_warning").split(":")[0]}:</strong>{t("security_warning").split(":")[1]}
-          </p>
-        </div>
-
-        <AnimatePresence mode="wait">
-          {!success ? (
-            <motion.div
-              key="login-form-pane"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-3.5"
-            >
-              {/* Role Selector Tabs (Sliding indicator style) */}
-              <div className="relative p-1 bg-zinc-100 border border-zinc-200/60 rounded-xl grid grid-cols-2 gap-1">
-                <button
-                  id="role-institution"
-                  type="button"
-                  onClick={() => setRole("institution")}
-                  className={`relative z-10 py-1.5 sm:py-2 px-1 sm:px-2.5 text-[9.5px] xs:text-xs font-bold uppercase tracking-normal xs:tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center gap-1 xs:gap-1.5 cursor-pointer whitespace-nowrap ${
-                    role === "institution" ? "text-primary font-black" : "text-zinc-500 hover:text-zinc-900"
-                  }`}
-                >
-                  <Building2 className="w-3.5 h-3.5 shrink-0" />
-                  <span>{t("role_institution")}</span>
-                </button>
-                <button
-                  id="role-official"
-                  type="button"
-                  onClick={() => setRole("official")}
-                  className={`relative z-10 py-1.5 sm:py-2 px-1 sm:px-2.5 text-[9.5px] xs:text-xs font-bold uppercase tracking-normal xs:tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center gap-1 xs:gap-1.5 cursor-pointer whitespace-nowrap ${
-                    role === "official" ? "text-primary font-black" : "text-zinc-500 hover:text-zinc-900"
-                  }`}
-                >
-                  <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-                  <span>{t("role_official")}</span>
-                </button>
-
-                {/* Slider Indicator */}
-                <div
-                  className="absolute top-1 bottom-1 bg-white rounded-lg shadow-sm border border-zinc-200/50 transition-all duration-300 ease-out"
-                  style={{
-                    left: role === "institution" ? "4px" : "calc(50% + 2px)",
-                    width: "calc(50% - 6px)",
-                  }}
-                />
+            {/* Feature Callout Cards */}
+            <div className="space-y-3">
+              <div className="bg-white border border-slate-200/90 rounded-xl p-3.5 flex items-start gap-3.5 shadow-2xs hover:border-emerald-300 transition-colors">
+                <div className="p-2 bg-emerald-50 text-[#0D6B4F] rounded-lg shrink-0 border border-emerald-100">
+                  <Landmark className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-xs font-bold text-slate-900">
+                    Institutional Incubation &amp; Seed Grants
+                  </h3>
+                  <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+                    Access pre-incubation grants (₹8.00L to ₹50.00L), track fund utilization certificates, and manage chapter star ratings.
+                  </p>
+                </div>
               </div>
 
-              {/* Direct Email OTP Login Form */}
-              <form onSubmit={handleSubmit} className="space-y-3">
-                {/* Email input */}
-                <div className="space-y-1.5">
-                  <label htmlFor="login-id" className="block text-xs font-semibold text-zinc-700">
-                    {idLabel}
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400">
-                      <Mail className="w-4 h-4" />
+              <div className="bg-white border border-slate-200/90 rounded-xl p-3.5 flex items-start gap-3.5 shadow-2xs hover:border-emerald-300 transition-colors">
+                <div className="p-2 bg-blue-50 text-blue-700 rounded-lg shrink-0 border border-blue-100">
+                  <GraduationCap className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-xs font-bold text-slate-900">
+                    Student Innovator &amp; Internship Verification
+                  </h3>
+                  <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+                    Review and endorse undergraduate innovation internships across 10 core national tracks with real-time audit registries.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white border border-slate-200/90 rounded-xl p-3.5 flex items-start gap-3.5 shadow-2xs hover:border-emerald-300 transition-colors">
+                <div className="p-2 bg-purple-50 text-purple-700 rounded-lg shrink-0 border border-purple-100">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-xs font-bold text-slate-900">
+                    Secure Institutional Mailbox &amp; Gazette Desks
+                  </h3>
+                  <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+                    Direct cryptographic communications with the Central Directorate, official notifications, and compliance alerts.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Live Trust Metrics */}
+            <div className="grid grid-cols-3 gap-3 pt-2">
+              <div className="bg-white border border-slate-200 rounded-xl p-3 text-center shadow-2xs">
+                <div className="text-lg font-black text-[#0D6B4F]">180+</div>
+                <div className="text-[10px] uppercase font-bold text-slate-500 mt-0.5">Chapters</div>
+              </div>
+              <div className="bg-white border border-slate-200 rounded-xl p-3 text-center shadow-2xs">
+                <div className="text-lg font-black text-slate-900">10,000+</div>
+                <div className="text-[10px] uppercase font-bold text-slate-500 mt-0.5">Innovators</div>
+              </div>
+              <div className="bg-white border border-slate-200 rounded-xl p-3 text-center shadow-2xs">
+                <div className="text-lg font-black text-[#f5a623]">₹10 Cr+</div>
+                <div className="text-[10px] uppercase font-bold text-slate-500 mt-0.5">Fund Support</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Clean White Authorization Card */}
+          <div className="lg:col-span-6">
+            <div className="bg-white border border-slate-200 rounded-2xl shadow-xl p-6 sm:p-8 relative overflow-hidden">
+              {/* National Tricolor Top Strip */}
+              <div className="absolute top-0 left-0 right-0 h-1.5 flex">
+                <div className="flex-1 bg-[#FF9933]" />
+                <div className="flex-1 bg-white border-y border-slate-200" />
+                <div className="flex-1 bg-[#138808]" />
+              </div>
+
+              {/* Portal Authorization Header */}
+              <div className="text-center space-y-1 mb-5 pt-1">
+                <div className="inline-flex items-center justify-center p-2.5 bg-emerald-50 text-[#0D6B4F] rounded-full mb-1 border border-emerald-200/60 shadow-inner">
+                  <Lock className="w-5 h-5" />
+                </div>
+                <h2 className="text-xl font-black text-slate-900 tracking-tight">
+                  Portal Authorization
+                </h2>
+                <p className="text-slate-500 text-xs">
+                  Enter your registered credentials to receive an authentication OTP.
+                </p>
+              </div>
+
+              {/* Security Advisory Callout */}
+              <div className="flex items-start gap-2.5 bg-amber-50/70 border border-amber-200/80 rounded-xl p-3 mb-4 text-left">
+                <AlertCircle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                <p className="text-[11px] text-amber-900 leading-snug">
+                  <strong>Notice:</strong> Restricted to authorized university coordinators and nodal personnel under Sec. 66 IT Act, 2000. All sessions logged.
+                </p>
+              </div>
+
+              <AnimatePresence mode="wait">
+                {!success ? (
+                  <motion.div
+                    key="login-form-pane"
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.15 }}
+                    className="space-y-4"
+                  >
+                    {/* Role Toggle Selector */}
+                    <div className="p-1 bg-slate-100 border border-slate-200 rounded-xl grid grid-cols-2 gap-1 shadow-inner">
+                      <button
+                        id="role-institution"
+                        type="button"
+                        onClick={() => setRole("institution")}
+                        className={`py-2 px-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                          role === "institution"
+                            ? "bg-[#0D6B4F] text-white shadow-md font-black"
+                            : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
+                        }`}
+                      >
+                        <Building2 className="w-3.5 h-3.5 shrink-0" />
+                        <span>INSTITUTION (SPOC)</span>
+                      </button>
+                      <button
+                        id="role-official"
+                        type="button"
+                        onClick={() => setRole("official")}
+                        className={`py-2 px-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                          role === "official"
+                            ? "bg-[#093325] text-white shadow-md font-black"
+                            : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
+                        }`}
+                      >
+                        <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+                        <span>NODAL OFFICER</span>
+                      </button>
                     </div>
-                    <input
-                      ref={firstInputRef}
-                      id="login-id"
-                      type="email"
-                      autoComplete="email"
-                      value={id}
-                      onChange={(e) => setId(e.target.value)}
-                      placeholder={idPlaceholder}
-                      required
-                      className="w-full bg-white border border-zinc-200 rounded-xl pl-10 pr-4 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-primary/15 focus:border-primary transition-all shadow-sm"
-                    />
-                  </div>
-                </div>
 
-                {/* Passwordless notice */}
-                <div className="flex items-center gap-2 bg-emerald-50/60 border border-emerald-200/60 rounded-xl px-3 py-1.5">
-                  <Lock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <p className="text-[10px] text-emerald-800">A secure <strong>6-digit OTP</strong> will be dispatched to your registered email.</p>
-                </div>
+                    {/* Form Input */}
+                    <form onSubmit={handleSubmit} className="space-y-3.5">
+                      {/* Email Input */}
+                      <div className="space-y-1 text-left">
+                        <label
+                          htmlFor="login-id"
+                          className="block text-[11px] font-bold uppercase tracking-wider text-slate-700"
+                        >
+                          {role === "institution"
+                            ? "Institutional SPOC Email Address"
+                            : "Nodal Officer / Ministry Email"}
+                          <span className="text-red-500 ml-0.5">*</span>
+                        </label>
+                        <div className="relative">
+                          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <Mail className="w-4 h-4" />
+                          </div>
+                          <input
+                            ref={firstInputRef}
+                            id="login-id"
+                            type="email"
+                            autoComplete="email"
+                            value={id}
+                            onChange={(e) => setId(e.target.value)}
+                            placeholder={
+                              role === "institution"
+                                ? "e.g. spoc@institution.edu.in"
+                                : "e.g. nodal.officer@ncie.gov.in"
+                            }
+                            required
+                            className="w-full bg-slate-50/50 border border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D6B4F]/20 focus:border-[#0D6B4F] transition-all shadow-2xs font-mono"
+                          />
+                        </div>
+                      </div>
 
-                {/* CAPTCHA validation card */}
-                <div className="space-y-1.5">
-                  <div className="flex justify-between items-center">
-                    <label className="block text-xs font-semibold text-zinc-700">
-                      {t("captcha_label")}
-                    </label>
+                      {/* Passwordless OTP Notice */}
+                      <div className="flex items-center gap-2 bg-emerald-50/70 border border-emerald-200 rounded-xl px-3.5 py-2 text-[11px] text-emerald-900 text-left">
+                        <Lock className="w-3.5 h-3.5 text-[#0D6B4F] shrink-0" />
+                        <span>
+                          A secure <strong>6-digit OTP</strong> will be dispatched to your registered email.
+                        </span>
+                      </div>
+
+                      {/* Security CAPTCHA Card */}
+                      <div className="space-y-1.5 pt-0.5 text-left">
+                        <div className="flex justify-between items-center">
+                          <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700">
+                            Security Captcha <span className="text-red-500">*</span>
+                          </label>
+                          <button
+                            type="button"
+                            onClick={generateCaptcha}
+                            className="text-[#0D6B4F] hover:text-[#094e39] transition-colors flex items-center gap-1 text-[11px] font-bold cursor-pointer"
+                          >
+                            <RefreshCw
+                              className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin" : ""}`}
+                            />
+                            <span>Refresh Code</span>
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="relative bg-slate-100 border border-slate-300 rounded-xl flex items-center justify-center select-none overflow-hidden h-[40px] shadow-inner">
+                            <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(45deg,#000_25%,transparent_25%),linear-gradient(-45deg,#000_25%,transparent_25%)] bg-[size:6px_6px]" />
+                            <div className="absolute w-full h-[1px] bg-slate-400/60 top-[20px] -rotate-2" />
+                            <span className="font-mono text-lg font-black tracking-[0.3em] text-slate-900 italic select-none">
+                              {captchaCode}
+                            </span>
+                          </div>
+
+                          <input
+                            type="text"
+                            maxLength={5}
+                            placeholder="Enter code"
+                            value={captchaInput}
+                            onChange={(e) => {
+                              setCaptchaInput(e.target.value.toUpperCase());
+                              setCaptchaError(false);
+                            }}
+                            required
+                            className={`w-full bg-slate-50/50 focus:bg-white border rounded-xl px-3 py-2 text-center text-sm font-mono font-bold tracking-widest focus:outline-none transition-all shadow-2xs ${
+                              captchaError
+                                ? "border-red-500 focus:ring-2 focus:ring-red-200"
+                                : "border-slate-300 focus:ring-2 focus:ring-[#0D6B4F]/20 focus:border-[#0D6B4F]"
+                            }`}
+                          />
+                        </div>
+                        {captchaError && (
+                          <p className="text-red-600 text-xs font-semibold flex items-center gap-1 mt-0.5">
+                            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                            <span>Incorrect captcha code. Please try again.</span>
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Error Banner */}
+                      {authError && (
+                        <div className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-xl p-3 animate-in fade-in text-left">
+                          <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+                          <p className="text-xs text-red-700 font-semibold">{authError}</p>
+                        </div>
+                      )}
+
+                      {/* Submit Button */}
+                      <button
+                        id="login-submit"
+                        type="submit"
+                        disabled={loading || ssoLoading}
+                        className="w-full flex items-center justify-center gap-2 bg-[#0D6B4F] hover:bg-[#0a5840] active:scale-[0.99] text-white font-bold text-xs sm:text-sm rounded-xl py-3 transition-all shadow-md hover:shadow-lg disabled:opacity-70 cursor-pointer"
+                      >
+                        {loading ? (
+                          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        ) : (
+                          <Lock className="w-4 h-4" />
+                        )}
+                        <span>
+                          {loading
+                            ? "Dispatched Security Verification..."
+                            : role === "institution"
+                            ? "Request SPOC Access OTP"
+                            : "Request Nodal Officer Access OTP"}
+                        </span>
+                      </button>
+                    </form>
+
+                    {/* Establish Chapter Register Link */}
+                    {role === "institution" && (
+                      <div className="pt-1 text-center">
+                        <Link
+                          href="/join"
+                          className="inline-flex items-center gap-1.5 text-xs text-[#0D6B4F] hover:text-[#084231] font-bold hover:underline"
+                        >
+                          <PlusCircle className="w-3.5 h-3.5" />
+                          <span>Not registered? Establish your Campus Chapter →</span>
+                        </Link>
+                      </div>
+                    )}
+
+                    {/* SSO Divider */}
+                    <div className="relative flex py-1 items-center">
+                      <div className="flex-grow border-t border-slate-200"></div>
+                      <span className="flex-shrink mx-3 text-slate-400 font-bold uppercase tracking-widest text-[10px]">
+                        NATIONAL CENTRAL SSO
+                      </span>
+                      <div className="flex-grow border-t border-slate-200"></div>
+                    </div>
+
+                    {/* National SSO Button */}
                     <button
                       type="button"
-                      onClick={generateCaptcha}
-                      className="text-primary hover:text-primary-light transition-colors flex items-center gap-1 text-xs font-semibold cursor-pointer"
+                      onClick={handleSsoLogin}
+                      disabled={loading || ssoLoading}
+                      className="w-full flex items-center justify-center gap-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-300 rounded-xl py-2.5 transition-all text-xs font-bold text-slate-800 cursor-pointer shadow-2xs"
                     >
-                      <RefreshCw className={`w-3 h-3 ${isRefreshing ? "animate-spin" : ""}`} />
-                      {t("captcha_refresh")}
+                      {ssoLoading ? (
+                        <span className="w-3.5 h-3.5 border-2 border-slate-400/30 border-t-slate-700 rounded-full animate-spin" />
+                      ) : (
+                        <Fingerprint className="w-4 h-4 text-[#E85D04]" />
+                      )}
+                      <span>Sign in with MeriPehchaan (National SSO / JanParichay)</span>
                     </button>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="relative bg-zinc-100 border border-zinc-200 rounded-xl flex items-center justify-center select-none overflow-hidden h-[36px]">
-                      <div className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(45deg,#000_25%,transparent_25%),linear-gradient(-45deg,#000_25%,transparent_25%)] bg-[size:6px_6px]" />
-                      <div className="absolute w-full h-[1px] bg-zinc-400/50 top-[18px] -rotate-2" />
-                      <span className="font-mono text-base font-extrabold tracking-widest text-zinc-800 italic select-none">
-                        {captchaCode}
-                      </span>
+                  </motion.div>
+                ) : (
+                  /* OTP Verification Screen */
+                  <motion.div
+                    key="auth-success-pane"
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="text-center space-y-4 py-2"
+                  >
+                    <div className="w-14 h-14 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center mx-auto text-[#0D6B4F] shadow-inner">
+                      <KeyRound className="w-7 h-7" />
                     </div>
 
-                    <input
-                      type="text"
-                      maxLength={5}
-                      placeholder={t("captcha_verify_placeholder")}
-                      value={captchaInput}
-                      onChange={(e) => {
-                        setCaptchaInput(e.target.value.toUpperCase());
-                        setCaptchaError(false);
-                      }}
-                      required
-                      className={`w-full bg-white border rounded-xl px-3 py-1.5 text-center text-sm font-mono tracking-widest focus:outline-none transition-all shadow-sm ${
-                        captchaError
-                          ? "border-red-400 focus:ring-2 focus:ring-red-105"
-                          : "border-zinc-200 focus:ring-2 focus:ring-primary/15 focus:border-primary"
-                      }`}
-                    />
-                  </div>
-                  {captchaError && (
-                    <p className="text-red-500 text-xs flex items-center gap-1 mt-0.5">
-                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                      {t("captcha_error")}
-                    </p>
-                  )}
-                </div>
+                    <div className="space-y-1">
+                      <h3 className="text-lg font-black text-slate-900">
+                        Enter Security Verification OTP
+                      </h3>
+                      <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
+                        A 6-digit access code has been dispatched to:
+                      </p>
+                      {otpEmail && (
+                        <p className="text-xs font-mono font-bold text-slate-900 bg-slate-100 border border-slate-200 rounded-lg px-3 py-1 inline-block">
+                          {otpEmail}
+                        </p>
+                      )}
+                    </div>
 
-                {/* Auth error */}
-                {authError && (
-                  <div className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
-                    <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
-                    <p className="text-xs text-red-700 font-medium">{authError}</p>
-                  </div>
+                    {/* 6-Box Segmented OTP Inputs */}
+                    <form onSubmit={handleVerifyOtp} className="space-y-4 max-w-sm mx-auto pt-1">
+                      <div className="space-y-2">
+                        <div className="flex justify-center gap-2">
+                          {[0, 1, 2, 3, 4, 5].map((idx) => (
+                            <input
+                              key={idx}
+                              ref={(el) => {
+                                otpInputRefs.current[idx] = el;
+                              }}
+                              type="text"
+                              inputMode="numeric"
+                              maxLength={1}
+                              value={otp[idx]}
+                              onChange={(e) => handleOtpBoxChange(idx, e.target.value)}
+                              onKeyDown={(e) => handleOtpKeyDown(idx, e)}
+                              className={`w-10 h-12 text-center text-xl font-bold font-mono border rounded-xl focus:outline-none transition-all shadow-2xs ${
+                                otpError
+                                  ? "border-red-400 bg-red-50/40 text-red-900"
+                                  : "border-slate-300 bg-white text-slate-900 focus:border-[#0D6B4F] focus:ring-2 focus:ring-[#0D6B4F]/20"
+                              }`}
+                            />
+                          ))}
+                        </div>
+
+                        {otpError && (
+                          <p className="text-red-600 text-xs font-semibold flex items-center justify-center gap-1 mt-1">
+                            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                            <span>{otpError}</span>
+                          </p>
+                        )}
+                      </div>
+
+                      <button
+                        id="otp-verify-submit"
+                        type="submit"
+                        disabled={verifyingOtp}
+                        className="w-full flex items-center justify-center gap-2 bg-[#0D6B4F] hover:bg-[#0a5840] text-white font-bold text-sm rounded-xl py-3 transition-all shadow-md disabled:opacity-75 cursor-pointer"
+                      >
+                        {verifyingOtp ? (
+                          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        ) : (
+                          <ShieldCheck className="w-4 h-4" />
+                        )}
+                        <span>
+                          {verifyingOtp ? "Authenticating Session..." : "Verify & Access Dashboard"}
+                        </span>
+                      </button>
+
+                      {/* Resend Cooldown */}
+                      <div className="pt-1 flex flex-col items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={handleResendOtp}
+                          disabled={resendCountdown > 0}
+                          className="text-xs text-slate-600 hover:text-[#0D6B4F] disabled:opacity-50 disabled:cursor-not-allowed font-semibold cursor-pointer"
+                        >
+                          {resendCountdown > 0
+                            ? `Resend OTP in ${resendCountdown}s`
+                            : "Didn't receive the email? Resend OTP"}
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSuccess(false);
+                            setOtp(["", "", "", "", "", ""]);
+                            setOtpError(null);
+                            setAuthError(null);
+                            generateCaptcha();
+                          }}
+                          className="text-xs text-[#0D6B4F] hover:underline font-bold"
+                        >
+                          ← Re-enter Email Address
+                        </button>
+                      </div>
+                    </form>
+                  </motion.div>
                 )}
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
 
-                {/* Login submission button */}
-                <button
-                  id="login-submit"
-                  type="submit"
-                  disabled={loading || ssoLoading}
-                  className="w-full flex items-center justify-center gap-2 bg-[#0D6B4F] hover:bg-[#0b5c43] active:scale-[0.99] text-white font-semibold text-sm rounded-xl py-2.5 transition-all shadow-md disabled:opacity-75 cursor-pointer"
-                >
-                  {loading ? (
-                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    <Lock className="w-3.5 h-3.5" />
-                  )}
-                  {loading
-                    ? t("signing_in")
-                    : role === "institution"
-                    ? "Request SPOC Access OTP"
-                    : t("signin_button")}
-                </button>
-              </form>
+        {/* Support & Helpline Footer */}
+        <div className="mt-8 pt-4 border-t border-slate-200/80 flex flex-wrap justify-between items-center gap-3 text-xs text-slate-500">
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-1.5">
+              <Mail className="w-3.5 h-3.5 text-slate-400" />
+              <a href="mailto:info@ncieindia.org" className="hover:text-[#0D6B4F] transition-colors font-medium">
+                info@ncieindia.org
+              </a>
+            </span>
+            <span>•</span>
+            <span className="flex items-center gap-1.5">
+              <Phone className="w-3.5 h-3.5 text-slate-400" />
+              <span>Toll Free: 0863 232 1417 (10 AM to 5:30 PM)</span>
+            </span>
+          </div>
 
-              {role === "institution" && (
-                <div className="pt-1 text-center">
-                  <Link
-                    href="/join"
-                    className="inline-flex items-center gap-1 text-xs text-[#0D6B4F] hover:text-[#0a5840] font-bold hover:underline"
-                  >
-                    <PlusCircle className="w-3.5 h-3.5" />
-                    <span>Not registered? Establish your Campus Chapter →</span>
-                  </Link>
-                </div>
-              )}
+          <p className="text-[11px] text-slate-400 font-mono">
+            © 2026 National Council for Innovation &amp; Entrepreneurship (NCIE).
+          </p>
+        </div>
+      </div>
 
-              {/* SSO Divider */}
-              <div className="relative flex py-1 items-center">
-                <div className="flex-grow border-t border-zinc-200"></div>
-                <span className="flex-shrink mx-3 text-zinc-400 font-bold uppercase tracking-widest text-[9px]">OR</span>
-                <div className="flex-grow border-t border-zinc-200"></div>
-              </div>
-
-              {/* National SSO DigiLocker Integration */}
-              <button
-                type="button"
-                onClick={handleSsoLogin}
-                disabled={loading || ssoLoading}
-                className="w-full flex items-center justify-center gap-2.5 bg-zinc-50 border border-zinc-200 hover:border-zinc-350 hover:bg-zinc-100/50 active:bg-zinc-200 rounded-xl py-2.5 transition-all text-xs font-semibold text-zinc-700 hover:text-zinc-955 cursor-pointer shadow-sm"
-              >
-                {ssoLoading ? (
-                  <span className="w-3.5 h-3.5 border-2 border-zinc-400/30 border-t-zinc-700 rounded-full animate-spin" />
-                ) : (
-                  <Fingerprint className="w-4 h-4 text-[#E85D04]" />
-                )}
-                <span>{t("national_sso")}</span>
-              </button>
-
-            </motion.div>
-          ) : (
-            // Success Verification Dispatched
-            <motion.div
-              key="auth-success-pane"
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-center space-y-5 py-3"
+      {/* Help Modal */}
+      {showHelpModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-300 w-full max-w-md shadow-2xl rounded-2xl p-6 relative animate-in fade-in">
+            <button
+              onClick={() => setShowHelpModal(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-700 p-1 rounded-full hover:bg-slate-100 cursor-pointer"
             >
-              <div className="w-12 h-12 bg-emerald-50 border border-emerald-100 rounded-full flex items-center justify-center mx-auto text-emerald-500">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
+              <ArrowLeft className="w-4 h-4" />
+            </button>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="p-2 bg-emerald-100 text-[#0D6B4F] rounded-lg">
+                <Info className="w-5 h-5" />
               </div>
-              <div className="space-y-1">
-                <h3 className="text-base font-bold text-zinc-900">{t("mfa_sent")}</h3>
-                <p className="text-[11px] text-zinc-500 max-w-xs mx-auto leading-relaxed">
-                  {t("mfa_desc")}
-                </p>
-                {otpEmail && (
-                  <p className="text-[10px] text-zinc-400 mt-1">
-                    OTP sent to: <span className="font-bold text-zinc-700">{otpEmail}</span>
-                  </p>
-                )}
-              </div>
-
-              {/* Secure 6-Digit OTP Verification Form */}
-              <form onSubmit={handleVerifyOtp} className="space-y-3 max-w-[260px] mx-auto pt-1">
-                <div className="space-y-1.5">
-                  <label htmlFor="otp-input" className="block text-[10px] font-bold text-zinc-500 text-left uppercase tracking-wider">
-                    Enter 6-Digit Secure OTP
-                  </label>
-                  <input
-                    id="otp-input"
-                    type="text"
-                    maxLength={6}
-                    pattern="\d{6}"
-                    placeholder="••••••"
-                    value={otp}
-                    onChange={(e) => {
-                      setOtp(e.target.value.replace(/\D/g, ""));
-                      setOtpError(null);
-                    }}
-                    required
-                    className={`w-full bg-white border rounded-xl px-3 py-2 text-center text-base font-mono tracking-[0.4em] focus:outline-none transition-all shadow-sm ${
-                      otpError
-                        ? "border-red-400 focus:ring-2 focus:ring-red-100"
-                        : "border-zinc-200 focus:ring-2 focus:ring-primary/15 focus:border-primary"
-                    }`}
-                  />
-                  {otpError && (
-                    <p className="text-red-500 text-[10px] text-left flex items-center gap-1 mt-1">
-                      <AlertCircle className="w-3 h-3 shrink-0" />
-                      {otpError}
-                    </p>
-                  )}
-                </div>
-                
-                <button
-                  id="otp-verify-submit"
-                  type="submit"
-                  disabled={verifyingOtp}
-                  className="w-full flex items-center justify-center gap-2 bg-[#0D6B4F] hover:bg-[#0b5c43] text-white font-semibold text-xs rounded-xl py-2 transition-all shadow-md disabled:opacity-75 cursor-pointer"
+              <h3 className="text-base font-bold text-slate-900">Portal Access Guidelines</h3>
+            </div>
+            <div className="space-y-3 text-xs text-slate-700 leading-relaxed">
+              <p>
+                <strong>Institutional SPOCs:</strong> Sign in using the official email nominated during chapter establishment (e.g. principal or designated coordinator).
+              </p>
+              <p>
+                <strong>Nodal Officers:</strong> Sign in with registered central directorate / ministry credentials.
+              </p>
+              <p>
+                <strong>New Institutions:</strong> If your college has not registered an NCIE Campus Chapter, please use the{" "}
+                <Link
+                  href="/join"
+                  onClick={() => setShowHelpModal(false)}
+                  className="text-[#0D6B4F] font-bold underline"
                 >
-                  {verifyingOtp ? (
-                    <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    <Lock className="w-3 h-3" />
-                  )}
-                  {verifyingOtp ? "Verifying..." : "Verify & Proceed"}
-                </button>
-
-                {/* Resend OTP */}
-                <button
-                  type="button"
-                  onClick={handleResendOtp}
-                  disabled={resendCountdown > 0}
-                  className="w-full text-[10px] text-zinc-500 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-semibold cursor-pointer pt-1"
-                >
-                  {resendCountdown > 0 ? `Resend OTP in ${resendCountdown}s` : "Didn't receive it? Resend OTP"}
-                </button>
-              </form>
-
-              <div className="bg-zinc-50 border border-zinc-200/60 rounded-xl p-2.5 text-[10px] font-mono text-zinc-500">
-                {t("tx_id")}:<br />
-                <span className="font-bold text-zinc-800 select-all">NCIE-AUTH-849201</span>
-              </div>
+                  Chapter Affiliation Form
+                </Link>{" "}
+                to initiate accreditation.
+              </p>
+            </div>
+            <div className="mt-5 pt-3 border-t border-slate-200 flex justify-end">
               <button
                 type="button"
-                onClick={() => {
-                  setSuccess(false);
-                  setOtp("");
-                  setOtpError(null);
-                  setAuthError(null);
-                  generateCaptcha();
-                }}
-                className="text-xs text-primary hover:underline font-bold"
+                onClick={() => setShowHelpModal(false)}
+                className="px-4 py-2 bg-[#0D6B4F] hover:bg-[#0a5840] text-white rounded-lg text-xs font-bold cursor-pointer"
               >
-                {t("go_back_login")}
+                Close
               </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Support Helplines / Footer details */}
-      <div className="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-white/90 text-center px-4 relative z-10">
-        <span className="flex items-center gap-1.5">
-          <Mail className="w-3.5 h-3.5 text-white/70" />
-          <a href="mailto:support-ncie@nic.in" className="hover:text-emerald-300 transition-colors">
-            {t("helpline_email")}
-          </a>
-        </span>
-        <div className="hidden sm:block w-px h-3.5 bg-white/30 self-center" />
-        <span className="flex items-center gap-1.5">
-          <Phone className="w-3.5 h-3.5 text-white/70" />
-          <span>{t("helpline_phone")}</span>
-        </span>
-      </div>
-
-      <p className="text-[10px] text-white/60 mt-3 text-center relative z-10">
-        {t("copyright")}
-      </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

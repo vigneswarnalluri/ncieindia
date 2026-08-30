@@ -222,7 +222,7 @@ export default function SendInstitutionMailModal({
           window.dispatchEvent(new Event("storage"));
           window.dispatchEvent(new CustomEvent("ncie_mail_update"));
         }
-      } catch (e) {}
+      } catch (e) { }
 
       onSuccess?.(`Official email successfully dispatched to ${emailTo}`);
       onClose();
@@ -304,11 +304,10 @@ export default function SendInstitutionMailModal({
                     key={key}
                     type="button"
                     onClick={() => handleTemplateChange(key)}
-                    className={`px-2.5 py-1.5 text-[11px] font-medium text-left rounded border transition-all cursor-pointer truncate ${
-                      isSelected
+                    className={`px-2.5 py-1.5 text-[11px] font-medium text-left rounded border transition-all cursor-pointer truncate ${isSelected
                         ? "bg-[#0D6B4F] text-white border-[#0D6B4F] shadow-xs"
                         : "bg-zinc-50 text-zinc-700 border-zinc-200 hover:bg-zinc-100"
-                    }`}
+                      }`}
                   >
                     {TEMPLATES[key].name}
                   </button>

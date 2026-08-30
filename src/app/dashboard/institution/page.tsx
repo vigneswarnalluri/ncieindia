@@ -239,14 +239,30 @@ export default function InstitutionDashboard() {
             studentCount: 0,
           }));
 
-          const mergedMap = new Map<string, SpocInfo>();
-          knownList.forEach((s) => mergedMap.set(s.institution.toLowerCase(), s));
-          dbList.forEach((s) => {
-            const key = s.institution.toLowerCase();
-            const existing = mergedMap.get(key);
-            mergedMap.set(key, existing ? { ...existing, ...s } : s);
+          // Deduplicate DB chapters if multiple registrations exist for the same institution
+          const uniqueDbList: SpocInfo[] = [];
+          for (const dbItem of dbList) {
+            const alreadyExists = uniqueDbList.some(
+              (existing) =>
+                isSameOrg(existing.institution, dbItem.institution) ||
+                (existing.email && dbItem.email && existing.email.toLowerCase() === dbItem.email.toLowerCase())
+            );
+            if (!alreadyExists) {
+              uniqueDbList.push(dbItem);
+            }
+          }
+
+          // Include known institutions only if they are not already covered by live DB registrations
+          const remainingKnown: SpocInfo[] = knownList.filter((k) => {
+            return !uniqueDbList.some(
+              (dbItem) =>
+                isSameOrg(k.institution, dbItem.institution) ||
+                isSameOrg(k.shortName, dbItem.institution) ||
+                (k.email && dbItem.email && k.email.toLowerCase() === dbItem.email.toLowerCase())
+            );
           });
-          const mergedSpocs = Array.from(mergedMap.values());
+
+          const mergedSpocs = [...uniqueDbList, ...remainingKnown];
 
           mergedSpocs.forEach((spoc) => {
             spoc.studentCount = studentRecords.filter((rec: any) => isSameOrg(rec.org_name, spoc.institution)).length;
