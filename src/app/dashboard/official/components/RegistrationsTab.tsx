@@ -68,6 +68,139 @@ export interface RegistrationRecord {
   submitted_at: string;
 }
 
+export const STANDARD_STREAMS = [
+  "B.Tech / B.E.",
+  "M.Tech / M.E.",
+  "Diploma (Polytechnic)",
+  "BCA",
+  "MCA",
+  "B.Sc",
+  "M.Sc",
+  "B.Com",
+  "M.Com",
+  "BBA",
+  "MBA",
+  "Ph.D.",
+  "Other"
+];
+
+export const STANDARD_DEPARTMENTS = [
+  "Computer Science & Engineering",
+  "Information Technology",
+  "Electronics & Communication Engineering",
+  "Electrical & Electronics Engineering",
+  "Mechanical Engineering",
+  "Civil Engineering",
+  "Chemical Engineering",
+  "Biotechnology",
+  "Science & Humanities",
+  "Business Administration",
+  "Other"
+];
+
+export const STANDARD_YEARS = [
+  "1st Year",
+  "2nd Year",
+  "3rd Year",
+  "4th Year",
+  "5th Year",
+  "Postgraduate"
+];
+
+export const STANDARD_SPECIALIZATIONS: Record<string, string[]> = {
+  "Computer Science & Engineering": [
+    "Artificial Intelligence",
+    "Machine Learning",
+    "Data Science",
+    "Cyber Security",
+    "Software Engineering",
+    "Cloud Computing",
+    "Internet of Things (IoT)",
+    "Blockchain",
+    "Other"
+  ],
+  "Information Technology": [
+    "Artificial Intelligence",
+    "Machine Learning",
+    "Data Science",
+    "Cyber Security",
+    "Software Engineering",
+    "Cloud Computing",
+    "Internet of Things (IoT)",
+    "Blockchain",
+    "Other"
+  ],
+  "Electronics & Communication Engineering": [
+    "VLSI Design",
+    "Embedded Systems",
+    "Robotics & Automation",
+    "Signal Processing",
+    "Communication Systems",
+    "Other"
+  ],
+  "Electrical & Electronics Engineering": [
+    "Power Electronics",
+    "Robotics & Automation",
+    "Smart Grid Technologies",
+    "Renewable Energy Systems",
+    "Control Systems",
+    "Other"
+  ],
+  "Mechanical Engineering": [
+    "Robotics & Automation",
+    "CAD/CAM & Design",
+    "Thermal Engineering",
+    "Manufacturing Technologies",
+    "Mechatronics",
+    "Automotive Engineering",
+    "Other"
+  ],
+  "Civil Engineering": [
+    "Structural Engineering",
+    "Geotechnical Engineering",
+    "Transportation Engineering",
+    "Environmental Engineering",
+    "Construction Management",
+    "Other"
+  ],
+  "Chemical Engineering": [
+    "Nanotechnology",
+    "Process Control & Safety",
+    "Environmental Chemical Engineering",
+    "Biochemical Engineering",
+    "Other"
+  ],
+  "Biotechnology": [
+    "Bioinformatics",
+    "Genetic Engineering",
+    "Bioprocess Technology",
+    "Nanotechnology",
+    "Other"
+  ],
+  "Science & Humanities": [
+    "Physics / Materials Science",
+    "Applied Mathematics",
+    "Computational Chemistry",
+    "Technical Writing / Communication",
+    "Other"
+  ],
+  "Business Administration": [
+    "Finance & Investment",
+    "Marketing & Analytics",
+    "Human Resource Management",
+    "Operations & Supply Chain",
+    "Entrepreneurship & Innovation",
+    "Other"
+  ],
+  "Other": [
+    "General Innovation",
+    "Core Engineering",
+    "Pure Sciences",
+    "Social Entrepreneurship",
+    "Other"
+  ]
+};
+
 interface Props {
   onNotify?: (msg: string) => void;
 }
@@ -108,14 +241,23 @@ export default function RegistrationsTab({ onNotify }: Props) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
 
-  // Helper to extract course or position
+  // Helper to extract course specifically for Course Internship & Nominated candidates
+  const extractCourse = (record: RegistrationRecord) => {
+    if (record.proposal?.includes("Course:")) {
+      const match = record.proposal.match(/Course:\s*([^|]+)/i);
+      if (match && match[1].trim()) return match[1].trim();
+    }
+    if (record.role === "internship") {
+      return "Viksit Bharat Innovation Program";
+    }
+    return null;
+  };
+
+  // Helper to extract course or position for table display
   const extractDetails = (record: RegistrationRecord) => {
     if (record.role === "internship") {
-      if (record.proposal?.includes("Course:")) {
-        const match = record.proposal.match(/Course:\s*([^|]+)/i);
-        return match ? match[1].trim() : "Viksit Bharat Innovation Program";
-      }
-      return "Viksit Bharat Innovation Program";
+      const course = extractCourse(record);
+      return course || "Viksit Bharat Innovation Program";
     }
     if (record.role === "recruitment") {
       if (record.designation) return record.designation;
@@ -331,29 +473,38 @@ export default function RegistrationsTab({ onNotify }: Props) {
   }, [records]);
 
   const uniqueCourses = useMemo(() => {
-    const courses = records.map((r) => extractDetails(r)).filter(Boolean) as string[];
+    const courses = records.map((r) => extractCourse(r)).filter(Boolean) as string[];
     return Array.from(new Set(courses)).sort();
   }, [records]);
 
   const uniqueStreams = useMemo(() => {
-    const streams = records.map((r) => r.stream).filter(Boolean) as string[];
-    return Array.from(new Set(streams)).sort();
+    const fromRecords = records.map((r) => r.stream).filter(Boolean) as string[];
+    return Array.from(new Set([...STANDARD_STREAMS, ...fromRecords]));
   }, [records]);
 
   const uniqueYears = useMemo(() => {
-    const years = records.map((r) => r.year_of_study).filter(Boolean) as string[];
-    return Array.from(new Set(years)).sort();
+    const fromRecords = records.map((r) => r.year_of_study).filter(Boolean) as string[];
+    return Array.from(new Set([...STANDARD_YEARS, ...fromRecords]));
   }, [records]);
 
   const uniqueDepts = useMemo(() => {
-    const depts = records.map((r) => r.department).filter(Boolean) as string[];
-    return Array.from(new Set(depts)).sort();
+    const fromRecords = records.map((r) => r.department).filter(Boolean) as string[];
+    return Array.from(new Set([...STANDARD_DEPARTMENTS, ...fromRecords]));
   }, [records]);
 
   const uniqueSpecializations = useMemo(() => {
-    const specs = records.map((r) => r.specialization).filter(Boolean) as string[];
-    return Array.from(new Set(specs)).sort();
-  }, [records]);
+    const allPredefinedSpecs = Object.values(STANDARD_SPECIALIZATIONS).flat();
+    const fromRecords = records.map((r) => r.specialization).filter(Boolean) as string[];
+    if (filterDept !== "all" && STANDARD_SPECIALIZATIONS[filterDept]) {
+      const deptSpecs = STANDARD_SPECIALIZATIONS[filterDept];
+      const deptRecordSpecs = records
+        .filter((r) => r.department === filterDept)
+        .map((r) => r.specialization)
+        .filter(Boolean) as string[];
+      return Array.from(new Set([...deptSpecs, ...deptRecordSpecs]));
+    }
+    return Array.from(new Set([...allPredefinedSpecs, ...fromRecords]));
+  }, [records, filterDept]);
 
   // Reset all filters
   const handleClearFilters = () => {
@@ -411,7 +562,7 @@ export default function RegistrationsTab({ onNotify }: Props) {
         if (filterCollege !== "all" && normalizeCollegeName(r.org_name) !== filterCollege) return false;
 
         // Course filter
-        if (filterCourse !== "all" && extractDetails(r) !== filterCourse) return false;
+        if (filterCourse !== "all" && extractCourse(r) !== filterCourse) return false;
 
         // Stream filter
         if (filterStream !== "all" && r.stream !== filterStream) return false;
@@ -1054,7 +1205,7 @@ export default function RegistrationsTab({ onNotify }: Props) {
               <option value="all">Year: All</option>
               {uniqueYears.map((yr) => (
                 <option key={yr} value={yr}>
-                  Year {yr}
+                  {yr.toLowerCase().includes("year") || yr === "Postgraduate" ? yr : `Year ${yr}`}
                 </option>
               ))}
             </select>
