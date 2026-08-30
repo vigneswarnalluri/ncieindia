@@ -115,7 +115,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body 
-        className="min-h-full flex flex-col bg-white text-charcoal selection:bg-primary/10 selection:text-primary"
+        className="min-h-full flex flex-col bg-white text-charcoal"
         suppressHydrationWarning
       >
         <LanguageProvider>

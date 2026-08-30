@@ -66,11 +66,11 @@ export default function ChapterTab({ requests, onVerify, onNotify }: Props) {
         <div className="overflow-x-auto">
           <table className="w-full text-xs border-collapse">
             <thead>
-              <tr className="bg-[#0D6B4F] text-white text-[10px] uppercase tracking-wider">
+              <tr className="bg-zinc-50/90 border-b border-zinc-200 text-zinc-600 text-[11px] font-semibold tracking-wider select-none">
                 {["AISHE Code", "Institution Name", "Type", "State", "SPOC", "Status", "Actions"].map((h) => (
                   <th
                     key={h}
-                    className={`px-4 py-2.5 font-semibold ${["Status", "Actions"].includes(h) ? "text-center" : "text-left"}`}
+                    className={`px-4 py-3 font-semibold ${["Status", "Actions"].includes(h) ? "text-center" : "text-left"}`}
                   >
                     {h}
                   </th>
@@ -80,7 +80,7 @@ export default function ChapterTab({ requests, onVerify, onNotify }: Props) {
             <tbody className="divide-y divide-zinc-100">
               {requests.length > 0 ? (
                 requests.map((r, i) => (
-                  <tr key={r.id} className={`${i % 2 === 0 ? "bg-white" : "bg-zinc-50/50"} hover:bg-[#e8f5f0]/40`}>
+                  <tr key={r.id} className={`${i % 2 === 0 ? "bg-white" : "bg-zinc-50/40"} hover:bg-emerald-50/30 transition-colors`}>
                     <td className="px-4 py-2.5 font-mono text-zinc-600 font-bold">{r.aishe}</td>
                     <td className="px-4 py-2.5 font-semibold text-zinc-900">{r.name}</td>
                     <td className="px-4 py-2.5 text-zinc-600">{r.type}</td>

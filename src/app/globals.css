@@ -48,6 +48,21 @@
   animation-play-state: paused;
 }
 
+::selection {
+  background-color: #0D6B4F;
+  color: #ffffff;
+}
+
+/* High-contrast inverse selection on dark green elements */
+.bg-primary ::selection,
+.bg-primary-dark ::selection,
+.bg-\[\#0D6B4F\] ::selection,
+.bg-\[\#1a3a2a\] ::selection,
+[class*="bg-\[#0D6B4F\]"] ::selection {
+  background-color: #ffffff;
+  color: #0D6B4F;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #111827;

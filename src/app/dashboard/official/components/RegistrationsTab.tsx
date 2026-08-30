@@ -241,6 +241,44 @@ export default function RegistrationsTab({ onNotify }: Props) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
 
+  // Drag-to-scroll table state & handlers
+  const tableContainerRef = React.useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (
+      target.closest("button") ||
+      target.closest("input") ||
+      target.closest("select") ||
+      target.closest("a")
+    ) {
+      return;
+    }
+    if (!tableContainerRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - tableContainerRef.current.offsetLeft);
+    setScrollLeft(tableContainerRef.current.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !tableContainerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - tableContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    tableContainerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
   // Helper to extract course specifically for Course Internship & Nominated candidates
   const extractCourse = (record: RegistrationRecord) => {
     if (record.proposal?.includes("Course:")) {
@@ -873,37 +911,37 @@ export default function RegistrationsTab({ onNotify }: Props) {
     switch (role) {
       case "internship":
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-900 border border-amber-300">
-            <GraduationCap className="w-3 h-3 text-amber-700" /> Course Internship
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-800 border border-amber-200/60">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" /> Course Internship
           </span>
         );
       case "student":
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-900 border border-emerald-300">
-            <User className="w-3 h-3 text-emerald-700" /> Student Innovator
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200/60">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Student Innovator
           </span>
         );
       case "chapter":
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-900 border border-blue-300">
-            <Building className="w-3 h-3 text-blue-700" /> College Chapter
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-blue-50 text-blue-800 border border-blue-200/60">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500" /> College Chapter
           </span>
         );
       case "partner":
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-900 border border-purple-300">
-            <Layers className="w-3 h-3 text-purple-700" /> Ecosystem Partner
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-purple-50 text-purple-800 border border-purple-200/60">
+            <span className="w-1.5 h-1.5 rounded-full bg-purple-500" /> Ecosystem Partner
           </span>
         );
       case "recruitment":
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-900 border border-rose-300">
-            <Briefcase className="w-3 h-3 text-rose-700" /> Career Recruitment
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-rose-50 text-rose-800 border border-rose-200/60">
+            <span className="w-1.5 h-1.5 rounded-full bg-rose-500" /> Recruitment
           </span>
         );
       default:
         return (
-          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-zinc-100 text-zinc-700 border border-zinc-300 uppercase">
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-zinc-100 text-zinc-700 uppercase">
             {role}
           </span>
         );
@@ -1575,12 +1613,21 @@ export default function RegistrationsTab({ onNotify }: Props) {
           </div>
         </div>
 
-        {/* Responsive Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs border-collapse">
+        {/* Responsive Draggable Table */}
+        <div
+          ref={tableContainerRef}
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeave}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+          className={`overflow-x-auto select-none transition-colors ${
+            isDragging ? "cursor-grabbing" : "cursor-grab"
+          }`}
+        >
+          <table className="w-full min-w-[1050px] text-xs border-collapse">
             <thead>
-              <tr className="bg-[#0D6B4F] text-white text-[10px] uppercase tracking-wider font-bold select-none">
-                <th className="px-3 py-2.5 font-semibold text-center w-10">
+              <tr className="bg-zinc-50/90 border-b border-zinc-200 text-zinc-600 text-[11px] font-semibold tracking-wider select-none">
+                <th className="px-3.5 py-3 text-center w-10">
                   <input
                     type="checkbox"
                     checked={paginatedRecords.length > 0 && paginatedRecords.every((r) => selectedIds.includes(r.reg_id))}
@@ -1589,14 +1636,14 @@ export default function RegistrationsTab({ onNotify }: Props) {
                     title="Select All on Current Page"
                   />
                 </th>
-                <th className="px-3 py-2.5 text-left w-12">S.No.</th>
-                <th className="px-4 py-2.5 text-left">Reg ID &amp; Date</th>
-                <th className="px-4 py-2.5 text-left">Candidate / Contact</th>
-                <th className="px-4 py-2.5 text-left">Pathway Role</th>
-                <th className="px-4 py-2.5 text-left">Course / Details</th>
-                <th className="px-4 py-2.5 text-left">College / Entity</th>
-                <th className="px-4 py-2.5 text-center">Status</th>
-                <th className="px-4 py-2.5 text-center">Actions</th>
+                <th className="px-3 py-3 text-left w-12 font-medium text-zinc-400">#</th>
+                <th className="px-4 py-3 text-left font-semibold">Reg ID &amp; Date</th>
+                <th className="px-4 py-3 text-left font-semibold">Candidate</th>
+                <th className="px-4 py-3 text-left font-semibold">Pathway</th>
+                <th className="px-4 py-3 text-left font-semibold">Course / Details</th>
+                <th className="px-4 py-3 text-left font-semibold">College / Location</th>
+                <th className="px-4 py-3 text-center font-semibold">Status</th>
+                <th className="px-4 py-3 text-right font-semibold">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-100">
@@ -1625,10 +1672,10 @@ export default function RegistrationsTab({ onNotify }: Props) {
                   return (
                     <tr
                       key={r.reg_id || i}
-                      className={`${isSelected ? "bg-[#e8f5f0]/80" : (i % 2 === 0 ? "bg-white" : "bg-zinc-50/50")} hover:bg-[#e8f5f0]/40 transition-colors`}
+                      className={`${isSelected ? "bg-emerald-50/40" : "bg-white hover:bg-zinc-50/70"} transition-colors`}
                     >
                       {/* Selection Checkbox */}
-                      <td className="px-3 py-2.5 text-center">
+                      <td className="px-3.5 py-3 text-center">
                         <input
                           type="checkbox"
                           checked={isSelected}
@@ -1638,111 +1685,78 @@ export default function RegistrationsTab({ onNotify }: Props) {
                       </td>
 
                       {/* S.No */}
-                      <td className="px-3 py-2.5 text-zinc-500 font-mono font-medium">{itemIndex}</td>
+                      <td className="px-3 py-3 text-zinc-400 font-mono text-[11px]">{itemIndex}</td>
 
                       {/* Reg ID & Date */}
-                      <td className="px-4 py-2.5">
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-mono font-bold text-emerald-950 block">{r.reg_id}</span>
-                          <span
-                            className="px-1 py-0.2 bg-emerald-100 text-emerald-800 text-[8.5px] font-bold rounded font-mono uppercase"
-                            title="Live Database Record"
-                          >
-                            Live
-                          </span>
-                        </div>
-                        <span className="text-[10px] text-zinc-400 flex items-center gap-1 mt-0.5">
-                          <Calendar className="w-2.5 h-2.5" /> {formattedDate}
-                        </span>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <span className="font-mono font-semibold text-zinc-900 block text-xs tracking-tight">{r.reg_id}</span>
+                        <span className="text-[11px] text-zinc-400 block mt-0.5">{formattedDate}</span>
                       </td>
 
                       {/* Candidate Name & Contact */}
-                      <td className="px-4 py-2.5">
-                        <span className="font-bold text-zinc-900 block">{r.full_name}</span>
-                        <div className="space-y-0.5 mt-0.5">
-                          <a
-                            href={`mailto:${r.email}`}
-                            className="text-[10px] text-zinc-500 hover:text-[#0D6B4F] hover:underline block truncate max-w-[180px]"
-                            title={r.email}
-                          >
-                            {r.email}
-                          </a>
-                          {r.mobile && (
-                            <a
-                              href={`tel:${r.mobile}`}
-                              className="text-[10px] text-zinc-400 hover:text-[#0D6B4F] block font-mono"
-                            >
-                              Tel: {r.mobile}
-                            </a>
-                          )}
-                        </div>
+                      <td className="px-4 py-3 max-w-[200px]">
+                        <span className="font-semibold text-zinc-900 block text-xs truncate" title={r.full_name}>
+                          {r.full_name}
+                        </span>
+                        <a
+                          href={`mailto:${r.email}`}
+                          className="text-[11px] text-zinc-500 hover:text-emerald-700 hover:underline block truncate mt-0.5"
+                          title={r.email}
+                        >
+                          {r.email}
+                        </a>
                       </td>
 
                       {/* Pathway Role */}
-                      <td className="px-4 py-2.5">{getRoleBadge(r.role)}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">{getRoleBadge(r.role)}</td>
 
                       {/* Course / Details */}
-                      <td className="px-4 py-2.5 max-w-[200px]">
-                        <span className="font-semibold text-zinc-800 block text-xs truncate" title={extractDetails(r)}>
+                      <td className="px-4 py-3 max-w-[260px]">
+                        <span className="font-medium text-zinc-800 block text-xs truncate" title={extractDetails(r)}>
                           {extractDetails(r)}
                         </span>
-                        {paymentId && (
-                          <span
-                            className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[9px] font-bold font-mono bg-emerald-50 text-emerald-800 border border-emerald-300 mt-0.5 cursor-pointer"
-                            onClick={() => handleCopy(paymentId, "txn")}
-                            title={`Click to copy: ${paymentId}`}
-                          >
-                            <CreditCard className="w-2.5 h-2.5 text-emerald-600" />
-                            <span>Txn: {paymentId.slice(0, 12)}...</span>
-                          </span>
-                        )}
-                        {r.reg_number && (
-                          <span className="text-[10px] text-zinc-400 block font-mono">
-                            ID: {r.reg_number}
-                          </span>
-                        )}
                       </td>
 
                       {/* College / Entity */}
-                      <td className="px-4 py-2.5 max-w-[180px]">
+                      <td className="px-4 py-3 max-w-[200px]">
                         <span
-                          className="font-semibold text-zinc-800 block text-xs truncate"
+                          className="font-medium text-zinc-800 block text-xs truncate"
                           title={normalizeCollegeName(r.org_name) || "Independent"}
                         >
                           {normalizeCollegeName(r.org_name) || "Independent"}
                         </span>
                         {r.state && (
-                          <span className="text-[10px] text-zinc-400 block truncate">
+                          <span className="text-[11px] text-zinc-400 block truncate mt-0.5">
                             {r.city ? `${r.city}, ` : ""}{r.state}
                           </span>
                         )}
                       </td>
 
                       {/* Status */}
-                      <td className="px-4 py-2.5 text-center">
+                      <td className="px-4 py-3 text-center whitespace-nowrap">
                         {r.status === "pending" && (
-                          <span className="text-[9px] font-bold px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-300 rounded uppercase">
-                            Pending
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-amber-50 text-amber-800 border border-amber-200/70">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" /> Pending
                           </span>
                         )}
                         {r.status === "approved" && (
-                          <span className="text-[9px] font-bold px-2 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded uppercase">
-                            Approved
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200/70">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Approved
                           </span>
                         )}
                         {r.status === "rejected" && (
-                          <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 text-red-800 border border-red-300 rounded uppercase">
-                            Rejected
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-red-50 text-red-800 border border-red-200/70">
+                            <span className="w-1.5 h-1.5 rounded-full bg-red-500" /> Rejected
                           </span>
                         )}
                       </td>
 
                       {/* Actions */}
-                      <td className="px-4 py-2.5 text-center">
-                        <div className="flex items-center justify-center gap-1.5">
+                      <td className="px-4 py-3 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => setSelectedRecord(r)}
-                            className="bg-[#0D6B4F] hover:bg-[#09543e] text-white text-[10px] font-bold px-2.5 py-1 rounded cursor-pointer inline-flex items-center gap-1 shadow-2xs"
+                            className="px-2.5 py-1 rounded text-[11px] font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition-colors inline-flex items-center gap-1 cursor-pointer"
                             title="Inspect Full Application"
                           >
                             <Eye className="w-3 h-3" />
@@ -1754,27 +1768,27 @@ export default function RegistrationsTab({ onNotify }: Props) {
                               <button
                                 onClick={() => handleStatusUpdate(r.reg_id, "approved")}
                                 disabled={updatingId === r.reg_id}
-                                className="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold p-1 rounded cursor-pointer disabled:opacity-50"
+                                className="p-1 rounded text-zinc-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors cursor-pointer disabled:opacity-50"
                                 title="Approve Application"
                               >
-                                <CheckCircle className="w-3.5 h-3.5" />
+                                <CheckCircle className="w-4 h-4" />
                               </button>
                               <button
                                 onClick={() => handleStatusUpdate(r.reg_id, "rejected")}
                                 disabled={updatingId === r.reg_id}
-                                className="bg-red-600 hover:bg-red-700 text-white text-[10px] font-bold p-1 rounded cursor-pointer disabled:opacity-50"
+                                className="p-1 rounded text-zinc-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer disabled:opacity-50"
                                 title="Reject Application"
                               >
-                                <XCircle className="w-3.5 h-3.5" />
+                                <XCircle className="w-4 h-4" />
                               </button>
                             </>
                           ) : (
                             <button
                               onClick={() => handleOpenMailModal(r)}
-                              className="bg-zinc-100 hover:bg-zinc-200 text-zinc-700 text-[10px] font-bold p-1 rounded cursor-pointer border border-zinc-300"
-                              title="Compose Official Dispatch to Candidate"
+                              className="p-1.5 rounded text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors cursor-pointer"
+                              title="Compose Official Dispatch"
                             >
-                              <Mail className="w-3.5 h-3.5 text-[#0D6B4F]" />
+                              <Mail className="w-3.5 h-3.5" />
                             </button>
                           )}
                         </div>
