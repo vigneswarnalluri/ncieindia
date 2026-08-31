@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { User, Landmark, Building, CheckCircle, ArrowLeft, ShieldCheck, Info, FileText, Check, BookOpen, Briefcase, Download, Mail } from "lucide-react";
+import { User, Landmark, Building, CheckCircle, ArrowLeft, ShieldCheck, Info, FileText, Check, BookOpen, Briefcase, Download, Mail, HelpCircle } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -2063,6 +2063,44 @@ export default function JoinClient() {
                     </div>
                   </div>
                 )}
+
+                {/* Enquiries & Support Helpdesk Block */}
+                <div className="bg-white border border-zinc-200 rounded p-5 shadow-sm space-y-4 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-primary" />
+                  <div className="flex items-center gap-1.5 text-primary">
+                    <HelpCircle className="w-4 h-4 shrink-0" />
+                    <h3 className="text-xs font-bold uppercase tracking-wider">{t("form_enquiry_title") || "For Enquiries & Helpdesk"}</h3>
+                  </div>
+                  
+                  <p className="text-xs text-zinc-500 leading-relaxed">
+                    {t("form_enquiry_note") || "For questions regarding registration, nomination processing, institutional onboarding, or payments:"}
+                  </p>
+
+                  <a
+                    href="mailto:info@ncieindia.org"
+                    className="flex items-start gap-3 p-3 bg-zinc-50/70 hover:bg-emerald-50/50 border border-zinc-200 hover:border-primary/30 rounded transition-all group"
+                  >
+                    <div className="w-8 h-8 rounded bg-emerald-50 text-primary flex items-center justify-center shrink-0 mt-0.5 border border-primary/15 group-hover:scale-105 transition-transform">
+                      <Mail className="w-4 h-4" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-bold text-zinc-800 group-hover:text-primary transition-colors">
+                        info@ncieindia.org
+                      </p>
+                      <p className="text-[10px] text-zinc-400 font-medium mt-1">
+                        {t("form_enquiry_hours") || "Mon–Sat, 9:00 AM – 5:30 PM IST"}
+                      </p>
+                    </div>
+                  </a>
+
+                  <div className="pt-2 border-t border-zinc-150 flex items-center justify-between text-xs text-zinc-500">
+                    <span>Need more assistance?</span>
+                    <Link href="/contact" className="text-primary hover:text-accent-dark font-semibold underline">
+                      Contact Center
+                    </Link>
+                  </div>
+                </div>
+
               </div>
 
             </div>

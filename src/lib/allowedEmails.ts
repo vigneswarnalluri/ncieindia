@@ -24,15 +24,18 @@ export const ALLOWED_OFFICIAL_EMAILS = [
 ];
 
 export const ALLOWED_INSTITUTION_EMAILS = [
-  "spoc@institution.ac.in",
-  "spoc@institution.edu.in",
-  "spoc@iitmadras.ac.in",
-  "spoc.innovation@annauniv.edu",
-  "spoc@pilani.bits-pilani.ac.in",
-  "spoc@coep.ac.in",
-  "spoc@nitt.edu",
-  "spoc@dseu.ac.in",
+  // 7 Approved Institutional Chapter SPOCs
+  "riperatp@gmail.com",
+  "principal@acem.ac.in",
+  "srrandcvr@gmail.com",
+  "srcptapcell@gmail.com",
+  "principal@srit.ac.in",
+  "principal@swarnandhra.ac.in",
+  "principal@kitsguntur.ac.in",
+
+  // Master / Super Admin
   "ceo@ncieindia.org",
+  "admin@ncieindia.org",
   "vigneswarnalluri10@gmail.com",
 ];
 
@@ -50,12 +53,7 @@ export const isAllowedInstitutionEmail = (email?: string | null): boolean => {
   }
 
   if (isSuperAdminEmail(lower)) return true;
-  if (ALLOWED_INSTITUTION_EMAILS.some((e) => e.toLowerCase() === lower)) return true;
-  // Allow valid educational / college domains or any valid email for institutional SPOCs
-  if (lower.includes("@") && lower.includes(".")) {
-    return true;
-  }
-  return false;
+  return ALLOWED_INSTITUTION_EMAILS.some((e) => e.toLowerCase() === lower);
 };
 
 export const ALLOWED_EMAILS = [
