@@ -14,6 +14,8 @@ export default function ContactClient() {
   const { t, language } = useLanguage();
   const [activeTab, setActiveTab] = useState<string>("student");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [docketNumber, setDocketNumber] = useState("");
   const [copiedEmail, setCopiedEmail] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -28,14 +30,40 @@ export default function ContactClient() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    setIsSubmitting(true);
+    const generatedDocket = `NCIE/INQ/2026/${Math.floor(1000 + Math.random() * 9000)}`;
+
+    try {
+      const res = await fetch("/api/submissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "contact_inquiry",
+          data: { ...formData, desk: activeTab },
+          docketNumber: generatedDocket,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setDocketNumber(data.docketNumber || generatedDocket);
+      } else {
+        setDocketNumber(generatedDocket);
+      }
+    } catch (err) {
+      console.error("Contact submission error:", err);
+      setDocketNumber(generatedDocket);
+    } finally {
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+    }
   };
 
   const resetForm = () => {
     setFormData({ name: "", email: "", org: "", phone: "", message: "" });
     setIsSubmitted(false);
+    setDocketNumber("");
   };
 
   const copyToClipboard = (email: string) => {
@@ -212,6 +240,9 @@ export default function ContactClient() {
                 
                 <div className="space-y-2">
                   <h3 className="text-xl font-bold text-zinc-900 uppercase tracking-wide">{t("contact_submitted_title")}</h3>
+                  <div className="text-xs font-mono font-bold text-[#0D6B4F] bg-emerald-50 px-3 py-1.5 border border-emerald-200 inline-block">
+                    Inquiry Docket: {docketNumber || "NCIE/INQ/2026/1029"}
+                  </div>
                   <p className="text-xs text-zinc-500 leading-relaxed max-w-sm mx-auto">
                     {t("contact_submitted_desc")
                       .replace("{name}", formData.name)
@@ -331,8 +362,12 @@ export default function ContactClient() {
                         />
                       </div>
 
-                      <Button type="submit" className="w-full justify-center text-xs uppercase tracking-wider font-bold py-3 bg-[#0D6B4F] hover:bg-[#08533d] text-white rounded-none cursor-pointer shadow-none transition-colors flex items-center gap-1.5">
-                        {t("contact_btn_submit")}
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full justify-center text-xs uppercase tracking-wider font-bold py-3 bg-[#0D6B4F] hover:bg-[#08533d] text-white rounded-none cursor-pointer shadow-none transition-colors flex items-center gap-1.5 disabled:opacity-50"
+                      >
+                        {isSubmitting ? "Logging Inquiry Docket..." : t("contact_btn_submit")}
                         <ArrowRight className="w-3.5 h-3.5" />
                       </Button>
 

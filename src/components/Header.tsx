@@ -35,10 +35,11 @@ const NAV_LINKS = [
   { key: "nav_home", href: "/" },
   { key: "nav_about", href: "/about", hasMega: "about" as const },
   { key: "nav_programs", href: "/programs", hasMega: "programs" as const },
-  { key: "nav_schemes", href: "/schemes", hasMega: "schemes" as const },
-  { key: "nav_ecosystem", href: "/chapters", hasMega: "ecosystem" as const },
-  { key: "nav_media", href: "/media" },
-  { key: "nav_join", href: "/join" },
+  { key: "nav_students", href: "/students" },
+  { key: "nav_startups", href: "/startups" },
+  { key: "nav_collaborations", href: "/collaborations" },
+  { key: "nav_alignment", href: "/government-alignment" },
+  { key: "nav_documents", href: "/documents" },
   { key: "nav_contact", href: "/contact" },
 ];
 
@@ -239,8 +240,8 @@ export default function Header() {
               : "border-zinc-150/40"
           )}
         >
-          <div className="max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-20 gap-2">
+          <div className="max-w-[1536px] mx-auto px-2 sm:px-4 lg:px-4 xl:px-6">
+            <div className="flex justify-between items-center h-18 lg:h-20 gap-2">
 
               {/* Logo Area */}
               <Link
@@ -252,9 +253,9 @@ export default function Header() {
                 <Image
                   src="/logo-new.svg"
                   alt="NCIE India Logo"
-                  width={280}
-                  height={80}
-                  className="h-10 sm:h-12 lg:h-14 xl:h-16 w-auto object-contain max-w-[170px] sm:max-w-[220px] lg:max-w-none"
+                  width={240}
+                  height={70}
+                  className="h-10 sm:h-11 lg:h-11 xl:h-13 w-auto object-contain max-w-[145px] sm:max-w-[180px] xl:max-w-[210px] 2xl:max-w-none"
                   priority
                   unoptimized
                 />
@@ -281,7 +282,7 @@ export default function Header() {
                           }
                         }}
                         className={cn(
-                          "px-2.5 lg:px-3 xl:px-4 h-full flex items-center gap-1 text-[11px] lg:text-[12px] xl:text-[13px] font-bold uppercase tracking-wider transition-all duration-200 relative focus:outline-none select-none hover:bg-zinc-50/70 whitespace-nowrap cursor-pointer",
+                          "px-1.5 lg:px-1.5 xl:px-2 2xl:px-3 h-full flex items-center gap-0.5 xl:gap-1 text-[10px] lg:text-[10.5px] xl:text-[11.5px] 2xl:text-[12.5px] font-bold uppercase tracking-tight 2xl:tracking-wider transition-all duration-200 relative focus:outline-none select-none hover:bg-zinc-50/70 whitespace-nowrap cursor-pointer",
                           (isActive || isMenuOpen)
                             ? "text-primary font-extrabold"
                             : "text-zinc-600 hover:text-primary"
@@ -291,7 +292,7 @@ export default function Header() {
                         {hasMega && (
                           <ChevronDown
                             className={cn(
-                              "w-3 h-3 transition-transform duration-250 opacity-70",
+                              "w-2.5 h-2.5 xl:w-3 xl:h-3 transition-transform duration-250 opacity-70",
                               isMenuOpen && "rotate-180 text-primary opacity-100"
                             )}
                           />
@@ -310,12 +311,12 @@ export default function Header() {
               </nav>
 
               {/* Actions & Lang */}
-              <div className="hidden lg:flex items-center gap-2 xl:gap-3 h-full shrink-0 acc-actions-container" onMouseEnter={() => setActiveMenu(null)}>
+              <div className="hidden lg:flex items-center gap-1.5 xl:gap-2 h-full shrink-0 acc-actions-container" onMouseEnter={() => setActiveMenu(null)}>
                 {/* Login — institutions & officials only */}
                 <Link
                   href="/login"
                   id="header-login-btn"
-                  className="inline-flex items-center gap-2 h-9 px-4 text-[11px] font-semibold tracking-widest uppercase text-primary bg-white border border-primary/40 rounded hover:border-primary hover:bg-primary/5 transition-all duration-150 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 h-8 xl:h-8.5 px-2.5 xl:px-3 text-[10px] xl:text-[11px] font-semibold tracking-wider uppercase text-primary bg-white border border-primary/40 rounded hover:border-primary hover:bg-primary/5 transition-all duration-150 cursor-pointer"
                 >
                   <Lock className="w-3 h-3" />
                   {t("nav_login")}
@@ -323,29 +324,27 @@ export default function Header() {
 
                 {/* Apply Now CTA */}
                 <Link href="/join">
-                  <ApplyNowButton />
+                  <ApplyNowButton className="h-8 xl:h-8.5 px-3 xl:px-3.5 text-[10px] xl:text-[11px]" />
                 </Link>
 
-                <div className="h-4 w-px bg-zinc-200" />
+                <div className="h-4 w-px bg-zinc-200 mx-0.5" />
 
                 {/* Language selector */}
                 <button
                   onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-                  className="flex items-center text-zinc-500 hover:text-primary transition-colors cursor-pointer"
+                  className="p-1 flex items-center text-zinc-500 hover:text-primary transition-colors cursor-pointer"
                   title={language === "en" ? "हिन्दी में बदलें" : "Switch to English"}
                 >
-                  <LanguageIcon className="w-4.5 h-4.5 shrink-0" />
+                  <LanguageIcon className="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0" />
                 </button>
-
-                <div className="h-4 w-px bg-zinc-200" />
 
                 {/* Accessibility Button */}
                 <button
                   onClick={() => setAccessibilityOpen(true)}
-                  className="flex items-center text-zinc-500 hover:text-primary transition-colors cursor-pointer"
+                  className="p-1 flex items-center text-zinc-500 hover:text-primary transition-colors cursor-pointer"
                   title="Accessibility Controls"
                 >
-                  <AccessibilityIcon className="w-4.5 h-4.5 shrink-0" />
+                  <AccessibilityIcon className="w-4 h-4 xl:w-4.5 xl:h-4.5 shrink-0" />
                 </button>
               </div>
 

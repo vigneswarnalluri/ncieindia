@@ -114,11 +114,11 @@ export default function Footer() {
               <h4 className="text-sm font-semibold tracking-wider uppercase text-accent">{t("footer_ecosystem")}</h4>
               <ul className="space-y-2 text-sm text-zinc-300">
                 <li><Link href="/about" className="hover:text-accent transition-colors">{t("footer_about")}</Link></li>
-                <li><Link href="/schemes" className="hover:text-accent transition-colors">Govt Schemes &amp; Support</Link></li>
+                <li><Link href="/students" className="hover:text-accent transition-colors">Students Portal &amp; Internships</Link></li>
+                <li><Link href="/startups" className="hover:text-accent transition-colors">Innovation &amp; Startups Hub</Link></li>
+                <li><Link href="/collaborations" className="hover:text-accent transition-colors">MoU Registry &amp; Partnerships</Link></li>
                 <li><Link href="/programs" className="hover:text-accent transition-colors">{t("footer_initiatives")}</Link></li>
-                <li><Link href="/opportunities" className="hover:text-accent transition-colors">{t("footer_opportunities")}</Link></li>
-                <li><Link href="/careers" className="hover:text-accent transition-colors">{t("footer_careers")}</Link></li>
-                <li><Link href="/chapters" className="hover:text-accent transition-colors">{t("footer_chapters")}</Link></li>
+                <li><Link href="/government-alignment" className="hover:text-accent transition-colors">Government &amp; Policy Alignment</Link></li>
               </ul>
             </div>
 
@@ -127,8 +127,8 @@ export default function Footer() {
               <h4 className="text-sm font-semibold tracking-wider uppercase text-accent">{t("footer_engage")}</h4>
               <ul className="space-y-2 text-sm text-zinc-300">
                 <li><Link href="/join" className="hover:text-accent transition-colors">{t("footer_join")}</Link></li>
+                <li><Link href="/documents" className="hover:text-accent transition-colors">Documents &amp; DPR Vault</Link></li>
                 <li><Link href="/notices" className="hover:text-accent transition-colors">Public Notices &amp; Bulletins</Link></li>
-                <li><Link href="/notices?tab=orders" className="hover:text-accent transition-colors">Official Orders &amp; Directives</Link></li>
                 <li><Link href="/media" className="hover:text-accent transition-colors">{t("footer_media")}</Link></li>
                 <li><Link href="/vision-2047" className="hover:text-accent transition-colors">{t("footer_vision")}</Link></li>
                 <li><Link href="/contact" className="hover:text-accent transition-colors">{t("footer_contact_inquiries")}</Link></li>
