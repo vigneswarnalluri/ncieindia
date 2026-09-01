@@ -253,9 +253,9 @@ export default function Header() {
                 <Image
                   src="/logo-new.svg"
                   alt="NCIE India Logo"
-                  width={240}
-                  height={70}
-                  className="h-10 sm:h-11 lg:h-11 xl:h-13 w-auto object-contain max-w-[145px] sm:max-w-[180px] xl:max-w-[210px] 2xl:max-w-none"
+                  width={280}
+                  height={80}
+                  className="h-11 sm:h-12 lg:h-13 xl:h-15 w-auto object-contain max-w-[170px] sm:max-w-[210px] xl:max-w-[250px] 2xl:max-w-none"
                   priority
                   unoptimized
                 />
@@ -826,9 +826,9 @@ export default function Header() {
                     <Image
                       src="/logo-new.svg"
                       alt="NCIE Logo"
-                      width={110}
-                      height={32}
-                      className="h-8 w-auto object-contain"
+                      width={140}
+                      height={40}
+                      className="h-9 sm:h-10 w-auto object-contain"
                       priority
                       unoptimized
                     />
