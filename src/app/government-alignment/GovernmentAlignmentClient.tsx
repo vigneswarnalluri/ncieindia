@@ -164,7 +164,6 @@ export default function GovernmentAlignmentClient() {
                 <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-900">
                   Core National Value
                 </h3>
-                <p className="text-[10px] text-zinc-400 font-mono mt-0.5">GOVERNING PRINCIPLE</p>
               </div>
               <p className="text-xs text-zinc-800 font-serif italic border-l-2 border-emerald-600 pl-3 py-1 bg-emerald-50/40">
                 &ldquo;Sabka Saath, Sabka Vikas, Sabka Vishwas, Sabka Prayas&rdquo;
@@ -180,7 +179,6 @@ export default function GovernmentAlignmentClient() {
                 <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-900">
                   Policy &amp; Compliance Cell
                 </h3>
-                <p className="text-[10px] text-zinc-400 font-mono mt-0.5">CENTRAL REGISTRY</p>
               </div>
 
               <div className="space-y-2 pt-1 text-zinc-650">
@@ -206,9 +204,6 @@ export default function GovernmentAlignmentClient() {
               <div className="space-y-6">
                 <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                   <div className="border-l-4 border-primary pl-4 py-0.5">
-                    <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                      SECTION 1 • MINISTERIAL DOMAINS
-                    </span>
                     <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                       Central Ministries Policy Alignment Matrix
                     </h2>
@@ -257,9 +252,6 @@ export default function GovernmentAlignmentClient() {
             {activeTab === "viksit" && (
               <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                 <div className="border-l-4 border-primary pl-4 py-0.5">
-                  <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                    SECTION 2 • CENTENARY ROADMAP
-                  </span>
                   <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                     Viksit Bharat @2047 National Vision &amp; Macro Pathways
                   </h2>
@@ -336,9 +328,6 @@ export default function GovernmentAlignmentClient() {
             {activeTab === "transparency" && (
               <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                 <div className="border-l-4 border-primary pl-4 py-0.5">
-                  <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                    SECTION 3 • STATUTORY DISCLOSURE
-                  </span>
                   <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                     Institutional Status &amp; Transparency Statement
                   </h2>

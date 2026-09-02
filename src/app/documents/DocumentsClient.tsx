@@ -226,9 +226,6 @@ export default function DocumentsClient() {
 
             <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
               <div className="border-l-4 border-primary pl-4 py-0.5">
-                <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                  OFFICIAL REPOSITORY ARCHIVE
-                </span>
                 <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                   Publications, DPR &amp; Policy Guidelines Archive
                 </h2>

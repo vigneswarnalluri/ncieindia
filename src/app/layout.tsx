@@ -138,6 +138,27 @@ export default function RootLayout({
             gtag('config', 'G-FQ4P91VSD4');
           `}
         </Script>
+        <Script id="organization-schema" type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "GovernmentOrganization",
+            "name": "National Council for Innovation and Entrepreneurship",
+            "alternateName": "NCIE India",
+            "url": "https://ncieindia.org",
+            "logo": "https://ncieindia.org/logo-new.png",
+            "description": "National Council for Innovation and Entrepreneurship (NCIE) India builds the nation's largest student startup, incubation, and collegiate chapter ecosystem aligned with Viksit Bharat 2047.",
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "IN"
+            },
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "Nodal Secretariat & Grievance Desk",
+              "email": "info@ncieindia.org",
+              "availableLanguage": ["English", "Hindi"]
+            }
+          })}
+        </Script>
       </body>
     </html>
   );

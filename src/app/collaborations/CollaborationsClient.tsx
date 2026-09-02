@@ -267,9 +267,6 @@ export default function CollaborationsClient() {
             {activeTab === "registry" && (
               <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                 <div className="border-l-4 border-primary pl-4 py-0.5">
-                  <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                    PUBLIC REGISTRY OF AGREEMENTS
-                  </span>
                   <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                     Institutional Memorandum of Understanding (MoU) Registry
                   </h2>
@@ -353,9 +350,6 @@ export default function CollaborationsClient() {
             {activeTab === "proposal" && (
               <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                 <div className="border-l-4 border-primary pl-4 py-0.5">
-                  <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                    ONLINE PARTNERSHIP INITIATION
-                  </span>
                   <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                     Institutional Collaboration Proposal Form
                   </h2>
@@ -503,9 +497,6 @@ export default function CollaborationsClient() {
             {activeTab === "grants" && (
               <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                 <div className="border-l-4 border-primary pl-4 py-0.5">
-                  <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                    PROGRAMME 4 • INFRASTRUCTURE SCHEME
-                  </span>
                   <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                     Institutional Incubation Development Fund (₹20 Lakh – ₹50 Lakh)
                   </h2>
@@ -547,9 +538,6 @@ export default function CollaborationsClient() {
             {activeTab === "verticals" && (
               <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                 <div className="border-l-4 border-primary pl-4 py-0.5">
-                  <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                    SECTORAL FRAMEWORKS
-                  </span>
                   <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                     Institutional Collaboration Verticals
                   </h2>

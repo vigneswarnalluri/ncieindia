@@ -272,9 +272,6 @@ export default function StartupsClient() {
               <div className="space-y-6">
                 <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                   <div className="border-l-4 border-primary pl-4 py-0.5">
-                    <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                      STRUCTURED DEVELOPMENT FRAMEWORK
-                    </span>
                     <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                       National Startup Journey &amp; Incubation Pathway
                     </h2>
@@ -329,9 +326,6 @@ export default function StartupsClient() {
             {activeTab === "submit" && (
               <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                 <div className="border-l-4 border-primary pl-4 py-0.5">
-                  <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                    ONLINE PROPOSAL SUBMISSION
-                  </span>
                   <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                     Collegiate &amp; Youth Startup Idea Submission Form
                   </h2>
@@ -477,9 +471,6 @@ export default function StartupsClient() {
             {activeTab === "kalam" && (
               <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                 <div className="border-l-4 border-primary pl-4 py-0.5">
-                  <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                    PROGRAMME 2 • SEED CAPITAL SCHEME
-                  </span>
                   <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                     Dr. A.P.J. Abdul Kalam Startup Validation Programme
                   </h2>
@@ -527,9 +518,6 @@ export default function StartupsClient() {
             {activeTab === "investor" && (
               <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                 <div className="border-l-4 border-primary pl-4 py-0.5">
-                  <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                    PROGRAMME 3 • COMMERCIALIZATION
-                  </span>
                   <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                     Investor &amp; Startup Growth Linkages
                   </h2>
@@ -567,9 +555,6 @@ export default function StartupsClient() {
             {activeTab === "toolkits" && (
               <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                 <div className="border-l-4 border-primary pl-4 py-0.5">
-                  <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                    FOUNDER REPOSITORY
-                  </span>
                   <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                     Startup Documentation &amp; Framework Templates
                   </h2>

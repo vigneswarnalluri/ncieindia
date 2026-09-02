@@ -137,9 +137,6 @@ export default function ContactClient() {
                 <h2 className="text-lg font-bold uppercase tracking-wider text-zinc-900">
                   {t("contact_address_title")}
                 </h2>
-                <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-0.5">
-                  Apex Command &amp; Central Registry
-                </p>
               </div>
 
               <div className="space-y-6 text-xs sm:text-sm">
@@ -198,9 +195,6 @@ export default function ContactClient() {
                 <h3 className="text-base font-bold uppercase tracking-wider text-zinc-900">
                   {language === "hi" ? "आधिकारिक संचार डेस्क" : "Official Communication Desks"}
                 </h3>
-                <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-0.5">
-                  Direct Department Directories
-                </p>
               </div>
 
               <div className="divide-y divide-zinc-150 text-xs sm:text-sm">

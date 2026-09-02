@@ -874,7 +874,7 @@ export default function NoticesClient() {
 
                   {/* Executive Brief */}
                   <div className="bg-[#0D6B4F]/5 border border-[#0D6B4F]/10 rounded-xl p-4">
-                    <div className="text-[10px] text-[#0D6B4F] font-black uppercase tracking-widest mb-1.5 font-mono">
+                    <div className="text-[10px] text-[#0D6B4F] font-black uppercase tracking-wider mb-1.5 font-mono">
                       I. Executive Summary & Brief
                     </div>
                     <p className="text-zinc-700 text-xs leading-relaxed font-medium">
@@ -1038,7 +1038,7 @@ export default function NoticesClient() {
 
                   {/* Mandate Description */}
                   <div className="bg-[#A68034]/5 border border-[#A68034]/10 rounded-xl p-4">
-                    <div className="text-[10px] text-[#A68034] font-black uppercase tracking-widest mb-1.5 font-mono">
+                    <div className="text-[10px] text-[#A68034] font-black uppercase tracking-wider mb-1.5 font-mono">
                       I. Gazette Directives & Mandate
                     </div>
                     <p className="text-zinc-700 text-xs leading-relaxed font-medium">

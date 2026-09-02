@@ -178,45 +178,96 @@ export default function StudentsClient() {
     details: "",
   });
 
-  const handleVerifyCertificate = (e: React.FormEvent) => {
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [isCheckingApp, setIsCheckingApp] = useState(false);
+
+  const handleVerifyCertificate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!certQuery.trim()) return;
+    setIsVerifying(true);
 
-    if (certQuery.toUpperCase().includes("NCIE") || certQuery.length >= 6) {
-      setCertResult({
-        valid: true,
-        certId: certQuery.toUpperCase(),
-        studentName: "Aarav Sharma",
-        program: "Viksit Bharat Innovation Leadership Programme (60-Day Cohort)",
-        issueDate: "15 August 2025",
-        authority: "National Council for Innovation & Entrepreneurship (NCIE)",
-        status: "Officially Verified & Active in National Registry",
-      });
-    } else {
+    try {
+      const res = await fetch(`/api/verify?type=certificate&query=${encodeURIComponent(certQuery.trim())}`);
+      const result = await res.json();
+
+      if (result.success && result.found) {
+        setCertResult({
+          valid: true,
+          certId: result.data.certId,
+          studentName: result.data.studentName,
+          program: result.data.program,
+          issueDate: result.data.issueDate,
+          authority: result.data.authority || "National Council for Innovation & Entrepreneurship (NCIE)",
+          status: result.data.status || "Officially Verified & Active in National Registry",
+        });
+      } else {
+        setCertResult({
+          valid: false,
+          certId: certQuery.trim().toUpperCase(),
+          studentName: "",
+          program: "",
+          issueDate: "",
+          authority: "",
+          status: result.message || "Certificate Record Not Found in Official Registry",
+        });
+      }
+    } catch (err) {
+      console.error("Verification error:", err);
       setCertResult({
         valid: false,
-        certId: certQuery,
+        certId: certQuery.trim().toUpperCase(),
         studentName: "",
         program: "",
         issueDate: "",
         authority: "",
-        status: "Certificate Record Not Found in Official Registry",
+        status: "Verification server communication error. Please retry.",
       });
+    } finally {
+      setIsVerifying(false);
     }
   };
 
-  const handleCheckStatus = (e: React.FormEvent) => {
+  const handleCheckStatus = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!appId.trim()) return;
+    setIsCheckingApp(true);
 
-    setAppResult({
-      id: appId.toUpperCase(),
-      name: "Rohan Patel",
-      program: "60-Day Viksit Bharat Innovation Leadership Programme",
-      status: "Application Approved • Enrolment Active (Cohort 2025-26)",
-      institution: "National Institute of Technology",
-      updatedAt: "Academic Session 2025-26",
-    });
+    try {
+      const res = await fetch(`/api/verify?type=application&query=${encodeURIComponent(appId.trim())}`);
+      const result = await res.json();
+
+      if (result.success && result.found) {
+        setAppResult({
+          id: result.data.appId,
+          name: result.data.studentName,
+          program: result.data.program,
+          status: result.data.status,
+          institution: result.data.institution,
+          updatedAt: result.data.updatedAt || "Academic Session 2025-26",
+        });
+      } else {
+        setAppResult({
+          id: appId.trim().toUpperCase(),
+          name: "Record Not Found",
+          program: "N/A",
+          status: "No active application found matching this reference. Please verify your Application ID or mobile number.",
+          institution: "N/A",
+          updatedAt: "N/A",
+        });
+      }
+    } catch (err) {
+      console.error("Application check error:", err);
+      setAppResult({
+        id: appId.trim().toUpperCase(),
+        name: "Server Error",
+        program: "N/A",
+        status: "Unable to reach registry database. Please try again.",
+        institution: "N/A",
+        updatedAt: "N/A",
+      });
+    } finally {
+      setIsCheckingApp(false);
+    }
   };
 
   const handleGrievanceSubmit = async (e: React.FormEvent) => {
@@ -419,9 +470,6 @@ export default function StudentsClient() {
                 {/* Section 1: Flagship 60-Day Leadership Programme */}
                 <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                   <div className="border-l-4 border-primary pl-4 py-0.5">
-                    <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                      PROGRAMME 1 • APEX MANDATE
-                    </span>
                     <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                       NCIE Viksit Bharat Innovation Leadership Programme
                     </h2>
@@ -526,9 +574,6 @@ export default function StudentsClient() {
             {activeTab === "internships" && (
               <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                 <div className="border-l-4 border-primary pl-4 py-0.5">
-                  <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                    VISION 2047 NATIONAL INITIATIVE
-                  </span>
                   <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                     10-Core Paid Internship Ecosystem
                   </h2>
@@ -593,9 +638,6 @@ export default function StudentsClient() {
             {activeTab === "verify" && (
               <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                 <div className="border-l-4 border-primary pl-4 py-0.5">
-                  <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                    ONLINE REPOSITORY VERIFICATION
-                  </span>
                   <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                     National Certificate Verification Engine
                   </h2>
@@ -632,9 +674,10 @@ export default function StudentsClient() {
 
                   <button
                     type="submit"
-                    className="w-full py-2.5 bg-[#0D6B4F] hover:bg-[#094835] text-white font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                    disabled={isVerifying}
+                    className="w-full py-2.5 bg-[#0D6B4F] hover:bg-[#094835] text-white font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer disabled:opacity-50"
                   >
-                    Authenticate Credential
+                    {isVerifying ? "Authenticating with Central Registry..." : "Authenticate Credential"}
                   </button>
                 </form>
 
@@ -679,7 +722,7 @@ export default function StudentsClient() {
                       <div className="flex items-start gap-3 bg-red-50 border border-red-200 p-4 text-red-900 text-xs">
                         <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
                         <div>
-                          <strong>Record Not Verified:</strong> No active credential matching ID &quot;{certResult.certId}&quot; exists in the central registry. Please verify the code or contact Secretariat support.
+                          <strong>Record Not Verified:</strong> {certResult.status}
                         </div>
                       </div>
                     )}
@@ -692,9 +735,6 @@ export default function StudentsClient() {
             {activeTab === "status" && (
               <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                 <div className="border-l-4 border-primary pl-4 py-0.5">
-                  <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                    TRACKING &amp; ADMISSION STATUS
-                  </span>
                   <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                     Student Application Status Portal
                   </h2>
@@ -719,46 +759,58 @@ export default function StudentsClient() {
                   </div>
                   <button
                     type="submit"
-                    className="w-full py-2.5 bg-[#0D6B4F] hover:bg-[#094835] text-white font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                    disabled={isCheckingApp}
+                    className="w-full py-2.5 bg-[#0D6B4F] hover:bg-[#094835] text-white font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer disabled:opacity-50"
                   >
-                    Track Application Record
+                    {isCheckingApp ? "Querying National Admission Registry..." : "Track Application Record"}
                   </button>
                 </form>
 
                 {appResult && (
                   <div className="border border-zinc-200 p-5 space-y-4">
-                    <div className="flex justify-between items-center bg-zinc-50 p-3 border border-zinc-200">
-                      <div>
-                        <div className="text-[10px] font-mono text-zinc-400 font-bold uppercase">Application Reference</div>
-                        <div className="font-mono font-bold text-xs text-zinc-900">{appResult.id}</div>
-                      </div>
-                      <span className="px-2.5 py-1 bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold text-[10px] uppercase">
-                        Active Enrolment
-                      </span>
-                    </div>
+                    {appResult.name !== "Record Not Found" && appResult.name !== "Server Error" ? (
+                      <>
+                        <div className="flex justify-between items-center bg-zinc-50 p-3 border border-zinc-200">
+                          <div>
+                            <div className="text-[10px] font-mono text-zinc-400 font-bold uppercase">Application Reference</div>
+                            <div className="font-mono font-bold text-xs text-zinc-900">{appResult.id}</div>
+                          </div>
+                          <span className="px-2.5 py-1 bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold text-[10px] uppercase">
+                            Active Enrolment
+                          </span>
+                        </div>
 
-                    <div className="border border-zinc-200">
-                      <table className="w-full text-left text-xs">
-                        <tbody>
-                          <tr className="border-b border-zinc-200">
-                            <td className="p-3 font-bold text-zinc-700 w-1/3 border-r border-zinc-200">Applicant Name</td>
-                            <td className="p-3 text-zinc-900 font-semibold">{appResult.name}</td>
-                          </tr>
-                          <tr className="border-b border-zinc-200 bg-zinc-50/70">
-                            <td className="p-3 font-bold text-zinc-700 border-r border-zinc-200">Enrolled Programme</td>
-                            <td className="p-3 text-zinc-900 font-semibold">{appResult.program}</td>
-                          </tr>
-                          <tr className="border-b border-zinc-200">
-                            <td className="p-3 font-bold text-zinc-700 border-r border-zinc-200">Current Status</td>
-                            <td className="p-3 font-bold text-[#0D6B4F]">{appResult.status}</td>
-                          </tr>
-                          <tr className="bg-zinc-50/70">
-                            <td className="p-3 font-bold text-zinc-700 border-r border-zinc-200">Academic Session</td>
-                            <td className="p-3 text-zinc-900">{appResult.updatedAt}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                        <div className="border border-zinc-200">
+                          <table className="w-full text-left text-xs">
+                            <tbody>
+                              <tr className="border-b border-zinc-200">
+                                <td className="p-3 font-bold text-zinc-700 w-1/3 border-r border-zinc-200">Applicant Name</td>
+                                <td className="p-3 text-zinc-900 font-semibold">{appResult.name}</td>
+                              </tr>
+                              <tr className="border-b border-zinc-200 bg-zinc-50/70">
+                                <td className="p-3 font-bold text-zinc-700 border-r border-zinc-200">Enrolled Programme</td>
+                                <td className="p-3 text-zinc-900 font-semibold">{appResult.program}</td>
+                              </tr>
+                              <tr className="border-b border-zinc-200">
+                                <td className="p-3 font-bold text-zinc-700 border-r border-zinc-200">Current Status</td>
+                                <td className="p-3 font-bold text-[#0D6B4F]">{appResult.status}</td>
+                              </tr>
+                              <tr className="bg-zinc-50/70">
+                                <td className="p-3 font-bold text-zinc-700 border-r border-zinc-200">Academic Session</td>
+                                <td className="p-3 text-zinc-900">{appResult.updatedAt}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 p-4 text-amber-900 text-xs">
+                        <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                        <div>
+                          <strong>Application Not Located:</strong> {appResult.status}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -768,9 +820,6 @@ export default function StudentsClient() {
             {activeTab === "grievance" && (
               <div className="bg-white border border-zinc-200 rounded-none p-6 sm:p-8 space-y-6 shadow-2xs">
                 <div className="border-l-4 border-primary pl-4 py-0.5">
-                  <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-widest block">
-                    PUBLIC GRIEVANCE REDRESSAL CELL
-                  </span>
                   <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-zinc-900 mt-0.5">
                     Student Support &amp; Grievance Redressal
                   </h2>

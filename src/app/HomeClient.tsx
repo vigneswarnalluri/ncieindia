@@ -699,6 +699,134 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 2.5. CORE NATIONAL ECOSYSTEM PORTALS */}
+      <section className="py-12 bg-zinc-50 border-b border-zinc-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-8">
+            <div className="flex items-center gap-2 border-l-4 border-[#0D6B4F] pl-3 py-0.5">
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 uppercase">
+                National Innovation Ecosystem Portals
+              </h2>
+            </div>
+            <p className="text-xs sm:text-sm text-zinc-500 mt-1 pl-4">
+              Direct access to official student frameworks, startup seed grant registries, institutional MoUs, and policy documents
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            {/* Card 1: Students */}
+            <Link
+              href="/students"
+              className="bg-white border border-zinc-200 p-5 hover:border-[#0D6B4F] hover:shadow-md transition-all flex flex-col justify-between group"
+            >
+              <div>
+                <div className="w-10 h-10 bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#0D6B4F] mb-3 group-hover:bg-[#0D6B4F] group-hover:text-white transition-colors">
+                  <GraduationCap className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-zinc-900 text-sm group-hover:text-[#0D6B4F] transition-colors">
+                  Students Portal
+                </h3>
+                <p className="text-xs text-zinc-500 mt-1.5 leading-relaxed">
+                  60-Day Leadership Programme, 10-core paid internships, and instant certificate verification.
+                </p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-zinc-100 flex items-center justify-between text-xs font-bold text-[#0D6B4F]">
+                <span>Access Portal</span>
+                <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+
+            {/* Card 2: Startups */}
+            <Link
+              href="/startups"
+              className="bg-white border border-zinc-200 p-5 hover:border-[#0D6B4F] hover:shadow-md transition-all flex flex-col justify-between group"
+            >
+              <div>
+                <div className="w-10 h-10 bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#0D6B4F] mb-3 group-hover:bg-[#0D6B4F] group-hover:text-white transition-colors">
+                  <Rocket className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-zinc-900 text-sm group-hover:text-[#0D6B4F] transition-colors">
+                  Innovation &amp; Startups
+                </h3>
+                <p className="text-xs text-zinc-500 mt-1.5 leading-relaxed">
+                  Dr. Kalam 5-stage milestone seed grants up to ₹5,00,000, 9-phase pathway, and idea submission.
+                </p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-zinc-100 flex items-center justify-between text-xs font-bold text-[#0D6B4F]">
+                <span>Submit Innovation</span>
+                <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+
+            {/* Card 3: Collaborations */}
+            <Link
+              href="/collaborations"
+              className="bg-white border border-zinc-200 p-5 hover:border-[#0D6B4F] hover:shadow-md transition-all flex flex-col justify-between group"
+            >
+              <div>
+                <div className="w-10 h-10 bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#0D6B4F] mb-3 group-hover:bg-[#0D6B4F] group-hover:text-white transition-colors">
+                  <Building2 className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-zinc-900 text-sm group-hover:text-[#0D6B4F] transition-colors">
+                  MoUs &amp; Collaborations
+                </h3>
+                <p className="text-xs text-zinc-500 mt-1.5 leading-relaxed">
+                  Active institutional MoU directory, ₹20L–₹50L incubation development grants, and partnership proposals.
+                </p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-zinc-100 flex items-center justify-between text-xs font-bold text-[#0D6B4F]">
+                <span>View Registry</span>
+                <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+
+            {/* Card 4: Government Alignment */}
+            <Link
+              href="/government-alignment"
+              className="bg-white border border-zinc-200 p-5 hover:border-[#0D6B4F] hover:shadow-md transition-all flex flex-col justify-between group"
+            >
+              <div>
+                <div className="w-10 h-10 bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#0D6B4F] mb-3 group-hover:bg-[#0D6B4F] group-hover:text-white transition-colors">
+                  <Landmark className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-zinc-900 text-sm group-hover:text-[#0D6B4F] transition-colors">
+                  Government Alignment
+                </h3>
+                <p className="text-xs text-zinc-500 mt-1.5 leading-relaxed">
+                  Viksit Bharat @2047 macro development roadmap, ministerial mandates, and statutory disclosures.
+                </p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-zinc-100 flex items-center justify-between text-xs font-bold text-[#0D6B4F]">
+                <span>Explore Policy</span>
+                <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+
+            {/* Card 5: Documents */}
+            <Link
+              href="/documents"
+              className="bg-white border border-zinc-200 p-5 hover:border-[#0D6B4F] hover:shadow-md transition-all flex flex-col justify-between group"
+            >
+              <div>
+                <div className="w-10 h-10 bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#0D6B4F] mb-3 group-hover:bg-[#0D6B4F] group-hover:text-white transition-colors">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-zinc-900 text-sm group-hover:text-[#0D6B4F] transition-colors">
+                  Documents Archive
+                </h3>
+                <p className="text-xs text-zinc-500 mt-1.5 leading-relaxed">
+                  Official NCIE DPR, curriculum syllabi, seed grant rules, gazette circulars, and institutional guidelines.
+                </p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-zinc-100 flex items-center justify-between text-xs font-bold text-[#0D6B4F]">
+                <span>Download Vault</span>
+                <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* 3. VISION & MISSION SECTION (From Hero Banner.pdf) */}
       <section className="py-14 sm:py-16 bg-[#F9FAFB] border-b border-zinc-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -706,7 +834,7 @@ export default function Home() {
           <div className="bg-gradient-to-br from-[#074733] via-[#0A5D45] to-[#0D6B4F] text-white p-8 sm:p-10 border-l-8 border-[#C9A24B] shadow-xl relative overflow-hidden mb-12">
             <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-white/5 to-transparent pointer-events-none" />
             <div className="relative z-10 max-w-4xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#C9A24B] text-zinc-950 font-black text-xs uppercase tracking-widest rounded mb-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#C9A24B] text-zinc-950 font-black text-xs uppercase tracking-wider rounded mb-3">
                 <Target className="w-3.5 h-3.5" />
                 <span>{t("home_core_vision_title") || "Vision"}</span>
               </div>
@@ -965,7 +1093,6 @@ export default function Home() {
                     <span className="text-[10px] font-bold text-[#0D6B4F] bg-emerald-50 border border-emerald-200 px-2 py-0.5 uppercase tracking-wider font-mono">
                       {item.tag}
                     </span>
-                    <span className="text-[9px] font-mono text-zinc-400">#GOI-INITIATIVE</span>
                   </div>
 
                   <div className="flex-1 flex flex-col items-center justify-center py-2">
@@ -996,7 +1123,6 @@ export default function Home() {
                       <span className="text-[10px] font-bold text-[#0D6B4F] bg-emerald-50 border border-emerald-200 px-2 py-0.5 uppercase tracking-wider font-mono">
                         {item.tag}
                       </span>
-                      <span className="text-[9px] font-mono text-zinc-400">#GOI-INITIATIVE</span>
                     </div>
 
                     <h3 className="text-sm font-bold text-zinc-900 group-hover:text-[#0D6B4F] transition-colors leading-snug">
