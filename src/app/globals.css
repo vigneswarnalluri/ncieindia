@@ -87,6 +87,17 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Make all images and graphics strictly non-draggable and non-movable across the website */
+img,
+picture,
+svg {
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
 /* Perf: contain paint/layout for large sections */
 /* Marquee — GPU-only, no repaints */
 .animate-marquee {
