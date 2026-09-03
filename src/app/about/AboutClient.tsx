@@ -59,11 +59,77 @@ export default function AboutPage() {
 
   const activeTabLabel = TABS.find((tab) => tab.id === activeTab)?.label || t("tab_about");
 
-  const OBJECTIVES = [
-    t("about_obj_1"),
-    t("about_obj_2"),
-    t("about_obj_3"),
-    t("about_obj_4")
+  const OFFICIAL_OBJECTIVES = [
+    {
+      num: "01",
+      titleEn: "Promote Innovation",
+      titleHi: "नवाचार को बढ़ावा देना",
+      descEn: "Encourage students, youth, institutions, and innovators to identify problems, develop creative ideas, and create practical and technology-enabled solutions.",
+      descHi: "छात्रों, युवाओं, संस्थानों और नवप्रवर्तकों को समस्याओं की पहचान करने, रचनात्मक विचार विकसित करने और व्यावहारिक व तकनीक-सक्षम समाधान बनाने के लिए प्रोत्साहित करना।"
+    },
+    {
+      num: "02",
+      titleEn: "Nurture Young Innovators",
+      titleHi: "युवा नवप्रवर्तकों का पोषण",
+      descEn: "Identify and support promising student ideas through ideation programmes, innovation challenges, project development, mentoring, and validation opportunities.",
+      descHi: "विचार कार्यक्रमों, नवाचार चुनौतियों, परियोजना विकास, मेंटरशिप और प्रमाणीकरण के अवसरों के माध्यम से होनहार छात्र विचारों की पहचान और समर्थन करना।"
+    },
+    {
+      num: "03",
+      titleEn: "Promote Entrepreneurship",
+      titleHi: "उद्यमिता का विकास",
+      descEn: "Build entrepreneurial knowledge, skills, and capabilities among students and young people through structured education, training, mentoring, and practical exposure.",
+      descHi: "संरचित शिक्षा, प्रशिक्षण, मेंटरिंग और व्यावहारिक अनुभव के माध्यम से छात्रों और युवाओं में उद्यमशीलता ज्ञान, कौशल और क्षमताओं का निर्माण करना।"
+    },
+    {
+      num: "04",
+      titleEn: "Support Startups & Emerging Entrepreneurs",
+      titleHi: "स्टार्टअप्स और उभरते उद्यमियों को सहायता",
+      descEn: "Facilitate access to mentorship, incubation linkages, industry networks, investors, and other appropriate ecosystem resources for promising ventures.",
+      descHi: "आशाजनक उद्यमों के लिए मेंटरशिप, इनक्यूबेशन लिंकेज, उद्योग नेटवर्क, निवेशकों और अन्य प्रासंगिक पारिस्थितिकी तंत्र संसाधनों तक पहुंच की सुविधा प्रदान करना।"
+    },
+    {
+      num: "05",
+      titleEn: "Bridge Ideas with Implementation",
+      titleHi: "विचारों को क्रियान्वयन से जोड़ना",
+      descEn: "Help transform innovative ideas into practical solutions by providing access to guidance, technical support, collaboration, and prototyping resources.",
+      descHi: "मार्गदर्शन, तकनीकी सहायता, सहयोग और प्रोटोटाइपिंग संसाधनों तक पहुंच प्रदान करके नवोन्मेषी विचारों को व्यावहारिक समाधानों में बदलने में मदद करना।"
+    },
+    {
+      num: "06",
+      titleEn: "Encourage Grassroots & Inclusive Innovation",
+      titleHi: "जमीनी और समावेशी नवाचार को प्रोत्साहन",
+      descEn: "Promote participation in innovation and entrepreneurship opportunities among students and youth from diverse social, economic, rural, and semi-urban backgrounds.",
+      descHi: "विविध सामाजिक, आर्थिक, ग्रामीण और अर्ध-शहरी पृष्ठभूमि के छात्रों और युवाओं में नवाचार और उद्यमिता के अवसरों में भागीदारी को बढ़ावा देना।"
+    },
+    {
+      num: "07",
+      titleEn: "Strengthen Educational Institutions",
+      titleHi: "शैक्षणिक संस्थानों का सुदृढ़ीकरण",
+      descEn: "Support colleges, universities, and technical institutions in establishing and strengthening campus incubation centres, innovation laboratories, and EDCs.",
+      descHi: "कॉलेजों, विश्वविद्यालयों और तकनीकी संस्थानों में परिसर इनक्यूबेशन केंद्रों, नवाचार प्रयोगशालाओं और उद्यमिता विकास प्रकोष्ठों (EDCs) की स्थापना में सहायता करना।"
+    },
+    {
+      num: "08",
+      titleEn: "Facilitate Mentorship & Ecosystem Linkages",
+      titleHi: "मेंटरशिप और इकोसिस्टम लिंकेज",
+      descEn: "Connect students, innovators, and startups with verified industry experts, technical mentors, startup accelerators, and venture investors.",
+      descHi: "छात्रों, नवप्रवर्तकों और स्टार्टअप्स को सत्यापित उद्योग विशेषज्ञों, तकनीकी सलाहकारों, स्टार्टअप त्वरकों और उद्यम निवेशकों से जोड़ना।"
+    },
+    {
+      num: "09",
+      titleEn: "Develop Innovation Infrastructure",
+      titleHi: "नवाचार अवसंरचना का विकास",
+      descEn: "Encourage the establishment and upgrading of rapid prototyping labs, makerspaces, 3D printing testbenches, and collegiate enterprise incubators.",
+      descHi: "रैपिड प्रोटोटाइपिंग लैब, मेकर्सपेस, 3डी प्रिंटिंग टेस्टबेंच और कॉलेजिएट एंटरप्राइज इनक्यूबेटरों की स्थापना और उन्नयन को प्रोत्साहित करना।"
+    },
+    {
+      num: "10",
+      titleEn: "Connect Education, Industry & Startups",
+      titleHi: "शिक्षा, उद्योग और स्टार्टअप का एकीकरण",
+      descEn: "Promote an integrated national ecosystem connecting: Education → Innovation → Entrepreneurship → Startups → Industry → Investment → Impact.",
+      descHi: "शिक्षा → कौशल → नवाचार → उद्यमिता → स्टार्टअप → निवेश → प्रभाव को जोड़ने वाले एक एकीकृत राष्ट्रीय पारिस्थितिकी तंत्र को बढ़ावा देना।"
+    }
   ];
 
   const DOWNLOADS = [
@@ -99,11 +165,11 @@ export default function AboutPage() {
               {[
                 { en: "Innovation", hi: "नवाचार" },
                 { en: "Entrepreneurship", hi: "उद्यमिता" },
+                { en: "Startups", hi: "स्टार्टअप्स" },
+                { en: "Youth", hi: "युवा" },
+                { en: "Skills", hi: "कौशल" },
                 { en: "Leadership", hi: "नेतृत्व" },
-                { en: "Skill Development", hi: "कौशल विकास" },
-                { en: "Startup Development", hi: "स्टार्टअप विकास" },
-                { en: "Youth Empowerment", hi: "युवा सशक्तिकरण" },
-                { en: "Institutional Collaboration", hi: "संस्थागत सहयोग" }
+                { en: "Institutional Development", hi: "संस्थागत विकास" }
               ].map((item, idx) => (
                 <span
                   key={idx}
@@ -112,6 +178,34 @@ export default function AboutPage() {
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-2 shrink-0" />
                   {language === "hi" ? item.hi : item.en}
                 </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Who We Serve Stakeholder Matrix from Page 24 of DPR */}
+          <div className="border border-zinc-200 p-4 sm:p-5 rounded-xs space-y-3 mt-4 bg-zinc-50/50 select-none">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-900 font-mono flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#0D6B4F]" />
+                {language === "hi" ? "हम किन्हें सेवा प्रदान करते हैं (Who We Serve)" : "Who We Serve"}
+              </h3>
+              <span className="text-[10px] text-zinc-400 font-mono">NCIE DPR SPECIFICATION</span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 text-xs text-zinc-700">
+              {[
+                { en: "Students", hi: "छात्र" },
+                { en: "Young Innovators", hi: "युवा नवप्रवर्तक" },
+                { en: "Young Entrepreneurs", hi: "युवा उद्यमी" },
+                { en: "Startup Founders", hi: "स्टार्टअप संस्थापक" },
+                { en: "Colleges & Universities", hi: "कॉलेज एवं विश्वविद्यालय" },
+                { en: "Technical Institutions", hi: "तकनीकी संस्थान" },
+                { en: "NGOs & Organisations", hi: "एनजीओ एवं सामाजिक संगठन" },
+                { en: "Industry Stakeholders", hi: "उद्योग हितधारक" }
+              ].map((stakeholder, idx) => (
+                <div key={idx} className="flex items-center gap-2 bg-white border border-zinc-200/80 px-2.5 py-1.5 rounded-xs text-[11px] font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#0D6B4F] shrink-0" />
+                  <span>{language === "hi" ? stakeholder.hi : stakeholder.en}</span>
+                </div>
               ))}
             </div>
           </div>
@@ -152,17 +246,12 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* 2. Constitutional Mandate & Statutory Framework */}
+      {/* 2. Institutional Charter, Background & Policy Alignment */}
       <div className="bg-white border border-zinc-200 p-6 sm:p-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 pb-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 bg-emerald-50 text-[#0D6B4F] border border-emerald-200 text-[10px] font-bold uppercase tracking-wider rounded-xs font-mono">
-                {t("home_const_badge") || "Constitutional Mandate & Statutory Framework"}
-              </span>
-            </div>
-            <h2 className="text-base sm:text-lg font-bold uppercase tracking-wider text-zinc-900 border-l-4 border-[#0D6B4F] pl-3 py-0.5 mt-2">
-              {language === "hi" ? "2. संवैधानिक जनादेश एवं वैधानिक आधार" : "2. Constitutional Mandate & Statutory Foundation"}
+            <h2 className="text-base sm:text-lg font-bold uppercase tracking-wider text-zinc-900 border-l-4 border-[#0D6B4F] pl-3 py-0.5">
+              {language === "hi" ? "2. संस्थागत अधिदेश एवं राष्ट्रीय संरेखण" : "2. Institutional Mandate & National Alignment"}
             </h2>
           </div>
           <img
@@ -172,42 +261,73 @@ export default function AboutPage() {
           />
         </div>
 
-        {/* Dual Statutory Establishment Statements */}
+        {/* Dual Institutional Alignment Statements */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Pillar 1: Constitution of India */}
+          {/* Pillar 1: Non-Governmental, Not-for-Profit Apex Platform */}
           <div className="bg-gradient-to-br from-emerald-950 via-zinc-900 to-zinc-950 text-white p-5 rounded-xs border border-emerald-800/40 relative overflow-hidden flex flex-col justify-between shadow-sm">
             <div className="flex items-center justify-between gap-3 mb-3">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300">
                   <Landmark className="w-4 h-4" />
                 </div>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-300 font-bold">
-                  {language === "hi" ? "संवैधानिक प्रावधान" : "Constitutional Provision"}
+                <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-300 font-bold">
+                  {language === "hi" ? "गैर-सरकारी, गैर-लाभकारी मंच" : "Non-Governmental, Not-for-Profit"}
                 </span>
               </div>
-              <img src="/gov-emblem.png" alt="Emblem" className="h-6 w-auto opacity-70 brightness-0 invert" />
             </div>
             <p className="text-xs sm:text-sm font-bold text-emerald-50 leading-relaxed">
-              &ldquo;{t("home_const_statutory_text_1") || "NCIE was established under the Constitution of India."}&rdquo;
+              {language === "hi"
+                ? "एनसीआईई एक गैर-सरकारी, गैर-लाभकारी संगठन है जो छात्रों, युवाओं, स्टार्टअप्स और शैक्षणिक संस्थानों में नवाचार, उद्यमिता, नेतृत्व, कौशल विकास और डिजिटल परिवर्तन को गति प्रदान करता है।"
+                : "NCIE is an independent, non-governmental, not-for-profit organisation working to promote innovation, entrepreneurship, leadership, skill development, and institutional capacity building across India."}
             </p>
           </div>
 
-          {/* Pillar 2: Act of Government of India */}
+          {/* Pillar 2: Government & National Policy Alignment */}
           <div className="bg-gradient-to-br from-amber-950 via-zinc-900 to-zinc-950 text-white p-5 rounded-xs border border-amber-800/40 relative overflow-hidden flex flex-col justify-between shadow-sm">
             <div className="flex items-center justify-between gap-3 mb-3">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-[#C9A24B]">
                   <Scale className="w-4 h-4" />
                 </div>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-[#C9A24B] font-bold">
-                  {language === "hi" ? "वैधानिक अधिकार" : "Statutory Authority"}
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[#C9A24B] font-bold">
+                  {language === "hi" ? "राष्ट्रीय नीति संरेखण" : "Government & Policy Alignment"}
                 </span>
               </div>
               <img src="/gov-of-ind.png" alt="Gov of India" className="h-6 w-auto opacity-70 brightness-0 invert" />
             </div>
             <p className="text-xs sm:text-sm font-bold text-amber-50 leading-relaxed">
-              &ldquo;{t("home_const_statutory_text_2") || "NCIE was established under an Act of the Government of India."}&rdquo;
+              {language === "hi"
+                ? "एनसीआईई विकसित भारत @2047 के राष्ट्रीय विजन और कॉर्पोरेट कार्य मंत्रालय (MCA), इलेक्ट्रॉनिक्स एवं आईटी (MeitY), सूक्ष्म, लघु एवं मध्यम उद्यम (MSME) तथा कौशल विकास (MSDE) की राष्ट्रीय प्राथमिकताओं के साथ समन्वय में कार्य करता है।"
+                : "NCIE works in alignment with the national vision of Viksit Bharat @2047 and national priorities associated with the Ministry of Corporate Affairs (MCA), MeitY, MSME, and MSDE."}
             </p>
+          </div>
+        </div>
+
+        {/* 4-Ministry Alignment Directory Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
+          <div className="border border-zinc-200 p-3.5 bg-zinc-50/60 rounded-xs">
+            <div className="text-[11px] font-bold text-zinc-900 uppercase">Ministry of Corporate Affairs (MCA)</div>
+            <div className="text-[11px] text-zinc-500 mt-1 leading-relaxed">
+              Corporate &amp; institutional ecosystem development and responsible governance practices.
+            </div>
+          </div>
+          <div className="border border-zinc-200 p-3.5 bg-zinc-50/60 rounded-xs">
+            <div className="text-[11px] font-bold text-zinc-900 uppercase">Ministry of Electronics &amp; IT (MeitY)</div>
+            <div className="text-[11px] text-zinc-500 mt-1 leading-relaxed">
+              Digital skills, Artificial Intelligence, and technology-driven student innovation.
+            </div>
+          </div>
+          <div className="border border-zinc-200 p-3.5 bg-zinc-50/60 rounded-xs">
+            <div className="text-[11px] font-bold text-zinc-900 uppercase">Ministry of MSME</div>
+            <div className="text-[11px] text-zinc-500 mt-1 leading-relaxed">
+              Enterprise creation, incubation linkages, and youth-led startup development.
+            </div>
+          </div>
+          <div className="border border-zinc-200 p-3.5 bg-zinc-50/60 rounded-xs">
+            <div className="text-[11px] font-bold text-zinc-900 uppercase">Ministry of Skill Development (MSDE)</div>
+            <div className="text-[11px] text-zinc-500 mt-1 leading-relaxed">
+              Entrepreneurship education, hands-on internships, and career readiness.
+            </div>
           </div>
         </div>
 
@@ -227,7 +347,7 @@ export default function AboutPage() {
                 {t("home_const_art_51a_quote") || `"It shall be the duty of every citizen of India to develop the scientific temper, humanism and the spirit of inquiry and reform."`}
               </blockquote>
               <p className="text-xs text-zinc-650 leading-relaxed text-justify">
-                {t("home_const_art_51a_desc") || "This constitutional provision encourages scientific thinking, innovation, research, creativity, and the spirit of inquiry, which form the foundation of entrepreneurship and innovation."}
+                {t("home_const_art_51a_desc") || "Inspired by this national duty, NCIE fosters scientific thinking, problem-solving, research, creativity, and the spirit of inquiry across higher educational institutions."}
               </p>
             </div>
 
@@ -239,72 +359,71 @@ export default function AboutPage() {
               />
               <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent p-2.5 text-white">
                 <p className="text-[10px] font-bold leading-tight">Scientific Temper &amp; Innovation</p>
-                <p className="text-[8.5px] text-emerald-200">Article 51A(h) Constitutional Duty</p>
+                <p className="text-[8.5px] text-emerald-200">Article 51A(h) National Guiding Principle</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* 3-Column Directive Principles (Articles 38, 39, 41) */}
+        {/* 8-Phase Core Approach Stepper (Page 6 & 25 of DPR) */}
         <div className="space-y-3 pt-2">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500">
-            {language === "hi" ? "राज्य के नीति निदेशक सिद्धांत (DPSP)" : "Directive Principles of State Policy (DPSPs)"}
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Article 38 */}
-            <div className="bg-zinc-50 border border-zinc-200 p-4.5 rounded-xs flex flex-col justify-between hover:border-emerald-500/50 hover:shadow-xs transition-all">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-[10px] font-bold font-mono px-2 py-0.5 bg-emerald-100 text-emerald-900 border border-emerald-200 rounded-xs">
-                    {t("home_const_art_38_num") || "Article 38"}
-                  </span>
-                  <Scale className="w-4 h-4 text-emerald-700" />
-                </div>
-                <h4 className="text-xs font-bold text-zinc-900 leading-snug">
-                  {t("home_const_art_38_title") || "Social & Economic Justice"}
-                </h4>
-                <p className="text-xs text-zinc-600 leading-relaxed text-justify">
-                  {t("home_const_art_38_desc") || "Promotes the welfare of the people by securing a social order based on justice—social, economic, and political—and supports inclusive national development."}
-                </p>
-              </div>
-            </div>
-
-            {/* Article 39 */}
-            <div className="bg-zinc-50 border border-zinc-200 p-4.5 rounded-xs flex flex-col justify-between hover:border-emerald-500/50 hover:shadow-xs transition-all">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-[10px] font-bold font-mono px-2 py-0.5 bg-amber-100 text-amber-900 border border-amber-200 rounded-xs">
-                    {t("home_const_art_39_num") || "Article 39"}
-                  </span>
-                  <Briefcase className="w-4 h-4 text-[#8B6E30]" />
-                </div>
-                <h4 className="text-xs font-bold text-zinc-900 leading-snug">
-                  {t("home_const_art_39_title") || "Equitable Livelihoods & Resources"}
-                </h4>
-                <p className="text-xs text-zinc-600 leading-relaxed text-justify">
-                  {t("home_const_art_39_desc") || "Encourages policies that secure adequate livelihoods, equitable distribution of resources, and the common good, supporting entrepreneurship, economic development, and employment generation."}
-                </p>
-              </div>
-            </div>
-
-            {/* Article 41 */}
-            <div className="bg-zinc-50 border border-zinc-200 p-4.5 rounded-xs flex flex-col justify-between hover:border-emerald-500/50 hover:shadow-xs transition-all">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-[10px] font-bold font-mono px-2 py-0.5 bg-blue-100 text-blue-900 border border-blue-200 rounded-xs">
-                    {t("home_const_art_41_num") || "Article 41"}
-                  </span>
-                  <GraduationCap className="w-4 h-4 text-blue-700" />
-                </div>
-                <h4 className="text-xs font-bold text-zinc-900 leading-snug">
-                  {t("home_const_art_41_title") || "Right to Work & Education"}
-                </h4>
-                <p className="text-xs text-zinc-600 leading-relaxed text-justify">
-                  {t("home_const_art_41_desc") || "Encourages the State to make effective provisions for securing the right to work, education, and public assistance, thereby supporting skill development, employability, and human resource development."}
-                </p>
-              </div>
-            </div>
+          <div className="flex items-center justify-between">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-800">
+              {language === "hi" ? "कार्यप्रणाली: विचार से प्रभाव तक" : "Core Operational Approach: Idea to Sustainable Impact"}
+            </h3>
+            <span className="text-[10px] font-mono text-[#0D6B4F] font-bold">8-PHASE LIFECYCLE</span>
           </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 text-center text-xs">
+            {[
+              { step: "01", name: "Identify", desc: "Talent Scouting" },
+              { step: "02", name: "Inspire", desc: "Awareness Drives" },
+              { step: "03", name: "Innovate", desc: "Design & PoC" },
+              { step: "04", name: "Mentor", desc: "Expert Advisory" },
+              { step: "05", name: "Validate", desc: "Market Testing" },
+              { step: "06", name: "Incubate", desc: "Lab & Co-working" },
+              { step: "07", name: "Connect", desc: "Investor Linkages" },
+              { step: "08", name: "Scale", desc: "Enterprise Growth" },
+            ].map((p, idx) => (
+              <div key={idx} className="bg-zinc-50 border border-zinc-200 p-2.5 rounded-xs hover:border-[#0D6B4F] transition-colors">
+                <div className="font-mono text-[10px] font-bold text-[#0D6B4F]">{p.step}</div>
+                <div className="font-bold text-zinc-900 mt-0.5">{p.name}</div>
+                <div className="text-[9px] text-zinc-500 mt-0.5">{p.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 800+ CSR Partners Network Showcase (Pages 26–27 of DPR) */}
+        <div className="bg-emerald-50/60 border border-emerald-200 p-5 rounded-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1 max-w-2xl">
+            <div className="flex items-center gap-2">
+              <Building2 className="w-4 h-4 text-[#0D6B4F]" />
+              <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-wide">
+                800+ CSR &amp; Institutional Partner Network
+              </h4>
+            </div>
+            <p className="text-xs text-zinc-650 leading-relaxed">
+              NCIE facilitates corporate CSR deployment and institutional partnerships for campus prototyping laboratories, rapid incubation centers, student startup grants, and rural innovation development across Tier-2, Tier-3, and underserved colleges.
+            </p>
+          </div>
+          <Link
+            href="/collaborations"
+            className="shrink-0 inline-flex items-center gap-1.5 bg-[#0D6B4F] hover:bg-[#074733] text-white text-xs font-bold uppercase tracking-wider px-3.5 py-2 rounded-xs transition-colors shadow-2xs"
+          >
+            <span>Explore Collaborations</span>
+            <ArrowRight className="w-3 h-3" />
+          </Link>
+        </div>
+
+        {/* Formal Statutory Transparency & Verification Notice (Pages 18 & 29 of DPR) */}
+        <div className="bg-zinc-50 border border-zinc-200 p-4.5 rounded-xs space-y-2 text-xs text-zinc-650">
+          <div className="flex items-center gap-2 text-zinc-900 font-bold uppercase tracking-wide text-[11px]">
+            <ShieldCheck className="w-4 h-4 text-[#0D6B4F]" />
+            <span>Transparency &amp; Governance Statement</span>
+          </div>
+          <p className="leading-relaxed text-justify">
+            Policy alignment with a Government of India ministry or national development initiative reflects thematic synergy and does not constitute a formal government partnership, approval, endorsement, or affiliation unless supported by an executed MoU, sanction order, gazette notification, or competent-authority record. NCIE maintains a strict institutional distinction between established facts, formal agreements, proposed initiatives, funding targets, and long-term vision.
+          </p>
         </div>
       </div>
 
@@ -331,11 +450,18 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* 3. Key Objectives List Table */}
+      {/* 4. Complete 10 Official Key Objectives (Pages 30–31 of DPR) */}
       <div className="bg-white border border-zinc-200 p-6 sm:p-8 space-y-4">
-        <h2 className="text-base font-bold uppercase tracking-wider text-zinc-900 border-l-4 border-primary pl-3 py-0.5">
-          {t("about_objectives_title")}
-        </h2>
+        <div className="border-l-4 border-primary pl-3 py-0.5">
+          <h2 className="text-base font-bold uppercase tracking-wider text-zinc-900">
+            {language === "hi" ? "एनसीआईई के 10 मुख्य संस्थागत उद्देश्य" : "10 Key Institutional Objectives"}
+          </h2>
+          <p className="text-xs text-zinc-500 mt-1">
+            {language === "hi"
+              ? "एनसीआईई डीपीआर विनिर्देशन के अनुसार राष्ट्रीय नवाचार, उद्यमशीलता एवं युवा नेतृत्व का आधिकारिक ढांचा"
+              : "Official Mandate for National Innovation, Entrepreneurship & Youth Leadership as specified in the NCIE DPR"}
+          </p>
+        </div>
         
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse border border-zinc-200">
@@ -344,19 +470,25 @@ export default function AboutPage() {
                 <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-16 text-center">
                   {language === "hi" ? "क्र.सं." : "S.No."}
                 </th>
+                <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700 border-r border-zinc-200 w-64 sm:w-80">
+                  {language === "hi" ? "मुख्य उद्देश्य" : "Key Objective"}
+                </th>
                 <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-700">
-                  {language === "hi" ? "मुख्य उद्देश्य / विवरण" : "Key Objective / Description"}
+                  {language === "hi" ? "विस्तृत विवरण एवं अधिदेश" : "Detailed Mandate & Description"}
                 </th>
               </tr>
             </thead>
-            <tbody>
-              {OBJECTIVES.map((obj, idx) => (
-                <tr key={idx} className="border-b border-zinc-200 last:border-b-0 hover:bg-zinc-50/50 odd:bg-white even:bg-zinc-50/20">
-                  <td className="px-4 py-3.5 text-xs sm:text-sm text-zinc-600 font-mono border-r border-zinc-200 text-center font-bold">
-                    0{idx + 1}
+            <tbody className="divide-y divide-zinc-200">
+              {OFFICIAL_OBJECTIVES.map((obj, idx) => (
+                <tr key={idx} className="hover:bg-zinc-50/60 odd:bg-white even:bg-zinc-50/20 text-xs sm:text-sm">
+                  <td className="px-4 py-3.5 text-zinc-600 font-mono border-r border-zinc-200 text-center font-bold">
+                    {obj.num}
                   </td>
-                  <td className="px-4 py-3.5 text-xs sm:text-sm text-zinc-650 leading-relaxed">
-                    {obj}
+                  <td className="px-4 py-3.5 font-bold text-zinc-900 border-r border-zinc-200">
+                    {language === "hi" ? obj.titleHi : obj.titleEn}
+                  </td>
+                  <td className="px-4 py-3.5 text-zinc-650 leading-relaxed text-justify">
+                    {language === "hi" ? obj.descHi : obj.descEn}
                   </td>
                 </tr>
               ))}
@@ -773,34 +905,39 @@ export default function AboutPage() {
       </div>
 
       {/* ── Main Layout Body ── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-10">
+        
+        {/* ── FULL WIDTH Dynamic Tab Content Panel (End to End) ── */}
+        <div className="w-full">
+          {activeTab === "about" && renderAboutContent()}
+          {activeTab === "team" && renderTeamContent()}
+          {activeTab === "orgs" && renderOrgsContent()}
+          {activeTab === "performance" && renderPerformanceContent()}
+          {activeTab === "directory" && renderDirectoryContent()}
+        </div>
+
+        {/* ── FULL WIDTH Bottom Section: Official Downloads & Secretariat Support (End to End) ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-4 border-t border-zinc-200">
           
-          {/* ── LEFT COLUMN: Dynamic Tab Content Panel (65% width) ── */}
-          <div className="lg:col-span-8">
-            {activeTab === "about" && renderAboutContent()}
-            {activeTab === "team" && renderTeamContent()}
-            {activeTab === "orgs" && renderOrgsContent()}
-            {activeTab === "performance" && renderPerformanceContent()}
-            {activeTab === "directory" && renderDirectoryContent()}
-          </div>
-
-          {/* ── RIGHT COLUMN: Downloads & Helplines (35% width) ── */}
-          <div className="lg:col-span-4 space-y-6">
-
-            {/* 1. Official Downloads Center */}
-            <div className="bg-white border border-zinc-200">
-              <div className="bg-[#0D6B4F] text-white px-4 py-3 border-b border-[#0d6b4f]/30">
+          {/* 1. Official Downloads Center (8 cols) */}
+          <div className="lg:col-span-8 bg-white border border-zinc-200 shadow-xs">
+            <div className="bg-[#0D6B4F] text-white px-5 py-3.5 border-b border-[#0d6b4f]/30 flex items-center justify-between">
+              <div>
                 <h3 className="text-xs font-bold uppercase tracking-wider">
                   {t("about_downloads_title")}
                 </h3>
-                <p className="text-[9px] text-emerald-100/80 font-medium">
+                <p className="text-[10px] text-emerald-100/80 font-medium">
                   {t("about_downloads_sub")}
                 </p>
               </div>
+              <span className="text-[10px] font-mono bg-white/10 px-2.5 py-1 rounded-xs uppercase tracking-wider text-emerald-100 hidden sm:inline-block">
+                Official Repository
+              </span>
+            </div>
 
+            <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-zinc-200">
               <div className="divide-y divide-zinc-200">
-                {DOWNLOADS.map((doc, idx) => (
+                {DOWNLOADS.slice(0, 3).map((doc, idx) => (
                   <a 
                     key={idx}
                     href={getStorageUrl(doc.url)}
@@ -809,7 +946,7 @@ export default function AboutPage() {
                     className="flex items-center justify-between p-3.5 hover:bg-zinc-50 transition-colors group cursor-pointer"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <FileText className="w-4 h-4 text-zinc-400 shrink-0" />
+                      <FileText className="w-4 h-4 text-zinc-400 shrink-0 group-hover:text-primary" />
                       <div className="min-w-0">
                         <h4 className="text-xs font-semibold text-zinc-800 truncate leading-tight group-hover:text-primary transition-colors">
                           {doc.title}
@@ -819,7 +956,34 @@ export default function AboutPage() {
                         </span>
                       </div>
                     </div>
-                    <span className="text-[10px] text-zinc-500 font-mono flex items-center gap-1.5">
+                    <span className="text-[10px] text-zinc-500 font-mono flex items-center gap-1.5 shrink-0 ml-2">
+                      <span>{doc.size}</span>
+                      <Download className="w-3.5 h-3.5 text-zinc-400 group-hover:text-primary" />
+                    </span>
+                  </a>
+                ))}
+              </div>
+              <div className="divide-y divide-zinc-200">
+                {DOWNLOADS.slice(3).map((doc, idx) => (
+                  <a 
+                    key={idx}
+                    href={getStorageUrl(doc.url)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-3.5 hover:bg-zinc-50 transition-colors group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <FileText className="w-4 h-4 text-zinc-400 shrink-0 group-hover:text-primary" />
+                      <div className="min-w-0">
+                        <h4 className="text-xs font-semibold text-zinc-800 truncate leading-tight group-hover:text-primary transition-colors">
+                          {doc.title}
+                        </h4>
+                        <span className="text-[9px] text-zinc-400 font-medium font-mono uppercase">
+                          {doc.type}
+                        </span>
+                      </div>
+                    </div>
+                    <span className="text-[10px] text-zinc-500 font-mono flex items-center gap-1.5 shrink-0 ml-2">
                       <span>{doc.size}</span>
                       <Download className="w-3.5 h-3.5 text-zinc-400 group-hover:text-primary" />
                     </span>
@@ -827,10 +991,12 @@ export default function AboutPage() {
                 ))}
               </div>
             </div>
+          </div>
 
-            {/* 2. Official Secretariat Helpline Contacts */}
-            <div className="bg-white border border-zinc-200">
-              <div className="bg-zinc-100 text-zinc-850 px-4 py-3 border-b border-zinc-200">
+          {/* 2. Official Secretariat Helpline Contacts (4 cols) */}
+          <div className="lg:col-span-4 bg-white border border-zinc-200 shadow-xs flex flex-col justify-between">
+            <div>
+              <div className="bg-zinc-100 text-zinc-850 px-5 py-3.5 border-b border-zinc-200">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-800">
                   Technical Secretariat Support
                 </h3>
@@ -838,7 +1004,7 @@ export default function AboutPage() {
               
               <div className="p-5 space-y-4 text-xs">
                 <div className="flex items-start gap-3">
-                  <Mail className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
+                  <Mail className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                   <div className="space-y-0.5">
                     <p className="font-semibold text-zinc-800">Support Email</p>
                     <a href={`mailto:${t("helpline_email")}`} className="text-primary hover:underline font-mono font-semibold">
@@ -853,6 +1019,12 @@ export default function AboutPage() {
               </div>
             </div>
 
+            <div className="bg-zinc-50 p-4 border-t border-zinc-200 text-center">
+              <Link href="/contact" className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline uppercase tracking-wider">
+                <span>Contact Central Registry</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
 
         </div>
