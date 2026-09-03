@@ -11,6 +11,10 @@ import {
   Mail,
   Clock,
   Building,
+  Eye,
+  ShieldCheck,
+  Award,
+  BookOpen,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -30,100 +34,178 @@ const DotGridIcon = () => (
 
 const DOCUMENTS_LIST = [
   {
-    docNo: "NCIE/DPR/2025/01",
     title: "NCIE Detailed Project Report (DPR) 2025–2047",
     category: "DPR & Vision",
     size: "1.2 MB PDF",
     date: "January 2025",
-    desc: "Master organizational overview, major initiatives, macro financial allocations, and 2047 outcome projections.",
-    tag: "Master Blueprint",
+    desc: "Master organizational overview, major national initiatives, macro financial allocations, and 2047 institutional outcome projections.",
     url: "/NCIE_DPR.pdf",
   },
   {
-    docNo: "NCIE/VIS/2024/02",
-    title: "NCIE Vision 2047 Strategy Blueprint",
+    title: "NCIE Institutional Profile & Statutory Positioning Charter",
     category: "DPR & Vision",
-    size: "7.8 MB PDF",
-    date: "December 2024",
-    desc: "Strategic framework aligning collegiate innovation with Viksit Bharat @2047 national development goals.",
-    tag: "Vision Charter",
-    url: "/NCIE_Vision_Document_2047.pdf",
+    size: "248 KB PDF (12 Pages)",
+    date: "2026 Edition",
+    desc: "Foundational charter defining NCIE's institutional mandate, core intervention areas, flagship initiatives, multi-mode delivery mechanisms, beneficiary classification, and formal institutional disclaimers.",
+    url: "/documents/NCIE_Institutional_Profile.pdf",
   },
   {
-    docNo: "NCIE/SYL/2025/IEDP",
+    title: "NCIE Governance Architecture & Organisational Structure",
+    category: "Institutional",
+    size: "149 KB PDF (15 Pages)",
+    date: "2026 Edition",
+    desc: "Comprehensive 10-tier institutional hierarchy, functional divisions (Admin/HR, Finance, Programmes, Tech, M&E, Compliance), advisory council terms, regional coordinators, and formal decision-making workflows.",
+    url: "/documents/NCIE_Governance_Organisational_Structure.pdf",
+  },
+  {
+    title: "NCIE Vision 2047: Building an Innovation-Driven & Future-Ready India",
+    category: "DPR & Vision",
+    size: "251 KB PDF (12 Pages)",
+    date: "2026 Edition",
+    desc: "Long-term institutional vision comprising 8 strategic pillars, student-to-enterprise progression pipeline, and 4-phase national rollout roadmap (Foundation 2026–30 to National Impact 2040–47).",
+    url: "/documents/NCIE_Vision_2047.pdf",
+  },
+  {
+    title: "NCIE Viksit Bharat @2047 National Alignment Framework",
+    category: "DPR & Vision",
+    size: "258 KB PDF (17 Pages)",
+    date: "2026 Edition",
+    desc: "Operational framework linking collegiate youth skilling, experiential innovation, AI literacy, and enterprise incubation directly with the national development aspiration of Viksit Bharat @2047.",
+    url: "/documents/NCIE_Viksit_Bharat_2047_Alignment_Framework.pdf",
+  },
+  {
+    title: "NCIE Government & National Policy Alignment Matrix",
+    category: "Policies",
+    size: "254 KB PDF (15 Pages)",
+    date: "2026 Edition",
+    desc: "Structured thematic mapping across 15 national missions and priorities: NEP 2020, Startup India, Skill India, Digital India, Make in India, Atmanirbhar Bharat, and UN SDGs (4, 5, 8, 9, 10, 11, 17).",
+    url: "/documents/NCIE_Government_Policy_Alignment_Matrix.pdf",
+  },
+  {
+    title: "NCIE Comprehensive Programme Framework & Delivery Architecture",
+    category: "Programmes",
+    size: "258 KB PDF (18 Pages)",
+    date: "2026 Edition",
+    desc: "Standardized programme lifecycle across 6 interconnected streams (Youth, Innovation, Startups, Digital, Institutional, Ecosystem), multi-format delivery, institutional onboarding SOPs, and quality assurance.",
+    url: "/documents/NCIE_Programme_Framework.pdf",
+  },
+  {
+    title: "Flagship Innovation Leadership & Dr. A.P.J. Abdul Kalam Startup Validation Guidelines",
+    category: "Programmes",
+    size: "252 KB PDF (15 Pages)",
+    date: "2026 Edition",
+    desc: "Detailed operational guidelines for course-integrated tracks (₹700 one-time fee), 8-stage startup validation lifecycle, ₹5 Lakh indicative seed support, and ₹25 Crore potential investor connectivity pipeline.",
+    url: "/documents/NCIE_Flagship_Innovation_and_Startup_Programmes.pdf",
+  },
+  {
+    title: "NCIE Institutional Innovation & Startup Policy",
+    category: "Policies",
+    size: "276 KB PDF (25 Pages)",
+    date: "2026 Edition",
+    desc: "Authoritative policy governing student venture creation, intellectual property protection (participants retain 100% IP ownership), responsible AI ethics, confidentiality covenants, and campus innovation scorecards.",
+    url: "/documents/NCIE_Innovation_Startup_Policy.pdf",
+  },
+  {
+    title: "NCIE Institutional Collaboration & Strategic Partnership Framework",
+    category: "Institutional",
+    size: "275 KB PDF (25 Pages)",
+    date: "2026 Edition",
+    desc: "Formal framework governing 12 partnership categories across universities, industry, accelerators, CSR trusts, and public agencies; includes 7 collaboration models, due diligence protocols, and MoU guidelines.",
+    url: "/documents/NCIE_Collaboration_Partnership_Framework.pdf",
+  },
+  {
+    title: "NCIE Corporate Social Responsibility (CSR) Partnership Framework",
+    category: "Institutional",
+    size: "268 KB PDF (22 Pages)",
+    date: "2026 Edition",
+    desc: "Companies Act Section 135-compliant CSR engagement guidelines for collegiate skilling, incubation lab setup (₹5L–₹25L), startup grants, project budgeting, audit verification, and independent impact audits.",
+    url: "/documents/NCIE_CSR_Partnership_Framework.pdf",
+  },
+  {
+    title: "NCIE Funding & Resource Mobilisation Framework",
+    category: "Institutional",
+    size: "272 KB PDF (25 Pages)",
+    date: "2026 Edition",
+    desc: "7-stage rigorous funding status classification (Pipeline to Utilised), campus project facilitation SOPs (₹5L–₹25L), internal financial controls, procurement rules, and Resource Mobilisation MIS tracking.",
+    url: "/documents/NCIE_Funding_Resource_Mobilisation_Framework.pdf",
+  },
+  {
+    title: "NCIE Monitoring & Evaluation (M&E) Results Architecture",
+    category: "Policies",
+    size: "283 KB PDF (30 Pages)",
+    date: "2026 Edition",
+    desc: "5-level monitoring framework (Participant to Impact), KPIs for skills and startup outcomes, digital MIS dashboards, pre/post learning gain assessment, and root-cause corrective action mechanisms.",
+    url: "/documents/NCIE_Monitoring_Evaluation_Framework.pdf",
+  },
+  {
+    title: "NCIE Institutional Transparency, Public Disclosure & Representation Policy",
+    category: "Policies",
+    size: "277 KB PDF (26 Pages)",
+    date: "2026 Edition",
+    desc: "Statutory standards for official communications, mandatory non-governmental representation disclaimers, accurate government alignment terminology, fee transparency, privacy protection, and prohibited claims.",
+    url: "/documents/NCIE_Transparency_Public_Disclosure_Policy.pdf",
+  },
+  {
+    title: "NCIE Grievance Redressal Policy & Stakeholder Protection Mechanism",
+    category: "Policies",
+    size: "270 KB PDF (24 Pages)",
+    date: "2026 Edition",
+    desc: "Structured complaint redressal mechanism across 10 grievance categories; time-bound SLAs (2-3 days acknowledgement, 15-30 days resolution), 5-tier escalation ladder, and whistleblower non-retaliation protections.",
+    url: "/documents/NCIE_Grievance_Redressal_Policy.pdf",
+  },
+  {
     title: "Day-Wise Curriculum Syllabus & Modular Timeline",
     category: "Programmes",
     size: "150 KB PDF",
     date: "Session 2025-26",
     desc: "Detailed modular syllabus breakdown across Innovation Ecosystem, Design Thinking, Prototyping, and Startup Launch.",
-    tag: "Modular Syllabus",
     url: "/NCIE_3_COURSES.pdf",
   },
   {
-    docNo: "NCIE/GL/2025/VBLP",
-    title: "Viksit Bharat Innovation Leadership Programme Operational Guidelines",
-    category: "Programmes",
-    size: "867 KB PDF",
-    date: "Session 2025-26",
-    desc: "Comprehensive 60-day syllabus, module competency benchmarks, and certification requirements.",
-    tag: "Curriculum SOP",
-    url: "/NCIE_Viksit_Bharat_2047_Innovation_Leadership_Programmes.pdf",
-  },
-  {
-    docNo: "NCIE/SCH/2025/KALAM",
     title: "Dr. A.P.J. Abdul Kalam Startup Validation Programme & Grant Manual",
     category: "Programmes",
     size: "941 KB PDF",
     date: "January 2025",
     desc: "5-Stage milestone seed grant disbursement rules (up to ₹5,00,000) and evaluation benchmarks.",
-    tag: "Grant Rules",
     url: "/Kalam_Startup_Seed_Funding_Scheme.pdf",
   },
   {
-    docNo: "NCIE/IDF/2024/04",
     title: "Institutional Incubation & Development Fund Proposal Guide",
     category: "Institutional",
     size: "950 KB PDF",
     date: "November 2024",
     desc: "Application SOPs for universities and colleges applying for ₹20L–₹50L campus incubation grants.",
-    tag: "Institutional Kit",
     url: "/Institutional_Incubation_Development_Support_Scheme.pdf",
   },
   {
-    docNo: "NCIE/INT/2025/10",
     title: "Student Startup Grants: Rules, Regulations & Guidelines",
     category: "Programmes",
     size: "925 KB PDF",
     date: "Session 2025-26",
     desc: "Operational guidelines, eligible expenditure, and evaluation benchmarks for student startup grants.",
-    tag: "Grant Guidelines",
     url: "/NCIE_Student_Startup_Grants_Guidelines.pdf",
   },
   {
-    docNo: "NCIE/CIR/2025/01",
     title: "Innovation India Council Annual Activity Circular 2025-26",
     category: "Circulars",
     size: "3.2 MB PDF",
     date: "January 2025",
     desc: "Annual circular on collegiate chapter registrations, innovation challenges, and hackathon schedules.",
-    tag: "Official Circular",
     url: "/Innovation_India_Council.pdf",
   },
 ];
 
 export default function DocumentsClient() {
   const { language } = useLanguage();
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const categories = ["DPR & Vision", "Programmes", "Institutional", "Policies", "Circulars"];
+  const [selectedCategory, setSelectedCategory] = useState("DPR & Vision");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const categories = ["All", "DPR & Vision", "Programmes", "Institutional", "Policies", "Circulars"];
-
   const filteredDocs = DOCUMENTS_LIST.filter((doc) => {
-    const matchesCategory = selectedCategory === "All" || doc.category === selectedCategory;
+    const matchesCategory = doc.category === selectedCategory;
     const matchesSearch =
       doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doc.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doc.docNo.toLowerCase().includes(searchQuery.toLowerCase());
+      doc.desc.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -189,7 +271,7 @@ export default function DocumentsClient() {
                         <span>{cat}</span>
                       </div>
                       <span className="text-[10px] font-mono text-zinc-400 font-normal">
-                        {cat === "All" ? DOCUMENTS_LIST.length : DOCUMENTS_LIST.filter(d => d.category === cat).length}
+                        {DOCUMENTS_LIST.filter(d => d.category === cat).length}
                       </span>
                     </button>
                   );
@@ -217,9 +299,7 @@ export default function DocumentsClient() {
                   </div>
                 </div>
               </div>
-            </div>
-
-          </div>
+            </div></div>
 
           {/* ── RIGHT COLUMN (8/12) ── */}
           <div className="lg:col-span-8 space-y-6">
@@ -253,7 +333,6 @@ export default function DocumentsClient() {
                     <div key={idx} className="p-4 sm:p-5 hover:bg-zinc-50/80 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <span className="font-mono text-[10px] font-bold text-zinc-400">{doc.docNo}</span>
                           <span className="px-2 py-0.2 bg-zinc-100 text-zinc-700 font-mono text-[10px] font-bold">
                             {doc.category}
                           </span>
@@ -269,13 +348,25 @@ export default function DocumentsClient() {
                         </div>
                       </div>
 
-                      <a
-                        href={doc.url}
-                        download
-                        className="px-3.5 py-1.5 bg-white border border-zinc-300 hover:border-[#0D6B4F] hover:bg-[#0D6B4F] hover:text-white text-zinc-800 font-bold text-xs uppercase tracking-wider transition-colors inline-flex items-center gap-1.5 shrink-0 self-start sm:self-center cursor-pointer"
-                      >
-                        <Download className="w-3.5 h-3.5" /> Download
-                      </a>
+                      <div className="flex items-center gap-2 shrink-0 self-start sm:self-center">
+                        <a
+                          href={doc.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3 py-1.5 bg-zinc-50 border border-zinc-300 hover:border-[#0D6B4F] hover:bg-emerald-50 text-zinc-700 hover:text-[#0D6B4F] font-bold text-xs uppercase tracking-wider transition-colors inline-flex items-center gap-1.5 cursor-pointer"
+                          title="View PDF document in browser"
+                        >
+                          <Eye className="w-3.5 h-3.5" /> View
+                        </a>
+                        <a
+                          href={doc.url}
+                          download
+                          className="px-3 py-1.5 bg-white border border-zinc-300 hover:border-[#0D6B4F] hover:bg-[#0D6B4F] hover:text-white text-zinc-800 font-bold text-xs uppercase tracking-wider transition-colors inline-flex items-center gap-1.5 cursor-pointer"
+                          title="Download PDF file"
+                        >
+                          <Download className="w-3.5 h-3.5" /> Download
+                        </a>
+                      </div>
                     </div>
                   ))}
                 </div>
