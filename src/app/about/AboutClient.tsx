@@ -154,87 +154,23 @@ export default function AboutPage() {
           <p className="indent-8 text-justify">{t("about_intro_p1")}</p>
           <p className="indent-8 text-justify">{t("about_intro_p2")}</p>
 
-          {/* NCIE's Alignment with Government of India Ministries */}
-          <div className="bg-gradient-to-br from-white via-zinc-50 to-emerald-50/30 border border-emerald-900/20 p-5 sm:p-6 rounded-xs space-y-4 mt-5 shadow-xs">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-950/10 pb-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-emerald-100/80 border border-emerald-300 flex items-center justify-center text-[#0D6B4F] shrink-0">
-                  <Landmark className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-zinc-900 font-mono">
-                    {t("about_intro_ministries_title")}
-                  </h3>
-                  <p className="text-[11px] text-zinc-600 mt-0.5">
-                    {t("about_intro_ministries_lead")}
-                  </p>
-                </div>
-              </div>
-              <span className="self-start sm:self-auto text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 bg-emerald-800 text-white rounded-xs shrink-0">
-                GOI Alignment
-              </span>
-            </div>
-
-            {/* 4 Ministries Grid in exact order: MSDE, MSME, MeitY, MCA */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-              {[
-                {
-                  code: "MSDE",
-                  name: t("about_intro_ministry_msde"),
-                  icon: GraduationCap,
-                  color: "border-emerald-600/30 bg-emerald-50/40 text-emerald-950",
-                  desc: language === "hi" ? "कौशल विकास, व्यावहारिक इंटर्नशिप और युवा उद्यमिता संवर्धन।" : "Skill development, hands-on internships, and youth entrepreneurship advancement."
-                },
-                {
-                  code: "MSME",
-                  name: t("about_intro_ministry_msme"),
-                  icon: Building2,
-                  color: "border-amber-600/30 bg-amber-50/40 text-amber-950",
-                  desc: language === "hi" ? "जमीनी स्तर पर उद्यम निर्माण, इनक्यूबेशन और स्टार्टअप लिंकेज।" : "Grassroots enterprise creation, incubation linkages, and startup development."
-                },
-                {
-                  code: "MeitY",
-                  name: t("about_intro_ministry_meity"),
-                  icon: Cpu,
-                  color: "border-blue-600/30 bg-blue-50/40 text-blue-950",
-                  desc: language === "hi" ? "डिजिटल नवाचार, आर्टिफिशियल इंटेलिजेंस और तकनीकी उद्यमिता।" : "Digital innovation, AI adoption, software challenges, and tech entrepreneurship."
-                },
-                {
-                  code: "MCA",
-                  name: t("about_intro_ministry_mca"),
-                  icon: Scale,
-                  color: "border-indigo-600/30 bg-indigo-50/40 text-indigo-950",
-                  desc: language === "hi" ? "कॉर्पोरेट सीएसआर साझेदारी, संस्थागत शासन और उद्यम औपचारिकीकरण।" : "Corporate CSR alignment, institutional governance, and enterprise formalization."
-                }
-              ].map((m, idx) => (
-                <div key={idx} className={`border p-3.5 rounded-xs flex items-start gap-3 ${m.color}`}>
-                  <div className="w-7 h-7 rounded bg-white border border-zinc-200 flex items-center justify-center shrink-0 text-zinc-800 mt-0.5 shadow-2xs">
-                    <m.icon className="w-3.5 h-3.5 text-[#0D6B4F]" />
-                  </div>
-                  <div className="space-y-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 bg-zinc-900 text-white rounded-2xs">
-                        {m.code}
-                      </span>
-                      <h4 className="text-xs font-bold text-zinc-900 leading-snug">
-                        {m.name}
-                      </h4>
-                    </div>
-                    <p className="text-[11px] text-zinc-600 leading-relaxed">
-                      {m.desc}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Closing Impact Statement */}
-            <div className="p-3.5 bg-white border border-emerald-200/80 rounded-xs flex items-start gap-3 shadow-2xs">
-              <Sparkles className="w-4 h-4 text-[#C9A24B] shrink-0 mt-0.5" />
-              <p className="text-xs text-zinc-700 leading-relaxed font-medium">
-                {t("about_intro_ministries_impact")}
-              </p>
-            </div>
+          {/* NCIE's Alignment with Government of India Ministries - Formatted as Matter */}
+          <div className="pt-2 space-y-3">
+            <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-zinc-900 font-mono">
+              {t("about_intro_ministries_title")}
+            </h3>
+            <p className="indent-8 text-justify">
+              {t("about_intro_ministries_lead")}
+            </p>
+            <ul className="list-disc list-inside pl-8 sm:pl-12 space-y-1.5 text-zinc-800 font-medium text-xs sm:text-sm">
+              <li>{t("about_intro_ministry_msde")}</li>
+              <li>{t("about_intro_ministry_msme")}</li>
+              <li>{t("about_intro_ministry_meity")}</li>
+              <li>{t("about_intro_ministry_mca")}</li>
+            </ul>
+            <p className="indent-8 text-justify">
+              {t("about_intro_ministries_impact")}
+            </p>
           </div>
 
           {/* Core Focus Badge Card */}
