@@ -209,7 +209,6 @@ export default function AboutPage() {
                 <span className="w-2 h-2 rounded-full bg-[#0D6B4F]" />
                 {language === "hi" ? "हम किन्हें सेवा प्रदान करते हैं (Who We Serve)" : "Who We Serve"}
               </h3>
-              <span className="text-[10px] text-zinc-400 font-mono">NCIE DPR SPECIFICATION</span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 text-xs text-zinc-700">
               {[
