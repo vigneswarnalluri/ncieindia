@@ -402,7 +402,7 @@ export default function StudentsClient() {
                     className="group flex items-center justify-between p-2.5 bg-zinc-50 border border-zinc-200 hover:border-[#0D6B4F] hover:bg-emerald-50/40 transition-colors"
                   >
                     <div className="pr-2">
-                      <div className="font-bold text-zinc-800 text-[11px] group-hover:text-[#0D6B4F] line-clamp-1">{doc.name}</div>
+                      <div className="font-bold text-zinc-800 text-[11px] group-hover:text-[#0D6B4F] leading-snug">{doc.name}</div>
                       <div className="text-[10px] text-zinc-400 font-mono mt-0.5">{doc.size}</div>
                     </div>
                     <Download className="w-3.5 h-3.5 text-zinc-400 group-hover:text-[#0D6B4F] shrink-0" />
@@ -450,18 +450,18 @@ export default function StudentsClient() {
               <div className="space-y-6">
                 
                 {/* Official Notification Callout Bar */}
-                <div className="bg-emerald-50/60 border border-emerald-600/30 p-4 rounded-none flex items-start justify-between gap-4">
-                  <div className="flex items-start gap-3">
-                    <span className="px-2 py-0.5 bg-[#0D6B4F] text-white font-mono text-[10px] font-bold uppercase tracking-wider shrink-0 mt-0.5">
+                <div className="bg-emerald-50/70 border border-emerald-600/30 p-4 rounded-none flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                    <span className="self-start px-2 py-0.5 bg-[#0D6B4F] text-white font-mono text-[10px] font-bold uppercase tracking-wider shrink-0">
                       NOTIFICATION
                     </span>
                     <div className="text-xs text-zinc-800 leading-relaxed">
-                      <strong>NCIE-NOTIF/2025/VBLP-01:</strong> Enrolments open for the National 60-Day Viksit Bharat Innovation Leadership Programme Cohort 2025-26 across all recognized collegiate institutions.
+                      <strong>Admissions Open (Session 2025–26):</strong> Enrolments are officially open for the National 60-Day Viksit Bharat Innovation Leadership Programme across all recognized collegiate institutions.
                     </div>
                   </div>
                   <Link
                     href="/join"
-                    className="shrink-0 px-3.5 py-1.5 bg-[#0D6B4F] hover:bg-[#094835] text-white text-[11px] font-bold uppercase tracking-wider transition-colors inline-flex items-center gap-1"
+                    className="self-start sm:self-center shrink-0 px-3.5 py-1.5 bg-[#0D6B4F] hover:bg-[#094835] text-white text-[11px] font-bold uppercase tracking-wider transition-colors inline-flex items-center gap-1 cursor-pointer"
                   >
                     Enrol Online <ChevronRight className="w-3 h-3" />
                   </Link>

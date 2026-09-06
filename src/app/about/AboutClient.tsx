@@ -13,7 +13,9 @@ import {
   Landmark,
   Briefcase,
   GraduationCap,
-  Star
+  Star,
+  Cpu,
+  Sparkles
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -151,7 +153,89 @@ export default function AboutPage() {
         <div className="space-y-4 text-xs sm:text-sm text-zinc-700 leading-relaxed font-sans">
           <p className="indent-8 text-justify">{t("about_intro_p1")}</p>
           <p className="indent-8 text-justify">{t("about_intro_p2")}</p>
-          <p className="indent-8 text-justify">{t("about_intro_p3")}</p>
+
+          {/* NCIE's Alignment with Government of India Ministries */}
+          <div className="bg-gradient-to-br from-white via-zinc-50 to-emerald-50/30 border border-emerald-900/20 p-5 sm:p-6 rounded-xs space-y-4 mt-5 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-950/10 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-emerald-100/80 border border-emerald-300 flex items-center justify-center text-[#0D6B4F] shrink-0">
+                  <Landmark className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-zinc-900 font-mono">
+                    {t("about_intro_ministries_title")}
+                  </h3>
+                  <p className="text-[11px] text-zinc-600 mt-0.5">
+                    {t("about_intro_ministries_lead")}
+                  </p>
+                </div>
+              </div>
+              <span className="self-start sm:self-auto text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 bg-emerald-800 text-white rounded-xs shrink-0">
+                GOI Alignment
+              </span>
+            </div>
+
+            {/* 4 Ministries Grid in exact order: MSDE, MSME, MeitY, MCA */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              {[
+                {
+                  code: "MSDE",
+                  name: t("about_intro_ministry_msde"),
+                  icon: GraduationCap,
+                  color: "border-emerald-600/30 bg-emerald-50/40 text-emerald-950",
+                  desc: language === "hi" ? "कौशल विकास, व्यावहारिक इंटर्नशिप और युवा उद्यमिता संवर्धन।" : "Skill development, hands-on internships, and youth entrepreneurship advancement."
+                },
+                {
+                  code: "MSME",
+                  name: t("about_intro_ministry_msme"),
+                  icon: Building2,
+                  color: "border-amber-600/30 bg-amber-50/40 text-amber-950",
+                  desc: language === "hi" ? "जमीनी स्तर पर उद्यम निर्माण, इनक्यूबेशन और स्टार्टअप लिंकेज।" : "Grassroots enterprise creation, incubation linkages, and startup development."
+                },
+                {
+                  code: "MeitY",
+                  name: t("about_intro_ministry_meity"),
+                  icon: Cpu,
+                  color: "border-blue-600/30 bg-blue-50/40 text-blue-950",
+                  desc: language === "hi" ? "डिजिटल नवाचार, आर्टिफिशियल इंटेलिजेंस और तकनीकी उद्यमिता।" : "Digital innovation, AI adoption, software challenges, and tech entrepreneurship."
+                },
+                {
+                  code: "MCA",
+                  name: t("about_intro_ministry_mca"),
+                  icon: Scale,
+                  color: "border-indigo-600/30 bg-indigo-50/40 text-indigo-950",
+                  desc: language === "hi" ? "कॉर्पोरेट सीएसआर साझेदारी, संस्थागत शासन और उद्यम औपचारिकीकरण।" : "Corporate CSR alignment, institutional governance, and enterprise formalization."
+                }
+              ].map((m, idx) => (
+                <div key={idx} className={`border p-3.5 rounded-xs flex items-start gap-3 ${m.color}`}>
+                  <div className="w-7 h-7 rounded bg-white border border-zinc-200 flex items-center justify-center shrink-0 text-zinc-800 mt-0.5 shadow-2xs">
+                    <m.icon className="w-3.5 h-3.5 text-[#0D6B4F]" />
+                  </div>
+                  <div className="space-y-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 bg-zinc-900 text-white rounded-2xs">
+                        {m.code}
+                      </span>
+                      <h4 className="text-xs font-bold text-zinc-900 leading-snug">
+                        {m.name}
+                      </h4>
+                    </div>
+                    <p className="text-[11px] text-zinc-600 leading-relaxed">
+                      {m.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Closing Impact Statement */}
+            <div className="p-3.5 bg-white border border-emerald-200/80 rounded-xs flex items-start gap-3 shadow-2xs">
+              <Sparkles className="w-4 h-4 text-[#C9A24B] shrink-0 mt-0.5" />
+              <p className="text-xs text-zinc-700 leading-relaxed font-medium">
+                {t("about_intro_ministries_impact")}
+              </p>
+            </div>
+          </div>
 
           {/* Core Focus Badge Card */}
           <div className="bg-gradient-to-r from-emerald-50/70 via-zinc-50 to-amber-50/40 border border-emerald-600/20 p-4 sm:p-5 rounded-xs space-y-3 mt-4 select-none">
@@ -277,8 +361,8 @@ export default function AboutPage() {
             </div>
             <p className="text-xs sm:text-sm font-bold text-emerald-50 leading-relaxed">
               {language === "hi"
-                ? "एनसीआईई एक गैर-सरकारी, गैर-लाभकारी संगठन है जो छात्रों, युवाओं, स्टार्टअप्स और शैक्षणिक संस्थानों में नवाचार, उद्यमिता, नेतृत्व, कौशल विकास और डिजिटल परिवर्तन को गति प्रदान करता है।"
-                : "NCIE is an independent, non-governmental, not-for-profit organisation working to promote innovation, entrepreneurship, leadership, skill development, and institutional capacity building across India."}
+                ? "एनसीआईई एक गैर-सरकारी, गैर-लाभकारी, उद्योग-नेतृत्व वाला और उद्योग-प्रबंधित संगठन है जो छात्रों, युवाओं, स्टार्टअप्स और शैक्षणिक संस्थानों में नवाचार, उद्यमिता, नेतृत्व, कौशल विकास, प्रौद्योगिकी अपनाने और युवा सशक्तिकरण को बढ़ावा देता है।"
+                : "The National Council for Innovation & Entrepreneurship (NCIE) is a non-government, not-for-profit, industry-led and industry-managed organisation committed to the promotion and advancement of innovation, entrepreneurship, leadership, skill development, technology adoption, and youth empowerment across India."}
             </p>
           </div>
 
@@ -297,24 +381,18 @@ export default function AboutPage() {
             </div>
             <p className="text-xs sm:text-sm font-bold text-amber-50 leading-relaxed">
               {language === "hi"
-                ? "एनसीआईई विकसित भारत @2047 के राष्ट्रीय विजन और कॉर्पोरेट कार्य मंत्रालय (MCA), इलेक्ट्रॉनिक्स एवं आईटी (MeitY), सूक्ष्म, लघु एवं मध्यम उद्यम (MSME) तथा कौशल विकास (MSDE) की राष्ट्रीय प्राथमिकताओं के साथ समन्वय में कार्य करता है।"
-                : "NCIE works in alignment with the national vision of Viksit Bharat @2047 and national priorities associated with the Ministry of Corporate Affairs (MCA), MeitY, MSME, and MSDE."}
+                ? "एनसीआईई कौशल विकास (MSDE), सूक्ष्म, लघु एवं मध्यम उद्यम (MSME), इलेक्ट्रॉनिक्स एवं आईटी (MeitY) तथा कॉर्पोरेट कार्य मंत्रालय (MCA) के साथ समन्वय में जमीनी स्तर पर राष्ट्रीय योजनाओं को लागू कर 2047 तक विकसित भारत के निर्माण में सक्रिय योगदान देता है।"
+                : "NCIE is affiliated with and works in alignment and coordination with MSDE, MSME, MeitY, and MCA to support the grassroots implementation of national schemes, empowering innovators and entrepreneurs towards Viksit Bharat 2047."}
             </p>
           </div>
         </div>
 
-        {/* 4-Ministry Alignment Directory Cards */}
+        {/* 4-Ministry Alignment Directory Cards in exact order: MSDE, MSME, MeitY, MCA */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
           <div className="border border-zinc-200 p-3.5 bg-zinc-50/60 rounded-xs">
-            <div className="text-[11px] font-bold text-zinc-900 uppercase">Ministry of Corporate Affairs (MCA)</div>
+            <div className="text-[11px] font-bold text-zinc-900 uppercase">Ministry of Skill Development (MSDE)</div>
             <div className="text-[11px] text-zinc-500 mt-1 leading-relaxed">
-              Corporate &amp; institutional ecosystem development and responsible governance practices.
-            </div>
-          </div>
-          <div className="border border-zinc-200 p-3.5 bg-zinc-50/60 rounded-xs">
-            <div className="text-[11px] font-bold text-zinc-900 uppercase">Ministry of Electronics &amp; IT (MeitY)</div>
-            <div className="text-[11px] text-zinc-500 mt-1 leading-relaxed">
-              Digital skills, Artificial Intelligence, and technology-driven student innovation.
+              Entrepreneurship education, hands-on internships, and career readiness.
             </div>
           </div>
           <div className="border border-zinc-200 p-3.5 bg-zinc-50/60 rounded-xs">
@@ -324,9 +402,15 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="border border-zinc-200 p-3.5 bg-zinc-50/60 rounded-xs">
-            <div className="text-[11px] font-bold text-zinc-900 uppercase">Ministry of Skill Development (MSDE)</div>
+            <div className="text-[11px] font-bold text-zinc-900 uppercase">Ministry of Electronics &amp; IT (MeitY)</div>
             <div className="text-[11px] text-zinc-500 mt-1 leading-relaxed">
-              Entrepreneurship education, hands-on internships, and career readiness.
+              Digital skills, Artificial Intelligence, and technology-driven student innovation.
+            </div>
+          </div>
+          <div className="border border-zinc-200 p-3.5 bg-zinc-50/60 rounded-xs">
+            <div className="text-[11px] font-bold text-zinc-900 uppercase">Ministry of Corporate Affairs (MCA)</div>
+            <div className="text-[11px] text-zinc-500 mt-1 leading-relaxed">
+              Corporate &amp; institutional ecosystem development and responsible governance practices.
             </div>
           </div>
         </div>

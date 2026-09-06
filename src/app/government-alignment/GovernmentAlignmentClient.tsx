@@ -35,26 +35,15 @@ const DotGridIcon = () => (
 
 const MINISTRIES = [
   {
-    name: "Ministry of Corporate Affairs (MCA)",
-    hindi: "कॉर्पोरेट कार्य मंत्रालय",
-    scope: "Corporate and institutional ecosystem development, governance, CSR partnership facilitation, and ethical business practices.",
+    name: "Ministry of Skill Development & Entrepreneurship (MSDE)",
+    hindi: "कौशल विकास और उद्यमशीलता मंत्रालय",
+    scope: "Vocational upskilling, practical learning exposure, leadership training, and youth employability.",
     alignmentPoints: [
-      "Promotion of responsible Corporate Social Responsibility (CSR) investments in collegiate innovation.",
-      "Guidance for student enterprises on statutory incorporation and formal governance.",
-      "Capacity building for institutional and organizational frameworks across states.",
+      "Delivery of the 60-Day Viksit Bharat Innovation Leadership Programme (60 Hours).",
+      "Implementation of the 10-Core sector paid internship and practical apprenticeship frameworks.",
+      "Bridging the academia-industry skill divide through mentorship and competency training.",
     ],
-    icon: Building,
-  },
-  {
-    name: "Ministry of Electronics & Information Technology (MeitY)",
-    hindi: "इलेक्ट्रॉनिक्स और सूचना प्रौद्योगिकी मंत्रालय",
-    scope: "Digital technology adoption, Artificial Intelligence, software innovation, and emerging tech entrepreneurship.",
-    alignmentPoints: [
-      "National student awareness programs in Artificial Intelligence, Cloud, and Web technologies.",
-      "Support for tech-driven student prototypes, hackathons, and software innovation challenges.",
-      "Digital skill-building for rural, semi-urban, and grassroots youth innovators.",
-    ],
-    icon: Cpu,
+    icon: GraduationCap,
   },
   {
     name: "Ministry of Micro, Small & Medium Enterprises (MSME)",
@@ -68,15 +57,26 @@ const MINISTRIES = [
     icon: Landmark,
   },
   {
-    name: "Ministry of Skill Development & Entrepreneurship (MSDE)",
-    hindi: "कौशल विकास और उद्यमशीलता मंत्रालय",
-    scope: "Vocational upskilling, practical learning exposure, leadership training, and youth employability.",
+    name: "Ministry of Electronics & Information Technology (MeitY)",
+    hindi: "इलेक्ट्रॉनिक्स और सूचना प्रौद्योगिकी मंत्रालय",
+    scope: "Digital technology adoption, Artificial Intelligence, software innovation, and emerging tech entrepreneurship.",
     alignmentPoints: [
-      "Delivery of the 60-Day Viksit Bharat Innovation Leadership Programme (60 Hours).",
-      "Implementation of the 10-Core sector paid internship and practical apprenticeship frameworks.",
-      "Bridging the academia-industry skill divide through mentorship and competency training.",
+      "National student awareness programs in Artificial Intelligence, Cloud, and Web technologies.",
+      "Support for tech-driven student prototypes, hackathons, and software innovation challenges.",
+      "Digital skill-building for rural, semi-urban, and grassroots youth innovators.",
     ],
-    icon: GraduationCap,
+    icon: Cpu,
+  },
+  {
+    name: "Ministry of Corporate Affairs (MCA)",
+    hindi: "कॉर्पोरेट कार्य मंत्रालय",
+    scope: "Corporate and institutional ecosystem development, governance, CSR partnership facilitation, and ethical business practices.",
+    alignmentPoints: [
+      "Promotion of responsible Corporate Social Responsibility (CSR) investments in collegiate innovation.",
+      "Guidance for student enterprises on statutory incorporation and formal governance.",
+      "Capacity building for institutional and organizational frameworks across states.",
+    ],
+    icon: Building,
   },
 ];
 
@@ -342,7 +342,7 @@ export default function GovernmentAlignmentClient() {
                     Mandatory Policy Alignment &amp; Verification Disclaimer
                   </div>
                   <p className="leading-relaxed">
-                    The National Council for Innovation &amp; Entrepreneurship (NCIE) is an independent, non-governmental, not-for-profit organisation working to promote innovation, entrepreneurship, youth leadership, skill development, digital transformation, and institutional capacity building.
+                    The National Council for Innovation &amp; Entrepreneurship (NCIE) is a non-government, not-for-profit, industry-led and industry-managed organisation committed to the promotion and advancement of innovation, entrepreneurship, leadership, skill development, technology adoption, and youth empowerment across India.
                   </p>
                   <p className="leading-relaxed font-semibold">
                     Policy alignment with a Government of India ministry or national initiative should not be interpreted as a formal government partnership, approval, statutory affiliation, or endorsement unless supported by a specific official document, executed MoU, sanction order, or competent-authority record.

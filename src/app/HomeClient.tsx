@@ -520,6 +520,40 @@ export default function Home() {
                 </Link>
               </div>
 
+              {/* Official Executive Introduction Card */}
+              <div className="bg-gradient-to-br from-emerald-50/70 via-white to-amber-50/30 border border-emerald-700/20 p-4 sm:p-5 rounded-xs space-y-3 shadow-2xs">
+                <div className="flex items-center justify-between gap-2 border-b border-emerald-950/10 pb-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#0D6B4F] animate-pulse" />
+                    <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#0D6B4F]">
+                      {language === "hi" ? "आधिकारिक परिचय" : "Official Introduction"}
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 bg-emerald-800 text-white rounded-2xs font-bold uppercase">
+                    Industry-Led &amp; Managed
+                  </span>
+                </div>
+                <p className="text-xs sm:text-[13px] text-zinc-700 leading-relaxed text-justify">
+                  {t("about_intro_p1")}
+                </p>
+                <div className="pt-2 border-t border-dashed border-zinc-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-mono text-zinc-600">
+                    <span className="font-bold text-zinc-800">Affiliated Ministries:</span>
+                    <span className="bg-white border border-zinc-200 px-1.5 py-0.5 rounded-2xs font-semibold text-emerald-800">MSDE</span>
+                    <span className="bg-white border border-zinc-200 px-1.5 py-0.5 rounded-2xs font-semibold text-amber-800">MSME</span>
+                    <span className="bg-white border border-zinc-200 px-1.5 py-0.5 rounded-2xs font-semibold text-blue-800">MeitY</span>
+                    <span className="bg-white border border-zinc-200 px-1.5 py-0.5 rounded-2xs font-semibold text-indigo-800">MCA</span>
+                  </div>
+                  <Link
+                    href="/about"
+                    className="text-xs font-bold text-[#0D6B4F] hover:text-[#074733] hover:underline inline-flex items-center gap-1 shrink-0"
+                  >
+                    <span>{language === "hi" ? "विस्तृत परिचय एवं संरेखण पढ़ें" : "Read Full Introduction & Alignment"}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+
               {/* Quick Directories / Access Points */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                 <div className="border border-zinc-200 p-4 bg-zinc-50/70 hover:bg-white hover:border-[#0D6B4F]/40 transition-all flex flex-col justify-between shadow-xs">

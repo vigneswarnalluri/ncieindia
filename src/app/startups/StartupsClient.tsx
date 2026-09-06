@@ -224,7 +224,7 @@ export default function StartupsClient() {
                     className="group flex items-center justify-between p-2.5 bg-zinc-50 border border-zinc-200 hover:border-[#0D6B4F] hover:bg-emerald-50/40 transition-colors"
                   >
                     <div className="pr-2">
-                      <div className="font-bold text-zinc-800 text-[11px] group-hover:text-[#0D6B4F] line-clamp-1">{doc.name}</div>
+                      <div className="font-bold text-zinc-800 text-[11px] group-hover:text-[#0D6B4F] leading-snug">{doc.name}</div>
                       <div className="text-[10px] text-zinc-400 font-mono mt-0.5">{doc.size}</div>
                     </div>
                     <Download className="w-3.5 h-3.5 text-zinc-400 group-hover:text-[#0D6B4F] shrink-0" />
