@@ -15,6 +15,7 @@ import {
   Briefcase,
   FileText,
   Award,
+  Mail,
 } from "lucide-react";
 import {
   FaYoutube,
@@ -136,97 +137,115 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 md:top-[-64px] z-50 w-full flex flex-col" onMouseLeave={handleHeaderMouseLeave}>
-        {/* Top Black Bar (Gov/Institutional style) */}
-        <div className="bg-[#111827] text-white border-b border-white/10 text-xs font-sans relative z-40 hidden md:block py-2.5">
-          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            {/* Left: Government of India & Ministry Branding + Socials */}
-            <div className="flex items-center gap-4 lg:gap-6">
-              {/* Government of India & Ministry Emblem Lockup */}
-              <div className="flex items-center gap-3">
-                <img
-                  src="/gov-emblem.png"
-                  alt="Government of India"
-                  className="h-8 w-auto object-contain shrink-0"
-                />
-                <div className="h-5 w-px bg-white/20" />
-                <div className="flex flex-col justify-center select-none">
-                  <span className="text-[11px] font-medium text-white/95 tracking-wide leading-tight">
-                    कौशल विकास और उद्यमशीलता मंत्रालय
-                  </span>
-                  <span className="text-[9px] font-bold text-white/80 uppercase tracking-wider leading-tight mt-0.5">
-                    Ministry of Skill Development &amp; Entrepreneurship
-                  </span>
-                </div>
+      <header className="sticky top-[-36px] sm:top-[-44px] z-50 w-full flex flex-col" onMouseLeave={handleHeaderMouseLeave}>
+        {/* Top Black Bar (Gov/Institutional style) - Fully Responsive for All Devices */}
+        <div className="bg-[#111827] text-white border-b border-white/10 text-xs font-sans relative z-40 py-1.5 sm:py-2">
+          <div className="max-w-[1536px] mx-auto px-2 sm:px-4 lg:px-6 xl:px-8 flex justify-between items-center gap-2 sm:gap-4">
+            {/* Left: Government of India & Ministry Branding */}
+            <div className="flex items-center gap-1.5 sm:gap-2.5 md:gap-3 min-w-0 shrink">
+              <img
+                src="/gov-emblem.png"
+                alt="Government of India"
+                className="h-6 sm:h-7 md:h-8 w-auto object-contain shrink-0"
+              />
+
+              {/* Bharat Sarkar / Government of India */}
+              <div className="flex flex-col justify-center select-none shrink-0">
+                <span className="text-[9px] sm:text-[10px] md:text-[11px] font-medium text-white/95 tracking-wide leading-tight whitespace-nowrap">
+                  भारत सरकार
+                </span>
+                <span className="text-[7px] sm:text-[8px] md:text-[9px] font-bold text-white/80 uppercase tracking-wider leading-tight mt-0.5 whitespace-nowrap">
+                  Government of India
+                </span>
               </div>
 
-              <div className="h-5 w-px bg-white/20 hidden xl:block" />
+              <div className="h-4 sm:h-5 md:h-6 w-px bg-white/20 mx-0.5 sm:mx-1 shrink-0" />
 
-              {/* Social Icons — sleek circular badges */}
-              <div className="flex items-center gap-1.5">
+              {/* Ministry of Skill Development & Entrepreneurship */}
+              <div className="flex flex-col justify-center select-none min-w-0">
+                <span className="text-[9px] sm:text-[10px] md:text-[11px] font-medium text-white/95 tracking-wide leading-tight truncate">
+                  कौशल विकास और उद्यमशीलता मंत्रालय
+                </span>
+                <span className="text-[7px] sm:text-[8px] md:text-[9px] font-bold text-white/80 uppercase tracking-wider leading-tight mt-0.5 truncate">
+                  <span className="hidden md:inline">Ministry of Skill Development &amp; Entrepreneurship</span>
+                  <span className="md:hidden">MSDE</span>
+                </span>
+              </div>
+            </div>
+
+            {/* Right: Socials & Support Contact */}
+            <div className="flex items-center gap-2 sm:gap-3 md:gap-4 shrink-0">
+              {/* Social Icons — sleek circular badges (visible on lg+) */}
+              <div className="hidden lg:flex items-center gap-1.5 shrink-0">
                 <a
                   href="https://www.linkedin.com/company/ncieindia"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="LinkedIn"
-                  className="w-6.5 h-6.5 rounded-full bg-zinc-800 hover:bg-[#0077b5] text-white flex items-center justify-center transition-colors shrink-0"
+                  className="w-6 h-6 rounded-full bg-zinc-800 hover:bg-[#0077b5] text-white flex items-center justify-center transition-colors shrink-0"
                 >
-                  <FaLinkedinIn className="w-3 h-3" />
+                  <FaLinkedinIn className="w-2.5 h-2.5" />
                 </a>
                 <a
                   href="https://www.facebook.com/ncieindiaofficial"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
-                  className="w-6.5 h-6.5 rounded-full bg-zinc-800 hover:bg-[#1877f2] text-white flex items-center justify-center transition-colors shrink-0"
+                  className="w-6 h-6 rounded-full bg-zinc-800 hover:bg-[#1877f2] text-white flex items-center justify-center transition-colors shrink-0"
                 >
-                  <FaFacebook className="w-3 h-3" />
+                  <FaFacebook className="w-2.5 h-2.5" />
                 </a>
                 <a
                   href="https://www.instagram.com/ncieindia"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
-                  className="w-6.5 h-6.5 rounded-full bg-zinc-800 hover:bg-[#e4405f] text-white flex items-center justify-center transition-colors shrink-0"
+                  className="w-6 h-6 rounded-full bg-zinc-800 hover:bg-[#e4405f] text-white flex items-center justify-center transition-colors shrink-0"
                 >
-                  <FaInstagram className="w-3 h-3" />
+                  <FaInstagram className="w-2.5 h-2.5" />
                 </a>
                 <a
                   href="https://x.com/ncieindia"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Twitter / X"
-                  className="w-6.5 h-6.5 rounded-full bg-zinc-800 hover:bg-black text-white flex items-center justify-center transition-colors shrink-0"
+                  className="w-6 h-6 rounded-full bg-zinc-800 hover:bg-black text-white flex items-center justify-center transition-colors shrink-0"
                 >
-                  <FaXTwitter className="w-3 h-3" />
+                  <FaXTwitter className="w-2.5 h-2.5" />
                 </a>
                 <a
                   href="https://youtube.com/@ncie.9"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="YouTube"
-                  className="w-6.5 h-6.5 rounded-full bg-zinc-800 hover:bg-[#ff0000] text-white flex items-center justify-center transition-colors shrink-0"
+                  className="w-6 h-6 rounded-full bg-zinc-800 hover:bg-[#ff0000] text-white flex items-center justify-center transition-colors shrink-0"
                 >
-                  <FaYoutube className="w-3 h-3" />
+                  <FaYoutube className="w-2.5 h-2.5" />
                 </a>
                 <a
                   href="https://whatsapp.com/channel/0029Vb7s9A430LKNIB0OxD1w"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WhatsApp"
-                  className="w-6.5 h-6.5 rounded-full bg-zinc-800 hover:bg-[#25d366] text-white flex items-center justify-center transition-colors shrink-0"
+                  className="w-6 h-6 rounded-full bg-zinc-800 hover:bg-[#25d366] text-white flex items-center justify-center transition-colors shrink-0"
                 >
-                  <FaWhatsapp className="w-3 h-3" />
+                  <FaWhatsapp className="w-2.5 h-2.5" />
                 </a>
               </div>
-            </div>
 
-            {/* Right: Support Contact */}
-            <div className="flex items-center text-white font-sans tracking-wide font-medium text-xs">
-              <span>Official Support: </span>
-              <a href="mailto:info@ncieindia.org" className="text-accent font-bold ml-1.5 hover:underline">
-                info@ncieindia.org
-              </a>
+              <div className="h-4 w-px bg-white/20 hidden lg:block" />
+
+              {/* Support Contact */}
+              <div className="flex items-center text-white font-sans tracking-wide font-medium text-[10.5px] sm:text-xs shrink-0 whitespace-nowrap">
+                <span className="hidden sm:inline text-white/85">Official Support:&nbsp;</span>
+                <a
+                  href="mailto:info@ncieindia.org"
+                  className="text-accent font-bold hover:underline inline-flex items-center gap-1"
+                >
+                  <Mail className="w-3 h-3 sm:hidden" />
+                  <span>info@ncieindia.org</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>

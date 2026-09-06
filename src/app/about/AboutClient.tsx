@@ -575,29 +575,21 @@ export default function AboutPage() {
         </div>
 
         {/* Nodal Agency Official Card */}
-        <div className="bg-gradient-to-r from-emerald-900 via-[#074733] to-emerald-950 text-white p-5 sm:p-6 rounded-sm shadow-md border border-emerald-700/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="bg-gradient-to-r from-emerald-900 via-[#074733] to-emerald-950 text-white p-5 sm:p-6 rounded-sm shadow-md border border-emerald-700/50 flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-full bg-white/10 text-emerald-300 flex items-center justify-center shrink-0 border border-white/20">
               <Building2 className="w-6 h-6" />
             </div>
             <div>
-              <span className="px-2 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-400/30 text-[10px] font-bold uppercase tracking-wider rounded-xs">
-                {language === "hi" ? "नोडल एवं कार्यान्वयन निदेशालय" : "Nodal & Implementation Directorate"}
-              </span>
-              <h3 className="text-base sm:text-lg font-black tracking-tight text-white mt-1">
+              <h3 className="text-base sm:text-lg font-black tracking-tight text-white">
                 {language === "hi" ? "राष्ट्रीय परियोजना एवं संचालन निदेशालय" : "National Operations & Project Directorate"}
               </h3>
-              <p className="text-xs text-emerald-100/80">
+              <p className="text-xs text-emerald-100/80 mt-0.5">
                 {language === "hi"
                   ? "राष्ट्रीय परिषद के लिए राष्ट्रीय संचालन और परियोजना कार्यान्वयन का निष्पादन"
                   : "Executes national operations and project implementation for the council"}
               </p>
             </div>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-xs border border-white/20 px-3.5 py-2 text-center rounded-xs text-xs font-mono shrink-0">
-            <span className="text-emerald-200 block text-[10px] uppercase tracking-widest">{language === "hi" ? "संरचना स्तर" : "Apex Framework"}</span>
-            <span className="font-bold text-white">NCIE Governance</span>
           </div>
         </div>
 
