@@ -48,6 +48,16 @@ export const KNOWN_INSTITUTIONS: InstitutionProfile[] = [
     grantAmount: "₹8.00 Lakhs",
   },
   {
+    name: "KKR & KSR Institute of Technology & Sciences (KITS), Guntur",
+    shortName: "KITS Guntur",
+    email: "tarakeswararao.cse@kitsguntur.ac.in",
+    spoc: "Dr. B. Tarakeswara Rao (SPOC)",
+    aishe: "1-2076261",
+    city: "Guntur",
+    state: "Andhra Pradesh",
+    grantAmount: "₹8.00 Lakhs",
+  },
+  {
     name: "Indian Institute of Technology Madras",
     shortName: "IIT Madras",
     email: "spoc@iitmadras.ac.in",

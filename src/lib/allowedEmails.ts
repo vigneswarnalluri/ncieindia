@@ -32,6 +32,7 @@ export const ALLOWED_INSTITUTION_EMAILS = [
   "principal@srit.ac.in",
   "principal@swarnandhra.ac.in",
   "principal@kitsguntur.ac.in",
+  "tarakeswararao.cse@kitsguntur.ac.in",
 
   // Master / Super Admin
   "ceo@ncieindia.org",

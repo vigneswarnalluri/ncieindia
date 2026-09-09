@@ -239,13 +239,13 @@ export default function InstitutionDashboard() {
             studentCount: 0,
           }));
 
-          // Deduplicate DB chapters if multiple registrations exist for the same institution
+          // Deduplicate DB chapters if multiple registrations exist for the same institution/email
           const uniqueDbList: SpocInfo[] = [];
           for (const dbItem of dbList) {
             const alreadyExists = uniqueDbList.some(
               (existing) =>
-                isSameOrg(existing.institution, dbItem.institution) ||
-                (existing.email && dbItem.email && existing.email.toLowerCase() === dbItem.email.toLowerCase())
+                (existing.email && dbItem.email && existing.email.toLowerCase() === dbItem.email.toLowerCase()) ||
+                (isSameOrg(existing.institution, dbItem.institution) && existing.name.trim().toLowerCase() === dbItem.name.trim().toLowerCase())
             );
             if (!alreadyExists) {
               uniqueDbList.push(dbItem);
@@ -256,9 +256,8 @@ export default function InstitutionDashboard() {
           const remainingKnown: SpocInfo[] = knownList.filter((k) => {
             return !uniqueDbList.some(
               (dbItem) =>
-                isSameOrg(k.institution, dbItem.institution) ||
-                isSameOrg(k.shortName, dbItem.institution) ||
-                (k.email && dbItem.email && k.email.toLowerCase() === dbItem.email.toLowerCase())
+                (k.email && dbItem.email && k.email.toLowerCase() === dbItem.email.toLowerCase()) ||
+                (isSameOrg(k.institution, dbItem.institution) && isSameOrg(k.name, dbItem.name))
             );
           });
 
@@ -361,7 +360,9 @@ export default function InstitutionDashboard() {
               : allDbProjects;
 
             // Resolve the official Chapter SPOC / Head for this institution
-            const chapterHead = data.find((r: any) => r.role === "chapter" && isSameOrg(r.org_name, resolvedOrg));
+            const chapterHead =
+              data.find((r: any) => r.role === "chapter" && email && r.email?.toLowerCase() === email.toLowerCase()) ||
+              data.find((r: any) => r.role === "chapter" && isSameOrg(r.org_name, resolvedOrg));
             if (chapterHead) {
               const formattedSpoc = chapterHead.designation
                 ? `${chapterHead.full_name} (${chapterHead.designation} & SPOC)`
