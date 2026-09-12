@@ -375,7 +375,7 @@ export default function RegistrationsTab({ onNotify, userEmail, isSuper }: Props
             dbHiddenIds.add(r.reg_id);
           }
         });
-        setHiddenIds((prev) => new Set([...prev, ...dbHiddenIds]));
+        setHiddenIds(dbHiddenIds);
         setRecords(data as RegistrationRecord[]);
       }
     } catch (err: any) {
@@ -440,11 +440,11 @@ export default function RegistrationsTab({ onNotify, userEmail, isSuper }: Props
   // Fetch & Subscribe to Hidden Records
   useEffect(() => {
     fetchServerHiddenIds().then((ids) => {
-      setHiddenIds((prev) => new Set([...prev, ...ids]));
+      setHiddenIds(ids);
     });
 
     const unsubscribe = subscribeToHiddenUpdates((ids) => {
-      setHiddenIds((prev) => new Set([...prev, ...ids]));
+      setHiddenIds(ids);
     });
 
     return () => unsubscribe();
