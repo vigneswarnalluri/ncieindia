@@ -54,7 +54,7 @@ export default function EcoTab({ userEmail, isSuper }: EcoTabProps) {
       try {
         const { data: allRows, error } = await supabase
           .from("registrations")
-          .select("reg_id, role");
+          .select("reg_id, role, partner_category");
 
         if (error) {
           console.error("Error fetching db stats:", error);
@@ -72,7 +72,7 @@ export default function EcoTab({ userEmail, isSuper }: EcoTabProps) {
           let totalActive = 0;
 
           totalRecords.forEach((row: any) => {
-            const isHidden = currentHidden.has(row.reg_id);
+            const isHidden = currentHidden.has(row.reg_id) || row.partner_category === "HIDDEN";
             if (isHidden) {
               hiddenCount++;
               if (canManageHidden) {

@@ -218,7 +218,7 @@ export default function InstitutionDashboard() {
           // Filter out chapters, partners, recruitment, and all hidden records from institutional view
           const studentRecords = data.filter((rec: any) => {
             if (rec.role === "chapter" || rec.role === "partner" || rec.role === "recruitment") return false;
-            if (currentHidden.has(rec.reg_id)) return false;
+            if (currentHidden.has(rec.reg_id) || rec.partner_category === "HIDDEN") return false;
             return true;
           });
 

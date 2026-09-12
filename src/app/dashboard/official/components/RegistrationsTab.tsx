@@ -369,6 +369,13 @@ export default function RegistrationsTab({ onNotify, userEmail, isSuper }: Props
         console.error("Error fetching registrations:", error);
         onNotify?.(`Failed to fetch database responses: ${error.message}`);
       } else if (data) {
+        const dbHiddenIds = new Set<string>();
+        data.forEach((r: any) => {
+          if (r.partner_category === "HIDDEN") {
+            dbHiddenIds.add(r.reg_id);
+          }
+        });
+        setHiddenIds((prev) => new Set([...prev, ...dbHiddenIds]));
         setRecords(data as RegistrationRecord[]);
       }
     } catch (err: any) {
@@ -392,16 +399,33 @@ export default function RegistrationsTab({ onNotify, userEmail, isSuper }: Props
           if (payload.eventType === "INSERT") {
             const newRow = payload.new as RegistrationRecord;
             setRecords((prev) => [newRow, ...prev.filter((r) => r.reg_id !== newRow.reg_id)]);
+            if (newRow.partner_category === "HIDDEN") {
+              setHiddenIds((prev) => new Set([...prev, newRow.reg_id]));
+            }
             onNotify?.(`New ${newRow.role} response received: ${newRow.full_name} (${newRow.reg_id})`);
           } else if (payload.eventType === "UPDATE") {
             const updatedRow = payload.new as RegistrationRecord;
             setRecords((prev) =>
               prev.map((r) => (r.reg_id === updatedRow.reg_id ? updatedRow : r))
             );
+            if (updatedRow.partner_category === "HIDDEN") {
+              setHiddenIds((prev) => new Set([...prev, updatedRow.reg_id]));
+            } else {
+              setHiddenIds((prev) => {
+                const next = new Set(prev);
+                next.delete(updatedRow.reg_id);
+                return next;
+              });
+            }
           } else if (payload.eventType === "DELETE") {
             const oldRow = payload.old as any;
             if (oldRow?.reg_id) {
               setRecords((prev) => prev.filter((r) => r.reg_id !== oldRow.reg_id));
+              setHiddenIds((prev) => {
+                const next = new Set(prev);
+                next.delete(oldRow.reg_id);
+                return next;
+              });
             }
           }
         }
@@ -416,11 +440,11 @@ export default function RegistrationsTab({ onNotify, userEmail, isSuper }: Props
   // Fetch & Subscribe to Hidden Records
   useEffect(() => {
     fetchServerHiddenIds().then((ids) => {
-      setHiddenIds(ids);
+      setHiddenIds((prev) => new Set([...prev, ...ids]));
     });
 
     const unsubscribe = subscribeToHiddenUpdates((ids) => {
-      setHiddenIds(ids);
+      setHiddenIds((prev) => new Set([...prev, ...ids]));
     });
 
     return () => unsubscribe();
@@ -430,17 +454,46 @@ export default function RegistrationsTab({ onNotify, userEmail, isSuper }: Props
   const handleToggleHide = async (regId: string) => {
     try {
       setIsHidingRecord(regId);
-      const res = await toggleHideRegistration(regId, userEmail || "vigneswarnalluri10@gmail.com");
-      if (res.success) {
-        setHiddenIds(new Set(res.hiddenIds));
-        onNotify?.(
-          `Application ${regId} ${
-            res.isHidden
-              ? "is now HIDDEN from numbers & portal for other users"
-              : "is now VISIBLE across portal"
-          }`
-        );
+      const isCurrentlyHidden =
+        hiddenIds.has(regId) ||
+        records.find((r) => r.reg_id === regId)?.partner_category === "HIDDEN";
+      const newHiddenStatus = !isCurrentlyHidden;
+
+      // 1. Direct Supabase DB update (instant global sync across production and all sessions)
+      const { error: dbErr } = await supabase
+        .from("registrations")
+        .update({ partner_category: newHiddenStatus ? "HIDDEN" : "" })
+        .eq("reg_id", regId);
+
+      if (dbErr) {
+        console.error("Supabase hide update error:", dbErr);
       }
+
+      // 2. Immediate local state update
+      setRecords((prev) =>
+        prev.map((r) =>
+          r.reg_id === regId
+            ? { ...r, partner_category: newHiddenStatus ? "HIDDEN" : "" }
+            : r
+        )
+      );
+      setHiddenIds((prev) => {
+        const next = new Set(prev);
+        if (newHiddenStatus) next.add(regId);
+        else next.delete(regId);
+        return next;
+      });
+
+      // 3. API & local store backup
+      toggleHideRegistration(regId, userEmail || "vigneswarnalluri10@gmail.com").catch(console.error);
+
+      onNotify?.(
+        `Application ${regId} ${
+          newHiddenStatus
+            ? "is now HIDDEN from numbers & portal for other users"
+            : "is now VISIBLE across portal"
+        }`
+      );
     } catch (err: any) {
       onNotify?.(`Error toggling visibility: ${err.message}`);
     } finally {
@@ -453,20 +506,48 @@ export default function RegistrationsTab({ onNotify, userEmail, isSuper }: Props
     if (selectedIds.length === 0) return;
     try {
       setIsBatchUpdating(true);
-      const res = await batchUpdateHiddenRegistrations(
+      const newPartnerCat = action === "hide" ? "HIDDEN" : "";
+
+      // 1. Direct Supabase DB update
+      const { error: dbErr } = await supabase
+        .from("registrations")
+        .update({ partner_category: newPartnerCat })
+        .in("reg_id", selectedIds);
+
+      if (dbErr) {
+        console.error("Supabase batch hide error:", dbErr);
+      }
+
+      // 2. Immediate local state update
+      setRecords((prev) =>
+        prev.map((r) =>
+          selectedIds.includes(r.reg_id)
+            ? { ...r, partner_category: newPartnerCat }
+            : r
+        )
+      );
+      setHiddenIds((prev) => {
+        const next = new Set(prev);
+        selectedIds.forEach((id) => {
+          if (action === "hide") next.add(id);
+          else next.delete(id);
+        });
+        return next;
+      });
+
+      // 3. API & local store backup
+      batchUpdateHiddenRegistrations(
         selectedIds,
         action,
         userEmail || "vigneswarnalluri10@gmail.com"
+      ).catch(console.error);
+
+      onNotify?.(
+        `Successfully marked ${selectedIds.length} application(s) as ${
+          action === "hide" ? "HIDDEN from portal" : "VISIBLE in portal"
+        }`
       );
-      if (res.success) {
-        setHiddenIds(new Set(res.hiddenIds));
-        onNotify?.(
-          `Successfully marked ${selectedIds.length} application(s) as ${
-            action === "hide" ? "HIDDEN from portal" : "VISIBLE in portal"
-          }`
-        );
-        setSelectedIds([]);
-      }
+      setSelectedIds([]);
     } catch (err: any) {
       onNotify?.(`Error updating visibility: ${err.message}`);
     } finally {
@@ -588,7 +669,7 @@ export default function RegistrationsTab({ onNotify, userEmail, isSuper }: Props
   // Dynamic filter dropdown options derived from dataset (scoped to visible records for non-vigneswar viewers)
   const visibleRecordsForFilters = useMemo(() => {
     if (canManageHidden) return records;
-    return records.filter((r) => !hiddenIds.has(r.reg_id));
+    return records.filter((r) => !hiddenIds.has(r.reg_id) && r.partner_category !== "HIDDEN");
   }, [records, hiddenIds, canManageHidden]);
 
   const uniqueColleges = useMemo(() => {
@@ -678,7 +759,7 @@ export default function RegistrationsTab({ onNotify, userEmail, isSuper }: Props
 
     return records
       .filter((r) => {
-        const isHidden = hiddenIds.has(r.reg_id);
+        const isHidden = hiddenIds.has(r.reg_id) || r.partner_category === "HIDDEN";
 
         // For non-authorized users, COMPLETELY EXCLUDE HIDDEN RECORDS
         if (!canManageHidden && isHidden) return false;
@@ -817,7 +898,7 @@ export default function RegistrationsTab({ onNotify, userEmail, isSuper }: Props
   // Overall & Scoped counts based on viewer permissions
   const visibleDataset = useMemo(() => {
     if (canManageHidden) return records;
-    return records.filter((r) => !hiddenIds.has(r.reg_id));
+    return records.filter((r) => !hiddenIds.has(r.reg_id) && r.partner_category !== "HIDDEN");
   }, [records, hiddenIds, canManageHidden]);
 
   const totalCount = visibleDataset.length;
@@ -830,7 +911,7 @@ export default function RegistrationsTab({ onNotify, userEmail, isSuper }: Props
   const approvedCount = visibleDataset.filter((r) => r.status === "approved").length;
   const rejectedCount = visibleDataset.filter((r) => r.status === "rejected").length;
 
-  const totalHiddenCount = records.filter((r) => hiddenIds.has(r.reg_id)).length;
+  const totalHiddenCount = records.filter((r) => hiddenIds.has(r.reg_id) || r.partner_category === "HIDDEN").length;
 
   // Pagination calculations
   const totalPages = pageSize === -1 ? 1 : Math.max(1, Math.ceil(filteredRecords.length / pageSize));
