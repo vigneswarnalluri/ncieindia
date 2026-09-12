@@ -10,9 +10,14 @@ import {
 } from "lucide-react";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { supabase } from "@/lib/supabase";
-import { isSuperAdminEmail } from "@/lib/allowedEmails";
+import { isSuperAdminEmail, isVigneswarEmail } from "@/lib/allowedEmails";
 import { normalizeCollegeName } from "@/lib/collegeNormalization";
 import { KNOWN_INSTITUTIONS, loadInstitutionMails } from "@/lib/institutionMailbox";
+import {
+  fetchServerHiddenIds,
+  subscribeToHiddenUpdates,
+  getLocalCachedHiddenIds,
+} from "@/lib/hiddenRecordsStore";
 
 import OverviewTab, { SpocInfo } from "./components/OverviewTab";
 import VerifyTab, { Student } from "./components/VerifyTab";
@@ -80,6 +85,7 @@ export default function InstitutionDashboard() {
   const [rawAllProjects, setRawAllProjects] = useState<Project[]>([]);
   const [allSpocs, setAllSpocs] = useState<SpocInfo[]>([]);
   const [selectedSpocId, setSelectedSpocId] = useState<string>("all");
+  const [hiddenIds, setHiddenIds] = useState<Set<string>>(() => getLocalCachedHiddenIds());
 
   const [userOrg, setUserOrg] = useState("");
   const [userName, setUserName] = useState("");
@@ -185,6 +191,9 @@ export default function InstitutionDashboard() {
       }
 
       try {
+        const currentHidden = await fetchServerHiddenIds();
+        setHiddenIds(currentHidden);
+
         const { data, error } = await supabase
           .from("registrations")
           .select("*")
@@ -204,10 +213,14 @@ export default function InstitutionDashboard() {
             "Postgraduate": "PG",
           };
 
-          // Filter out chapters and corporate partners to get student & internship records
-          const studentRecords = data.filter(
-            (rec: any) => rec.role !== "chapter" && rec.role !== "partner" && rec.role !== "recruitment"
-          );
+          const canManageHidden = isVigneswarEmail(email);
+
+          // Filter out chapters, partners, recruitment, and all hidden records from institutional view
+          const studentRecords = data.filter((rec: any) => {
+            if (rec.role === "chapter" || rec.role === "partner" || rec.role === "recruitment") return false;
+            if (currentHidden.has(rec.reg_id)) return false;
+            return true;
+          });
 
           // Build unified SPOC list from known institutions + database chapter registrations
           const knownList: SpocInfo[] = KNOWN_INSTITUTIONS.map((k, idx) => ({
@@ -302,6 +315,7 @@ export default function InstitutionDashboard() {
               submittedAt: rec.submitted_at,
               proposal: rec.proposal,
               isDbRecord: true,
+              isHidden: currentHidden.has(rec.reg_id),
             };
           });
 
@@ -855,7 +869,16 @@ export default function InstitutionDashboard() {
                 />
               );
             })()}
-            {activeTab === "verify"      && <VerifyTab      students={students} onAction={handleStudentAction} onBatchAction={handleBatchStudentAction} />}
+            {activeTab === "verify"      && (
+              <VerifyTab
+                students={students}
+                onAction={handleStudentAction}
+                onBatchAction={handleBatchStudentAction}
+                userEmail={userEmail}
+                isSuper={isSuper}
+                canManageHidden={isVigneswarEmail(userEmail)}
+              />
+            )}
             {activeTab === "innovations" && <InnovationsTab projects={projects} onEndorse={handleEndorse} onAdd={handleAddProject} onDelete={handleDeleteProject} />}
             {activeTab === "grants"      && <GrantsTab      grants={grants} onToast={showToast} userOrg={userOrg} aisheCode={aisheCode} />}
             {activeTab === "activities"  && <ActivitiesTab  events={events} onAdd={handleAddEvent} />}

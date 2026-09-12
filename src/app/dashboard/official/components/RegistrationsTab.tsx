@@ -37,11 +37,22 @@ import {
   Printer,
   Copy,
   FileSpreadsheet,
-  ClipboardList
+  ClipboardList,
+  EyeOff,
+  Sliders,
+  ShieldCheck
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { normalizeCollegeName } from "@/lib/collegeNormalization";
 import SendInstitutionMailModal, { MailRecipientInfo } from "./SendInstitutionMailModal";
+import {
+  fetchServerHiddenIds,
+  toggleHideRegistration,
+  batchUpdateHiddenRegistrations,
+  subscribeToHiddenUpdates,
+  getLocalCachedHiddenIds,
+} from "@/lib/hiddenRecordsStore";
+import { isVigneswarEmail } from "@/lib/allowedEmails";
 
 export interface RegistrationRecord {
   id?: string | number;
@@ -203,14 +214,23 @@ export const STANDARD_SPECIALIZATIONS: Record<string, string[]> = {
 
 interface Props {
   onNotify?: (msg: string) => void;
+  userEmail?: string;
+  isSuper?: boolean;
 }
 
-export default function RegistrationsTab({ onNotify }: Props) {
+export default function RegistrationsTab({ onNotify, userEmail, isSuper }: Props) {
   const [records, setRecords] = useState<RegistrationRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [isBatchUpdating, setIsBatchUpdating] = useState(false);
+
+  // Hidden Records State
+  const [hiddenIds, setHiddenIds] = useState<Set<string>>(() => getLocalCachedHiddenIds());
+  const [isHidingRecord, setIsHidingRecord] = useState<string | null>(null);
+  const [filterVisibility, setFilterVisibility] = useState<"all" | "active" | "hidden">("all");
+
+  const canManageHidden = isVigneswarEmail(userEmail);
 
   // Selection & Modal State
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -393,6 +413,67 @@ export default function RegistrationsTab({ onNotify }: Props) {
     };
   }, []);
 
+  // Fetch & Subscribe to Hidden Records
+  useEffect(() => {
+    fetchServerHiddenIds().then((ids) => {
+      setHiddenIds(ids);
+    });
+
+    const unsubscribe = subscribeToHiddenUpdates((ids) => {
+      setHiddenIds(ids);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Toggle Hide/Unhide for a single registration
+  const handleToggleHide = async (regId: string) => {
+    try {
+      setIsHidingRecord(regId);
+      const res = await toggleHideRegistration(regId, userEmail || "vigneswarnalluri10@gmail.com");
+      if (res.success) {
+        setHiddenIds(new Set(res.hiddenIds));
+        onNotify?.(
+          `Application ${regId} ${
+            res.isHidden
+              ? "is now HIDDEN from numbers & portal for other users"
+              : "is now VISIBLE across portal"
+          }`
+        );
+      }
+    } catch (err: any) {
+      onNotify?.(`Error toggling visibility: ${err.message}`);
+    } finally {
+      setIsHidingRecord(null);
+    }
+  };
+
+  // Batch Hide/Unhide for selected registrations
+  const handleBatchHideAction = async (action: "hide" | "unhide") => {
+    if (selectedIds.length === 0) return;
+    try {
+      setIsBatchUpdating(true);
+      const res = await batchUpdateHiddenRegistrations(
+        selectedIds,
+        action,
+        userEmail || "vigneswarnalluri10@gmail.com"
+      );
+      if (res.success) {
+        setHiddenIds(new Set(res.hiddenIds));
+        onNotify?.(
+          `Successfully marked ${selectedIds.length} application(s) as ${
+            action === "hide" ? "HIDDEN from portal" : "VISIBLE in portal"
+          }`
+        );
+        setSelectedIds([]);
+      }
+    } catch (err: any) {
+      onNotify?.(`Error updating visibility: ${err.message}`);
+    } finally {
+      setIsBatchUpdating(false);
+    }
+  };
+
   // Update status directly in Supabase
   const handleStatusUpdate = async (regId: string, newStatus: "approved" | "rejected") => {
     try {
@@ -504,45 +585,50 @@ export default function RegistrationsTab({ onNotify }: Props) {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  // Dynamic filter dropdown options derived from dataset
+  // Dynamic filter dropdown options derived from dataset (scoped to visible records for non-vigneswar viewers)
+  const visibleRecordsForFilters = useMemo(() => {
+    if (canManageHidden) return records;
+    return records.filter((r) => !hiddenIds.has(r.reg_id));
+  }, [records, hiddenIds, canManageHidden]);
+
   const uniqueColleges = useMemo(() => {
-    const orgs = records.map((r) => normalizeCollegeName(r.org_name)).filter(Boolean) as string[];
+    const orgs = visibleRecordsForFilters.map((r) => normalizeCollegeName(r.org_name)).filter(Boolean) as string[];
     return Array.from(new Set(orgs)).sort();
-  }, [records]);
+  }, [visibleRecordsForFilters]);
 
   const uniqueCourses = useMemo(() => {
-    const courses = records.map((r) => extractCourse(r)).filter(Boolean) as string[];
+    const courses = visibleRecordsForFilters.map((r) => extractCourse(r)).filter(Boolean) as string[];
     return Array.from(new Set(courses)).sort();
-  }, [records]);
+  }, [visibleRecordsForFilters]);
 
   const uniqueStreams = useMemo(() => {
-    const fromRecords = records.map((r) => r.stream).filter(Boolean) as string[];
+    const fromRecords = visibleRecordsForFilters.map((r) => r.stream).filter(Boolean) as string[];
     return Array.from(new Set([...STANDARD_STREAMS, ...fromRecords]));
-  }, [records]);
+  }, [visibleRecordsForFilters]);
 
   const uniqueYears = useMemo(() => {
-    const fromRecords = records.map((r) => r.year_of_study).filter(Boolean) as string[];
+    const fromRecords = visibleRecordsForFilters.map((r) => r.year_of_study).filter(Boolean) as string[];
     return Array.from(new Set([...STANDARD_YEARS, ...fromRecords]));
-  }, [records]);
+  }, [visibleRecordsForFilters]);
 
   const uniqueDepts = useMemo(() => {
-    const fromRecords = records.map((r) => r.department).filter(Boolean) as string[];
+    const fromRecords = visibleRecordsForFilters.map((r) => r.department).filter(Boolean) as string[];
     return Array.from(new Set([...STANDARD_DEPARTMENTS, ...fromRecords]));
-  }, [records]);
+  }, [visibleRecordsForFilters]);
 
   const uniqueSpecializations = useMemo(() => {
     const allPredefinedSpecs = Object.values(STANDARD_SPECIALIZATIONS).flat();
-    const fromRecords = records.map((r) => r.specialization).filter(Boolean) as string[];
+    const fromRecords = visibleRecordsForFilters.map((r) => r.specialization).filter(Boolean) as string[];
     if (filterDept !== "all" && STANDARD_SPECIALIZATIONS[filterDept]) {
       const deptSpecs = STANDARD_SPECIALIZATIONS[filterDept];
-      const deptRecordSpecs = records
+      const deptRecordSpecs = visibleRecordsForFilters
         .filter((r) => r.department === filterDept)
         .map((r) => r.specialization)
         .filter(Boolean) as string[];
       return Array.from(new Set([...deptSpecs, ...deptRecordSpecs]));
     }
     return Array.from(new Set([...allPredefinedSpecs, ...fromRecords]));
-  }, [records, filterDept]);
+  }, [visibleRecordsForFilters, filterDept]);
 
   // Reset all filters
   const handleClearFilters = () => {
@@ -557,6 +643,7 @@ export default function RegistrationsTab({ onNotify }: Props) {
     setFilterDoc("all");
     setFilterPayment("all");
     setFilterDateRange("all");
+    setFilterVisibility("all");
     setSearchQuery("");
     setSortBy("newest");
     setCurrentPage(1);
@@ -577,6 +664,7 @@ export default function RegistrationsTab({ onNotify }: Props) {
     filterDept !== "all" ||
     filterSpecialization !== "all" ||
     filterYear !== "all" ||
+    (canManageHidden && filterVisibility !== "all") ||
     activeAdvancedCount > 0 ||
     searchQuery.trim() !== "" ||
     sortBy !== "newest";
@@ -590,6 +678,17 @@ export default function RegistrationsTab({ onNotify }: Props) {
 
     return records
       .filter((r) => {
+        const isHidden = hiddenIds.has(r.reg_id);
+
+        // For non-authorized users, COMPLETELY EXCLUDE HIDDEN RECORDS
+        if (!canManageHidden && isHidden) return false;
+
+        // For authorized users (vigneswarnalluri10@gmail.com), filter by visibility filter
+        if (canManageHidden) {
+          if (filterVisibility === "active" && isHidden) return false;
+          if (filterVisibility === "hidden" && !isHidden) return false;
+        }
+
         // Role filter
         if (selectedRole !== "all" && r.role !== selectedRole) return false;
 
@@ -697,6 +796,9 @@ export default function RegistrationsTab({ onNotify }: Props) {
       });
   }, [
     records,
+    hiddenIds,
+    canManageHidden,
+    filterVisibility,
     selectedRole,
     selectedStatus,
     filterCollege,
@@ -712,16 +814,23 @@ export default function RegistrationsTab({ onNotify }: Props) {
     sortBy,
   ]);
 
-  // Overall & Scoped counts
-  const totalCount = records.length;
-  const internshipCount = records.filter((r) => r.role === "internship").length;
-  const studentCount = records.filter((r) => r.role === "student").length;
-  const chapterCount = records.filter((r) => r.role === "chapter").length;
-  const partnerCount = records.filter((r) => r.role === "partner").length;
-  const recruitmentCount = records.filter((r) => r.role === "recruitment").length;
-  const pendingCount = records.filter((r) => r.status === "pending").length;
-  const approvedCount = records.filter((r) => r.status === "approved").length;
-  const rejectedCount = records.filter((r) => r.status === "rejected").length;
+  // Overall & Scoped counts based on viewer permissions
+  const visibleDataset = useMemo(() => {
+    if (canManageHidden) return records;
+    return records.filter((r) => !hiddenIds.has(r.reg_id));
+  }, [records, hiddenIds, canManageHidden]);
+
+  const totalCount = visibleDataset.length;
+  const internshipCount = visibleDataset.filter((r) => r.role === "internship").length;
+  const studentCount = visibleDataset.filter((r) => r.role === "student").length;
+  const chapterCount = visibleDataset.filter((r) => r.role === "chapter").length;
+  const partnerCount = visibleDataset.filter((r) => r.role === "partner").length;
+  const recruitmentCount = visibleDataset.filter((r) => r.role === "recruitment").length;
+  const pendingCount = visibleDataset.filter((r) => r.status === "pending").length;
+  const approvedCount = visibleDataset.filter((r) => r.status === "approved").length;
+  const rejectedCount = visibleDataset.filter((r) => r.status === "rejected").length;
+
+  const totalHiddenCount = records.filter((r) => hiddenIds.has(r.reg_id)).length;
 
   // Pagination calculations
   const totalPages = pageSize === -1 ? 1 : Math.max(1, Math.ceil(filteredRecords.length / pageSize));
@@ -1016,6 +1125,24 @@ export default function RegistrationsTab({ onNotify }: Props) {
               <strong className="text-red-800 font-bold">{rejectedCount}</strong>
             </button>
           )}
+          {canManageHidden && totalHiddenCount > 0 && (
+            <button
+              onClick={() => {
+                setFilterVisibility(filterVisibility === "hidden" ? "all" : "hidden");
+                setCurrentPage(1);
+              }}
+              className={`px-3 py-1.5 border rounded font-medium flex items-center gap-1.5 cursor-pointer transition-colors ${
+                filterVisibility === "hidden"
+                  ? "bg-amber-200 border-amber-400 text-amber-950 font-bold"
+                  : "bg-amber-50 hover:bg-amber-100 border-amber-300 text-amber-900"
+              }`}
+              title="Filter by Hidden Applications"
+            >
+              <EyeOff className="w-3.5 h-3.5 text-amber-700" />
+              <span className="text-[10px] uppercase text-amber-700 font-bold">Hidden:</span>
+              <strong className="text-amber-900 font-bold">{totalHiddenCount}</strong>
+            </button>
+          )}
           <button
             onClick={fetchRecords}
             disabled={isRefreshing}
@@ -1086,7 +1213,7 @@ export default function RegistrationsTab({ onNotify }: Props) {
       {/* Main Filter Toolbar */}
       <div className="bg-white border border-zinc-200 p-3.5 space-y-3 rounded-xs shadow-2xs">
         {/* Row 1: Primary Controls */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-9 gap-2">
+        <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ${canManageHidden ? "xl:grid-cols-10" : "xl:grid-cols-9"} gap-2`}>
           {/* Live Search Input */}
           <div className="relative">
             <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -1112,6 +1239,31 @@ export default function RegistrationsTab({ onNotify }: Props) {
               </button>
             )}
           </div>
+
+          {/* Visibility Filter Dropdown (Master Developer only) */}
+          {canManageHidden && (
+            <div>
+              <select
+                value={filterVisibility}
+                onChange={(e) => {
+                  setFilterVisibility(e.target.value as any);
+                  setCurrentPage(1);
+                }}
+                className={`w-full py-1.5 px-2.5 text-xs rounded border font-semibold cursor-pointer truncate ${
+                  filterVisibility === "hidden"
+                    ? "bg-amber-100 border-amber-400 text-amber-900"
+                    : filterVisibility === "active"
+                    ? "bg-emerald-50 border-emerald-300 text-emerald-900"
+                    : "bg-zinc-50 border-zinc-200 text-zinc-700"
+                }`}
+                title="Filter records by visibility"
+              >
+                <option value="all">Visibility: All ({totalCount})</option>
+                <option value="active">Active Only ({totalCount - totalHiddenCount})</option>
+                <option value="hidden">Hidden Only ({totalHiddenCount})</option>
+              </select>
+            </div>
+          )}
 
           {/* College / Institution Filter Dropdown */}
           <div>
@@ -1564,6 +1716,30 @@ export default function RegistrationsTab({ onNotify }: Props) {
               {isBatchUpdating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <X className="w-3.5 h-3.5" />}
               <span>Reject ({selectedIds.length})</span>
             </button>
+
+            {canManageHidden && (
+              <>
+                <button
+                  onClick={() => handleBatchHideAction("hide")}
+                  disabled={isBatchUpdating}
+                  className="bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold px-3 py-1.5 rounded-xs cursor-pointer transition-colors flex items-center gap-1.5 shadow-xs disabled:opacity-50"
+                  title={`Hide ${selectedIds.length} selected application(s) from portal & counts`}
+                >
+                  <EyeOff className="w-3.5 h-3.5" />
+                  <span>Hide ({selectedIds.length})</span>
+                </button>
+                <button
+                  onClick={() => handleBatchHideAction("unhide")}
+                  disabled={isBatchUpdating}
+                  className="bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold px-3 py-1.5 rounded-xs cursor-pointer transition-colors flex items-center gap-1.5 shadow-xs disabled:opacity-50"
+                  title={`Unhide ${selectedIds.length} selected application(s) (make visible across portal)`}
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>Unhide ({selectedIds.length})</span>
+                </button>
+              </>
+            )}
+
             <button
               onClick={handleExportSelectedCsv}
               className="bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-3 py-1.5 rounded-xs border border-white/20 cursor-pointer transition-colors flex items-center gap-1.5"
@@ -1660,6 +1836,7 @@ export default function RegistrationsTab({ onNotify }: Props) {
                 paginatedRecords.map((r, i) => {
                   const itemIndex = startIndex + i + 1;
                   const isSelected = selectedIds.includes(r.reg_id);
+                  const isHidden = hiddenIds.has(r.reg_id);
                   const paymentId = extractPaymentId(r.proposal);
                   const formattedDate = r.submitted_at
                     ? new Date(r.submitted_at).toLocaleDateString("en-IN", {
@@ -1672,7 +1849,13 @@ export default function RegistrationsTab({ onNotify }: Props) {
                   return (
                     <tr
                       key={r.reg_id || i}
-                      className={`${isSelected ? "bg-emerald-50/40" : "bg-white hover:bg-zinc-50/70"} transition-colors`}
+                      className={`${
+                        isSelected
+                          ? "bg-emerald-50/40"
+                          : isHidden
+                          ? "bg-amber-50/40 hover:bg-amber-100/50"
+                          : "bg-white hover:bg-zinc-50/70"
+                      } transition-colors`}
                     >
                       {/* Selection Checkbox */}
                       <td className="px-3.5 py-3 text-center">
@@ -1689,7 +1872,14 @@ export default function RegistrationsTab({ onNotify }: Props) {
 
                       {/* Reg ID & Date */}
                       <td className="px-4 py-3 whitespace-nowrap">
-                        <span className="font-mono font-semibold text-zinc-900 block text-xs tracking-tight">{r.reg_id}</span>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-mono font-semibold text-zinc-900 block text-xs tracking-tight">{r.reg_id}</span>
+                          {canManageHidden && isHidden && (
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-100 text-amber-900 border border-amber-300 font-mono" title="Hidden from numbers & portal for other users">
+                              <EyeOff className="w-2.5 h-2.5 text-amber-700" /> HIDDEN
+                            </span>
+                          )}
+                        </div>
                         <span className="text-[11px] text-zinc-400 block mt-0.5">{formattedDate}</span>
                       </td>
 
@@ -1762,6 +1952,32 @@ export default function RegistrationsTab({ onNotify }: Props) {
                             <Eye className="w-3 h-3" />
                             <span>Audit</span>
                           </button>
+
+                          {/* Hide / Unhide button for vigneswarnalluri10@gmail.com */}
+                          {canManageHidden && (
+                            <button
+                              onClick={() => handleToggleHide(r.reg_id)}
+                              disabled={isHidingRecord === r.reg_id}
+                              className={`p-1.5 rounded transition-colors cursor-pointer disabled:opacity-50 ${
+                                isHidden
+                                  ? "text-amber-800 bg-amber-100 hover:bg-amber-200 border border-amber-300"
+                                  : "text-zinc-400 hover:text-amber-700 hover:bg-amber-50"
+                              }`}
+                              title={
+                                isHidden
+                                  ? "Unhide student (restore to numbers & portal for all other users)"
+                                  : "Hide student (hide from numbers & portal for all other users)"
+                              }
+                            >
+                              {isHidingRecord === r.reg_id ? (
+                                <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-700" />
+                              ) : isHidden ? (
+                                <Eye className="w-3.5 h-3.5 text-emerald-700" />
+                              ) : (
+                                <EyeOff className="w-3.5 h-3.5" />
+                              )}
+                            </button>
+                          )}
 
                           {r.status === "pending" ? (
                             <>
@@ -1924,7 +2140,7 @@ export default function RegistrationsTab({ onNotify }: Props) {
             <div className="p-6 space-y-5">
               {/* Status Action Banner */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-zinc-50 border border-zinc-200 rounded gap-2">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-xs font-bold text-zinc-700 uppercase">Verification Status:</span>
                   {selectedRecord.status === "pending" && (
                     <span className="text-xs font-bold px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-300 rounded uppercase">
@@ -1964,6 +2180,63 @@ export default function RegistrationsTab({ onNotify }: Props) {
                   )}
                 </div>
               </div>
+
+              {/* Master Developer Portal Visibility Card */}
+              {canManageHidden && (
+                <div className={`p-3 rounded border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 ${
+                  hiddenIds.has(selectedRecord.reg_id)
+                    ? "bg-amber-50 border-amber-300 text-amber-950"
+                    : "bg-emerald-50/60 border-emerald-300 text-emerald-950"
+                }`}>
+                  <div className="flex items-center gap-2.5">
+                    {hiddenIds.has(selectedRecord.reg_id) ? (
+                      <EyeOff className="w-4 h-4 text-amber-700 shrink-0" />
+                    ) : (
+                      <Eye className="w-4 h-4 text-emerald-700 shrink-0" />
+                    )}
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold uppercase">Portal Visibility:</span>
+                        <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded font-mono uppercase ${
+                          hiddenIds.has(selectedRecord.reg_id)
+                            ? "bg-amber-200 text-amber-900 border border-amber-400"
+                            : "bg-emerald-100 text-emerald-900 border border-emerald-300"
+                        }`}>
+                          {hiddenIds.has(selectedRecord.reg_id) ? "Hidden From Portal & Numbers" : "Visible Across Portal"}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-zinc-600 mt-0.5">
+                        {hiddenIds.has(selectedRecord.reg_id)
+                          ? "This candidate is hidden from counts, filters, queues, and exports for all other users."
+                          : "This candidate is visible to all authorized officials and chapter SPOCs."}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleToggleHide(selectedRecord.reg_id)}
+                    disabled={isHidingRecord === selectedRecord.reg_id}
+                    className={`px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs disabled:opacity-50 transition-colors shrink-0 ${
+                      hiddenIds.has(selectedRecord.reg_id)
+                        ? "bg-emerald-700 hover:bg-emerald-600 text-white"
+                        : "bg-amber-700 hover:bg-amber-600 text-white"
+                    }`}
+                  >
+                    {isHidingRecord === selectedRecord.reg_id ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : hiddenIds.has(selectedRecord.reg_id) ? (
+                      <>
+                        <Eye className="w-3.5 h-3.5" />
+                        <span>Unhide Candidate</span>
+                      </>
+                    ) : (
+                      <>
+                        <EyeOff className="w-3.5 h-3.5" />
+                        <span>Hide Candidate</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
 
               {/* Candidate Credentials Table */}
               <div>

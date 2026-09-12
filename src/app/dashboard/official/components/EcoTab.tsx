@@ -1,10 +1,40 @@
-import React, { useState, useEffect } from "react";
-import { Building2, TrendingUp, Landmark, FileText, MapPin, Eye, GraduationCap } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+"use client";
 
-export default function EcoTab() {
+import React, { useState, useEffect } from "react";
+import { Building2, TrendingUp, Landmark, FileText, MapPin, Eye, GraduationCap, EyeOff } from "lucide-react";
+import { supabase } from "@/lib/supabase";
+import { fetchServerHiddenIds, subscribeToHiddenUpdates, getLocalCachedHiddenIds } from "@/lib/hiddenRecordsStore";
+import { isVigneswarEmail } from "@/lib/allowedEmails";
+
+interface EcoTabProps {
+  userEmail?: string;
+  isSuper?: boolean;
+}
+
+export default function EcoTab({ userEmail, isSuper }: EcoTabProps) {
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
-  const [dbStats, setDbStats] = useState<{ total: number; students: number; chapters: number; internships: number } | null>(null);
+  const [dbStats, setDbStats] = useState<{
+    total: number;
+    students: number;
+    chapters: number;
+    internships: number;
+    hiddenCount: number;
+  } | null>(null);
+  const [hiddenIds, setHiddenIds] = useState<Set<string>>(() => getLocalCachedHiddenIds());
+
+  const canManageHidden = isVigneswarEmail(userEmail);
+
+  useEffect(() => {
+    fetchServerHiddenIds().then((ids) => {
+      setHiddenIds(ids);
+    });
+
+    const unsubscribe = subscribeToHiddenUpdates((ids) => {
+      setHiddenIds(ids);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const fetchCount = async () => {
@@ -22,28 +52,66 @@ export default function EcoTab() {
 
     const fetchDbStats = async () => {
       try {
-        const { count: total } = await supabase.from("registrations").select("*", { count: "exact", head: true });
-        const { count: students } = await supabase.from("registrations").select("*", { count: "exact", head: true }).in("role", ["student"]);
-        const { count: internships } = await supabase.from("registrations").select("*", { count: "exact", head: true }).eq("role", "internship");
-        const { count: chapters } = await supabase.from("registrations").select("*", { count: "exact", head: true }).eq("role", "chapter");
-        setDbStats({
-          total: total || 0,
-          students: students || 0,
-          internships: internships || 0,
-          chapters: chapters || 0,
-        });
+        const { data: allRows, error } = await supabase
+          .from("registrations")
+          .select("reg_id, role");
+
+        if (error) {
+          console.error("Error fetching db stats:", error);
+          return;
+        }
+
+        if (allRows) {
+          const totalRecords = allRows;
+          const currentHidden = hiddenIds;
+          
+          let hiddenCount = 0;
+          let studentCount = 0;
+          let internshipCount = 0;
+          let chapterCount = 0;
+          let totalActive = 0;
+
+          totalRecords.forEach((row: any) => {
+            const isHidden = currentHidden.has(row.reg_id);
+            if (isHidden) {
+              hiddenCount++;
+              if (canManageHidden) {
+                // If vigneswar, count in their full view
+                if (row.role === "student") studentCount++;
+                if (row.role === "internship") internshipCount++;
+                if (row.role === "chapter") chapterCount++;
+                totalActive++;
+              }
+            } else {
+              // Active for everyone
+              if (row.role === "student") studentCount++;
+              if (row.role === "internship") internshipCount++;
+              if (row.role === "chapter") chapterCount++;
+              totalActive++;
+            }
+          });
+
+          setDbStats({
+            total: canManageHidden ? totalRecords.length : totalActive,
+            students: studentCount,
+            internships: internshipCount,
+            chapters: chapterCount,
+            hiddenCount: hiddenCount,
+          });
+        }
       } catch (e) {
         console.error("Error fetching db stats:", e);
       }
     };
+
     fetchDbStats();
-  }, []);
+  }, [hiddenIds, canManageHidden]);
 
   const stats = [
     {
       label: "Course Internships",
       value: dbStats ? dbStats.internships.toLocaleString() : "...",
-      sub: "Active enrolled candidates",
+      sub: canManageHidden && dbStats?.hiddenCount ? `Active enrolled (${dbStats.hiddenCount} hidden)` : "Active enrolled candidates",
       color: "border-t-[#0D6B4F]",
       icon: <GraduationCap className="w-5 h-5 text-[#0D6B4F]" />
     },
@@ -64,7 +132,7 @@ export default function EcoTab() {
     {
       label: "Total DB Responses",
       value: dbStats ? dbStats.total.toLocaleString() : "...",
-      sub: "Live Supabase records",
+      sub: canManageHidden && dbStats?.hiddenCount ? `Live records (${dbStats.hiddenCount} hidden)` : "Live portal records",
       color: "border-t-amber-500",
       icon: <FileText className="w-5 h-5 text-amber-500" />
     },
@@ -84,7 +152,14 @@ export default function EcoTab() {
           <h1 className="text-base font-bold text-zinc-900">National Innovation Ecosystem Dashboard</h1>
           <p className="text-[11px] text-zinc-500 mt-0.5">Aggregate indicators — All India Chapter Registry | Updated: 16 June 2026</p>
         </div>
-        <span className="text-[10px] bg-[#e8f5f0] border border-[#c2dfd4] text-[#0D6B4F] font-bold px-3 py-1 uppercase tracking-wider whitespace-nowrap self-start sm:self-auto">Admin Dashboard — L2 Access</span>
+        <div className="flex items-center gap-2">
+          {canManageHidden && (dbStats?.hiddenCount || 0) > 0 && (
+            <span className="text-[10px] bg-amber-50 border border-amber-300 text-amber-800 font-bold px-2.5 py-1 uppercase tracking-wider flex items-center gap-1">
+              <EyeOff className="w-3 h-3" /> {dbStats?.hiddenCount} Records Hidden
+            </span>
+          )}
+          <span className="text-[10px] bg-[#e8f5f0] border border-[#c2dfd4] text-[#0D6B4F] font-bold px-3 py-1 uppercase tracking-wider whitespace-nowrap self-start sm:self-auto">Admin Dashboard — L2 Access</span>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-5 gap-4">

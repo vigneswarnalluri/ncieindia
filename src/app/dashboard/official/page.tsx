@@ -466,7 +466,7 @@ export default function OfficialDashboard() {
           </div>
 
           <div className="p-4 sm:p-6">
-            {activeTab === "overview"      && <EcoTab />}
+            {activeTab === "overview"      && <EcoTab userEmail={userEmail} isSuper={isSuper} />}
             {activeTab === "mailbox"       && (
               <AdminMailboxTab
                 userEmail={userEmail}
@@ -481,7 +481,7 @@ export default function OfficialDashboard() {
                 }))}
               />
             )}
-            {activeTab === "registrations" && <RegistrationsTab onNotify={showToast} />}
+            {activeTab === "registrations" && <RegistrationsTab onNotify={showToast} userEmail={userEmail} isSuper={isSuper} />}
             {activeTab === "verify"        && <ChapterTab requests={requests} onVerify={handleVerify} onNotify={showToast} />}
             {activeTab === "grants"        && <GrantsTab grants={grants} onDisburse={handleDisburse} />}
             {activeTab === "circulars"     && <CircularsTab circulars={circulars} onAdd={handleAddCircular} />}

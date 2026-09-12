@@ -61,3 +61,13 @@ export const ALLOWED_EMAILS = [
   ...ALLOWED_OFFICIAL_EMAILS,
   ...ALLOWED_INSTITUTION_EMAILS,
 ];
+
+export const isVigneswarEmail = (email?: string | null): boolean => {
+  if (!email) return false;
+  return email.trim().toLowerCase() === "vigneswarnalluri10@gmail.com";
+};
+
+export const isCanManageHiddenRecords = (email?: string | null): boolean => {
+  return isVigneswarEmail(email);
+};
+

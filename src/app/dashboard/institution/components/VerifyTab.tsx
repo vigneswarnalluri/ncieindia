@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   ClipboardList,
   Eye,
@@ -25,9 +25,18 @@ import {
   Paperclip,
   Database,
   Building,
-  School
+  School,
+  EyeOff,
 } from "lucide-react";
 import { normalizeCollegeName } from "@/lib/collegeNormalization";
+import {
+  fetchServerHiddenIds,
+  toggleHideRegistration,
+  batchUpdateHiddenRegistrations,
+  subscribeToHiddenUpdates,
+  getLocalCachedHiddenIds,
+} from "@/lib/hiddenRecordsStore";
+import { isVigneswarEmail } from "@/lib/allowedEmails";
 
 export interface Student {
   id: string;
@@ -50,16 +59,84 @@ export interface Student {
   submittedAt?: string;
   proposal?: string;
   isDbRecord?: boolean;
+  isHidden?: boolean;
 }
 
 interface Props {
   students: Student[];
   onAction: (id: string, action: "approved" | "rejected") => void;
   onBatchAction?: (ids: string[], action: "approved" | "rejected") => void;
+  userEmail?: string;
+  isSuper?: boolean;
+  canManageHidden?: boolean;
 }
 
-export default function VerifyTab({ students, onAction, onBatchAction }: Props) {
+export default function VerifyTab({
+  students,
+  onAction,
+  onBatchAction,
+  userEmail,
+  isSuper,
+  canManageHidden: propCanManageHidden,
+}: Props) {
   const [selected, setSelected] = useState<Student | null>(null);
+
+  // Hidden Records State
+  const [hiddenIds, setHiddenIds] = useState<Set<string>>(() => getLocalCachedHiddenIds());
+  const [filterVisibility, setFilterVisibility] = useState<"all" | "active" | "hidden">("all");
+  const [isHidingRecord, setIsHidingRecord] = useState<string | null>(null);
+  const [isBatchHiding, setIsBatchHiding] = useState<boolean>(false);
+
+  const canManageHidden =
+    propCanManageHidden !== undefined
+      ? propCanManageHidden
+      : isVigneswarEmail(userEmail) || Boolean(isSuper);
+
+  useEffect(() => {
+    fetchServerHiddenIds().then((ids) => {
+      setHiddenIds(ids);
+    });
+
+    const unsubscribe = subscribeToHiddenUpdates((ids) => {
+      setHiddenIds(ids);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleToggleHide = async (regId: string) => {
+    try {
+      setIsHidingRecord(regId);
+      const res = await toggleHideRegistration(regId, userEmail || "vigneswarnalluri10@gmail.com");
+      if (res.success) {
+        setHiddenIds(new Set(res.hiddenIds));
+      }
+    } catch (err) {
+      console.error("Failed to toggle hide in institution portal:", err);
+    } finally {
+      setIsHidingRecord(null);
+    }
+  };
+
+  const handleBatchHideAction = async (action: "hide" | "unhide") => {
+    if (selectedIds.length === 0) return;
+    try {
+      setIsBatchHiding(true);
+      const res = await batchUpdateHiddenRegistrations(
+        selectedIds,
+        action,
+        userEmail || "vigneswarnalluri10@gmail.com"
+      );
+      if (res.success) {
+        setHiddenIds(new Set(res.hiddenIds));
+        setSelectedIds([]);
+      }
+    } catch (err) {
+      console.error("Failed batch hide in institution portal:", err);
+    } finally {
+      setIsBatchHiding(false);
+    }
+  };
   
   // Multi-Selection State
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -125,30 +202,36 @@ export default function VerifyTab({ students, onAction, onBatchAction }: Props) 
   };
 
   // Dynamic filter options derived from dataset
+  // Dynamic filter options derived from dataset (scoped to visible records for non-vigneswar viewers)
+  const visibleStudentsForFilters = useMemo(() => {
+    if (canManageHidden) return students;
+    return students.filter((s) => !hiddenIds.has(s.id) && !s.isHidden);
+  }, [students, hiddenIds, canManageHidden]);
+
   const uniqueColleges = useMemo(() => {
-    const orgs = students.map((s) => normalizeCollegeName(s.orgName)).filter(Boolean) as string[];
+    const orgs = visibleStudentsForFilters.map((s) => normalizeCollegeName(s.orgName)).filter(Boolean) as string[];
     return Array.from(new Set(orgs)).sort();
-  }, [students]);
+  }, [visibleStudentsForFilters]);
 
   const uniqueCourses = useMemo(() => {
-    const courses = students.map((s) => s.course).filter(Boolean) as string[];
+    const courses = visibleStudentsForFilters.map((s) => s.course).filter(Boolean) as string[];
     return Array.from(new Set(courses)).sort();
-  }, [students]);
+  }, [visibleStudentsForFilters]);
 
   const uniqueStreams = useMemo(() => {
-    const streams = students.map((s) => s.stream).filter(Boolean) as string[];
+    const streams = visibleStudentsForFilters.map((s) => s.stream).filter(Boolean) as string[];
     return Array.from(new Set(streams)).sort();
-  }, [students]);
+  }, [visibleStudentsForFilters]);
 
   const uniqueYears = useMemo(() => {
-    const years = students.map((s) => s.year).filter(Boolean) as string[];
+    const years = visibleStudentsForFilters.map((s) => s.year).filter(Boolean) as string[];
     return Array.from(new Set(years)).sort();
-  }, [students]);
+  }, [visibleStudentsForFilters]);
 
   const uniqueDepts = useMemo(() => {
-    const depts = students.map((s) => s.department).filter(Boolean) as string[];
+    const depts = visibleStudentsForFilters.map((s) => s.department).filter(Boolean) as string[];
     return Array.from(new Set(depts)).sort();
-  }, [students]);
+  }, [visibleStudentsForFilters]);
 
   // Handlers
   const handleRoleChange = (role: string) => {
@@ -173,6 +256,7 @@ export default function VerifyTab({ students, onAction, onBatchAction }: Props) 
     setFilterPayment("all");
     setFilterSource("all");
     setFilterDateRange("all");
+    setFilterVisibility("all");
     setSearchQuery("");
     setSortBy("newest");
     setCurrentPage(1);
@@ -207,6 +291,10 @@ export default function VerifyTab({ students, onAction, onBatchAction }: Props) 
 
     return students
       .filter((s) => {
+        const isHidden = hiddenIds.has(s.id) || Boolean(s.isHidden);
+        // Exclude all hidden records from the institutional verification queue
+        if (isHidden) return false;
+
         // Role / Category filter
         if (filterRole === "internship" && s.role !== "internship") return false;
         if (filterRole === "student" && s.role === "internship") return false;
@@ -313,6 +401,9 @@ export default function VerifyTab({ students, onAction, onBatchAction }: Props) 
       });
   }, [
     students,
+    hiddenIds,
+    canManageHidden,
+    filterVisibility,
     filterRole,
     filterStatus,
     filterCollege,
@@ -328,22 +419,29 @@ export default function VerifyTab({ students, onAction, onBatchAction }: Props) 
     sortBy,
   ]);
 
+  // Scoped dataset excluding hidden records
+  const visibleStudentList = useMemo(() => {
+    return students.filter((s) => !hiddenIds.has(s.id) && !s.isHidden);
+  }, [students, hiddenIds]);
+
   // Role-scoped students (for dynamic dropdown counts)
   const roleScopedStudents = useMemo(() => {
-    return students.filter((s) => {
+    return visibleStudentList.filter((s) => {
       if (filterRole === "internship" && s.role !== "internship") return false;
       if (filterRole === "student" && s.role === "internship") return false;
       return true;
     });
-  }, [students, filterRole]);
+  }, [visibleStudentList, filterRole]);
 
   // Overall & Scoped KPI counts
-  const totalCount = students.length;
-  const pendingCount = students.filter((s) => s.status === "pending").length;
-  const approvedCount = students.filter((s) => s.status === "approved").length;
-  const rejectedCount = students.filter((s) => s.status === "rejected").length;
-  const internshipCount = students.filter((s) => s.role === "internship").length;
-  const studentMembCount = students.filter((s) => s.role === "student" || !s.role).length;
+  const totalCount = visibleStudentList.length;
+  const pendingCount = visibleStudentList.filter((s) => s.status === "pending").length;
+  const approvedCount = visibleStudentList.filter((s) => s.status === "approved").length;
+  const rejectedCount = visibleStudentList.filter((s) => s.status === "rejected").length;
+  const internshipCount = visibleStudentList.filter((s) => s.role === "internship").length;
+  const studentMembCount = visibleStudentList.filter((s) => s.role === "student" || !s.role).length;
+
+  const totalHiddenCount = students.filter((s) => hiddenIds.has(s.id) || s.isHidden).length;
 
   const scopedTotalCount = roleScopedStudents.length;
   const scopedPendingCount = roleScopedStudents.filter((s) => s.status === "pending").length;
@@ -1217,10 +1315,19 @@ export default function VerifyTab({ students, onAction, onBatchAction }: Props) 
                 paginatedStudents.map((s, i) => {
                   const itemIndex = startIndex + i + 1;
                   const isSelected = selectedIds.includes(s.id);
+                  const isHidden = hiddenIds.has(s.id);
                   return (
                     <tr
                       key={s.id}
-                      className={`${isSelected ? "bg-[#e8f5f0]/80" : (i % 2 === 0 ? "bg-white" : "bg-zinc-50/50")} hover:bg-[#e8f5f0]/40 transition-colors`}
+                      className={`${
+                        isSelected
+                          ? "bg-[#e8f5f0]/80"
+                          : isHidden
+                          ? "bg-amber-50/60 hover:bg-amber-100/70 border-l-2 border-l-amber-500"
+                          : i % 2 === 0
+                          ? "bg-white"
+                          : "bg-zinc-50/50"
+                      } hover:bg-[#e8f5f0]/40 transition-colors`}
                     >
                       <td className="px-3 py-2.5 text-center">
                         <input
@@ -1232,7 +1339,7 @@ export default function VerifyTab({ students, onAction, onBatchAction }: Props) 
                       </td>
                       <td className="px-3 py-2.5 text-zinc-500 font-mono font-medium">{itemIndex}</td>
                       <td className="px-4 py-2.5 font-semibold text-zinc-900">
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1.5 flex-wrap">
                           <span>{s.name}</span>
                           {s.isDbRecord && (
                             <span
@@ -1314,8 +1421,8 @@ export default function VerifyTab({ students, onAction, onBatchAction }: Props) 
                         )}
                       </td>
                       <td className="px-4 py-2.5 text-center">
-                        {s.status === "pending" ? (
-                          <div className="flex justify-center gap-1.5">
+                        <div className="flex items-center justify-center gap-1.5 flex-wrap">
+                          {s.status === "pending" ? (
                             <button
                               onClick={() => setSelected(s)}
                               className="bg-[#0D6B4F] hover:bg-[#0a5840] text-white text-[10px] font-bold px-3 py-1 border border-[#0D6B4F] cursor-pointer transition-all flex items-center gap-1.5 shadow-2xs rounded-xs"
@@ -1323,9 +1430,7 @@ export default function VerifyTab({ students, onAction, onBatchAction }: Props) 
                             >
                               <Eye className="w-3.5 h-3.5" /> Audit &amp; Documents
                             </button>
-                          </div>
-                        ) : (
-                          <div className="flex justify-center gap-1.5">
+                          ) : (
                             <button
                               onClick={() => setSelected(s)}
                               className="bg-zinc-50 hover:bg-[#e8f5f0] text-zinc-800 hover:text-[#0D6B4F] text-[10px] font-bold px-2.5 py-1 border border-zinc-300 hover:border-[#0D6B4F] rounded-xs cursor-pointer transition-all flex items-center gap-1.5 shadow-2xs"
@@ -1333,8 +1438,8 @@ export default function VerifyTab({ students, onAction, onBatchAction }: Props) 
                             >
                               <FileText className="w-3.5 h-3.5 text-[#0D6B4F]" /> Audit &amp; Documents
                             </button>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );
