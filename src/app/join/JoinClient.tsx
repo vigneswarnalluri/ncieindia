@@ -88,6 +88,17 @@ const YEARS_OF_STUDY = [
   "Postgraduate"
 ];
 
+const INTERNSHIP_COURSES = [
+  "AI Business & Startup Innovation",
+  "Innovation, Design Thinking & Start-up Development",
+  "Entrepreneurship, Innovation and Startup Development for Viksit Bharat 2047",
+  "Design Thinking, Technology Innovation and Product Development",
+  "Emerging Technologies, Product Innovation & Entrepreneurship",
+  "Innovational & Technology Management",
+  "Startup Development, Business Models and Technology Commercialization",
+  "Technology Commercialization, IPR & Business Model Innovation",
+];
+
 const COLLEGES = [
   "Indian Institute of Technology (IIT), Delhi",
   "Indian Institute of Technology (IIT), Bombay",
@@ -1439,9 +1450,9 @@ export default function JoinClient() {
                     className="w-full px-3 py-2 border border-zinc-300 rounded focus:ring-2 focus:ring-emerald-600 focus:outline-none"
                   >
                     <option value="">Select course if known...</option>
-                    {PROGRAMS_DATA.map((p) => (
-                      <option key={p.id} value={p.title}>
-                        {p.title}
+                    {INTERNSHIP_COURSES.map((courseTitle) => (
+                      <option key={courseTitle} value={courseTitle}>
+                        {courseTitle}
                       </option>
                     ))}
                   </select>
