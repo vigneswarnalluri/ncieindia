@@ -219,8 +219,10 @@ export async function POST(req: NextRequest) {
         submitted_at: targetRecord.submitted_at || new Date().toISOString(),
       };
 
+      const verifiedPhone = (mobile || rzpPaymentData?.contact || "").replace(/^\+91/, "").trim();
+
       if (fullName && !targetRecord.full_name) updatePayload.full_name = fullName.trim();
-      if (mobile && !targetRecord.mobile) updatePayload.mobile = mobile.trim();
+      if (verifiedPhone && !targetRecord.mobile) updatePayload.mobile = verifiedPhone;
       if (orgName && !targetRecord.org_name) updatePayload.org_name = orgName.trim();
       if (regNumber && !targetRecord.reg_number) updatePayload.reg_number = regNumber.trim();
 
@@ -260,14 +262,18 @@ export async function POST(req: NextRequest) {
         success: true,
         action: "updated",
         regId: targetRecord.reg_id,
-        fullName: targetRecord.full_name,
+        fullName: targetRecord.full_name || fullName,
         email: targetRecord.email,
         course: courseName,
         message: "Payment successfully linked to your existing registration.",
       });
     } else {
       // No existing record found. If sufficient details are provided, create one now!
-      if (!fullName || !orgName) {
+      const effectiveFullName = fullName || rzpPaymentData?.notes?.fullName || "";
+      const effectiveOrgName = orgName || rzpPaymentData?.notes?.orgName || "";
+      const effectiveMobile = (mobile || rzpPaymentData?.contact || "").replace(/^\+91/, "").trim();
+
+      if (!effectiveFullName || !effectiveOrgName) {
         return NextResponse.json({
           success: false,
           notFound: true,
@@ -277,7 +283,7 @@ export async function POST(req: NextRequest) {
       }
 
       const generatedId = `REG-2026-${Math.floor(Math.random() * 9000) + 1000}`;
-      const courseName = course || "Viksit Bharat @2047 Innovation Leadership Programme";
+      const courseName = course || rzpPaymentData?.notes?.course || "Viksit Bharat @2047 Innovation Leadership Programme";
       const finalProposal = `Payment ID: ${cleanPaymentId} | Course: ${courseName} | SOP: ${
         sop || "Self-verified payment registration"
       }`;
@@ -286,12 +292,12 @@ export async function POST(req: NextRequest) {
         {
           reg_id: generatedId,
           role: "internship",
-          full_name: fullName.trim(),
+          full_name: effectiveFullName.trim(),
           email: cleanEmail,
-          org_name: orgName.trim(),
+          org_name: effectiveOrgName.trim(),
           proposal: finalProposal,
           designation: "Student",
-          mobile: mobile ? mobile.trim() : "",
+          mobile: effectiveMobile,
           department: department ? department.trim() : "Computer Science & Engineering",
           reg_number: regNumber ? regNumber.trim() : "",
           website_url: JSON.stringify({ consentForm: null, idCard: null, proposalRoster: null }),
