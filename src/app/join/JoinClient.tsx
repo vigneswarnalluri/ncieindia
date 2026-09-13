@@ -1289,34 +1289,14 @@ export default function JoinClient() {
     <div className="flex-1 bg-[#F8FAFC] py-12 md:py-16 border-t border-zinc-200">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Top Header & Self-Service Payment Claim Action */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900">
-              NCIE Official Enrollment Portal
-            </h1>
-            <p className="text-xs text-zinc-500">
-              National Council for Innovation & Entrepreneurship • Government & Institutional Programs
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => {
-              setRecoveryError(null);
-              setRecoverySuccess(null);
-              if (pendingDraft) {
-                setRecoveryEmail(pendingDraft.email || "");
-                setRecoveryFullName(pendingDraft.fullName || "");
-                setRecoveryOrgName(pendingDraft.orgName || "");
-                setRecoveryCourse(pendingDraft.selectedCourse || "");
-              }
-              setShowRecoveryModal(true);
-            }}
-            className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-emerald-900 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 rounded-lg shadow-xs transition-colors cursor-pointer"
-          >
-            <ShieldCheck className="w-4 h-4 text-emerald-700" />
-            <span>Already Paid? Link / Recover Registration</span>
-          </button>
+        {/* Top Header */}
+        <div className="mb-6">
+          <h1 className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900">
+            NCIE Official Enrollment Portal
+          </h1>
+          <p className="text-xs text-zinc-500">
+            National Council for Innovation & Entrepreneurship • Government & Institutional Programs
+          </p>
         </div>
 
         {/* Pending Draft Notification Banner */}
@@ -2605,6 +2585,27 @@ export default function JoinClient() {
                     <Link href="/contact" className="text-primary hover:text-accent-dark font-semibold underline">
                       Contact Center
                     </Link>
+                  </div>
+
+                  <div className="pt-1.5 flex items-center justify-between text-[10px] text-zinc-400">
+                    <span>Paid but session dropped?</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setRecoveryError(null);
+                        setRecoverySuccess(null);
+                        if (pendingDraft) {
+                          setRecoveryEmail(pendingDraft.email || "");
+                          setRecoveryFullName(pendingDraft.fullName || "");
+                          setRecoveryOrgName(pendingDraft.orgName || "");
+                          setRecoveryCourse(pendingDraft.selectedCourse || "");
+                        }
+                        setShowRecoveryModal(true);
+                      }}
+                      className="text-primary hover:text-emerald-700 font-medium underline cursor-pointer"
+                    >
+                      Recover payment
+                    </button>
                   </div>
                 </div>
 
