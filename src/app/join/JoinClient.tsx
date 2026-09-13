@@ -10,19 +10,27 @@ import { PROGRAMS_DATA } from "@/data/programsData";
 import { normalizeCollegeName } from "@/lib/collegeNormalization";
 
 const uploadFile = async (file: File, path: string) => {
-  const { data, error } = await supabase.storage
-    .from("ncie-documents")
-    .upload(path, file, {
-      cacheControl: "3600",
-      upsert: true
-    });
-  if (error) throw error;
-  
-  const { data: { publicUrl } } = supabase.storage
-    .from("ncie-documents")
-    .getPublicUrl(path);
+  try {
+    const { data, error } = await supabase.storage
+      .from("ncie-documents")
+      .upload(path, file, {
+        cacheControl: "3600",
+        upsert: true
+      });
+    if (error) {
+      console.warn("Storage upload error (non-fatal):", error);
+      return "";
+    }
     
-  return publicUrl;
+    const { data: { publicUrl } } = supabase.storage
+      .from("ncie-documents")
+      .getPublicUrl(path);
+      
+    return publicUrl || "";
+  } catch (err) {
+    console.warn("Storage exception (non-fatal):", err);
+    return "";
+  }
 };
 
 const loadRazorpayScript = (): Promise<boolean> => {
@@ -504,9 +512,22 @@ export default function JoinClient() {
     selectedCourse?: string;
   } | null>(null);
   const [regId, setRegId] = useState<string>("");
+  const [draftRegId, setDraftRegId] = useState<string>("");
   const [isEmailSending, setIsEmailSending] = useState(false);
   const [emailStatus, setEmailStatus] = useState<"sent" | "failed" | "queued" | null>(null);
   const [downloadingPdf, setDownloadingPdf] = useState(false);
+
+  // Self-service Payment Claim / Recovery State
+  const [showRecoveryModal, setShowRecoveryModal] = useState(false);
+  const [recoveryEmail, setRecoveryEmail] = useState("");
+  const [recoveryPaymentId, setRecoveryPaymentId] = useState("");
+  const [recoveryFullName, setRecoveryFullName] = useState("");
+  const [recoveryOrgName, setRecoveryOrgName] = useState("");
+  const [recoveryCourse, setRecoveryCourse] = useState("");
+  const [recoveryLoading, setRecoveryLoading] = useState(false);
+  const [recoveryError, setRecoveryError] = useState<string | null>(null);
+  const [recoverySuccess, setRecoverySuccess] = useState<string | null>(null);
+  const [pendingDraft, setPendingDraft] = useState<any | null>(null);
 
   const [files, setFiles] = useState<{
     consentForm: File | null;
@@ -563,6 +584,18 @@ export default function JoinClient() {
         setExistingSubmission(JSON.parse(savedSubmission));
       } catch (err) {
         localStorage.removeItem("ncie_submission_details");
+      }
+    }
+
+    const savedPending = localStorage.getItem("ncie_pending_registration");
+    if (savedPending) {
+      try {
+        const parsed = JSON.parse(savedPending);
+        if (parsed && parsed.email) {
+          setPendingDraft(parsed);
+        }
+      } catch (e) {
+        localStorage.removeItem("ncie_pending_registration");
       }
     }
   }, []);
@@ -714,6 +747,194 @@ export default function JoinClient() {
     }
 
     setFiles((prev) => ({ ...prev, [fileKey]: file }));
+  };
+
+  const handleClaimPayment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setRecoveryError(null);
+    setRecoverySuccess(null);
+
+    if (!recoveryPaymentId.trim()) {
+      setRecoveryError("Please enter your Razorpay Payment ID (e.g. pay_...).");
+      return;
+    }
+    if (!recoveryEmail.trim()) {
+      setRecoveryError("Please enter your registered Email address.");
+      return;
+    }
+
+    setRecoveryLoading(true);
+    try {
+      const res = await fetch("/api/records/claim-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: recoveryEmail.trim(),
+          paymentId: recoveryPaymentId.trim(),
+          fullName: recoveryFullName.trim() || undefined,
+          orgName: recoveryOrgName.trim() || undefined,
+          course: recoveryCourse.trim() || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        setRecoveryError(data.error || data.message || "Failed to recover registration. Please verify details.");
+        return;
+      }
+
+      setRecoverySuccess(data.message || "Registration verified and linked successfully!");
+      const submissionDetails = {
+        email: data.email || recoveryEmail.trim(),
+        orgName: data.orgName || recoveryOrgName.trim() || "Institution",
+        regId: data.regId,
+        fullName: data.fullName || recoveryFullName.trim(),
+        selectedCourse: data.course || recoveryCourse.trim(),
+      };
+      localStorage.setItem("ncie_submission_details", JSON.stringify(submissionDetails));
+      localStorage.removeItem("ncie_pending_registration");
+      setExistingSubmission(submissionDetails);
+      setRegId(data.regId);
+
+      setTimeout(() => {
+        setShowRecoveryModal(false);
+        setStep("success");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 1200);
+    } catch (err: any) {
+      setRecoveryError(err.message || "Network error. Please try again.");
+    } finally {
+      setRecoveryLoading(false);
+    }
+  };
+
+  const finalizeRegistrationRecord = async (
+    paymentId: string,
+    currentRegId: string,
+    precomputedFilesJson?: string
+  ) => {
+    try {
+      setIsSubmitting(true);
+      const finalProposal = `Payment ID: ${paymentId || "N/A"} | Course: ${formData.selectedCourse} | SOP: ${formData.proposal}`;
+
+      // Update in Supabase
+      const { error } = await supabase
+        .from("registrations")
+        .upsert([{
+          reg_id: currentRegId,
+          role,
+          full_name: formData.fullName,
+          email: formData.email,
+          org_name: formData.orgName,
+          state: formData.state,
+          city: formData.city,
+          proposal: finalProposal,
+          designation: formData.designation,
+          mobile: formData.mobile,
+          department: formData.department,
+          specialization: formData.specialization,
+          stream: formData.stream,
+          year_of_study: formData.yearOfStudy,
+          inst_type: formData.instType,
+          accreditation_code: formData.accreditationCode,
+          partner_category: formData.partnerCategory,
+          reg_number: formData.regNumber,
+          website_url: precomputedFilesJson || "{}",
+          status: "pending",
+          submitted_at: new Date().toISOString(),
+        }], { onConflict: "reg_id" });
+
+      if (error) {
+        console.warn("Supabase upsert warning, fallback to claim-payment API:", error);
+        await fetch("/api/records/claim-payment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: formData.email,
+            paymentId,
+            regId: currentRegId,
+            fullName: formData.fullName,
+            mobile: formData.mobile,
+            orgName: formData.orgName,
+            course: formData.selectedCourse,
+            sop: formData.proposal,
+            department: formData.department,
+            regNumber: formData.regNumber,
+          }),
+        });
+      }
+
+      setRegId(currentRegId);
+      localStorage.removeItem("ncie_pending_registration");
+
+      const submissionDetails = {
+        email: formData.email,
+        orgName: formData.orgName,
+        regId: currentRegId,
+        fullName: formData.fullName,
+        selectedCourse: formData.selectedCourse,
+      };
+      localStorage.setItem("ncie_submission_details", JSON.stringify(submissionDetails));
+      setExistingSubmission(submissionDetails);
+
+      // Google Sheets sync in background
+      const webhookUrl = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_WEBHOOK_URL;
+      if (webhookUrl) {
+        fetch(webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            reg_id: currentRegId,
+            submitted_at: new Date().toISOString(),
+            role,
+            full_name: formData.fullName,
+            email: formData.email,
+            mobile: formData.mobile,
+            org_name: formData.orgName,
+            reg_number: formData.regNumber,
+            state: formData.state,
+            city: formData.city,
+            department: formData.department,
+            specialization: formData.specialization,
+            stream: formData.stream,
+            year_of_study: formData.yearOfStudy,
+            proposal: finalProposal,
+            website_url: precomputedFilesJson || "{}",
+            status: "pending",
+          }),
+          mode: "no-cors",
+        }).catch((err) => console.error("Google Sheets sync failed:", err));
+      }
+
+      // Trigger automatic confirmation letter email dispatch
+      setIsEmailSending(true);
+      fetch("/api/send-confirmation-letter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          fullName: formData.fullName,
+          regId: currentRegId,
+          course: formData.selectedCourse || "Viksit Bharat @2047 Innovation Leadership Programme",
+          orgName: formData.orgName,
+          paymentId: paymentId || "N/A",
+          date: new Date().toISOString(),
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.emailSent) setEmailStatus("sent");
+          else setEmailStatus("queued");
+        })
+        .catch(() => setEmailStatus("failed"))
+        .finally(() => setIsEmailSending(false));
+
+      setStep("success");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err: any) {
+      setValidationError(err.message || "An unexpected error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const saveRegistrationRecord = async (paymentId: string) => {
@@ -918,6 +1139,85 @@ export default function JoinClient() {
     // Trigger Razorpay Payment Gateway modal if it is a student course registration (fee ₹700)
     if (role === "internship" && !formData.txnRef) {
       setIsSubmitting(true);
+
+      // 1. Generate or reuse unique registration ID
+      let currentDraftId = draftRegId;
+      if (!currentDraftId) {
+        currentDraftId = `REG-2026-${Math.floor(Math.random() * 9000) + 1000}`;
+        setDraftRegId(currentDraftId);
+      }
+
+      // 2. Pre-save files & draft record to Supabase before gateway opens
+      let consentFormUrl = "";
+      let idCardUrl = "";
+      let proposalRosterUrl = "";
+
+      if (files.consentForm) {
+        const ext = files.consentForm.name.split(".").pop();
+        consentFormUrl = await uploadFile(files.consentForm, `${role}/${currentDraftId}/consentForm.${ext}`);
+      }
+      if (files.idCard) {
+        const ext = files.idCard.name.split(".").pop();
+        idCardUrl = await uploadFile(files.idCard, `${role}/${currentDraftId}/idCard.${ext}`);
+      }
+      if (files.proposalRoster) {
+        const ext = files.proposalRoster.name.split(".").pop();
+        proposalRosterUrl = await uploadFile(files.proposalRoster, `${role}/${currentDraftId}/proposalRoster.${ext}`);
+      }
+
+      const fileUrlsObj = {
+        consentForm: consentFormUrl || null,
+        idCard: idCardUrl || null,
+        proposalRoster: proposalRosterUrl || null,
+      };
+      const filesJson = JSON.stringify(fileUrlsObj);
+
+      const draftProposal = `Payment ID: Pending | Course: ${formData.selectedCourse} | SOP: ${formData.proposal}`;
+
+      // Persist draft to Supabase
+      try {
+        await supabase
+          .from("registrations")
+          .upsert([{
+            reg_id: currentDraftId,
+            role,
+            full_name: formData.fullName,
+            email: formData.email,
+            org_name: formData.orgName,
+            state: formData.state,
+            city: formData.city,
+            proposal: draftProposal,
+            designation: formData.designation,
+            mobile: formData.mobile,
+            department: formData.department,
+            specialization: formData.specialization,
+            stream: formData.stream,
+            year_of_study: formData.yearOfStudy,
+            inst_type: formData.instType,
+            accreditation_code: formData.accreditationCode,
+            partner_category: formData.partnerCategory,
+            reg_number: formData.regNumber,
+            website_url: filesJson,
+            status: "pending_payment",
+            submitted_at: new Date().toISOString(),
+          }], { onConflict: "reg_id" });
+      } catch (draftErr) {
+        console.warn("Draft pre-save to Supabase error:", draftErr);
+      }
+
+      // Store in localStorage
+      localStorage.setItem("ncie_pending_registration", JSON.stringify({
+        regId: currentDraftId,
+        fullName: formData.fullName,
+        email: formData.email,
+        mobile: formData.mobile,
+        orgName: formData.orgName,
+        selectedCourse: formData.selectedCourse,
+        proposal: formData.proposal,
+        filesJson,
+        savedAt: new Date().toISOString(),
+      }));
+
       const scriptLoaded = await loadRazorpayScript();
       if (!scriptLoaded) {
         setValidationError("Failed to load Razorpay Payment Gateway script. Please check your internet connection.");
@@ -938,6 +1238,13 @@ export default function JoinClient() {
           email: formData.email,
           contact: formData.mobile
         },
+        notes: {
+          reg_id: currentDraftId,
+          email: formData.email,
+          mobile: formData.mobile,
+          course: formData.selectedCourse,
+          fullName: formData.fullName
+        },
         theme: {
           color: "#0D6B4F" // NCIE Green
         },
@@ -949,8 +1256,7 @@ export default function JoinClient() {
         handler: async function (response: any) {
           const paymentId = response.razorpay_payment_id;
           setFormData(prev => ({ ...prev, txnRef: paymentId }));
-          // Submit the data directly with the newly created transaction reference ID
-          await saveRegistrationRecord(paymentId);
+          await finalizeRegistrationRecord(paymentId, currentDraftId, filesJson);
         }
       };
 
@@ -972,6 +1278,196 @@ export default function JoinClient() {
     <div className="flex-1 bg-[#F8FAFC] py-12 md:py-16 border-t border-zinc-200">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
+        {/* Top Header & Self-Service Payment Claim Action */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+          <div>
+            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900">
+              NCIE Official Enrollment Portal
+            </h1>
+            <p className="text-xs text-zinc-500">
+              National Council for Innovation & Entrepreneurship • Government & Institutional Programs
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setRecoveryError(null);
+              setRecoverySuccess(null);
+              if (pendingDraft) {
+                setRecoveryEmail(pendingDraft.email || "");
+                setRecoveryFullName(pendingDraft.fullName || "");
+                setRecoveryOrgName(pendingDraft.orgName || "");
+                setRecoveryCourse(pendingDraft.selectedCourse || "");
+              }
+              setShowRecoveryModal(true);
+            }}
+            className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-emerald-900 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 rounded-lg shadow-xs transition-colors cursor-pointer"
+          >
+            <ShieldCheck className="w-4 h-4 text-emerald-700" />
+            <span>Already Paid? Link / Recover Registration</span>
+          </button>
+        </div>
+
+        {/* Pending Draft Notification Banner */}
+        {pendingDraft && step !== "success" && (
+          <div className="mb-6 p-4 bg-amber-50/90 border border-amber-200 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-amber-900 animate-slide-down shadow-xs">
+            <div className="flex items-center gap-2.5">
+              <Info className="w-4 h-4 text-amber-700 shrink-0" />
+              <div>
+                <p className="font-bold">Interrupted Registration Detected</p>
+                <p className="text-amber-800 text-[11px]">
+                  Found draft for <span className="font-semibold">{pendingDraft.fullName || pendingDraft.email}</span> ({pendingDraft.selectedCourse || "Course"}). If payment was completed, link your Payment ID.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => {
+                  setRecoveryEmail(pendingDraft.email || "");
+                  setRecoveryFullName(pendingDraft.fullName || "");
+                  setRecoveryOrgName(pendingDraft.orgName || "");
+                  setRecoveryCourse(pendingDraft.selectedCourse || "");
+                  setShowRecoveryModal(true);
+                }}
+                className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold rounded text-[11px] shadow-xs cursor-pointer"
+              >
+                Enter Payment ID
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  localStorage.removeItem("ncie_pending_registration");
+                  setPendingDraft(null);
+                }}
+                className="px-2 py-1.5 text-zinc-500 hover:text-zinc-700 text-[11px] cursor-pointer"
+              >
+                Dismiss
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Recovery Modal */}
+        {showRecoveryModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
+            <div className="bg-white rounded-xl shadow-2xl border border-zinc-200 max-w-lg w-full p-6 space-y-4 relative animate-scale-up">
+              <div className="flex justify-between items-start border-b border-zinc-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-zinc-900">Link & Recover Payment</h3>
+                    <p className="text-xs text-zinc-500">Retrieve your registration if your browser closed or session timed out</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowRecoveryModal(false)}
+                  className="text-zinc-400 hover:text-zinc-600 text-lg font-bold p-1 cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={handleClaimPayment} className="space-y-4 text-xs">
+                {recoveryError && (
+                  <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded text-xs">
+                    {recoveryError}
+                  </div>
+                )}
+                {recoverySuccess && (
+                  <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded text-xs">
+                    {recoverySuccess}
+                  </div>
+                )}
+
+                <div className="space-y-1">
+                  <label className="font-semibold text-zinc-700">Razorpay Payment ID *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="pay_TZykCJM9cONt1X"
+                    value={recoveryPaymentId}
+                    onChange={(e) => setRecoveryPaymentId(e.target.value)}
+                    className="w-full px-3 py-2 border border-zinc-300 rounded font-mono focus:ring-2 focus:ring-emerald-600 focus:outline-none"
+                  />
+                  <p className="text-[10px] text-zinc-400">Found in your SMS / Email receipt from Razorpay</p>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-semibold text-zinc-700">Registered Email Address *</label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="student@example.com"
+                    value={recoveryEmail}
+                    onChange={(e) => setRecoveryEmail(e.target.value)}
+                    className="w-full px-3 py-2 border border-zinc-300 rounded focus:ring-2 focus:ring-emerald-600 focus:outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="font-semibold text-zinc-700">Full Name (optional)</label>
+                    <input
+                      type="text"
+                      placeholder="Student Full Name"
+                      value={recoveryFullName}
+                      onChange={(e) => setRecoveryFullName(e.target.value)}
+                      className="w-full px-3 py-2 border border-zinc-300 rounded focus:ring-2 focus:ring-emerald-600 focus:outline-none"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="font-semibold text-zinc-700">College / Institution (optional)</label>
+                    <input
+                      type="text"
+                      placeholder="College Name"
+                      value={recoveryOrgName}
+                      onChange={(e) => setRecoveryOrgName(e.target.value)}
+                      className="w-full px-3 py-2 border border-zinc-300 rounded focus:ring-2 focus:ring-emerald-600 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-semibold text-zinc-700">Course Selected (optional)</label>
+                  <select
+                    value={recoveryCourse}
+                    onChange={(e) => setRecoveryCourse(e.target.value)}
+                    className="w-full px-3 py-2 border border-zinc-300 rounded focus:ring-2 focus:ring-emerald-600 focus:outline-none"
+                  >
+                    <option value="">Select course if known...</option>
+                    {PROGRAMS_DATA.map((p) => (
+                      <option key={p.id} value={p.title}>
+                        {p.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex justify-end gap-2 pt-2 border-t border-zinc-100">
+                  <button
+                    type="button"
+                    onClick={() => setShowRecoveryModal(false)}
+                    className="px-4 py-2 border border-zinc-300 text-zinc-700 font-semibold rounded hover:bg-zinc-50 cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={recoveryLoading}
+                    className="px-4 py-2 bg-emerald-800 hover:bg-emerald-900 text-white font-semibold rounded disabled:opacity-50 flex items-center gap-2 cursor-pointer"
+                  >
+                    {recoveryLoading ? "Verifying..." : "Verify & Link Payment"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
         {/* Top Progress Stepper (Official Portal Style) */}
         <div className="bg-white border border-zinc-200 rounded shadow-sm p-4 mb-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-semibold">
